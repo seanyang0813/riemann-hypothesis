@@ -66,6 +66,21 @@ jobs:
           unlink "$archive"
           "$RH_WORK/toolchain/bin/lean" --version | tee "$RH_WORK/lean-version.txt"
           grep -F 'commit 0b77e12952ad39077d80d8bd6b66d601f225c321' "$RH_WORK/lean-version.txt"
+          mkdir "$RH_WORK/elan-installer"
+          elan_archive="$RH_WORK/elan-installer/elan.tar.gz"
+          curl --fail --silent --show-error --location --retry 3 \
+            https://github.com/leanprover/elan/releases/download/v4.4.0/elan-x86_64-unknown-linux-gnu.tar.gz -o "$elan_archive"
+          printf '0e8250aa2be86c7af929ade68db617af9edc8b9ccf6eaf5ece228250d0d032e2  %s\n' "$elan_archive" | sha256sum --check
+          tar -xzf "$elan_archive" -C "$RH_WORK/elan-installer"
+          export ELAN_HOME="$RH_WORK/elan"
+          "$RH_WORK/elan-installer/elan-init" -y --no-modify-path --default-toolchain none
+          export ELAN_TOOLCHAIN=leanprover/lean4:v4.37.0-rc1
+          "$ELAN_HOME/bin/elan" toolchain link "$ELAN_TOOLCHAIN" "$RH_WORK/toolchain"
+          resolved=$("$ELAN_HOME/bin/elan" which lean)
+          test "$(readlink -f "$resolved")" = "$RH_WORK/toolchain/bin/lean"
+          test -x "$(dirname "$resolved")/leantar"
+          printf 'ELAN_HOME=%s\n' "$ELAN_HOME" >> "$GITHUB_ENV"
+          printf '%s\n' "$ELAN_HOME/bin" >> "$GITHUB_PATH"
           printf '%s\n' "$RH_WORK/toolchain/bin" >> "$GITHUB_PATH"
           printf 'LEAN_SYSROOT=%s\n' "$RH_WORK/toolchain" >> "$GITHUB_ENV"
 
@@ -138,4 +153,8 @@ jobs:
         shell: bash
         run: |
           mount="$RUNNER_TEMP/lean-build-data/mnt"
-          if mountpoint -q "$mount"; then sudo umount "$mount"; fi
+          if mountpoint -q "$mount"; then
+            df -h "$mount"
+            sudo btrfs filesystem usage -b "$mount"
+            sudo umount "$mount"
+          fi
