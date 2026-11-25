@@ -329,7 +329,7 @@ theorem intDual_coef : ∀ (l : ℕ) [Fact l.Prime] (LL : Type) [Field LL] [Alge
       (∀ o : O, ∃ z : ℤ_[l], lam (algebraMap O LL o) = (z : ℚ_[l])) ∧
       (∀ x : LL, x = ∑ i, lam (algebraMap O LL (f i) * x) • algebraMap O LL (e i)) := by
   intro l _ LL _ _ _ O _ _ hO
-  have H := _root_.GlobalTheory.GoodCoeff.good_coeff_integers l LL O hO
+  have H := _root_.GlobalTheory.PowerImageOpen.main l LL O hO
   obtain ⟨⟨hdom, hdvr, hfrac⟩, hfd, -, -, -⟩ := hO
   haveI := hdom
   haveI := hdvr

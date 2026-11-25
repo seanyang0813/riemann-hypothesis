@@ -470,19 +470,11 @@ theorem isVal_inv (hw : w ∈ ptsOver L (mCoordIdeal y)) {a : Ω} {v : L} (hv : 
   · rw [hy]; field_simp
   · rw [hv']; field_simp
 
-theorem prod_toNat {F : Type} [Field F] (x : K → F) (hx : ∀ k, x k ≠ 0) (a : K → ℤ) :
-    ∏ k, x k ^ (a k).toNat = (∏ k, x k ^ a k) * ∏ k, x k ^ (-a k).toNat := by
-  rw [← Finset.prod_mul_distrib]
-  refine Finset.prod_congr rfl fun k _ => ?_
-  rw [← zpow_natCast, ← zpow_natCast, ← zpow_add₀ (hx k)]
-  congr 1
-  omega
-
 theorem hasVal_of_isVal {c : ∀ k, ι k} (hy : ∀ k, y ⟨k, c k⟩ ≠ 0) (hz : ∀ k, w ⟨k, c k⟩ ≠ 0) (a : K → ℤ) {t : Ω} {v : L}
     (h : IsVal y w t v) : HasVal y a (t * ∏ k, y ⟨k, c k⟩ ^ a k) w (v * ∏ k, w ⟨k, c k⟩ ^ a k) := by
   obtain ⟨d, g, h', hg, hh, hn, e₁, e₂⟩ := h
-  have hy₁ := prod_toNat (fun k => y ⟨k, c k⟩) hy a
-  have hz₁ := prod_toNat (fun k => w ⟨k, c k⟩) hz a
+  have hy₁ := GlobalTheory.CompanionTheory.Ar.ChartTwist.prod_pow_toNat (fun k => y ⟨k, c k⟩) hy a
+  have hz₁ := GlobalTheory.CompanionTheory.Ar.ChartTwist.prod_pow_toNat (fun k => w ⟨k, c k⟩) hz a
   have hz₂ : ∏ k, w ⟨k, c k⟩ ^ (-a k).toNat ≠ 0 := Finset.prod_ne_zero_iff.2 fun k _ => pow_ne_zero _ (hz k)
   refine ⟨d + fun k => (a k).toNat, d + fun k => (-a k).toNat,
     g * GroundTheory.Heights₂.Heights.HilbertSamuel.GenOnFibres.cmon c fun k => (a k).toNat,

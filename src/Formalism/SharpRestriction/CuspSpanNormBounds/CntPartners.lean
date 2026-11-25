@@ -14,8 +14,6 @@ namespace Formalism.MainNotions.S.Cnt
 open NumberField IsDedekindDomain Module Formalism.BasicNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat
 open scoped ENNReal
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 section Hyp
 
 variable (D : D7)

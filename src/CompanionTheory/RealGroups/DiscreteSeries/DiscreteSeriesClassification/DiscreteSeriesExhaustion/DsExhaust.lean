@@ -883,8 +883,8 @@ theorem kHighest_perm {V : Type} [AddCommGroup V] [Module ℂ V] {ε : Fin n →
 theorem dsOfData : DSOfData := by
   intro n ε H _ _ σ D E hK s mu hSq hA
   obtain ⟨-, hord, hmin, v, hv0, hv⟩ := hA
-  obtain ⟨hT, -, -, hS, -⟩ := GlobalTheory.DSId.PermK.permKType n ε s H σ hord
-  obtain ⟨h1, h2, h3, h4, h5⟩ := hS.1 hSq
+  obtain ⟨hT, hS⟩ := GlobalTheory.DSId.PermK.permKType n ε s H σ hord
+  obtain ⟨h1, h2, h3, h4, h5⟩ := hS hSq
   have e : ∀ f : Fin n → ℝ, (f ∘ s.symm) ∘ s = f := fun f => by funext a; simp
   refine ⟨h1, h2, h3, h4, h5, ?_, ?_⟩
   · obtain ⟨T, hT'⟩ := hK.ty _ v hv0 (kHighest_of_perm hord hv)

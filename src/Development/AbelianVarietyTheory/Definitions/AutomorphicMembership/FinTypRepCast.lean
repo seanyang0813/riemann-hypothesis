@@ -52,22 +52,22 @@ namespace GlobalTheory.Mem.R3.Tr
 variable {B : Base} {C : Cols B} {a : Late B C} (b : Late B C) {G : Type} [Group G] [Fintype G] {Pl0 I0 T : Type}
 
 def rowPsi {V : HSp a.D} {n : ℕ} (P : principalLevelFrame.RowPsi V n) : @principalLevelFrame.RowPsi b.D ((V)) n where
-  ψ := (by with_unfolding_all exact (P.ψ :))
-  inj := (by with_unfolding_all exact (P.inj :))
-  into := (by with_unfolding_all exact (P.into :))
-  onto := (by with_unfolding_all exact (P.onto :))
+  ψ := P.ψ
+  inj := P.inj
+  into := P.into
+  onto := P.onto
 
 
 variable (a) in
 def isotLB : type_of% (@principalLevelFrame.isotL b.D) := @fun V n S θ P M J χ e π =>
-  (by with_unfolding_all exact ((@principalLevelFrame.isotL a.D ((V)) n ((S)) ((θ)) (((rowPsi a P))) (((ds a M))) ((J)) ((χ)) ((e)) ((π))) : _))
+  (((@principalLevelFrame.isotL a.D ((V)) n ((S)) ((θ)) (((rowPsi a P))) (((ds a M))) ((J)) ((χ)) ((e)) ((π))) : _))
 
 
 variable (a) in
 theorem isotL_eq : @principalLevelFrame.isotL b.D = @isotLB B C a b := by
   funext V n S θ P M J χ e π
   delta isotLB principalLevelFrame.isotL
-  with_unfolding_all exact (congrArg₂
+  exact (congrArg₂
     (fun (g : type_of% (@goodPart b.D)) (m : type_of% (@Mult.Mult b.D)) =>
       g θ M J χ e ⊓ principalLevelFrame.isotIn (principalLevelFrame.actM P M)
         (⨆ N : ℕ, m θ M (principalLevelFrame.levN P (N + 1)) fun _ => 1) π)
@@ -113,47 +113,46 @@ section Chain
 
 variable {A : FamIn a.D.what₂.LL G Pl0 T a.D.R.m} {R : RealDat a.D A Ks}
 
-theorem topMult_tr (h : TopMultH R) : letI := alg b iK; TopMultH (real b R) := by
-  with_unfolding_all exact (cast (congrArg (fun m : type_of% (@MultT a.D) => topW (@m) R) (multT_eq b a)) h : _)
+theorem topMult_tr (h : TopMultH R) : letI := alg b iK; TopMultH (real b R) := (cast (congrArg (fun m : type_of% (@MultT a.D) => topW (@m) R) (multT_eq b a)) h : _)
 
 variable (F : Face a.D A) (tupT : a.D.what₂.Tup → T) (hm : 0 < a.D.R.m) (hTop : TopMultH R)
 
 abbrev chainB : ChainReal b.D :=
-  @toChainReal b.D G _ _ Pl0 T (famM b A) Ks _ _ (alg b iK) (real b R) (face b F) ((by with_unfolding_all exact (tupT :))) ((by with_unfolding_all exact (hm :))) (topMult_tr b hTop)
+  @toChainReal b.D G _ _ Pl0 T (famM b A) Ks _ _ (alg b iK) (real b R) (face b F) (tupT) (hm) (topMult_tr b hTop)
 
 theorem chain_EEc : (toChainReal R F tupT hm hTop).EEc = ((chainB b F tupT hm hTop).EEc) := by
   delta ChainReal.EEc chainB toChainReal real
-  with_unfolding_all exact ((congrArg (fun (g : type_of% (@goodPart a.D)) (c : Bool) =>
+  exact ((congrArg (fun (g : type_of% (@goodPart a.D)) (c : Bool) =>
     (g R.θ (R.MY 0) (levS _ (R.βY 0) (R.dat0 (R.levR F c))) (levChi _ (R.βY 0) (R.dat0 (R.levR F c))) R.e0).map
       (PiTensorProduct.lift : MMap (R.MY 0) ≃ₗ[ℂ] AmbT (R.MY 0)).toLinearMap) (goodPart_eq b a)) :)
 
 theorem chain_CC : (toChainReal R F tupT hm hTop).CC = ((chainB b F tupT hm hTop).CC) :=
-  (by with_unfolding_all exact ((congrFun (congrArg (fun (m : type_of% (@MultT a.D)) (Ch : ChainReal a.D) => fun c μ j => m Ch.θ (Ch.MY j) (Ch.J c μ j) (Ch.χ c μ j)) (multT_eq b a) :)
+  (((congrFun (congrArg (fun (m : type_of% (@MultT a.D)) (Ch : ChainReal a.D) => fun c μ j => m Ch.θ (Ch.MY j) (Ch.J c μ j) (Ch.χ c μ j)) (multT_eq b a) :)
     (toChainReal R F tupT hm hTop)) :))
 
 theorem chain_CCP : (toChainReal R F tupT hm hTop).CCP = ((chainB b F tupT hm hTop).CCP) :=
-  (by with_unfolding_all exact ((congrFun (congrArg (fun (m : type_of% (@MultT a.D)) (Ch : ChainReal a.D) => fun c μ j => m Ch.θ (Ch.MY j) (Ch.JP c μ j) (Ch.χP c μ j)) (multT_eq b a) :)
+  (((congrFun (congrArg (fun (m : type_of% (@MultT a.D)) (Ch : ChainReal a.D) => fun c μ j => m Ch.θ (Ch.MY j) (Ch.JP c μ j) (Ch.χP c μ j)) (multT_eq b a) :)
     (toChainReal R F tupT hm hTop)) :))
 
 theorem chain_CCX : (toChainReal R F tupT hm hTop).CCX = ((chainB b F tupT hm hTop).CCX) :=
-  (by with_unfolding_all exact ((congrFun (congrArg (fun (m : type_of% (@MultT a.D)) (Ch : ChainReal a.D) => fun c μ => m Ch.θ Ch.MX (Ch.JX c μ) (Ch.χX c μ)) (multT_eq b a) :)
+  (((congrFun (congrArg (fun (m : type_of% (@MultT a.D)) (Ch : ChainReal a.D) => fun c μ => m Ch.θ Ch.MX (Ch.JX c μ) (Ch.χX c μ)) (multT_eq b a) :)
     (toChainReal R F tupT hm hTop)) :))
 
 theorem chain_CCXP : (toChainReal R F tupT hm hTop).CCXP = ((chainB b F tupT hm hTop).CCXP) :=
-  (by with_unfolding_all exact ((congrFun (congrArg (fun (m : type_of% (@MultT a.D)) (Ch : ChainReal a.D) => fun c μ => m Ch.θ Ch.MX (Ch.JXP c μ) (Ch.χXP c μ)) (multT_eq b a) :)
+  (((congrFun (congrArg (fun (m : type_of% (@MultT a.D)) (Ch : ChainReal a.D) => fun c μ => m Ch.θ Ch.MX (Ch.JXP c μ) (Ch.χXP c μ)) (multT_eq b a) :)
     (toChainReal R F tupT hm hTop)) :))
 
 theorem chain_ioC (t : T) (k : ℕ) (v : AmbT (R.MY (k + 1))) (hv : v ∈ ccJ (@multTB B C b a) R t (k + 1))
     (hv0 : v ∈ ccJ (@MultT a.D) R t (k + 1)) :
     (ioCW (@multTB B C b a) R (ioYB b R) t k ⟨v, hv⟩).1 = (ioCW (@MultT a.D) R ((R.ioY)) t k ⟨v, hv0⟩).1 :=
-  (by with_unfolding_all exact ((cast (io_congr R (multT_eq b a) (fun m y _ => ∀ hv : v ∈ ccJ (@m) R t (k + 1),
+  (((cast (io_congr R (multT_eq b a) (fun m y _ => ∀ hv : v ∈ ccJ (@m) R t (k + 1),
     (ioCW (@m) R y t k ⟨v, hv⟩).1 = (ioCW (@MultT a.D) R ((R.ioY)) t k ⟨v, hv0⟩).1) ((R.ioY)) ((R.ioX))) (fun _ => rfl) hv) : _))
 
 theorem chain_ioX (t : T) (v : AmbT R.MX) (hT : topW (@multTB B C b a) R)
     (hv : v ∈ multTB b a R.θ R.MX (levS _ R.βX (R.datXt t)) (levChi _ R.βX (R.datXt t)))
     (hv0 : v ∈ MultT R.θ R.MX (levS _ R.βX (R.datXt t)) (levChi _ R.βX (R.datXt t))) :
     (ioXW (@multTB B C b a) R (ioXB b R) hm hT t ⟨v, hv⟩).1 = (ioXW (@MultT a.D) R ((R.ioX)) hm hTop t ⟨v, hv0⟩).1 :=
-  (by with_unfolding_all exact ((cast (io_congr R (multT_eq b a) (fun m _ x => ∀ (hT : topW (@m) R)
+  (((cast (io_congr R (multT_eq b a) (fun m _ x => ∀ (hT : topW (@m) R)
       (hv : v ∈ m R.θ R.MX (levS _ R.βX (R.datXt t)) (levChi _ R.βX (R.datXt t))),
     (ioXW (@m) R x hm hT t ⟨v, hv⟩).1 = (ioXW (@MultT a.D) R ((R.ioX)) hm hTop t ⟨v, hv0⟩).1) ((R.ioY)) ((R.ioX)))
     (fun _ _ => rfl) hT hv) : _))
@@ -181,20 +180,20 @@ variable (hinj : ∀ i t, Function.Injective (R.extV i t))
 
 
 include hinj in
-theorem inj_tr : letI := alg b iK; ∀ i t, Function.Injective ((real b R).extV i t) := (by with_unfolding_all exact (hinj :))
+theorem inj_tr : letI := alg b iK; ∀ i t, Function.Injective ((real b R).extV i t) := hinj
 
 abbrev liftB : LiftReal b.D (chainB b F tupT hm hTop) :=
-  (by with_unfolding_all exact ((@toLiftReal b.D G _ _ Pl0 T (famM b A) Ks _ _ (alg b iK) (real b R) (face b F) ((tupT)) ((hm)) (topMult_tr b hTop)
+  (((@toLiftReal b.D G _ _ Pl0 T (famM b A) Ks _ _ (alg b iK) (real b R) (face b F) ((tupT)) ((hm)) (topMult_tr b hTop)
     (inj_tr b hinj)) : _))
 
 theorem lift_Wc : (toLiftReal R F tupT hm hTop hinj).Wc = ((liftB b F tupT hm hTop hinj).Wc) := by
   delta LiftReal.Wc liftB toLiftReal chainB toChainReal real
-  with_unfolding_all exact ((congrFun (congrArg (fun (g : type_of% (@goodPart a.D)) (L : LiftReal a.D (toChainReal R F tupT hm hTop)) => fun i =>
+  exact ((congrFun (congrArg (fun (g : type_of% (@goodPart a.D)) (L : LiftReal a.D (toChainReal R F tupT hm hTop)) => fun i =>
     (g R.θ (L.MW i) (L.JW i) (L.χW i) (L.eW i)).map (PiTensorProduct.lift : MMap (L.MW i) ≃ₗ[ℂ] L.AmbW i).toLinearMap)
     (goodPart_eq b a) :) (toLiftReal R F tupT hm hTop hinj)) :)
 
 theorem lift_MultW : (toLiftReal R F tupT hm hTop hinj).MultW = ((liftB b F tupT hm hTop hinj).MultW) :=
-  (by with_unfolding_all exact ((congrFun (congrArg (fun (m : type_of% (@MultT a.D)) (L : LiftReal a.D (toChainReal R F tupT hm hTop)) => fun i =>
+  (((congrFun (congrArg (fun (m : type_of% (@MultT a.D)) (L : LiftReal a.D (toChainReal R F tupT hm hTop)) => fun i =>
     m R.θ (L.MW i) (L.JA i) (L.χA i)) (multT_eq b a) :) (toLiftReal R F tupT hm hTop hinj)) :))
 
 end Chain

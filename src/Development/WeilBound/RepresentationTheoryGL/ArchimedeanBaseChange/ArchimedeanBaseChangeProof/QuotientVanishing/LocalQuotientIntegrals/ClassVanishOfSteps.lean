@@ -470,10 +470,6 @@ namespace PositivityTheory.Rg.BcB.CV
 
 namespace QuotientIntegral
 
-theorem enorm_ofReal_toReal_le (r : ℝ≥0∞) : ‖((r.toReal : ℝ) : ℂ)‖ₑ ≤ r := by
-  rw [← ofReal_norm, Complex.norm_real, Real.norm_of_nonneg ENNReal.toReal_nonneg]
-  exact ENNReal.ofReal_toReal_le
-
 variable {G : Type*} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [LocallyCompactSpace G]
   [T2Space G] [SecondCountableTopology G] [MeasurableSpace G] [BorelSpace G]
 
@@ -624,7 +620,7 @@ theorem main (μ : Measure G) [μ.IsHaarMeasure] (T : Subgroup G) (ν : Measure 
             (lintegral_mono fun g => ?_))
           rw [enorm_mul]
           gcongr
-          exact enorm_ofReal_toReal_le _
+          exact PositivityTheory.Rg.BcB.CV.QuotientIntegral.enorm_ofReal_toReal_le' _
       _ ≤ (ENNReal.ofReal B * ∫⁻ g, S.indicator 1 g * hex.choose g ∂μ).toReal :=
           ENNReal.toReal_mono hne hle
       _ = (∫⁻ g, S.indicator 1 g * hex.choose g ∂μ).toReal * B := by

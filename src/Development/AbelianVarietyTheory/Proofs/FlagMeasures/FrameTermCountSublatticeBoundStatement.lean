@@ -1413,24 +1413,6 @@ theorem conj_mem_NLam {F : LFlag S r T} {n m : S.V ≃ₗ[E] S.V} {Λ : Submodul
     exact h2
   · exact trans_sub_mem _ _ X_le_orth (trans_sub_mem _ _ X_le_orth ho hm.2.2) (symm_sub_mem n X_le_orth ho)
 
-theorem X_le_UUE {F : LFlag S r T} (G : LFlag S r T') {Λ : Submodule (𝓞 E) S.V}
-    (hΛ : Submodule.span E (Λ : Set S.V) = ⊤) : Xsp F ≤ UUE Λ F G := by
-  intro x hx
-  have h0 : x ∈ Submodule.span E (Λ : Set S.V) := hΛ ▸ Submodule.mem_top
-  obtain ⟨t, ht⟩ := multiple_mem_span_of_mem_localization_span (nonZeroDivisors (𝓞 E)) E _ x h0
-  rw [Submodule.span_eq] at ht
-  have h1 : (t : 𝓞 E) • x ∈ UU Λ F G :=
-    Submodule.mem_sup_left (Submodule.mem_sup_left (Submodule.mem_sup_left
-      ⟨ht, (toO S (Xsp F)).smul_mem (t : 𝓞 E) hx⟩))
-  have h2 : ((t : 𝓞 E) : E) • x ∈ UUE Λ F G := by
-    have : ((t : 𝓞 E) : E) • x = (t : 𝓞 E) • x := algebraMap_smul E (t : 𝓞 E) x
-    rw [this]
-    exact Submodule.subset_span h1
-  have h3 : ((t : 𝓞 E) : E) ≠ 0 := by
-    have := nonZeroDivisors.ne_zero t.2
-    exact_mod_cast this
-  exact (Submodule.smul_mem_iff _ h3).1 h2
-
 theorem Thp_map {F : LFlag S r T} (G : LFlag S r T') {n : S.V ≃ₗ[E] S.V} {Λ : Submodule (𝓞 E) S.V}
     (hn : n ∈ Formalism.HermitianLatticesTheory.isom S.hT) (hf : ∀ b, n (frame F b) = frame F b) (hz : F.zt = F.fl.z) {t : S.V}
     (ht : t ∈ Thp Λ F G) : n t ∈ Thp (Formalism.HermitianLatticesTheory.gmap n Λ) F (mapFlag n hn G) := by
@@ -1469,18 +1451,6 @@ theorem Thp_map {F : LFlag S r T} (G : LFlag S r T') {n : S.V ≃ₗ[E] S.V} {Λ
   have h2 := hn (n.symm x) t
   rw [n.apply_symm_apply] at h2
   exact h2.trans h1
-
-theorem Thp_sup_le {F : LFlag S r T} (G : LFlag S r T') {n : S.V ≃ₗ[E] S.V} {Λ : Submodule (𝓞 E) S.V}
-    (hΛ : Submodule.span E (Λ : Set S.V) = ⊤)
-    (hn : n ∈ Formalism.HermitianLatticesTheory.isom S.hT) (hf : ∀ b, n (frame F b) = frame F b)
-    (ho : ∀ x ∈ orth S (Xsp F), n x - x ∈ Xsp F) (hz : F.zt = F.fl.z) :
-    Thp Λ F G ⊔ toO S (Xsp F) ≤ Thp (Formalism.HermitianLatticesTheory.gmap n Λ) F (mapFlag n hn G) ⊔ toO S (Xsp F) := by
-  refine sup_le ?_ le_sup_right
-  intro t ht
-  have h1 : t ∈ orth S (Xsp F) := mem_orth'.2 fun x hx => mem_orth'.1 ht.2 x (X_le_UUE G hΛ hx)
-  have e : t = n t - (n t - t) := by abel
-  rw [e]
-  exact Submodule.sub_mem _ (Submodule.mem_sup_left (Thp_map G hn hf hz ht)) (Submodule.mem_sup_right (ho t h1))
 
 theorem Zhat_mapFlag {F : LFlag S r T} (G : LFlag S r T') {n : S.V ≃ₗ[E] S.V}
     (hn : n ∈ Formalism.HermitianLatticesTheory.isom S.hT) (hf : ∀ b, n (frame F b) = frame F b) :

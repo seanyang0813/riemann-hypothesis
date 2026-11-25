@@ -263,7 +263,7 @@ theorem para_mem (hP : IdFrame hF P) (hPq : ∀ v, NG.OverPl (Pq v) v) (hsp : �
     Lev.finE V (P.ψ κ) ∈ Formalism.L2.DIV.lev D.sp.cm V.gram 1 L := by
   obtain ⟨hn, -⟩ := id hP
   have hU := umax_of_para h hp
-  refine mem_lev_of_red hL _ ((GlobalTheory.T.frameKeepsMatrices_splitPlace_reduction_local D V _ hF P hP hn κ).1.1 hU) (fun kv => ?_) fun PP hPP => ?_
+  refine mem_lev_of_red hL _ ((_root_.GlobalTheory.MtRead.Red.red_eq_local D V _ hF P hP hn κ).1.1 hU) (fun kv => ?_) fun PP hPP => ?_
   · rw [red_one' hP hU h (hsp kv) fun ho => hg ⟨_, ho, kv.1, D.naut.plGw_over kv.1 kv.2⟩]
     exact ⟨one_mem _, ut_one⟩
   · obtain ⟨-, -, -, hQ, -⟩ := hL
@@ -293,7 +293,7 @@ theorem uni_mem (hP : IdFrame hF P) (hsp : ∀ kv, ∃ s : SplitPlace D.host.E, 
     Lev.finE V (P.ψ κ) ∈ Formalism.L2.DIV.lev D.sp.cm V.gram 1 L := by
   obtain ⟨hn, -⟩ := id hP
   have hU := umax_of_para h hp.1
-  refine mem_lev_of_red hL _ ((GlobalTheory.T.frameKeepsMatrices_splitPlace_reduction_local D V _ hF P hP hn κ).1.1 hU) (fun kv' => ?_) fun PP hPP => ?_
+  refine mem_lev_of_red hL _ ((_root_.GlobalTheory.MtRead.Red.red_eq_local D V _ hF P hP hn κ).1.1 hU) (fun kv' => ?_) fun PP hPP => ?_
   · by_cases e : NX.pG D kv' = s.w
     · rw [e]
       exact (inLevG_iff hP hn hU s _).1 (inLevG_of_uni hp)
@@ -309,7 +309,7 @@ theorem chr_pow (hP : IdFrame hF P) (hsp : ∀ kv, ∃ s : SplitPlace D.host.E, 
     (hκ' : Lev.finE V (P.ψ κ) ∈ Formalism.L2.DIV.lev D.sp.cm V.gram 1 L') :
     Lev.levChi V 1 L (P.ψ κ) ^ (D.host.g kv.1 - 1) = Lev.levChi V 1 L' (P.ψ κ) ^ (D.host.g kv.1 - 1) := by
   obtain ⟨hn, -⟩ := id hP
-  have hU := (GlobalTheory.T.frameKeepsMatrices_splitPlace_reduction_local D V _ hF P hP hn κ).1.2 (Formalism.L2.DIV.parLev_St hκ.1)
+  have hU := (_root_.GlobalTheory.MtRead.Red.red_eq_local D V _ hF P hP hn κ).1.2 (Formalism.L2.DIV.parLev_St hκ.1)
   have hg : ∀ kv', NX.pG D kv' ≠ NX.pG D kv → redFn 1 (NX.pG D kv') (Lev.finE V (P.ψ κ)) = 1 := fun kv' e =>
     red_one' hP hU h (hsp kv') (hoff kv' (hs ▸ e))
   unfold Lev.levChi

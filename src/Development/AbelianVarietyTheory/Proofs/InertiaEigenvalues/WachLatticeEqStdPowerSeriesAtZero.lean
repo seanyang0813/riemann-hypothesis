@@ -439,11 +439,11 @@ end Generic
 
 
 
-theorem full_down : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.loc D.locA HW F) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; let E := ((F l).E K s LL h).tie; let C := Cm l; ∀ T : Lt K LL, IsCrys ((D.loc l).PD K) T.ρ → ∀ (i : Let K) (ζ : ↥LL.1), (∃ j : ℕ, IsPrimitiveRoot ζ (l ^ j)) → Full (Di (HW l) h T i) (Lat C h T i ζ) → Full (Di (HW l) h T (i - 1)) (Lat C h T (i - 1) (ζ ^ l)) := by
-  intro D HW F Cm l _ K s LL h W E C T hT i ζ hζ hF
-  have hp : ((D.loc l).PD K).p = l := (D.loc l).PD_p K
+theorem full_down : ∀ (loc : LocTheory) (locA : ∀ (l : ℕ) [Fact l.Prime], LocAinf l (loc l)) (HW : HWOf loc) (F : FonOf loc locA HW) (Cm : CmpOf loc locA HW F) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; let E := ((F l).E K s LL h).tie; let C := Cm l; ∀ T : Lt K LL, IsCrys ((loc l).PD K) T.ρ → ∀ (i : Let K) (ζ : ↥LL.1), (∃ j : ℕ, IsPrimitiveRoot ζ (l ^ j)) → Full (Di (HW l) h T i) (Lat C h T i ζ) → Full (Di (HW l) h T (i - 1)) (Lat C h T (i - 1) (ζ ^ l)) := by
+  intro loc locA HW F Cm l _ K s LL h W E C T hT i ζ hζ hF
+  have hp : ((loc l).PD K).p = l := (loc l).PD_p K
   have := full_down_generic W (C.C K s LL h).tie T hT i ζ (by rw [hp]; exact hζ) hF
-  have e : ζ ^ ((D.loc l).PD K).p = ζ ^ l := by rw [hp]
+  have e : ζ ^ ((loc l).PD K).p = ζ ^ l := by rw [hp]
   rw [e] at this
   exact this
 
@@ -647,8 +647,8 @@ theorem lower (C : LocCmpT l P AI H F) (h : Good K s LL) (T : Lt K LL) (hT : IsC
 
 end Concrete
 
-theorem lat_one_std : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.loc D.locA HW F) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; let E := ((F l).E K s LL h).tie; let C := Cm l; ∀ T : Lt K LL, IsCrys ((D.loc l).PD K) T.ρ → ∀ i : Let K, Std (Di (HW l) h T i) (Lat C h T i 1) := by
-  intro D HW F Cm l _ K s LL h W E C T hT i
+theorem lat_one_std : ∀ (loc : LocTheory) (locA : ∀ (l : ℕ) [Fact l.Prime], LocAinf l (loc l)) (locT : ∀ (l : ℕ) [Fact l.Prime], Formalism.BasicNotions.LocTied l (loc l) (locA l)) (HW : HWOf loc) (F : FonOf loc locA HW) (Cm : CmpOf loc locA HW F) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; let E := ((F l).E K s LL h).tie; let C := Cm l; ∀ T : Lt K LL, IsCrys ((loc l).PD K) T.ρ → ∀ i : Let K, Std (Di (HW l) h T i) (Lat C h T i 1) := by
+  intro loc locA locT HW F Cm l _ K s LL h W E C T hT i
   have down : ∀ (n : ℕ) (i : Let K) (ζ : ↥LL.1), IsPrimitiveRoot ζ (l ^ n) →
       Full (Di (HW l) h T (i + n)) (Lat C h T (i + n) ζ) → Full (Di (HW l) h T i) (Lat C h T i 1) := by
     intro n
@@ -659,21 +659,21 @@ theorem lat_one_std : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F :
       simpa using hF
     | succ n ih =>
       intro i ζ hζ hF
-      have h1 := _root_.GlobalTheory.NL.FullDown.full_down D HW F Cm l K s LL h T hT _ ζ ⟨_, hζ⟩ hF
+      have h1 := _root_.GlobalTheory.NL.FullDown.full_down loc locA HW F Cm l K s LL h T hT _ ζ ⟨_, hζ⟩ hF
       have e : i + ((n + 1 : ℕ) : Let K) - 1 = i + n := by push_cast; ring
       rw [e] at h1
       exact ih i (ζ ^ l) (hζ.pow (pow_pos (Fact.out : l.Prime).pos _) (pow_succ' l n)) h1
   obtain ⟨ζ, -, -, hζ⟩ := GlobalTheory.exists_isPt_primitiveRoot (HW l) h i
-  have hF := down s i ζ hζ (_root_.GlobalTheory.NL.FullLevel.full_lat D HW F Cm l K s LL h T hT _ ζ hζ)
-  have hG := _root_.GlobalTheory.NL.GradedLat.graded_of_level_le D HW F Cm l K s LL h T hT i 1 (one_pow _) hF
+  have hF := down s i ζ hζ (_root_.GlobalTheory.NL.FullLevel.full_lat loc locA locT HW F Cm l K s LL h T hT _ ζ hζ)
+  have hG := _root_.GlobalTheory.NL.GradedLat.graded_of_level_le loc locA HW F Cm l K s LL h T hT i 1 (one_pow _) hF
   haveI : Module.Finite (AA K LL) ↥(W.N T) := Module.Finite.iff_fg.2 (W.N_fg T)
   set_option synthInstance.maxHeartbeats 200000 in
   have hex : ∀ (a : AA K LL) (x : ↥(W.N T)),
       ex C h T i 1 (a • x) = conv (W.lev i 1 a) (ex C h T i 1 x) := by
     intro a x
     funext k
-    have hinj : Function.Injective (ιV ((D.loc l).PD K) : T.V ⊗[ℚ_[l]] (D.loc l).R.B →ₗ[↥LL.1] T.V ⊗[ℚ_[l]] (D.loc l).R.BdR) := by
-      have hf : Function.Injective ((((D.loc l).PD K).ι.toLinearMap).restrictScalars ℚ_[l]) := ((D.loc l).PD K).ι_inj
+    have hinj : Function.Injective (ιV ((loc l).PD K) : T.V ⊗[ℚ_[l]] (loc l).R.B →ₗ[↥LL.1] T.V ⊗[ℚ_[l]] (loc l).R.BdR) := by
+      have hf : Function.Injective ((((loc l).PD K).ι.toLinearMap).restrictScalars ℚ_[l]) := ((loc l).PD K).ι_inj
       exact Module.Flat.lTensor_preserves_injective_linearMap (M := T.V) _ hf
     apply hinj
     obtain ⟨m, hm⟩ := (C.C K s LL h).tie.levB_supp T i 1 x

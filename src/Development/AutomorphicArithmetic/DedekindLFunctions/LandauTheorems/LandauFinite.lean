@@ -51,22 +51,13 @@ namespace Deduction
 
 theorem landau_finite {Z : Set ℂ} (hiso : ∀ z : ℂ, 0 < z.re → ∀ᶠ w in 𝓝[≠] z, w ∉ Z) {z : ℂ} {r : ℝ}
     (hr : r < z.re) : (Z ∩ Metric.closedBall z r).Finite := by
-  have hK : IsCompact (Metric.closedBall z r) := isCompact_closedBall z r
-  have hpos : ∀ w ∈ Metric.closedBall z r, 0 < w.re := by
-    intro w hw
-    have h1 : ‖w - z‖ ≤ r := by simpa [dist_eq_norm] using hw
-    have h2 : |(w - z).re| ≤ ‖w - z‖ := Complex.abs_re_le_norm _
-    have h3 := (abs_le.mp (h2.trans h1)).1
-    simp only [Complex.sub_re] at h3
-    linarith
-  obtain ⟨t, -, ht⟩ := hK.elim_nhds_subcover (fun w => {v | v ∈ ({w}ᶜ : Set ℂ) → v ∉ Z})
-    (fun w hw => eventually_nhdsWithin_iff.mp (hiso w (hpos w hw)))
-  refine t.finite_toSet.subset ?_
-  rintro v ⟨hvZ, hvK⟩
-  obtain ⟨w, hw, hvw⟩ := Set.mem_iUnion₂.mp (ht hvK)
-  by_cases h : v = w
-  · rw [h]; exact hw
-  · exact absurd hvZ (hvw h)
+  by_contra h
+  obtain ⟨w, hw, hacc⟩ := Set.Infinite.exists_accPt_of_subset_isCompact h
+    (isCompact_closedBall z r) Set.inter_subset_right
+  have hwpos : 0 < w.re := by
+    simpa [Complex.sub_re] using
+      (Complex.re_le_norm (z - w)).trans_lt ((mem_closedBall_iff_norm'.1 hw).trans_lt hr)
+  exact ((accPt_iff_frequently_nhdsNE.mp hacc).mono fun _ hy => hy.1) (hiso w hwpos)
 
 /-- If `d < cap` and `d < f w` for every `w` in the finite set `S`, some `r` with `d < r ≤ cap` is
 at most every `f w`. Taking the minimum over `S` together with `cap` covers the case where `S` is

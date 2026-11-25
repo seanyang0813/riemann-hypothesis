@@ -53,16 +53,6 @@ import ReciprocityTheory.CommutativeAlgebra.ChainConnInDim
 
 open IsLocalRing UpperTheory.V.Alg UpperTheory.V.CA ReciprocityTheory.CA
 
-private theorem isLocalHom_of_surjective {R R' : Type} [CommRing R] [IsLocalRing R] [CommRing R'] [IsLocalRing R']
-    (f : R →+* R') (hf : Function.Surjective f) : IsLocalHom f := by
-  refine ⟨fun x hx => ?_⟩
-  by_contra h
-  have hx' : x ∈ maximalIdeal R := h
-  have : f x ∈ maximalIdeal R' := by
-    rw [← IsLocalRing.map_maximalIdeal_of_surjective f hf]
-    exact Ideal.mem_map_of_mem f hx'
-  exact this hx
-
 private theorem smodEq_ideal_pow_smul_univ_iff_sub_mem {A : Type} [CommRing A] (I : Ideal A) (n : ℕ) (a b : A) :
     a ≡ b [SMOD (I ^ n • ⊤ : Submodule A A)] ↔ a - b ∈ I ^ n := by
   simp [SModEq.sub_mem, smul_eq_mul, Ideal.mul_top]
@@ -71,7 +61,7 @@ theorem UpperTheory.V.CA.cl_quot :
     ∀ (O : Type) [CommRing O] (R : Type) [CommRing R] [Algebra O R] [IsLocalRing R] (R' : Type) [CommRing R'] [Algebra O R'] [IsLocalRing R'] (p : R →ₐ[O] R'), Function.Surjective p → IsCL O R → IsCL O R' := by
   intro O _ R _ _ _ R' _ _ _ p hp hR
   have hpr : Function.Surjective (p : R →+* R') := hp
-  haveI : IsLocalHom (p : R →+* R') := isLocalHom_of_surjective _ hpr
+  haveI : IsLocalHom (p : R →+* R') := IsLocalHom.of_surjective _ hpr
   haveI := hR.noeth
   haveI : IsNoetherianRing R' := isNoetherianRing_of_surjective R R' (p : R →+* R') hpr
   haveI := hR.complete

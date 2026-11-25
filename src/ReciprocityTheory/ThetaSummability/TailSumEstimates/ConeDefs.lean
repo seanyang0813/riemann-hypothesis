@@ -25,7 +25,4 @@ def logCone (r : ℕ) (c : ℝ) : Set (Fin r → ℝ) :=
 def lowerBox (r : ℕ) (c : ℝ) : Set (Fin r → ℝ) :=
   Set.pi Set.univ (fun _ => Set.Ici c)
 
-def multCone (r : ℕ) (c : ℝ) : Set (Fin r → ℝ) :=
-  {t | ∀ k : Fin r, (if h : k.val + 1 < r then c * t ⟨k.val + 1, h⟩ else c) ≤ t k}
-
 end ReciprocityTheory.ThetaSummability.Est

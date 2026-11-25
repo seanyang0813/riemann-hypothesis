@@ -47,8 +47,6 @@ open GlobalTheory.Mem GlobalTheory.Mem.Col2 GlobalTheory.Mem.Top GlobalTheory.Me
 
 namespace GlobalTheory.Mem.R3.Rw
 
-attribute [local instance] Formalism.IndefR.principalLevelFrame.instCMHostI
-
 section Tr
 
 variable {B : Base} {C : Cols B} {a : Late B C} (b : Late B C) {G : Type} [Group G] [Fintype G] {Pl0 T : Type}

@@ -166,12 +166,6 @@ private theorem log_le_of_norm {l : ℕ} [Fact l.Prime] {n : ℤ} (hn : n ≠ 0)
   rw [Real.log_mul (abs_ne_zero.2 (by exact_mod_cast hn)) hp.ne'] at this
   rw [e]
   linarith
-private theorem totDisc_quot {G : Type} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
-    [TotallyDisconnectedSpace G] (N : Subgroup G) [N.Normal] (hN : IsClosed (N : Set G)) :
-    TotallyDisconnectedSpace (G ⧸ N) := by
-  first
-  | exact _root_.Formalism.SharedLemmas.totDisc_quot
-  | (apply _root_.Formalism.SharedLemmas.totDisc_quot <;> assumption)
 section Host
 variable {Ω : Type} [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] {l : ℕ} [Fact l.Prime] {c : Coef l} {N : ℕ} [NeZero N]
   {e : ℕ} {ψ : DirichletCharacter c.O N} {o₁ : ℕ} {S : Finset Pl} {A : S → ValuationSubring Ω}
@@ -185,7 +179,7 @@ private theorem cont_pt (hd : HostData l e ψ o₁) (hF : IsHostFrame Ω c e ψ 
   haveI : IsGalois ℚ Ω := IsAlgClosure.isGalois ℚ Ω
   haveI hcl := isClosed_NS Ω (S : Set Pl)
   haveI : CompactSpace (Gam Ω S) := inferInstance
-  haveI : TotallyDisconnectedSpace (Gam Ω S) := totDisc_quot _ hcl
+  haveI : TotallyDisconnectedSpace (Gam Ω S) := Formalism.SharedLemmas.totDisc_quot _ hcl
   exact (isCharZeroPt_basic F (hostFrame_ok Ω c e ψ o₁ hd S A F hF) g₁ hg r hr).2.2.1
 private theorem trace_rz (hF : IsHostFrame Ω c e ψ S A F) (ι : Qbar l ≃+* ℂ) {σ : Formalism.ConjugateSelfDual.G ℚ Ω} {q : ℕ}
     (hσ : ((cycZ ℚ Ω l σ : ℤ_[l]ˣ) : ℤ_[l]) = q) :
@@ -270,7 +264,7 @@ private theorem admissible_unitary_three_point (hP : _root_.UpperTheory.V.Af.Hyp
     have hN := hP.litN
     have : IsGalois ℚ Ω := IsAlgClosure.isGalois ℚ Ω
     have hcl := isClosed_NS Ω (S : Set Pl)
-    have : TotallyDisconnectedSpace (Gam Ω S) := totDisc_quot _ hcl
+    have : TotallyDisconnectedSpace (Gam Ω S) := Formalism.SharedLemmas.totDisc_quot _ hcl
     have ok := hostFrame_ok Ω c e ψ o₁ hd S A F hF
     obtain ⟨hmu, -, -, -⟩ := isCharZeroPt_basic F ok g₁ hg r hr
     have : IsLocalHom (algebraMap ℤ_[l] c.O) := by

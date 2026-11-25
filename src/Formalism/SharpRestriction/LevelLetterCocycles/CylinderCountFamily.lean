@@ -12,23 +12,12 @@ namespace Formalism.MainNotions.ArithmeticCylinders
 
 open Formalism.BasicNotions Formalism.MainNotions Filter Topology Polynomial
 
-structure AllRowsAt (D : D7) (Dall Dgood : ℕ) : Type 1 where
+structure AllRowsAt (D : D7) (Dall _Dgood : ℕ) : Type 1 where
   B : Formalism.MainNotions.S.RowsAut
-  n_eq : B.I.n = D.R.r
-  f_eq : B.I.f = D.R.f
   labAll : ∀ k, Fin Dall → D.nd.PlG k → (ZMod (D.host.g k))[X]
-  labAll_label : ∀ k σ v, IsLabel D k (labAll k σ v)
-  inc : Fin Dgood → Fin Dall
   eVec : ∀ k, D.nd.PlG k → MonoidAlgebra ℂ (GL (Fin D.R.r) (ZMod (D.host.g k)))
-  eVec_idem : ∀ k v, eVec k v * eVec k v = eVec k v
   eT : Set (Tup2 D) → B.I.Gf → ℂ
   ReT : Set (Tup2 D) → (B.I.L2 B.μf B.fund →L[ℂ] B.I.L2 B.μf B.fund)
-  ReT_spec : ∀ S, B.I.IsRConvF B.μf B.fund B.R (eT S) (ReT S)
-  eT_univ : eT Set.univ = B.e
-  ReT_univ : ReT Set.univ = B.Re
-  eT_one : ∀ (k : Fin 2) (S : Finset (Tup D k)),
-    (eT (cyl D k (S : Set (Tup D k))) 1).re =
-      (B.e 1).re * ∑ t ∈ S, ∏ v, wtOf D k (eVec k v) (t v)
 
 variable {D : D7} {Dall Dgood : ℕ}
 
@@ -51,19 +40,10 @@ variable (D)
 
 def AllRows.toAt {D : D7} (A : AllRows D) : AllRowsAt D D.what₂.Dall D.what₂.Drows where
   B := A.B
-  n_eq := A.n_eq
-  f_eq := A.f_eq
   labAll := A.labAll
-  labAll_label := A.labAll_label
-  inc := A.inc
   eVec := A.eVec
-  eVec_idem := A.eVec_idem
   eT := A.eT
   ReT := A.ReT
-  ReT_spec := A.ReT_spec
-  eT_univ := A.eT_univ
-  ReT_univ := A.ReT_univ
-  eT_one := A.eT_one
 
 end Formalism.MainNotions.ArithmeticCylinders
 

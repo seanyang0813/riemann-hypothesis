@@ -154,7 +154,7 @@ section Act
 
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
-local instance instCMHostI (D : Formalism.BasicNotions.D7) : IsCMField D.host.E := D.host.isCMField_hostE
+instance instCMHostI (D : Formalism.BasicNotions.D7) : IsCMField D.host.E := D.host.isCMField_hostE
 
 variable {D : Formalism.BasicNotions.D7} {V : Formalism.BasicNotions.TH.HSp D} {n : ℕ} {Sp : D.what₂.Tau → SPar}
 variable (θ : D.what₂.Tau → (Ainf D.host.F ⊗[D.host.F] D.host.E →+* ℂ))

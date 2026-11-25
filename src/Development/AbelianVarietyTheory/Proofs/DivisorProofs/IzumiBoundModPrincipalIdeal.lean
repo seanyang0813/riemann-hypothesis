@@ -524,10 +524,6 @@ theorem isTorsionFree_of_injective {R S : Type} [CommRing R] [CommRing S] [IsDom
     Module.IsTorsionFree R S :=
   Module.isTorsionFree_iff_algebraMap_injective.mpr h
 
-theorem norm_algebraMap_le (a : ℤ_[p]) : ‖algebraMap ℤ_[p] (PadicAlgCl p) a‖ ≤ 1 := by
-  rw [IsScalarTower.algebraMap_apply ℤ_[p] ℚ_[p] (PadicAlgCl p), PadicAlgCl.norm_extends]
-  simpa using PadicInt.norm_le_one a
-
 theorem norm_le_one_of_isIntegral (x : PadicAlgCl p) (hx : IsIntegral ℤ_[p] x) : ‖x‖ ≤ 1 := by
   apply GlobalTheory.PadicNormCastBounds.norm_le_one_of_isIntegral <;> assumption
 

@@ -212,8 +212,6 @@ end Rec
 
 section ChiD
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 variable {D : D7} {T : ℕ} {bad : Set (HeightOneSpectrum (𝓞 D.host.F))} {i : ℕ} {hi : i ≤ D.R.m}
 
 structure DetTie (S : StepLevel D.host.F D.host.E (sigD D) (gramN D i hi) T D.R.f bad) where

@@ -446,12 +446,6 @@ theorem mass_le (hK : IsCMUnram K) (h : K →ₗ⋆[K] K →ₗ[K] K) (h1 : h 1 
       _ = (hex.choose.card : ℝ) := by simp
   · positivity
 
-theorem isLattice_one : Submodule.IsFullLattice K (1 : Submodule (𝓞 K) K) := by
-  have : Submodule.IsLattice K (1 : Submodule (𝓞 K) K) := Submodule.IsLattice.of_fg K (by
-    rw [Submodule.one_eq_span]
-    exact Submodule.fg_span_singleton 1)
-  exact ⟨span_eq_top_of_ne_zero (Submodule.mem_one.2 ⟨1, map_one _⟩) one_ne_zero⟩
-
 theorem mass_std_one_le (hK : IsCMUnram K) :
     mass (stdForm K 1) (stdLat K 1) ≤ ((classNumber K * 2 ^ fDeg K : ℕ) : ℝ) := by
   have hs := stdForm_isSymm K 1

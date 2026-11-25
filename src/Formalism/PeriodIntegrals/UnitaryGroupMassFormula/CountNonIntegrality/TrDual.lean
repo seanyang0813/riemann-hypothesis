@@ -14,8 +14,6 @@ namespace PI.CntNotIntW
 open NumberField IsDedekindDomain Formalism.MainNotions.S Formalism.MainNotions.S.Lat Formalism.MainNotions.S.LocalSplitGroups Formalism.L2.SG.CntLocal
 open Classical ValuativeRel
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem exists_trOne (D : Formalism.BasicNotions.D7) : ∃ x : D.host.E, IsIntegral ℤ x ∧ x + D.host.conj x = 1 := by
   have hc := Formalism.BasicNotions.Examples₂.conj_bE (H := D.host)
   refine ⟨(1 + D.host.sqd) / 2, Formalism.BasicNotions.Examples₂.isIntegral_halfB (H := D.host), ?_⟩

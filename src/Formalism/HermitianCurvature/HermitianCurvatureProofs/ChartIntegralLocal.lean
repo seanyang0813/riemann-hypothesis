@@ -15,7 +15,7 @@ noncomputable section
 
 namespace Formalism.FourierDecayAlt.P.ChartIntegralLocal
 
-open Formalism.REAL Formalism.QuantumDeterminants Formalism.FourierDecayAlt.B Formalism.FourierDecayAlt.P.B4 Formalism.FourierDecayAlt.P.Ux10
+open Formalism.REAL Formalism.QuantumDeterminants Formalism.FourierDecayAlt.B Formalism.FourierDecayAlt.P.B4 Formalism.FourierDecayAlt.P.Ux1 Formalism.FourierDecayAlt.P.Ux10
 
 attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
@@ -163,7 +163,7 @@ theorem ck_at_of_chart {F : Mat k r → E} {mm : ℕ} {g0 : Mat k r} (hg0 : g0 �
       ContDiffOn ℝ ((mm : ℕ) : WithTop ℕ∞) F' U ∧ ∀ g ∈ U, g ∈ GV k r → F g = F' g := by
   have hgu : IsUnit g0.det := Formalism.QuantumDeterminants.WeylGroupFacts.isUnit_of_uh hg0
   have hg1 : g0 * g0⁻¹ = 1 := Matrix.mul_nonsing_inv _ hgu
-  set U := Sr g0 ∩ Formalism.FourierDecayAlt.P.Ux10.rho g0 ⁻¹' Metric.ball (0 : J k r → ℝ) δ with hUdef
+  set U := Sr g0 ∩ Formalism.FourierDecayAlt.P.Ux1.rho g0 ⁻¹' Metric.ball (0 : J k r → ℝ) δ with hUdef
   have hUo : IsOpen U :=
     (rho_cd g0).continuousOn.isOpen_inter_preimage (sr_open g0) Metric.isOpen_ball
   have hg0U : g0 ∈ U := by
@@ -172,14 +172,14 @@ theorem ck_at_of_chart {F : Mat k r → E} {mm : ℕ} {g0 : Mat k r} (hg0 : g0 �
     · show IsUnit (g0 * g0⁻¹ + 1).det
       rw [hg1, h2, Matrix.det_smul, Matrix.det_one, mul_one]
       exact (isUnit_iff_ne_zero.2 two_ne_zero).pow _
-    · show Formalism.FourierDecayAlt.P.Ux10.rho g0 g0 ∈ Metric.ball (0 : J k r → ℝ) δ
-      have h3 : Formalism.FourierDecayAlt.P.Ux10.rho g0 g0 = 0 := by
+    · show Formalism.FourierDecayAlt.P.Ux1.rho g0 g0 ∈ Metric.ball (0 : J k r → ℝ) δ
+      have h3 : Formalism.FourierDecayAlt.P.Ux1.rho g0 g0 = 0 := by
         funext i
-        simp only [Formalism.FourierDecayAlt.P.Ux10.rho, hg1, iot, sub_self, Matrix.zero_mul]
+        simp only [Formalism.FourierDecayAlt.P.Ux1.rho, hg1, iot, sub_self, Matrix.zero_mul]
         exact co_zero i
       rw [h3]; exact Metric.mem_ball_self hδ
-  refine ⟨U, fun x => F (chart g0 (Formalism.FourierDecayAlt.P.Ux10.rho g0 x)), hUo, hg0U, ?_, ?_⟩
-  · have h4 : ContDiffOn ℝ ((mm : ℕ) : WithTop ℕ∞) (Formalism.FourierDecayAlt.P.Ux10.rho g0) U :=
+  refine ⟨U, fun x => F (chart g0 (Formalism.FourierDecayAlt.P.Ux1.rho g0 x)), hUo, hg0U, ?_, ?_⟩
+  · have h4 : ContDiffOn ℝ ((mm : ℕ) : WithTop ℕ∞) (Formalism.FourierDecayAlt.P.Ux1.rho g0) U :=
       ((rho_cd g0).mono Set.inter_subset_left).of_le (by exact_mod_cast le_top)
     exact hAL.comp h4 (by intro x hx; exact hx.2)
   · intro x hx hxG

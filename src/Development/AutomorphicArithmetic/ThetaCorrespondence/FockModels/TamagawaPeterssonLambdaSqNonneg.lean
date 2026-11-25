@@ -570,24 +570,6 @@ theorem UpperTheory.Lit.Tam.supConst2Bounds :
     GlobalTheory.ConstSzRows.supConst_size_rows_of_log_bound D M Lb w _ hM hLb hMl hsz hfrl hw hwl
       fun L => MainStatements.Tam.Plug.supremum_constant_log_bound_alt D.host.E D.R.r D.host.d M w L
 
-theorem UpperTheory.Lit.Tam.tamagawa_weight_bound :
-    Hypotheses2 → ∃ C : ℝ, 0 ≤ C ∧ ∀ (D : D7) (T : CoreJ D), LawsJ T → ∀ j : ℕ,
-      1 ≤ (T.Q.Dw j).p → 1 ≤ (T.Q.Dw j).q → 2 < Module.finrank ℚ D.host.E / 2 → InR D j →
-      ∀ (Y : Deep T.toCore j) (e : ℕ) (o : ℝ), Y.Good e o → ∀ Lb : ℝ, 1 ≤ Lb →
-      Real.log Y.d.l₂.M ≤ 30 * Lb → fieldSz D.host.E ≤ 3 * Lb → Real.log (D.R.f * D.R.r) ≤ Lb →
-      o ≤ 391 * (D.R.f * D.R.r * Lb) ^ 2 → ∀ la : AllWt.Weight (T.Q.Dw j), (∀ τ, Antitone (la τ)) →
-      Real.log (∑ τ, ∑ k, |(la τ k : ℝ)|) ≤ 20 * Lb → ∀ Z,
-        BergLe Z Y.U (fun _ => D.sp.W j) Y.dict la (Real.exp (C * ((D.R.f : ℝ) * D.R.r * Lb) ^ 3)) ∧
-          SupBdWt Y.U (xiR D) (fun _ => D.sp.W j) Y.dict Z la (Real.exp (C * ((D.R.f : ℝ) * D.R.r * Lb) ^ 3)) ∧
-          Real.log (Y.rkC la Z) ≤ C * ((D.R.f : ℝ) * D.R.r * Lb) ^ 3 :=
-  fun _ => ⟨4000, by norm_num, fun D T hT j _ _ _ hj Y e o hY Lb hLb hM hsz hfr _ la _ hS Z =>
-    GlobalTheory.BergRank.berg_sup_rank_of_const D T hT j hj Y e o hY Lb hLb hsz la hS Z
-      (MainStatements.Tam.Plug.supConst2 D.host.E D.R.r D.host.d Y.d.l₂.M)
-      (fun w hw1 hlw => UpperTheory.Lit.Tam.supConst2Bounds D Y.d.l₂.M Lb w
-        (by have := Y.d.l₂.three_le; omega) hLb hM hsz hfr hw1 hlw)
-      (fun hL w hw hsp σ hσ y hy => UpperTheory.Lit.Tam.tamagawaPeterssonLambdaSq_nonneg trivial D j _ _ _ _ _
-        Y.U Y.dict hL σ hσ (wtOf _ la 0) (AllWt.even_wtOf la 0) w hw (hsp σ hσ) Z y hy)⟩
-
 end
 
 section
@@ -614,17 +596,6 @@ theorem _root_.UpperTheory.Lit.Tam.slopeMax_sq_latW_le_pow_mul (h6 : True) {PP A
     (fun M w L' hr2 hd hM hL' hw hl1 hlM hl2 hl3 hlw =>
       (MainStatements.Tam.Plug.supremum_constant_log_bound_alt D.host.E D.R.r D.host.d M w L' hr2 hd hM hL' hw
         hl1 hlM hl2 hl3 hlw).2)
-
-theorem _root_.UpperTheory.Lit.Tam.integral_cusp_slope_power_bound :
-    Hypotheses2 → Gram → Lifts fun Fm x _ ι p i _ A =>
-      slopeMax_sq (nrmK p.fw i) (latW (p.T.U ((i : ℕ) + 1)) (Gk p i)) ≤ (Fm.L x ι).sc.x ^ A * (Fm.L x ι).sc.b := by
-  intro hP hG
-  refine Closed.imp (Closed.and hG (Closed.and (GlobalTheory.CovTop.Sizes.hostN 1) _root_.GlobalTheory.CovTop.WtShape.wtN)) ?_
-  rintro eps Fm CH - ⟨⟨_, -, h1⟩, ⟨A, hA, h2⟩, ⟨_, -, h3⟩⟩
-  obtain ⟨x0, h⟩ := h1.and (h2.and h3)
-  refine ⟨2 * A + 4, by linarith, x0, fun x hx hle ι p hp i => ?_⟩
-  obtain ⟨a, b, c⟩ := h x hx hle ι p hp
-  exact UpperTheory.Lit.Tam.slopeMax_sq_latW_le_pow_mul p i trivial hp.2 (a i) (b i) (c i)
 
 end GlobalTheory.CovTop.LamCore
 end

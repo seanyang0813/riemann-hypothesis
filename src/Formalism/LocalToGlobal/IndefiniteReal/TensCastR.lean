@@ -12,8 +12,6 @@ open scoped TensorProduct
 
 namespace Formalism.IndefR.principalLevelFrame
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 def tensCastR {E : Type} [Field E] [NumberField E] {F1 F2 : Subfield E} (h : F1 = F2) :
     FiniteAdeleRing (𝓞 F1) F1 ⊗[F1] E ≃+* E ⊗[F2] FiniteAdeleRing (𝓞 F2) F2 := by
   subst h

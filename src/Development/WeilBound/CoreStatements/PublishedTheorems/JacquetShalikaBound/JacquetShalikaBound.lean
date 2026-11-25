@@ -622,23 +622,16 @@ theorem exists_pow_mul_mem_integer (a : F) :
   apply GlobalTheory.CompanionTheory.SatakeBound.LargeLattice.exists_pow_mul_mem
 
 
-open GroundTheory.Automorphic.GLnLocal in
-theorem pow_mul_mem_of_le {M M' : ℕ} (h : M ≤ M') {a : F}
-    (ha : (uniformizer F : F) ^ M * a ∈ 𝒪[F]) : (uniformizer F : F) ^ M' * a ∈ 𝒪[F] := by
-  obtain ⟨d, rfl⟩ := Nat.exists_eq_add_of_le h
-  rw [pow_add, mul_comm ((uniformizer F : F) ^ M), mul_assoc]
-  exact mul_mem (pow_mem (uniformizer F).2 d) ha
-
 theorem lat_mono {m M M' : ℕ} (h : M ≤ M') : lat F m M ⊆ lat F m M' := by
   intro x hx
   simp only [lat, Set.mem_ofPred_eq] at hx ⊢
-  exact fun i => pow_mul_mem_of_le h (hx i)
+  exact fun i => GlobalTheory.CompanionTheory.JSBound.unif_pow_mul_mem_of_le h (hx i)
 
 theorem exists_mem_lat {m : ℕ} (y : Fin m → F) : ∃ M, y ∈ lat F m M := by
   choose N hN using fun i => exists_pow_mul_mem_integer (y i)
   refine ⟨Finset.univ.sup N, ?_⟩
   simp only [lat, Set.mem_ofPred_eq]
-  exact fun i => pow_mul_mem_of_le (Finset.le_sup (Finset.mem_univ i)) (hN i)
+  exact fun i => GlobalTheory.CompanionTheory.JSBound.unif_pow_mul_mem_of_le (Finset.le_sup (Finset.mem_univ i)) (hN i)
 
 theorem add_mem_lat {m M : ℕ} {x y : Fin m → F} (hx : x ∈ lat F m M) (hy : y ∈ lat F m M) :
     x + y ∈ lat F m M := by

@@ -297,10 +297,6 @@ theorem sandwichAt_of_covariant {C : Type} [Field C] [IsAlgClosed C] [CharZero C
   have hal : ∀ t, D.al (toO e t) = (u₁ : O) • c.equivFun (ι G (hodgeTate G t)) := fun t => by
     refine (red F (ofPadic p O ∘ e t)).trans ?_
     rw [hF, ← hc, hΦ, ← nr, hu₁, map_smul, map_smul, nι, hodgeTate_eq_omegaDualMap]
-  have hact : ∀ a y, actH D a (c.equivFun y) = c.equivFun (H.map (ρ a).asHom y) := fun a y => by
-    obtain ⟨m, rfl⟩ := (hr G).1 y
-    rw [nr, hc, hc, ← hρM]
-    exact red _ _
   have hbb : ∀ y i, D.bb (c.equivFun y) i =
       padicToO p O ↑u⁻¹ * ↑u₂⁻¹ * π G y (dlog G (χ i)) := fun y i => by
     obtain ⟨m, rfl⟩ := (hr G).1 y
@@ -347,12 +343,7 @@ theorem sandwichAt_of_covariant {C : Type} [Field C] [IsAlgClosed C] [CharZero C
     (π G ∘ₗ c.equivFun.symm.toLinearMap) ((hex G).2.2.comp c.equivFun.symm.surjective)
   have hlie : ∀ y, lie (D.Fil.mkQ (c.equivFun y)) = π G y := fun y =>
     congrArg (π G) (c.equivFun.symm_apply_apply y)
-  refine ⟨D, e, LinearEquiv.ofBijective fil₀ hfil, lie, fun a t => (hρT a t).symm,
-    fun a w => ?_, fun a m => ?_, fun t => ?_, fun x χ' => ?_⟩
-  · exact (congrArg c.equivFun (nι _ _ (ρ a).asHom w).symm).trans (hact a _).symm
-  · obtain ⟨y, rfl⟩ := c.equivFun.surjective m
-    rw [hact, hlie, hlie]
-    exact nπ _ _ (ρ a).asHom y
+  refine ⟨D, e, LinearEquiv.ofBijective fil₀ hfil, lie, fun t => ?_, fun x χ' => ?_⟩
   · rw [hal, hodgeTate_eq_omegaMap]
     rfl
   · obtain ⟨y, rfl⟩ := (hex G).2.2 x

@@ -886,11 +886,6 @@ theorem sp_comp {A B C : Type} [CommRing A] [CommRing B] [CommRing C] (f : A →
 theorem sp_id {A : Type} [CommRing A] : spMap (RingHom.id A) = 𝟙 _ := by
   rw [← Spec.map_id]; rfl
 
-theorem isDominant_spMap {A B : Type} [Field A] [Field B] (i : A →+* B) : IsDominant (spMap i) := by
-  refine ⟨Function.Surjective.denseRange fun y => ?_⟩
-  haveI : Subsingleton (Spec (CommRingCat.of A)) := inferInstanceAs (Subsingleton (PrimeSpectrum A))
-  exact ⟨(default : PrimeSpectrum B), Subsingleton.elim _ _⟩
-
 theorem exists_inv {Ω : Type} [Field Ω] {O : Type} [CommRing O] [Algebra O Ω] (R : Subalgebra O Ω)
     [IsFractionRing R Ω] : ∃ e' : Ω →+* FractionRing R, (fracToField R).comp e' = RingHom.id Ω ∧
       e'.comp (algebraMap R Ω) = algebraMap R (FractionRing R) := by
@@ -953,7 +948,7 @@ theorem PositivityTheory.Xgn.full_torsion_packing : ∀ (X : Scheme.{0}) (G : Ov
       rw [map_pow, hv, hgN, map_one]
     have h2 : x₀ ^ N = 1 := by
       haveI := hG.separated
-      haveI := isDominant_spMap (a.comp e')
+      haveI := GlobalTheory.CompanionTheory.Ar.Sl.Reg.isDominant_spMap_field (a.comp e')
       haveI : IsReduced (Over.mk ξ).left := inferInstanceAs (IsReduced (Spec (CommRingCat.of Ω)))
       ext1
       refine ext_of_isDominant_of_isSeparated G.hom ?_ (spMap (a.comp e')) ?_

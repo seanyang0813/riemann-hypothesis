@@ -56,7 +56,6 @@ open GlobalTheory.TripleRead (thO ptO)
 open GlobalTheory.AdelicU (evFin splitPrime IsSplitBasis)
 open GlobalTheory.BotMatch (evW)
 open GlobalTheory.StageGeo
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 private theorem pair_over {D : D7} {ψ : AddChar (AF D.host.F) ℂ} {θ : InfFam D} (hθ : IsInfFam θ) {ε : Bool} {S X : HSp D}
     {d : ℕ} {e : Fin d ≃ Fin X.rank} {Bs : Base D.host.F D.host.E} {Vs : Spc D.host.F D.host.E S.rank}

@@ -558,10 +558,6 @@ def IsTauRule (R : ℕ) {J : Type} [Fintype J] {n : ℕ} (cf : J → ℤ) (x : J
 def IsGenRule (R : ℕ) {n : ℕ} (x₀ : Fin n → Dw.La) (u : Fin n → LatMod Dw R) (f : Rul Xo c) : Prop :=
   IsTauRule Xo c R (fun _ : Unit => 1) (fun _ => shiftFam R x₀ u) f
 
-def IsTauZero (R : ℕ) [Fintype (LatMod Dw R)] {n : ℕ} (x₀ : Fin n → Dw.La) (cf : (Fin n → LatMod Dw R) → ℤ)
-    (f : Rul Xo c) : Prop :=
-  IsTauRule Xo c R cf (shiftFam R x₀) f
-
 variable {Xo c}
 
 def NonzeroOn (Z : Comp Xo c) (f : Rul Xo c) : Prop := genVal Z f ≠ 0

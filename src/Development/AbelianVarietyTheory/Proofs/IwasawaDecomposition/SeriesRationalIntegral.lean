@@ -842,7 +842,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem descIntAt_of_laws : ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T0 : Type) (A : FamIn D.what₂.LL G Pl0 T0 D.R.m) (T : CoreJ D) [Algebra T.Q.c.F D.what₂.LL] (R : RealDat D A T.Q.c.F) (F : Face D A) (κ : ∀ i : Fin D.R.m, WeightFamilies.Wt D ((i : ℕ) + 1)) (v₀ : ∀ (i : Fin D.R.m) (σ : D.what₂.LL →+* ℂ), (R.MW i σ).Vec), LawsJ T → R.toLevCh.Is A.μ0 → R.IsGrp F → R.IsFam → R.IsModels → R.IsThP → TieIn T R κ v₀ → ∀ (i : Fin D.R.m), VStd D i → ∀ hV : T.V ((i : ℕ) + 1) T.σ₀ = Wc D i, GlobalTheory.IndefiniteRowSideFullHecke.OrthonormalLatticeThetaValues.FramePin T R i T.σ₀ hV → GlobalTheory.IndefiniteRowSideFullHecke.TwistSeries.DescIntAt T i (κ i) := by
   intro D G _ _ Pl0 T0 A T _ R F κ v₀ hL hμ hG hF hM hP hT i hS hV hFP l hl C hC hpin S hO hU φ hφ hk
-  obtain ⟨m, x, ψ, hψ, e⟩ := GlobalTheory.T.coverForm_rational_descent_to_base D G Pl0 T0 A T R F κ v₀ hL hμ hG hF hM hP hT i hS hV hFP l hl C hC hpin φ
+  obtain ⟨m, x, ψ, hψ, e⟩ := _root_.GlobalTheory.CoverDescRat.cover_desc_rat D G Pl0 T0 A T R F κ v₀ hL hμ hG hF hM hP hT i hS hV hFP l hl C hC hpin φ
     (C.intForms_subset _ _ S hφ) hk
   refine GlobalTheory.T.glue_integral_decompositions_over_rationalPrime D G Pl0 T0 A T R F κ v₀ hL hμ hG hF hM hP hT i hS hV hFP l hl C hC hpin S hO hU φ hφ hk m x ψ hψ e
     fun la hla => ?_
@@ -1155,7 +1155,7 @@ theorem untwRatS : UntwRatS := by
     exact f5 τ
   have hlt := GlobalTheory.FockLetters.isLetters_letterEquiv (n := (Vc D i).rank) (T.Q.Dw ((i : ℕ) + 1)) hΨ hpq
   generalize GlobalTheory.FockLetters.letterEquiv (n := (Vc D i).rank) (T.Q.Dw ((i : ℕ) + 1)) hΨ hpq = lt at hlt
-  have hχ := GlobalTheory.T.referenceTuple_secondSplittingCharacter D G Pl0 T0 A T R F κ v₀ hL hLev hG hFam hMod hTh hTie i hstd
+  have hχ := _root_.GlobalTheory.LevelSeries.chiData_chrTh_base D G Pl0 T0 A T R F κ v₀ hL hLev hG hFam hMod hTh hTie i hstd
   have hMg : T.Q.l.M = D.host.g 0 * D.host.g 1 := hL.pins.2.1.1
   rw [← hMg] at hχ
   have hM₀ : T.Q.l.M ≠ 0 := by have := T.Q.l.three_le; omega
@@ -1167,8 +1167,8 @@ theorem untwRatS : UntwRatS := by
         (D.host.ccK_coprime _ (by simp [D.host.g_level k])).symm
     rw [hMg]
     exact (this 0).mul_left (this 1)
-  obtain ⟨ph, hph, hbase⟩ := GlobalTheory.T.coreConstants_eq_vacuumIdentity_up_to_phase D G Pl0 T0 A T R F κ v₀ hL hLev hG hFam hMod hTh hTie i hstd hV hFP
-  obtain ⟨ka, hka, J, hJH, hJk, hJ⟩ := GlobalTheory.T.harmonicMap_extremalVector_eq_phase_smul_letters D G Pl0 T0 A T R F κ v₀ hL hLev hG hFam hMod hTh hTie i hstd u hu c0 hcm lt hlt
+  obtain ⟨ph, hph, hbase⟩ := _root_.GlobalTheory.LevelSeries.PinBase.baseCc_of_framePin D G Pl0 T0 A T R F κ v₀ hL hLev hG hFam hMod hTh hTie i hstd hV hFP
+  obtain ⟨ka, hka, J, hJH, hJk, hJ⟩ := _root_.GlobalTheory.SerIntLetters.io_eq_phase_smul_harmLetters D G Pl0 T0 A T R F κ v₀ hL hLev hG hFam hMod hTh hTie i hstd u hu c0 hcm lt hlt
   have hph0 : ph ≠ 0 := fun h => by simp [h] at hph
   have hka0 : ka ≠ 0 := fun h => by simp [h] at hka
   refine ⟨(ka * ph)⁻¹, by rw [norm_inv, norm_mul, hka, hph]; norm_num, fun C hC s hs f hf w hw => ?_⟩
@@ -1180,8 +1180,8 @@ theorem untwRatS : UntwRatS := by
   have hcl : Nat.Coprime C.d.pd l :=
     ((Nat.Prime.coprime_iff_not_dvd hl).2 fun h => by have := Nat.le_of_dvd hpd0 h; omega).symm
   obtain ⟨c₂, hc₂⟩ := series_bound hP (rank_Wc i) hodd hχ hM₀ hpq hΨ hB hlt hDom hLast hl hs
-  obtain ⟨hD, hF, hrel, hσ⟩ := GlobalTheory.T.uniformisedCover_isDictionary_frameCompatible D G Pl0 T0 A T R F κ v₀ hL hLev hG hFam hMod hTh hTie i hstd hV C hU
-  have hcc := GlobalTheory.T.vacuumIdentityConstants_cover_of_dominantPins D G Pl0 T0 A T R F κ v₀ hL hLev hG hFam hMod hTh hTie i hstd hV ph hph hbase C hU hpin
+  obtain ⟨hD, hF, hrel, hσ⟩ := _root_.GlobalTheory.LevelSeries.cover_dict_frameTie D G Pl0 T0 A T R F κ v₀ hL hLev hG hFam hMod hTh hTie i hstd hV C hU
+  have hcc := _root_.GlobalTheory.LevelSeries.covCc_of_pinned D G Pl0 T0 A T R F κ v₀ hL hLev hG hFam hMod hTh hTie i hstd hV ph hph hbase C hU hpin
   have hgood : C.d.l₂.GoodAt l := goodAt_of_dvd hl hM₂ hcl
     (Formalism.L2.Pj.goodAt_of_two_primes hMg (D.host.g_prime 0) (D.host.g_prime 1) D.host.g_ne l hl)
   have hval := GlobalTheory.T.character_quotient_values_in_embedding_field D G Pl0 T0 A T.Q.c.F R i C.d.c₂.F C.σ₂ hSmall

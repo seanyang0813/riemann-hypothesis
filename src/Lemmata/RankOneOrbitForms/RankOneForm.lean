@@ -30,21 +30,15 @@ private lemma span_orbit (τ : Representation K G T)
     (v : T) (hv : v ≠ 0) : Submodule.span K (Set.range fun g => τ g v) = ⊤ := by
   have hinvar : ∀ g : G, ∀ w ∈ Submodule.span K (Set.range fun g => τ g v),
       τ g w ∈ Submodule.span K (Set.range fun g => τ g v) := by
-    intro g w hw
-    induction hw using Submodule.span_induction with
-    | mem x hx =>
-      obtain ⟨h, rfl⟩ := hx
-      exact Submodule.subset_span ⟨g * h, by show τ (g * h) v = τ g (τ h v); rw [map_mul]; rfl⟩
-    | zero => rw [map_zero]; exact Submodule.zero_mem _
-    | add x y _ _ hx hy => rw [map_add (f := _)]; exact Submodule.add_mem _ hx hy
-    | smul c x _ hx => rw [map_smul]; exact Submodule.smul_mem _ c hx
-  rcases hirr _ hinvar with h | h
-  · exfalso
-    apply hv
-    have : τ 1 v ∈ Submodule.span K (Set.range fun g => τ g v) := Submodule.subset_span ⟨1, rfl⟩
-    rw [h, Submodule.mem_bot, map_one, Module.End.one_apply] at this
-    exact this
-  · exact h
+    intro g
+    change Submodule.span K (Set.range fun h => τ h v) ≤
+      (Submodule.span K (Set.range fun h => τ h v)).comap (τ g)
+    refine Submodule.span_le.mpr ?_
+    rintro _ ⟨h, rfl⟩
+    exact Submodule.subset_span ⟨g * h, by simp [map_mul]⟩
+  have hvspan : v ∈ Submodule.span K (Set.range fun g => τ g v) :=
+    Submodule.subset_span ⟨1, by simp⟩
+  exact (hirr _ hinvar).resolve_left fun h => hv (by simpa [h] using hvspan)
 
 private lemma orbit_ker (τ : Representation K G T)
     (hirr : ∀ W : Submodule K T, (∀ g : G, ∀ w ∈ W, τ g w ∈ W) → W = ⊥ ∨ W = ⊤)
@@ -80,9 +74,7 @@ theorem goal1 (τ : Representation K G T)
   obtain ⟨φ, v, hv, hφ, rfl⟩ := rank_one_form ε₀ h1
   have hspanT := span_orbit τ hirr v hv
   have hspanR : Submodule.span K (Set.range fun g => ε (τ g v)) = LinearMap.range ε := by
-    have : (Set.range fun g => ε (τ g v)) = ε '' (Set.range fun g => τ g v) := by
-      ext y; simp
-    rw [this, ← Submodule.map_span, hspanT, Submodule.map_top]
+    rw [Set.range_comp', ← Submodule.map_span, hspanT, Submodule.map_top]
   obtain ⟨γ, hγ⟩ := select (fun g => ε (τ g v)) (finrank K (LinearMap.range ε)) (by rw [hspanR])
   have hle : Submodule.span K (Set.range ((fun g => ε (τ g v)) ∘ γ)) ≤ LinearMap.range ε := by
     rw [Submodule.span_le]

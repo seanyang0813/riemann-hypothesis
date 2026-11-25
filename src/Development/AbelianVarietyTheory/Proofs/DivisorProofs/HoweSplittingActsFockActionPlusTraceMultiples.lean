@@ -1460,6 +1460,12 @@ theorem lieScalarD : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [Numbe
     intro z f f'; funext x; simp [pureA]; ring
   rw [key, map_add (f := _), map_smul, smul_eq_mul]
 
+theorem lieScalar : GlobalTheory.RealLift.LieScalar :=
+  fun F E _ _ _ _ _ σ α β κ _ _ _ _ _ P Q R S ψ τ JA JB d a b A C Φ om hCM hψ hFr hΦ hom =>
+    let ⟨c, hc⟩ := lieScalarD F E σ α β κ (fun _ => P) (fun _ => Q) (fun _ => R) (fun _ => S) ψ τ JA JB d a b A C Φ om hCM hψ
+      ⟨hFr.1, hFr.2.1, hFr.2.2⟩ ⟨hΦ.1, hΦ.2⟩ hom
+    ⟨c, fun γ hγ Y hY T => hc γ hγ Y hY T⟩
+
 end GlobalTheory.HoweD
 
 end

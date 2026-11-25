@@ -624,8 +624,7 @@ theorem galTied_withLoc_alt : ∀ (hL : _root_.UpperTheory.Zero.LLC.RecTExists) 
     b.mt hstar hexp hsplit hcheb b.big b.L b.Sp b.Au
   let fr' : OmFrame (withLoc b.L) := { fr with }
   have au : _root_.Formalism.L2.AUTiedAlt (withLoc b.L) (mtL b.L b.M) Hk.av :=
-    { Hk.au with
-      emb := Hk.emb }
+    { cls := Hk.au.cls, clsWt := Hk.au.clsWt }
   let g : _root_.Formalism.L2.NGalTiedAlt (withLoc b.L) :=
     { fr := fr', mt := mtL b.L b.M, hecke := Hk.hecke, av := Hk.av, au := au
       rational := Hk.rational, tup := b.tp.tup, level := Hk.level }

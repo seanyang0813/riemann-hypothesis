@@ -757,14 +757,6 @@ open GlobalTheory.CompanionTheory.WeilSiegel.Frame GlobalTheory.CompanionTheory.
 noncomputable section
 namespace GlobalTheory.CompanionTheory.WeilSiegel.Free.Aniso
 
-theorem free_inf {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
-    (σ : E →ₐ[F] E) (hCM : IsCMExt F E σ) {M : ℕ} (J : Matrix (Fin M) (Fin M) E) (hJ : IsHermND σ J)
-    {d : ℕ} (b : Module.Basis (Fin d) F E) (lam : Measure (Ainf F)) (hlam : lam.IsAddHaarMeasure) (n : ℕ) :
-    ∃ m, IsGramFibFree (Ainf F) σ J n (coordW (Ainf F) b lam n M) (coordHerm (Ainf F) σ b lam n) m := by
-  have hB : BorelSpace (Ainf F) := ⟨rfl⟩
-  obtain ⟨-, hW, hH⟩ := _root_.GlobalTheory.CompanionTheory.SW.coord_measures_haar F E σ hCM (Ainf F) _ b lam hlam
-  exact _root_.GlobalTheory.ArchGramFibre.exists_fibreFamily F E σ hCM M n J hJ _ _ (hW n M) (hH n)
-
 theorem free_v {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
     (σ : E →ₐ[F] E) (hCM : IsCMExt F E σ) {M : ℕ} (J : Matrix (Fin M) (Fin M) E) (hJ : IsHermND σ J)
     {d : ℕ} (b : Module.Basis (Fin d) F E) (v : HeightOneSpectrum (𝓞 F)) (lam : Measure (Fv F v))
@@ -847,7 +839,7 @@ theorem aniso_step : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [Numbe
     ⟨hhermb hJ.1, by rw [hdetb]; exact mul_ne_zero hta hJ.2⟩
 
   obtain ⟨m₁inf, hm₁inf⟩ := Step.loc_families σ hCM _ hJ' (Ainf F) hLi b laminf hinf.1 1
-  obtain ⟨m'inf, hm'inf⟩ := free_inf σ hCM J hJ b laminf hinf.1 n
+  obtain ⟨m'inf, hm'inf⟩ := GlobalTheory.CompanionTheory.WeilSiegel.HypStep.fam_inf σ hCM J hJ b laminf hinf.1 n
   choose m₁ hm₁ using fun v => Step.loc_families σ hCM _ hJ' (Fv F v) (hLv v) b (lam v) (hlam v).1 1
   choose m' hm' using fun v => free_v σ hCM J hJ b v (lam v) (hlam v).1 n
   obtain ⟨⟨μ₁, hμ₁⟩, hFV⟩ := _root_.GlobalTheory.CompanionTheory.SW.finVol_unitaryGroup F E σ hCM M J hJ
@@ -1101,16 +1093,6 @@ theorem local_transport (σ : E →ₐ[F] E) (hCM : IsCMExt F E σ) {M : ℕ} (J
     rw [h1]
     rfl
 
-theorem local_rescale (σ : E →ₐ[F] E) (hCM : IsCMExt F E σ) {M : ℕ} (J : Matrix (Fin M) (Fin M) E)
-    (R : Type) [CommRing R] [Algebra F R] [TopologicalSpace R] [MeasurableSpace R] [BorelSpace R]
-    (hR : IsLocR R) {d : ℕ} (b b' : Module.Basis (Fin d) F E) (lam : Measure R)
-    (hlam : lam.IsAddHaarMeasure) (n : ℕ)
-    (m : HermR R σ n → Measure (Fin n → Fin M → R ⊗[F] E))
-    (hm : IsGramFibFree R σ J n (coordW R b lam n M) (coordHerm R σ b lam n) m) :
-    ∃ r : ℝ≥0, r ≠ 0 ∧
-      IsGramFibFree R σ J n (coordW R b' lam n M) (coordHerm R σ b' lam n) (fun S => r • m S) :=
-  GlobalTheory.CompanionTheory.WeilSiegel.Free.Scale.coord_rescale σ hCM J R hR b b' lam hlam n m hm
-
 end Loc
 
 section Lat
@@ -1302,9 +1284,9 @@ theorem swFree_of_isometry : ∀ (F E : Type) [Field F] [NumberField F] [Field E
   have hfin : ∀ v, m v (hermOf (Fv F v) σ T hT) (latV b v) < ⊤ := by
     intro v
     obtain ⟨b', hb'⟩ := exists_scaled_basis (n := n) b v g
-    obtain ⟨ri, -, hri⟩ := local_rescale σ hCM _ (Ainf F) hLi b b' laminf hinf.1 n minf' hminf'
+    obtain ⟨ri, -, hri⟩ := GlobalTheory.CompanionTheory.WeilSiegel.Free.Scale.coord_rescale σ hCM _ (Ainf F) hLi b b' laminf hinf.1 n minf' hminf'
     choose r hr0 hrw using fun w =>
-      local_rescale σ hCM _ (Fv F w) (hLv w) b b' (lam w) (hlam w).1 n (m' w) (hm' w)
+      GlobalTheory.CompanionTheory.WeilSiegel.Free.Scale.coord_rescale σ hCM _ (Fv F w) (hLv w) b b' (lam w) (hlam w).1 n (m' w) (hm' w)
     have h1 := (hSW d b' laminf lam hinf hlam (μ.map He.symm) (He ⁻¹' 𝓕) hμ' h𝓕' _ _ hri hrw).1 v
     have hc0 : c v ≠ 0 := by
       intro h0

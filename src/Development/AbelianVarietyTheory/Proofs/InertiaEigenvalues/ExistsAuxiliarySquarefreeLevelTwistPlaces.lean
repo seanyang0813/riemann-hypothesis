@@ -299,8 +299,6 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.UnivCover
 
 
-theorem _root_.GlobalTheory.T.openKernel_ideleCharacter_trivial_finitePart_one : ∀ (D : D7) {A : Type} [Group A] (χ : (AE D)ˣ →* A), IsOpen (χ.ker : Set (AE D)ˣ) → ∀ x : (AE D)ˣ, finPart D (x : AE D) = 1 → χ x = 1 := by
-  first | exact @GlobalTheory.UnivCover.OpenKerChar.map_eq_one_of_finPart_eq_one
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.OpenKernelIdeleCharacterTrivialFinitePartOneStatement =====
@@ -319,8 +317,6 @@ open GlobalTheory.UnivCover
 namespace GlobalTheory.FibreIdem
 
 variable {D : D7} {H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host D.host.E} {Dw : Datum H}
-
-theorem chi_eq_one_of_finPart : ∀ (D : D7) {A : Type} [Group A] (χ : (AE D)ˣ →* A), IsOpen (χ.ker : Set (AE D)ˣ) → ∀ x : (AE D)ˣ, finPart D (x : AE D) = 1 → χ x = 1 := GlobalTheory.T.openKernel_ideleCharacter_trivial_finitePart_one
 
 theorem chi_eq_one_of_cong : ∀ (D : D7) {A : Type} [CommGroup A] (PP : Pl D.host.E) (χ : (AE D)ˣ →* A) (κ : GlobalTheory.ExportSeries.ResChars D A), (⟨{PP}, χ, κ⟩ : GlobalTheory.ExportSeries.Twist D A).Good → ∀ N : ℕ, ((N : ℕ) : 𝓞 D.host.E) ∈ PP.asIdeal → ∀ x : (AE D)ˣ, FinUnit x → (∃ y ∈ intAE D, finPart D (x : AE D) - 1 = N • y) → χ x = 1 := GlobalTheory.T.onePlaceTwist_trivial_on_congruent_units
 
@@ -749,7 +745,7 @@ theorem exists_sum_of_isRat (hT : LawsJ T) (hlast : κ.LastPos) (hn : 8 * D.R.f 
       rdU (T.U ((j : ℕ) + 1) T.σ₀) f ∈ Formalism.L2.Pj.holSub0 (T.U ((j : ℕ) + 1) T.σ₀).X
         (laU (T.U ((j : ℕ) + 1) T.σ₀) (wtA κ) κ.n)) ∧ T.phiJ ((j : ℕ) + 1) T.σ₀ (wtA κ) f = ψ k := hψ
   choose fs hfs using hψ'
-  refine ⟨m, xs, fun k => ⟨fs k, GlobalTheory.T.mem_cuspForms_of_reading_bounded_cuspidal_holomorphic D T hT _ (inR j) κ hlast hn (fs k) (hfs k).1.1 (hfs k).1.2⟩, funext fun g => ?_⟩
+  refine ⟨m, xs, fun k => ⟨fs k, _root_.GlobalTheory.CuspOfReading.mem_cuspA_of_rdU_mem_holSub0 D T hT _ (inR j) κ hlast hn (fs k) (hfs k).1.1 (hfs k).1.2⟩, funext fun g => ?_⟩
   rw [hφeq, RatExpand.castDict_sum_smul, Finset.sum_apply]
   refine Finset.sum_congr rfl fun k _ => ?_
   rw [← (hfs k).2]

@@ -1,6 +1,6 @@
 module
 
-import Formalism.HermitianCurvature.HermitianCurvatureProofs.CompactlySupportedBanachModel
+public import Formalism.HermitianCurvature.HermitianCurvatureProofs.CompactlySupportedBanachModel
 public import Formalism.HermitianCurvature.StatementU
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.DilationUnipotentWeylMeasure
 public import Mathlib.LinearAlgebra.Matrix.Permutation
@@ -11,58 +11,7 @@ public import Formalism.HermitianCurvature.HermitianCurvatureProofs.BetaSesquili
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.SymmetricScalarBlockMatrixMul
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.SymmetricScalarBlockMatrixTranspose
 import Mathlib.Algebra.Order.Archimedean.Real.Hom
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Algebra.Order.Star.Real
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.CategoryTheory.Countable
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.Order.CompletePartialOrder
-import Mathlib.RingTheory.PiTensorProduct
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.Lemma
 import Mathlib.Tactic.Linter.Style
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Tactic.TypeStar
-import Mathlib.Topology.Separation.CompletelyRegular
-import Mathlib.Topology.Sheaves.Init
 import Std.Tactic.BVDecide.Normalize.Prop
 public import Mathlib.Analysis.Calculus.ParametricIntegral
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.Block3MulBlocks
@@ -75,6 +24,7 @@ open Matrix MeasureTheory
 open Formalism.FourierDecayAlt Formalism.FourierDecayAlt.U Formalism.REAL Formalism.QuantumDeterminants
 
 namespace Formalism.FourierDecayAlt.P.Ux10
+open Formalism.FourierDecayAlt.P.Ux1
 
 alias block2_det_upper_triangular := _root_.Formalism.FourierDecayAlt.P.Ux3.block2_det_upper_triangular
 
@@ -124,6 +74,7 @@ end Formalism.FourierDecayAlt.P.Ux10
 open MeasureTheory Filter Topology
 
 namespace Formalism.FourierDecayAlt.P.Ux10
+open Formalism.FourierDecayAlt.P.Ux1
 
 section meas
 
@@ -297,6 +248,7 @@ end Formalism.FourierDecayAlt.P.Ux10
 
 
 namespace Formalism.FourierDecayAlt.P.Ux10
+open Formalism.FourierDecayAlt.P.Ux1
 
 open Formalism.REAL Formalism.QuantumDeterminants Formalism.FourierDecayAlt.B Formalism.FourierDecayAlt.P.B4
 
@@ -304,340 +256,12 @@ open scoped Matrix.Norms.Elementwise
 
 variable {k r : ℕ}
 
-section smooth
-
-variable {X : Type*} [NormedAddCommGroup X] [NormedSpace ℝ X] {n : WithTop ℕ∞} {s : Set X}
-
-lemma cdm_iff {F : X → Mat k r} :
-    ContDiffOn ℝ n F s ↔ ∀ i j, ContDiffOn ℝ n (fun x => F x i j) s := by
-  have := @contDiffOn_pi ℝ _ X _ _ s n (Fin (2 * r + k + 1)) _ (fun _ => Fin (2 * r + k + 1) → ℂ) _ _ F
-  exact this.trans (forall_congr' fun i => contDiffOn_pi)
-
-lemma cdm_mul {F G : X → Mat k r} (hF : ContDiffOn ℝ n F s) (hG : ContDiffOn ℝ n G s) :
-    ContDiffOn ℝ n (fun x => F x * G x) s := by
-  rw [cdm_iff] at hF hG ⊢
-  intro i j
-  simp only [Matrix.mul_apply]
-  exact ContDiffOn.sum fun l _ => (hF i l).mul (hG l j)
-
-lemma cd_det {F : X → Mat k r} (hF : ContDiffOn ℝ n F s) : ContDiffOn ℝ n (fun x => (F x).det) s := by
-  rw [cdm_iff] at hF
-  simp only [Matrix.det_apply']
-  exact ContDiffOn.sum fun σ _ => contDiffOn_const.mul (contDiffOn_prod fun i _ => hF _ _)
-
-lemma cdm_updateRow {F : X → Mat k r} (hF : ContDiffOn ℝ n F s) (j : Fin (2 * r + k + 1))
-    (b : Fin (2 * r + k + 1) → ℂ) : ContDiffOn ℝ n (fun x => (F x).updateRow j b) s := by
-  rw [cdm_iff] at hF ⊢
-  intro a l
-  by_cases ha : a = j
-  · subst ha; simp only [updateRow_self]; exact contDiffOn_const
-  · simp only [updateRow_ne ha]; exact hF a l
-
-lemma cdm_inv {F : X → Mat k r} (hF : ContDiffOn ℝ n F s) (hu : ∀ x ∈ s, IsUnit (F x).det) :
-    ContDiffOn ℝ n (fun x => (F x)⁻¹) s := by
-  rw [cdm_iff]
-  intro i j
-  have e : (fun x => (F x)⁻¹ i j)
-      = fun x => ((F x).det)⁻¹ * ((F x).updateRow j (Pi.single i 1)).det := by
-    funext x
-    rw [Matrix.inv_def, Matrix.smul_apply, adjugate_apply, Ring.inverse_eq_inv', smul_eq_mul]
-  rw [e]
-  exact ((cd_det hF).inv fun x hx => (hu x hx).ne_zero).mul (cd_det (cdm_updateRow hF j _))
-
-end smooth
-
-lemma hpk_herm : (Hpk k r)ᴴ = Hpk k r := (hpkFacts k r).1
-
-lemma hpk_sq' : Hpk k r * Hpk k r = 1 := (hpkFacts k r).2.1
-
-def prj (Z : Mat k r) : Mat k r := (1 / 2 : ℂ) • (Z - Hpk k r * Zᴴ * Hpk k r)
-
-lemma prj_lie (Z : Mat k r) : inLie k r (prj Z) := by
-  unfold inLie prj
-  have hH := (hpk_herm (k := k) (r := r))
-  have hHH := (hpk_sq' (k := k) (r := r))
-  rw [conjTranspose_smul, conjTranspose_sub, conjTranspose_mul, conjTranspose_mul, hH,
-    conjTranspose_conjTranspose]
-  have h1 : Hpk k r * (Z * Hpk k r) * Hpk k r = Hpk k r * Z := by
-    rw [Matrix.mul_assoc, Matrix.mul_assoc, hHH, Matrix.mul_one]
-  have h2 : Hpk k r * (Hpk k r * Zᴴ * Hpk k r) = Zᴴ * Hpk k r := by
-    rw [← Matrix.mul_assoc, ← Matrix.mul_assoc, hHH, Matrix.one_mul]
-  have hs : star (1 / 2 : ℂ) = 1 / 2 := by simp
-  rw [hs, Matrix.smul_mul, Matrix.mul_smul, Matrix.sub_mul, Matrix.mul_sub, h1, h2, ← smul_add]
-  simp
-
-lemma prj_of_lie {Z : Mat k r} (hZ : inLie k r Z) : prj Z = Z := by
-  unfold prj
-  have h0 : Zᴴ * Hpk k r = -(Hpk k r * Z) := eq_neg_of_add_eq_zero_left hZ
-  have h1 : Hpk k r * Zᴴ * Hpk k r = -Z := by
-    rw [Matrix.mul_assoc, h0, Matrix.mul_neg, ← Matrix.mul_assoc, hpk_sq', Matrix.one_mul]
-  rw [h1, sub_neg_eq_add, ← two_smul ℂ Z, smul_smul]
-  norm_num
-
-lemma prj_add (Z Z' : Mat k r) : prj (Z + Z') = prj Z + prj Z' := by
-  unfold prj
-  rw [conjTranspose_add, Matrix.mul_add, Matrix.add_mul, ← smul_add]
-  congr 1; abel
-
-lemma prj_rsmul (c : ℝ) (Z : Mat k r) : prj (c • Z) = c • prj Z := by
-  unfold prj
-  rw [RCLike.real_smul_eq_coe_smul (K := ℂ) c Z, RCLike.real_smul_eq_coe_smul (K := ℂ) c,
-    conjTranspose_smul]
-  simp only [RCLike.star_def, RCLike.conj_ofReal]
-  rw [Matrix.mul_smul, Matrix.smul_mul, ← smul_sub, smul_smul, smul_smul]
-  congr 1; ring
-
-lemma prj_zero : prj (0 : Mat k r) = 0 := by simp [prj]
-
-lemma prj_sum {ι : Type*} (s : Finset ι) (c : ι → ℝ) (Z : ι → Mat k r) :
-    prj (∑ i ∈ s, c i • Z i) = ∑ i ∈ s, c i • prj (Z i) := by
-  classical
-  induction s using Finset.induction_on with
-  | empty => simp [prj_zero]
-  | insert a s ha ih => rw [Finset.sum_insert ha, Finset.sum_insert ha, prj_add, prj_rsmul, ih]
-
-def kap (Y : Mat k r) : Mat k r := (1 + Y) * (1 - Y)⁻¹
-
-def iot (Z : Mat k r) : Mat k r := (Z - 1) * (Z + 1)⁻¹
-
-lemma kap_mem {Y : Mat k r} (hY : inLie k r Y) (hu : IsUnit (1 - Y).det) : kap Y ∈ GV k r := by
-  first | (apply UpperTheory.Reformulated.B.Qk20.kap_mem <;> assumption)
-
-lemma iot_facts {h : Mat k r} (hh : h ∈ GV k r) (hu : IsUnit (h + 1).det) :
-    inLie k r (iot h) ∧ IsUnit (1 - iot h).det ∧ kap (iot h) = h := by
-  apply Formalism.FourierDecayAlt.P.Ux1.iot_facts <;> assumption
-
-section smooth2
-
-variable {X : Type*} [NormedAddCommGroup X] [NormedSpace ℝ X] {n : WithTop ℕ∞} {s : Set X}
-
-lemma cdm_conjT {F : X → Mat k r} (hF : ContDiffOn ℝ n F s) : ContDiffOn ℝ n (fun x => (F x)ᴴ) s := by
-  rw [cdm_iff] at hF ⊢
-  intro i j
-  simp only [Matrix.conjTranspose_apply]
-  exact ((Complex.conjCLE : ℂ ≃L[ℝ] ℂ) : ℂ →L[ℝ] ℂ).contDiff.comp_contDiffOn (hF j i)
-
-lemma cdm_prj {F : X → Mat k r} (hF : ContDiffOn ℝ n F s) : ContDiffOn ℝ n (fun x => prj (F x)) s := by
-  unfold prj
-  exact (hF.sub (cdm_mul (cdm_mul contDiffOn_const (cdm_conjT hF)) contDiffOn_const)).const_smul _
-
-end smooth2
-
-abbrev J (k r : ℕ) : Type := Fin (2 * r + k + 1) × Fin (2 * r + k + 1) × Bool
-
-def Eb (i : J k r) : Mat k r :=
-  Matrix.of fun p q => if p = i.1 ∧ q = i.2.1 then (if i.2.2 then Complex.I else 1) else 0
-
-def Mv (Y : J k r → ℝ) : Mat k r :=
-  Matrix.of fun p q => ((Y (p, q, false) : ℝ) : ℂ) + ((Y (p, q, true) : ℝ) : ℂ) * Complex.I
-
-def co (Z : Mat k r) : J k r → ℝ := fun i => if i.2.2 then (Z i.1 i.2.1).im else (Z i.1 i.2.1).re
-
-lemma Mv_co (Z : Mat k r) : Mv (co Z) = Z := by
-  ext p q
-  simp [Mv, co, Complex.re_add_im]
-
-lemma Mv_sum (Y : J k r → ℝ) : Mv Y = ∑ i, Y i • Eb i := by
-  ext p q
-  rw [Matrix.sum_apply]
-  simp only [Matrix.smul_apply, Eb, Matrix.of_apply, Mv, smul_ite, smul_zero, ite_and]
-  rw [Fintype.sum_prod_type]
-  simp only [Fintype.sum_prod_type, Fintype.sum_bool]
-  simp only [Complex.real_smul, mul_one, if_true, if_false, Bool.false_eq_true]
-  simp only [Finset.sum_add_distrib]
-  rw [Finset.sum_eq_single p, Finset.sum_eq_single q, Finset.sum_eq_single p, Finset.sum_eq_single q]
-  · simp [add_comm]
-  all_goals first | (intro b _ hb; simp [Ne.symm hb]) | simp
-
-lemma co_add (Z Z' : Mat k r) (i : J k r) : co (Z + Z') i = co Z i + co Z' i := by
-  unfold co; split_ifs <;> simp
-
-lemma co_smul (c : ℝ) (Z : Mat k r) (i : J k r) : co (c • Z) i = c * co Z i := by
-  unfold co; split_ifs <;> simp [Complex.real_smul]
-
-lemma co_zero (i : J k r) : co (0 : Mat k r) i = 0 := by
-  unfold co; split_ifs <;> simp
-
-lemma co_sum {ι : Type*} (s : Finset ι) (c : ι → ℝ) (Z : ι → Mat k r) (i : J k r) :
-    co (∑ b ∈ s, c b • Z b) i = ∑ b ∈ s, c b * co (Z b) i := by
-  classical
-  induction s using Finset.induction_on with
-  | empty => simp [co_zero]
-  | insert a s ha ih => rw [Finset.sum_insert ha, Finset.sum_insert ha, co_add, co_smul, ih]
-
-lemma cd_co {X : Type*} [NormedAddCommGroup X] [NormedSpace ℝ X] {n : WithTop ℕ∞} {s : Set X}
-    {F : X → Mat k r} (hF : ContDiffOn ℝ n F s) (i : J k r) : ContDiffOn ℝ n (fun x => co (F x) i) s := by
-  rw [cdm_iff] at hF
-  unfold co
-  by_cases h : i.2.2 = true
-  · simp only [h, if_true]; exact Complex.imCLM.contDiff.comp_contDiffOn (hF _ _)
-  · simp only [h]; exact Complex.reCLM.contDiff.comp_contDiffOn (hF _ _)
-
-lemma cd_Mv : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (Mv : (J k r → ℝ) → Mat k r) := by
-  rw [← contDiffOn_univ, cdm_iff]
-  intro p q
-  simp only [Mv, Matrix.of_apply]
-  exact ((Complex.ofRealCLM.contDiff.comp (contDiff_apply ℝ (fun _ => ℝ) (p, q, false))).add
-    ((Complex.ofRealCLM.contDiff.comp (contDiff_apply ℝ (fun _ => ℝ) (p, q, true))).mul contDiff_const)).contDiffOn
-
-def Lt (i : J k r) : Mat k r := (nrm (true, prj (Eb i))).2
-
-lemma Lt_unit (i : J k r) : unitLie k r (Lt i) := nrm_unit (prj_lie _)
-
-lemma prj_Eb (i : J k r) : prj (Eb i) = ‖prj (Eb i)‖ • Lt i := by
-  rw [RCLike.real_smul_eq_coe_smul (K := ℂ)]
-  exact nrm_smul _
-
-def kc (i : J k r) (Z : Mat k r) : ℝ := co Z i * ‖prj (Eb i)‖
-
-lemma expandL {Z : Mat k r} (hZ : inLie k r Z) : Z = ∑ i, kc i Z • Lt i := by
-  conv_lhs => rw [← prj_of_lie hZ, ← Mv_co Z, Mv_sum, prj_sum]
-  refine Finset.sum_congr rfl fun i _ => ?_
-  rw [prj_Eb, smul_smul]
-  rfl
-
-lemma kc_sum {ι : Type*} (s : Finset ι) (c : ι → ℝ) (Z : ι → Mat k r) (i : J k r) :
-    kc i (∑ b ∈ s, c b • Z b) = ∑ b ∈ s, c b * kc i (Z b) := by
-  unfold kc; rw [co_sum, Finset.sum_mul]
-  exact Finset.sum_congr rfl fun b _ => by ring
-
-def chart (g0 : Mat k r) (Y : J k r → ℝ) : Mat k r := kap (prj (Mv Y)) * g0
-
-def Dom (k r : ℕ) : Set (J k r → ℝ) := {Y | IsUnit (1 - prj (Mv Y)).det}
-
-lemma cd_prjMv : ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (fun Y : J k r → ℝ => prj (Mv Y)) Set.univ :=
-  cdm_prj cd_Mv.contDiffOn
-
-lemma dom_open : IsOpen (Dom k r) := by
-  have hc : Continuous (fun Y : J k r → ℝ => (1 - prj (Mv Y)).det) := by
-    rw [← continuousOn_univ]
-    exact (cd_det (contDiffOn_const.sub cd_prjMv)).continuousOn
-  have : Dom k r = {Y : J k r → ℝ | (1 - prj (Mv Y)).det ≠ (fun _ => (0 : ℂ)) Y} := by
-    ext Y; simp [Dom, isUnit_iff_ne_zero]
-  rw [this]
-  exact isOpen_ne_fun hc continuous_const
-
-lemma zero_mem_dom : (0 : J k r → ℝ) ∈ Dom k r := by
-  have h0 : Mv (0 : J k r → ℝ) = 0 := by ext p q; simp [Mv]
-  simp [Dom, h0, prj_zero]
-
-lemma chart_cd (g0 : Mat k r) : ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (chart g0) (Dom k r) := by
-  have hP := cd_prjMv (k := k) (r := r)
-  unfold chart kap
-  exact cdm_mul (cdm_mul (contDiffOn_const.add (hP.mono (Set.subset_univ _)))
-    (cdm_inv (contDiffOn_const.sub (hP.mono (Set.subset_univ _))) fun Y hY => hY)) contDiffOn_const
-
-lemma chart_mem {g0 : Mat k r} (hg0 : g0 ∈ GV k r) {Y : J k r → ℝ} (hY : Y ∈ Dom k r) :
-    chart g0 Y ∈ GV k r :=
-  Formalism.FourierDecayAlt.P.BetaSesquilinearity.gv_mul (kap_mem (prj_lie _) hY) hg0
-
-lemma chart_diff (g0 : Mat k r) {Y : J k r → ℝ} (hY : Y ∈ Dom k r) : DifferentiableAt ℝ (chart g0) Y :=
-  ((chart_cd g0).differentiableOn (by simp)).differentiableAt (dom_open.mem_nhds hY)
-
-def mulB (k r : ℕ) : Mat k r →L[ℝ] Mat k r →L[ℝ] Mat k r :=
-  LinearMap.toContinuousLinearMap
-    { toFun := fun A => mulL A
-      map_add' := fun A B => by ext g : 1; simp [mulL_apply, Matrix.add_mul]
-      map_smul' := fun c A => by ext g : 1; simp [mulL_apply] }
-
-lemma mulB_apply (A B : Mat k r) : mulB k r A B = A * B := rfl
-
-def cT (k r : ℕ) : Mat k r →L[ℝ] Mat k r :=
-  LinearMap.toContinuousLinearMap
-    { toFun := fun A => Aᴴ
-      map_add' := fun A B => conjTranspose_add A B
-      map_smul' := fun c A => by
-        simp only [RingHom.id_apply]
-        rw [RCLike.real_smul_eq_coe_smul (K := ℂ), RCLike.real_smul_eq_coe_smul (K := ℂ),
-          conjTranspose_smul]
-        simp only [RCLike.star_def, RCLike.conj_ofReal] }
-
-lemma cT_apply (A : Mat k r) : cT k r A = Aᴴ := rfl
-
-lemma tangent {g0 : Mat k r} (hg0 : g0 ∈ GV k r) {Y : J k r → ℝ} (hY : Y ∈ Dom k r) (W : J k r → ℝ) :
-    inLie k r (-(fderiv ℝ (chart g0) Y W) * (chart g0 Y)⁻¹) := by
-  apply Formalism.FourierDecayAlt.P.Ux1.tangent <;> assumption
-
-def ebv (b : J k r) : J k r → ℝ := fun j => if b = j then 1 else 0
-
-def sC (g0 : Mat k r) (i b : J k r) (Y : J k r → ℝ) : ℝ :=
-  kc i (-(fderiv ℝ (chart g0) Y (ebv b)) * (chart g0 Y)⁻¹)
-
-def aC (g0 : Mat k r) (i : J k r) (Y : J k r → ℝ) : (J k r → ℝ) →L[ℝ] ℝ :=
-  ∑ b, sC g0 i b Y • ContinuousLinearMap.proj b
-
-lemma aC_apply (g0 : Mat k r) (i : J k r) (Y W : J k r → ℝ) :
-    aC g0 i Y W = kc i (-(fderiv ℝ (chart g0) Y W) * (chart g0 Y)⁻¹) := by
-  have hW : W = ∑ b, W b • ebv b := pi_eq_sum_univ W
-  have e1 : -(fderiv ℝ (chart g0) Y W) * (chart g0 Y)⁻¹ =
-      ∑ b, W b • (-(fderiv ℝ (chart g0) Y (ebv b)) * (chart g0 Y)⁻¹) := by
-    conv_lhs => rw [hW]
-
-    rw [map_sum, ← Finset.sum_neg_distrib, Finset.sum_mul]
-    refine Finset.sum_congr rfl fun b _ => ?_
-    rw [map_smul, ← smul_neg, Matrix.smul_mul]
-  rw [e1, kc_sum]
-  simp only [aC, FunLike.coe_sum, Finset.sum_apply, FunLike.coe_smul,
-    Pi.smul_apply, ContinuousLinearMap.proj_apply, smul_eq_mul, sC]
-  exact Finset.sum_congr rfl fun b _ => mul_comm _ _
-
-lemma aC_cd {g0 : Mat k r} (hg0 : g0 ∈ GV k r) (i : J k r) :
-    ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (aC g0 i) (Dom k r) := by
-  have h1 : ∀ b, ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (fun Y => fderiv ℝ (chart g0) Y (ebv b)) (Dom k r) :=
-    fun b => ((chart_cd g0).fderiv_of_isOpen dom_open (by simp)).clm_apply contDiffOn_const
-  have h2 : ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (fun Y => (chart g0 Y)⁻¹) (Dom k r) :=
-    cdm_inv (chart_cd g0) fun Y hY => Formalism.QuantumDeterminants.WeylGroupFacts.isUnit_of_uh (chart_mem hg0 hY)
-  have h3 : ∀ b, ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (sC g0 i b) (Dom k r) := by
-    intro b
-    unfold sC kc
-    exact (cd_co (cdm_mul (h1 b).neg h2) i).mul contDiffOn_const
-  unfold aC
-  exact ContDiffOn.sum fun b _ => (h3 b).smul contDiffOn_const
-
-variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E]
-
-lemma hasFDeriv_chart {g0 : Mat k r} (hg0 : g0 ∈ GV k r) {H : Mat k r → E}
-    (hH : CkOn ((1 : ℕ) : ℕ∞) (GV k r) H) {Y : J k r → ℝ} (hY : Y ∈ Dom k r) :
-    HasFDerivAt (fun Y' => H (chart g0 Y'))
-      (∑ i, (aC g0 i Y).smulRight (op true (Lt i) H (chart g0 Y))) Y := by
-  apply Formalism.FourierDecayAlt.P.Ux1.hasFDeriv_chart <;> assumption
-
-lemma cont_chart {g0 : Mat k r} (hg0 : g0 ∈ GV k r) {H : Mat k r → E}
-    (hH : CkOn ((0 : ℕ) : ℕ∞) (GV k r) H) : ContinuousOn (fun Y => H (chart g0 Y)) (Dom k r) := by
-  intro Y hY
-  apply ContinuousAt.continuousWithinAt
-  obtain ⟨U, h', hU, hcU, hcd, hff⟩ := hH _ (chart_mem hg0 hY)
-  have hchc : ContinuousAt (chart g0) Y := (chart_diff g0 hY).continuousAt
-  have h1 : ContinuousAt (fun Y' => h' (chart g0 Y')) Y :=
-    ContinuousAt.comp (g := h') (hcd.continuousOn.continuousAt (hU.mem_nhds hcU)) hchc
-  refine h1.congr ?_
-  filter_upwards [hchc.preimage_mem_nhds (hU.mem_nhds hcU), dom_open.mem_nhds hY] with Y' h1 h2
-  exact (hff _ h1 (chart_mem hg0 h2)).symm
-
-def rho (g0 : Mat k r) (x : Mat k r) : J k r → ℝ := co (iot (x * g0⁻¹))
-
-def Sr (g0 : Mat k r) : Set (Mat k r) := {x | IsUnit (x * g0⁻¹ + 1).det}
-
-lemma sr_open (g0 : Mat k r) : IsOpen (Sr g0) := by
-  have hc : Continuous (fun x : Mat k r => (x * g0⁻¹ + 1).det) :=
-    ((continuous_id.matrix_mul continuous_const).add continuous_const).matrix_det
-  have : Sr g0 = {x : Mat k r | (x * g0⁻¹ + 1).det ≠ (fun _ => (0 : ℂ)) x} := by
-    ext x; simp [Sr, isUnit_iff_ne_zero]
-  rw [this]
-  exact isOpen_ne_fun hc continuous_const
-
-lemma rho_cd (g0 : Mat k r) : ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (rho g0) (Sr g0) := by
-  have h1 : ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (fun x : Mat k r => x * g0⁻¹) (Sr g0) :=
-    cdm_mul contDiffOn_id contDiffOn_const
-  have h2 : ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (fun x => iot (x * g0⁻¹)) (Sr g0) := by
-    unfold iot
-    exact cdm_mul (h1.sub contDiffOn_const) (cdm_inv (h1.add contDiffOn_const) fun x hx => hx)
-  exact contDiffOn_pi.2 fun i => cd_co h2 i
 
 end Formalism.FourierDecayAlt.P.Ux10
 
 
 namespace Formalism.FourierDecayAlt.P.Ux10
+open Formalism.FourierDecayAlt.P.Ux1
 
 open Formalism.REAL Formalism.QuantumDeterminants Formalism.FourierDecayAlt.B Formalism.FourierDecayAlt.P.B4
 
@@ -773,7 +397,7 @@ theorem ck_of_chart {F : Mat k r → E} {mm : ℕ}
     · show rho g0 g0 ∈ Metric.ball (0 : J k r → ℝ) δ
       have h3 : rho g0 g0 = 0 := by
         funext i
-        simp only [rho, hg1, iot, sub_self, Matrix.zero_mul]
+        rw [Ux1.rho, hg1, Ux1.iot, sub_self, Matrix.zero_mul]
         exact co_zero i
       rw [h3]; exact Metric.mem_ball_self hδ
   refine ⟨U, fun x => F (chart g0 (rho g0 x)), hUo, hg0U, ?_, ?_⟩
@@ -899,6 +523,7 @@ end Formalism.FourierDecayAlt.P.Ux10
 
 
 namespace Formalism.FourierDecayAlt.P.Ux10
+open Formalism.FourierDecayAlt.P.Ux1
 
 
 section cont
@@ -1110,6 +735,7 @@ end Formalism.FourierDecayAlt.P.Ux10
 
 
 namespace Formalism.FourierDecayAlt.P.Ux10
+open Formalism.FourierDecayAlt.P.Ux1
 
 open Formalism.FourierDecayAlt Formalism.FourierDecayAlt.U Formalism.REAL Formalism.QuantumDeterminants Formalism.FourierDecayAlt.P.B4
 
@@ -1211,6 +837,7 @@ end Formalism.FourierDecayAlt.P.Ux10
 
 
 namespace Formalism.FourierDecayAlt.P.Ux10
+open Formalism.FourierDecayAlt.P.Ux1
 
 open Formalism.FourierDecayAlt Formalism.FourierDecayAlt.U Formalism.REAL Formalism.QuantumDeterminants Formalism.FourierDecayAlt.P.B4
 

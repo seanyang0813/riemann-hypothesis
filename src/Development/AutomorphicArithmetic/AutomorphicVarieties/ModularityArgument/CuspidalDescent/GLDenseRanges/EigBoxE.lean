@@ -105,13 +105,6 @@ def IsProj {G : Type} [Group G] (β : G →* H.Ga) (a : G →₀ ℤ) (N : ℕ) 
 
 variable (ι : Qbar l ≃+* ℂ) (lam : Wt L l n) (K : H.Lev) {G : Type} [Group G] (β : G →* H.Ga) (a : G →₀ ℤ) (N : ℕ)
 
-def IsDimE (D : ℕ) : Prop :=
-  ∃ (x : A →ₐ[c.O] Qbar l) (d : ℕ) (ξ : GV n H.Sl →* GL (Fin d) ℂ) (c0 : ℕ) (sp : H.X.Fn A H.m → Fin H.m → H.X.Fn ℂ d)
-    (ev : H.Op → ℂ), H.IsSpec θ ι x.toRingHom lam ξ c0 sp ∧ (∀ v j, ‖ι.symm (ev (.inr (v, j)))‖ = 1) ∧
-    zPart H θ ι x.toRingHom lam ξ K c0 ev ≠ ⊥ ∧
-    (∀ Y : H.Part ι lam ξ, Y.Y ⊓ zPart H θ ι x.toRingHom lam ξ K c0 ev ≠ ⊥ → Af.IsIrr Y.r) ∧
-    D = Module.finrank ℂ ↥(zPart H θ ι x.toRingHom lam ξ K c0 ev ⊓ ePart ((trF H d).comp β) a N)
-
 end Set
 
 section U

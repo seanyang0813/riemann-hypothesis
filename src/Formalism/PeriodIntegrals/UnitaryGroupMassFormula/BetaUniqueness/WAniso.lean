@@ -174,8 +174,6 @@ section D7
 
 open PI.BetaLUniq
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem weight_space_anisotropic : WAniso := by
   intro D u' F' w hw hww
   by_contra hwX

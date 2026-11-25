@@ -57,8 +57,6 @@ open NumberField IsDedekindDomain Formalism.MainNotions.GlobalTheoryTheory.Genus
 open GlobalTheory.WeilM GlobalTheory.LFun GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels
 open Formalism.IndefR.DatumF
 
-attribute [-instance] CStarMatrix.instHMulOfFintypeOfMulOfAddCommMonoid
-
 set_option linter.unusedSectionVars false
 
 noncomputable section

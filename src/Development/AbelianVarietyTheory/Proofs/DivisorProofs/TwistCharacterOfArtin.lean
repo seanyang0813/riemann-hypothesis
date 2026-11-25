@@ -47,7 +47,6 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions Form
 
 namespace GlobalTheory.TwistChr
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 attribute [local instance 10000] GlobalTheory.GalChar.isTorsionFree_field
 
 

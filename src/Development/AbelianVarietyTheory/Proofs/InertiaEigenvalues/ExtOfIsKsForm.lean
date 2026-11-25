@@ -45,8 +45,6 @@ open GlobalTheory.TwSys GlobalTheory.TwAll GlobalTheory.SupLaw GlobalTheory.Lift
 open scoped TensorProduct
 
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 noncomputable section
 namespace GlobalTheory.TwInputs.Move.Forms
 

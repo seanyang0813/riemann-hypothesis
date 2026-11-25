@@ -684,9 +684,6 @@ open Formalism.L2.Col Formalism.HermitianLatticesTheory Formalism.L2.Th1.H
 
 variable {E : Type} [Field E] [NumberField E] [StarRing E] {ι : Type} [Fintype ι] {a b : ℕ}
 
-theorem embH_apply' (emb : ι → E →+* ℂ) (δ : ℂ) (x : HomE E a b) (τ : ι) (i : Fin b) (j : Fin a) :
-    embH emb δ x τ i j = δ * emb τ (x (Pi.single j 1) i) := rfl
-
 theorem altE_nsmul_left {V : Type} [AddCommGroup V] [Module ℂ V] (H : Sesq V) (n : ℕ) (v w : V) :
     altE H (n • v) w = altE H v (n • w) := by
   simp only [altE, map_nsmul, LinearMap.smul_apply]

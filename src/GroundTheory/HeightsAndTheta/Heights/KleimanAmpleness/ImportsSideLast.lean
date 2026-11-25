@@ -22,17 +22,4 @@ def SegreLiftComap.Statement : Prop :=
       segreRels ι F ⊆ W' →
       IsMultiProjPrime (W'.comap (segreIncl ι F)) ∧ W' = segreLift ι F (W'.comap (segreIncl ι F))
 
-theorem SegreLiftComap.hyps :
-    IsMultiProjPrime (⊥ : Ideal (MRing (segreIdx (fun _ : Unit => Fin 1)) ℚ)) ∧
-      segreRels (fun _ : Unit => Fin 1) ℚ ⊆
-        ((⊥ : Ideal (MRing (segreIdx (fun _ : Unit => Fin 1)) ℚ)) : Set _) := by
-  have : ∀ k, Nonempty (segreIdx (fun _ : Unit => Fin 1) k) := fun k => by
-    rcases k with _ | _
-    · exact ⟨fun _ => (0 : Fin 1)⟩
-    · exact ⟨(0 : Fin 1)⟩
-  refine ⟨NumbersDVR.isMultiProjPrime_bot, ?_⟩
-  rintro g ⟨c, d, rfl⟩
-  obtain rfl : c = d := Subsingleton.elim _ _
-  simp
-
 end GroundTheory.Heights₂.Heights.Kleiman.SectionsOverLocalization

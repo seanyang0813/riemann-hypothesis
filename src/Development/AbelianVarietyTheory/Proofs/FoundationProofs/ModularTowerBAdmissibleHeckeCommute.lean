@@ -263,20 +263,6 @@ open StabHecke
 
 local notation "M₂" => Matrix (Fin 2) (Fin 2) ℤ
 
-theorem herm (p : ℕ) (hp : p.Prime) (m : M₂) (h : (p : ℤ) ∣ m.det) :
-    (∃ y : M₂, m = y * !![(p : ℤ), 0; 0, 1]) ∨
-      ∃ k : ℕ, k < p ∧ ∃ y : M₂, m = y * !![1, (k : ℤ); 0, (p : ℤ)] :=
-  _root_.GlobalTheory.hermite_right_factor_prime_det p hp m h
-
-theorem bezout (a c : ℤ) (hac : IsCoprime a c) (hc : c ≠ 0) (y y' β β' : M₂)
-    (hy : y.det = a) (hy' : y'.det = a) (hβ : β.det = c) (hβ' : β'.det = c) (h : y * β = y' * β') :
-    ∃ g : SL(2, ℤ), (g : M₂) * β = β' :=
-  _root_.GlobalTheory.sl2_right_factor_of_coprime_factorizations a c hac hc y y' β β' hy hy' hβ hβ' h
-
-theorem PP_conj (N l d : ℕ) (σ : SL(2, ℤ)) (r : M₂) (hσ : IsDiam N l d σ) (hr : PP N l r) :
-    PP N l ((σ : M₂) * r * ((σ⁻¹ : SL(2, ℤ)) : M₂)) :=
-  _root_.GlobalTheory.KZ.StabHecke.congruenceCondition_conj_diamond N l d σ r hσ hr
-
 theorem PP_cancel {N l : ℕ} {y β : M₂} (h : PP N l (y * β)) (hβ : PP N l β) : PP N l y := by
   obtain ⟨a1, a2, a3, a4⟩ := h
   obtain ⟨b1, b2, b3, b4⟩ := hβ

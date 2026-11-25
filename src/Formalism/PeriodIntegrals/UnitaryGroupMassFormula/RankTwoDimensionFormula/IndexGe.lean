@@ -12,8 +12,6 @@ open NumberField Formalism.BasicNotions Formalism.MainNotions.S Formalism.L2.SG.
 
 namespace PI.UnitaryDimensionFormula
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 def cj {D : D7} (X : HidaSetting D) (u : D.what₂.Word) (s : Hfin X u) : X.B.I.Gf :=
   (X.xu u)⁻¹ * (s : X.B.I.Gf) * X.xu u
 

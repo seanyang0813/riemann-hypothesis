@@ -75,7 +75,7 @@ import Mathlib.Tactic.Basify
 import Mathlib.Algebra.AffineMonoid.UniqueSums
 
 -- This file was produced by scripts/clump.py from the modules listed below.
--- Members: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ComplexifyStatement, Development.AbelianVarietyTheory.Proofs.DivisorProofs.NormalizedPointHeightLatticeSmul, Development.AbelianVarietyTheory.Proofs.DivisorProofs.VecHeightSmulAlgebraMap, Development.AbelianVarietyTheory.Definitions.Divisors.ExistsCoordAtPoints, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsCoordinatesSpecialisedFormProdLinearForms, Development.AbelianVarietyTheory.Proofs.DivisorProofs.FilMonoOfKerRes, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsLiftSectionsZeroSchemeRegularSequenceLineB, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsLocalLiftSectionsOnClosedSubscheme, Development.AbelianVarietyTheory.Proofs.DivisorProofs.VanishesToOneOfStalkMap, Development.AbelianVarietyTheory.Proofs.DivisorProofs.HilbertSamuelDegreeZeroResiduesRangeEqTop, Development.AbelianVarietyTheory.Proofs.DivisorProofs.IntegralLiftSymbol, Development.AbelianVarietyTheory.Definitions.Divisors.ExistsDataOfPositivity, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ProductOfVectorMultiplicationsGlobalResidues, Development.AbelianVarietyTheory.Proofs.DivisorProofs.HilbertSamuelFiltrationSymbolMonomialProduct, Development.AbelianVarietyTheory.Proofs.DivisorProofs.HilbertSamuelSectionBaseChangeProperties, Development.AbelianVarietyTheory.Proofs.DivisorProofs.FilSpaceVEqSpaceP, Development.AbelianVarietyTheory.Proofs.DivisorProofs.MulPowMemAndSpaceVLe, Development.AbelianVarietyTheory.Proofs.DivisorProofs.HilbertSamuelVanishingFiltrationDeepestStepSpan, Development.AbelianVarietyTheory.Proofs.DivisorProofs.MemSubPtsIffOfToBaseEq, Development.AbelianVarietyTheory.Proofs.DivisorProofs.NefBigBaseChange, Development.AbelianVarietyTheory.Proofs.DivisorProofs.NefBigSecondBaseChange, Development.AbelianVarietyTheory.Proofs.DivisorProofs.FilVSymVKer, Development.AbelianVarietyTheory.Proofs.DivisorProofs.TotFilTotSymKer, Development.AbelianVarietyTheory.Proofs.DivisorProofs.HilbertSamuelFiltrationAtGoodSections
+-- Members: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ComplexifyStatement, Development.AbelianVarietyTheory.Definitions.Divisors.ExistsCoordAtPoints, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsCoordinatesSpecialisedFormProdLinearForms, Development.AbelianVarietyTheory.Proofs.DivisorProofs.FilMonoOfKerRes, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsLiftSectionsZeroSchemeRegularSequenceLineB, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsLocalLiftSectionsOnClosedSubscheme, Development.AbelianVarietyTheory.Proofs.DivisorProofs.VanishesToOneOfStalkMap, Development.AbelianVarietyTheory.Proofs.DivisorProofs.HilbertSamuelDegreeZeroResiduesRangeEqTop, Development.AbelianVarietyTheory.Proofs.DivisorProofs.IntegralLiftSymbol, Development.AbelianVarietyTheory.Definitions.Divisors.ExistsDataOfPositivity, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ProductOfVectorMultiplicationsGlobalResidues, Development.AbelianVarietyTheory.Proofs.DivisorProofs.HilbertSamuelFiltrationSymbolMonomialProduct, Development.AbelianVarietyTheory.Proofs.DivisorProofs.HilbertSamuelSectionBaseChangeProperties, Development.AbelianVarietyTheory.Proofs.DivisorProofs.FilSpaceVEqSpaceP, Development.AbelianVarietyTheory.Proofs.DivisorProofs.MulPowMemAndSpaceVLe, Development.AbelianVarietyTheory.Proofs.DivisorProofs.HilbertSamuelVanishingFiltrationDeepestStepSpan, Development.AbelianVarietyTheory.Proofs.DivisorProofs.MemSubPtsIffOfToBaseEq, Development.AbelianVarietyTheory.Proofs.DivisorProofs.NefBigBaseChange, Development.AbelianVarietyTheory.Proofs.DivisorProofs.NefBigSecondBaseChange, Development.AbelianVarietyTheory.Proofs.DivisorProofs.FilVSymVKer, Development.AbelianVarietyTheory.Proofs.DivisorProofs.TotFilTotSymKer, Development.AbelianVarietyTheory.Proofs.DivisorProofs.HilbertSamuelFiltrationAtGoodSections
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ComplexifyStatement =====
 -- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.ComplexifyStatement", "h": "module\n\npublic import Development.AbelianVarietyTheory.BlockTheory.DivisorBase.TopRankPowers\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.MulBoundAtBaseChange\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.MulBoundAtOfNotIsReal\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Development.AbelianVarietyTheory.Definitions.Divisors.WellChosen\n\n"}
@@ -104,145 +104,8 @@ end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ComplexifyStatement =====
 
--- ===== clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.NormalizedPointHeightLatticeSmul =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.NormalizedPointHeightLatticeSmul", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.IsHeightIffOfDegreeEq\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\npublic import Mathlib.NumberTheory.NumberField.ProductFormula\n\n"}
-section -- clump:auto
-@[expose] public section
-
-open CategoryTheory AlgebraicGeometry NumberField GlobalTheory.ChowHt GlobalTheory.Adelic
-
-namespace GlobalTheory.Adelic.HeightScaling
-
-variable {F K : Type} [Field F] [Field K] [NumberField K] {N n : ℕ}
-
-theorem finite_support_log {c : K} (hc : c ≠ 0) :
-    (Function.support fun v : FinitePlace K => Real.log (v c)).Finite := by
-  refine Set.Finite.subset (FinitePlace.hasFiniteMulSupport hc) fun v hv h1 => hv ?_
-  simp only at h1
-  simp [h1]
-
-theorem sum_log_eq_zero {c : K} (hc : c ≠ 0) :
-    (∑ᶠ v : FinitePlace K, Real.log (v c)) + ∑ τ : K →+* ℂ, Real.log ‖τ c‖ = 0 := by
-  have hmul : (Function.mulSupport fun w : FinitePlace K => w c).Finite :=
-    FinitePlace.hasFiniteMulSupport hc
-  have h1 : ∑ᶠ w : FinitePlace K, Real.log (w c) = Real.log (∏ᶠ w : FinitePlace K, w c) := by
-    rw [finsum_eq_sum_of_support_subset (s := hmul.toFinset),
-      finprod_eq_prod_of_mulSupport_subset (s := hmul.toFinset) _ (by simp),
-      Real.log_prod (fun w _ => (FinitePlace.pos_iff.2 hc).ne')]
-    intro w hw
-    simp only [Set.Finite.coe_toFinset, Function.mem_mulSupport]
-    intro h1
-    apply hw
-    simp [h1]
-  have h2 : ∑ φ : K →+* ℂ, Real.log ‖φ c‖ = Real.log |Algebra.norm ℚ c| := by
-    rw [← Real.log_prod (fun φ _ => norm_ne_zero_iff.2 ((map_ne_zero φ).2 hc))]
-    congr 1
-    have := congr_arg (‖·‖) (Algebra.norm_eq_prod_embeddings ℚ ℂ c)
-    rw [norm_prod] at this
-    rw [Fintype.prod_equiv (RingHom.equivRatAlgHom K ℂ) (fun φ => ‖φ c‖) (fun φ => ‖φ c‖)
-      (fun _ => by simp [RingHom.equivRatAlgHom_apply]), ← this]
-    rw [eq_ratCast, ← Complex.ofReal_ratCast, Complex.norm_real, Real.norm_eq_abs]
-  rw [h1, h2, FinitePlace.prod_eq_inv_abs_norm hc]
-  push_cast
-  rw [Real.log_inv, neg_add_cancel]
-
-theorem finite_support_log_finSize {w : Matrix (Fin N) (Fin n) F} (hw : Submodule.span F (Set.range w.col) = ⊤)
-    (φ : F →+* K) {y : Fin N → K} (hy : y ≠ 0) :
-    (Function.support fun v : FinitePlace K => Real.log (finSize w φ v.1 y)).Finite := by
-  have hfin : (⋃ k : {k : Fin n // ∑ j, φ (w j k) * y j ≠ 0},
-      Function.mulSupport fun v : FinitePlace K => v (∑ j, φ (w j k.1) * y j)).Finite :=
-    Set.finite_iUnion fun k => FinitePlace.hasFiniteMulSupport k.2
-  refine hfin.subset fun v hv => ?_
-  by_contra hn
-  apply hv
-  have h1 : ∀ k : Fin n, ∑ j, φ (w j k) * y j ≠ 0 → v.1 (∑ j, φ (w j k) * y j) = 1 := fun k hk => by
-    by_contra h
-    exact hn (Set.mem_iUnion.2 ⟨⟨k, hk⟩, h⟩)
-  have hpos := finSize_pos hw φ v.1 hy
-  have hle : finSize w φ v.1 y ≤ 1 := Real.iSup_le (fun k => by
-    by_cases hk : ∑ j, φ (w j k) * y j = 0
-    · rw [hk, map_zero]; exact zero_le_one
-    · exact (h1 k hk).le) zero_le_one
-  have hge : 1 ≤ finSize w φ v.1 y := by
-    by_contra h
-    refine hpos.not_ge (Real.iSup_le (fun k => ?_) le_rfl)
-    by_cases hk : ∑ j, φ (w j k) * y j = 0
-    · rw [hk, map_zero]
-    · exact absurd ((h1 k hk).ge.trans (le_finSize w φ v.1 y k)) h
-  simp only [le_antisymm hle hge, Real.log_one]
-
-theorem pointHeight_smul : ∀ (F K : Type) [Field F] [NumberField F] [Field K] [NumberField K] [Algebra F K] (N n : ℕ) (w : Matrix (Fin N) (Fin n) F) (A : (F →+* ℂ) → Matrix (Fin N) (Fin N) ℂ), Submodule.span F (Set.range w.col) = ⊤ → (∀ σ, (A σ).det ≠ 0) → ∀ (y : Fin N → K) (c : K), y ≠ 0 → c ≠ 0 → pointHeight w A (c • y) = pointHeight w A y := by
-  intro F K _ _ _ _ _ N n w A hw hA y c hy hc
-  rw [pointHeight_eq, pointHeight_eq]
-  congr 1
-  have e1 : ∀ v : FinitePlace K, Real.log (finSize w (algebraMap F K) v.1 (c • y)) =
-      Real.log (v c) + Real.log (finSize w (algebraMap F K) v.1 y) := fun v => by
-    rw [finSize_smul, Real.log_mul (v.1.ne_zero hc) (finSize_pos hw _ v.1 hy).ne']
-    rfl
-  have e2 : ∀ τ : K →+* ℂ, Real.log (archSize (A (τ.comp (algebraMap F K))) fun j => τ ((c • y) j)) =
-      Real.log ‖τ c‖ + Real.log (archSize (A (τ.comp (algebraMap F K))) fun j => τ (y j)) := fun τ => by
-    have h0 : (fun j => τ (y j)) ≠ 0 := fun h => hy (funext fun j => (map_eq_zero τ).1 (congrFun h j))
-    have h1 : (fun j => τ ((c • y) j)) = τ c • fun j => τ (y j) := funext fun j => by simp
-    rw [h1, archSize_smul, Real.log_mul (norm_ne_zero_iff.2 ((map_ne_zero τ).2 hc)) (archSize_pos (hA _) h0).ne']
-  rw [finsum_congr e1, Finset.sum_congr rfl fun τ _ => e2 τ, Finset.sum_add_distrib,
-    finsum_add_distrib (finite_support_log hc) (finite_support_log_finSize hw _ hy)]
-  linarith [sum_log_eq_zero hc]
-
-end GlobalTheory.Adelic.HeightScaling
-end -- clump:auto
-end -- clump:auto
--- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.NormalizedPointHeightLatticeSmul =====
-
--- ===== clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.VecHeightSmulAlgebraMap =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.VecHeightSmulAlgebraMap", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.IsHeightIffOfDegreeEq\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.PointHeight\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.NormalizedPointHeightLatticeAlgebraMap\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.NormalizedPointHeightLatticeSmul\nimport Mathlib.Algebra.GroupWithZero.Submonoid.CancelMulZero\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Etale.Weakly\nimport Mathlib.RingTheory.Henselian\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.TotallySplit\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\n\n"}
-section -- clump:auto
-@[expose] public section
-
-open CategoryTheory AlgebraicGeometry NumberField GlobalTheory.ChowHt GlobalTheory.Adelic
-
-namespace GlobalTheory.Adelic
-
-theorem vecHeight_smul_algebraMap (F K : Type) [Field F] [NumberField F] [Field K] [NumberField K] [Algebra F K]
-    (N n : ℕ) (w : Matrix (Fin N) (Fin n) F) (A : (F →+* ℂ) → Matrix (Fin N) (Fin N) ℂ)
-    (hw : Submodule.span F (Set.range w.col) = ⊤) (hA : ∀ σ, (A σ).det ≠ 0)
-    (Ω : Type) [Field Ω] [Algebra F Ω] [Algebra.IsAlgebraic F Ω] [Algebra K Ω] [IsScalarTower F K Ω]
-    (y : Fin N → K) (c : Ω) (hy : y ≠ 0) (hc : c ≠ 0) :
-    vecHeight w A (c • fun j => algebraMap K Ω (y j)) = pointHeight w A y := by
-  set z : Fin N → Ω := c • fun j => algebraMap K Ω (y j) with hz
-  let L : IntermediateField K Ω := IntermediateField.adjoin K {c}
-  have hcK : IsIntegral K c := ((Algebra.IsAlgebraic.isAlgebraic (R := F) c).tower_top K).isIntegral
-  haveI : FiniteDimensional K L := IntermediateField.adjoin.finiteDimensional hcK
-  haveI : NumberField L := NumberField.of_module_finite K L
-  have hcL : c ∈ L := IntermediateField.mem_adjoin_simple_self K c
-  have hle : coordField F z ≤ L.restrictScalars F := by
-    refine IntermediateField.adjoin_le_iff.2 ?_
-    rintro _ ⟨j, rfl⟩
-    exact mul_mem hcL (L.algebraMap_mem (y j))
-  let ι : coordField F z →ₐ[F] L := IntermediateField.inclusion hle
-  letI : Algebra (coordField F z) L := ι.toRingHom.toAlgebra
-  haveI : IsScalarTower F (coordField F z) L := IsScalarTower.of_algebraMap_eq fun x => (ι.commutes x).symm
-  let z' : Fin N → coordField F z := fun j => ⟨z j, IntermediateField.subset_adjoin _ _ ⟨j, rfl⟩⟩
-  let c' : L := ⟨c, hcL⟩
-  have hc' : c' ≠ 0 := fun h => hc (congrArg Subtype.val h)
-  have hyL : (fun j => algebraMap K L (y j)) ≠ 0 := fun h => hy (funext fun j =>
-    (algebraMap K L).injective ((congrFun h j).trans (map_zero _).symm))
-  have he : (fun j => algebraMap (coordField F z) L (z' j)) = c' • fun j => algebraMap K L (y j) :=
-    funext fun j => Subtype.ext rfl
-  have hz' : z' ≠ 0 := fun h => smul_ne_zero hc' hyL (by
-    rw [← he, h]; exact funext fun j => map_zero _)
-  have h1 := _root_.GlobalTheory.Adelic.HeightExt.pointHeight_algebraMap F (coordField F z) N n w A hw hA L z' hz'
-  have h2 := _root_.GlobalTheory.Adelic.HeightScaling.pointHeight_smul F L N n w A hw hA _ c' hyL hc'
-  have h3 := _root_.GlobalTheory.Adelic.HeightExt.pointHeight_algebraMap F K N n w A hw hA L y hy
-  rw [he, h2, h3] at h1
-  exact h1.symm
-
-end GlobalTheory.Adelic
-end -- clump:auto
-end -- clump:auto
--- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.VecHeightSmulAlgebraMap =====
-
 -- ===== clump member: Development.AbelianVarietyTheory.Definitions.Divisors.ExistsCoordAtPoints =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Definitions.Divisors.ExistsCoordAtPoints", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.IntegralBound\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.FiniteFinrankLineBundleSectionsFiniteEtale\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsUnitaryOfFrameNormConj\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.VecHeightSmulAlgebraMap\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Etale.Weakly\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.TotallySplit\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Definitions.Divisors.ExistsCoordAtPoints", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.IntegralBound\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.FiniteFinrankLineBundleSectionsFiniteEtale\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsUnitaryOfFrameNormConj\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.IsHeightIffOfDegreeEq\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.PointHeight\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.NormalizedPointHeightLatticeAlgebraMap\npublic import Mathlib.NumberTheory.NumberField.ProductFormula\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Etale.Weakly\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.TotallySplit\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -350,23 +213,6 @@ def RatPt.geomPt (x : RatPt (G.baseChange E) s) : (G.toLinSys.baseChange E).Pt (
 
 variable {G E s}
 
-theorem RatPt.ptHeight_geomPt (x : RatPt (G.baseChange E) s) :
-    haveI : Algebra.IsAlgebraic F (AlgebraicClosure E) := Algebra.IsAlgebraic.trans F E _
-    G.ptHeight (LinSys.toBase (RatPt.geomPt G E s x)) = x.ht := by
-  haveI : Algebra.IsAlgebraic F (AlgebraicClosure E) := Algebra.IsAlgebraic.trans F E _
-  obtain ⟨c, hc, e⟩ := G.exists_coords_baseChange E x.pt.1
-  have h₀ := G.geom.alg.bpf.coords_ne_zero (x.pt.1 ≫ G.bcFst E)
-  have h₁ := vecHeight_smul_algebraMap F E _ _ G.w G.A G.geom.alg.spans G.herm (AlgebraicClosure E) _ 1 h₀ one_ne_zero
-  have h₃ := vecHeight_smul_algebraMap F E _ _ G.w G.A G.geom.alg.spans G.herm E _ c h₀ hc
-  have h₄ := vecHeight_smul_algebraMap F E _ _ G.w G.A G.geom.alg.spans G.herm E _ 1 (smul_ne_zero hc h₀) one_ne_zero
-  rw [one_smul] at h₁ h₄
-  have h₅ : G.coords (LinSys.toBase (RatPt.geomPt G E s x)).1 =
-      fun j => algebraMap E (AlgebraicClosure E) (G.coords (x.pt.1 ≫ G.bcFst E) j) := by
-    rw [← LinSys.coords_spMap_comp]
-    exact congrArg G.coords ((congrArg (· ≫ G.bcFst E) (Category.assoc _ _ _)).trans (Category.assoc _ _ _))
-  rw [HermSys.ptHeight, h₅, h₁]
-  exact (h₃.symm.trans h₄).trans (congrArg (pointHeight G.w G.A) e.symm)
-
 theorem Split.along_surjective (h : Split G.toTuple E s) :
     Function.Surjective fun x : RatPt (G.baseChange E) s => x.along (algebraMap E (AlgebraicClosure E)) := fun w => by
   obtain ⟨x₀, e⟩ := h w.1 w.2
@@ -391,7 +237,7 @@ theorem RatPt.geomPt_injective (hs : (G.baseChange E).IsGood s) : Function.Injec
 theorem Split.exists_coord (h : Split G.toTuple E s) (hs : (G.baseChange E).IsGood s) :
     ∃ (x : Fin (G.geomPts E (G.linSection E s)).ncard ≃ RatPt (G.baseChange E) s)
       (Co : Coord (G.baseChange E) hs (G.geomPts E (G.linSection E s)).ncard),
-      Co.AtPoints x ∧ G.cycleHeight E (G.linSection E s) = ∑ p, (x p).ht := by
+      Co.AtPoints x := by
   have hfin := (Geo.isGood_baseChange_iff.1 hs).finite_geomPts
   have : Finite (RatPt (G.baseChange E) s) :=
     (Set.finite_range_iff (RatPt.geomPt_injective hs)).1 (h.geomPts_eq ▸ hfin)
@@ -399,11 +245,7 @@ theorem Split.exists_coord (h : Split G.toTuple E s) (hs : (G.baseChange E).IsGo
     rw [h.geomPts_eq, Set.ncard_range_of_injective (RatPt.geomPt_injective hs)]
   let x := (Finite.equivFinOfCardEq e).symm
   obtain ⟨Co, hCo⟩ := exists_coord_atPoints hs h.along_surjective x
-  refine ⟨x, Co, hCo, ?_⟩
-  rw [HermSys.cycleHeight]
-  refine (finsum_mem_congr h.geomPts_eq fun _ _ => rfl).trans ?_
-  rw [finsum_mem_range (RatPt.geomPt_injective hs), ← finsum_comp_equiv x, finsum_eq_sum_of_fintype]
-  exact Finset.sum_congr rfl fun p _ => (x p).ptHeight_geomPt
+  exact ⟨x, Co, hCo⟩
 
 end Split
 
@@ -472,7 +314,7 @@ theorem exists_eq_C_mul_prod {E K ι : Type} [Field E] [Field K] [Fintype ι] (�
 theorem exists_coord_spec_eq : ∀ (F : Type) [Field F] [NumberField F] (G : Geo F) (E : Type) [Field E] [NumberField E] [Algebra F E] (s : Fin G.D → Fin G.N → E) (hs : (G.baseChange E).IsGood s) (δ : ℕ) (f : MvPolynomial (Fin (G.D + 1) × Fin G.N) F), Split G.toTuple E s → SimpleAt G.toTuple δ f E s → ∃ (Co : Coord (G.baseChange E) hs δ) (c : E), c ≠ 0 ∧ spec s f = C c * ∏ p, lin (Co.y p) := by
   intro F _ _ G E _ _ _ s hs δ f h hS
   obtain rfl := hS.card
-  obtain ⟨x, Co, hCo, -⟩ := h.exists_coord hs
+  obtain ⟨x, Co, hCo⟩ := h.exists_coord hs
   obtain ⟨c, hc, e⟩ := hS.fac
   choose a ha ea using fun p => G.exists_coords_baseChange E (x p).pt.1
   have h₅ (p) : G.coords (LinSys.toBase (RatPt.geomPt G E s (x p))).1 =
@@ -1034,10 +876,6 @@ theorem mulPow_mem_global (G : Geo K) (s : Fin G.D → Fin G.N → K) {a j l : �
   rfl
 
 end GlobalTheory.HSCore.IntLift
-
-namespace GlobalTheory.HSCore
-
-end GlobalTheory.HSCore
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.IntegralLiftSymbol =====

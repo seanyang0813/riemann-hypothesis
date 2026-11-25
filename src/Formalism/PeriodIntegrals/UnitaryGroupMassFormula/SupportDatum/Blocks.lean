@@ -12,8 +12,6 @@ open NumberField IsDedekindDomain Formalism.MainNotions.S Formalism.MainNotions.
 open scoped BigOperators ComplexOrder
 open Classical
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 def blkDet {K : Type} [CommRing K] : List (K × ℕ) → K
   | [] => 1
   | (t, s) :: bs => (-1) ^ (s * (s - 1) / 2) * t ^ s * blkDet bs

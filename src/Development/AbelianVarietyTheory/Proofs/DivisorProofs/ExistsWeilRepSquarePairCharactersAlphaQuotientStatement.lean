@@ -119,7 +119,7 @@ theorem squareWeil₁ : ∀ {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} {G
   obtain ⟨rα, rβ⟩ := GlobalTheory.T.thetaGrid_alpha_beta_restrict_quadratic_pow_rank hL t i j
   have pα := GlobalTheory.LFun.resEtaPow_of_resEta _ _ h2 _ _ rα
   have pβ := GlobalTheory.LFun.resEtaPow_of_resEta _ _ h2 _ _ rβ
-  exact GlobalTheory.T.exists_adelicWeilRep_unitaryPair_schroedingerModel D B hB _ _ X Y r s r' s' hX hY Mo hMo _ _ hα (isHecke_div hα hβ) pα (resEtaPow_div pα pβ)
+  exact _root_.GlobalTheory.WeilSchrodinger.exists_isWeil D B hB _ _ X Y r s r' s' hX hY Mo hMo _ _ hα (isHecke_div hα hβ) pα (resEtaPow_div pα pβ)
 
 end GlobalTheory.FunObj
 

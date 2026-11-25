@@ -310,7 +310,7 @@ theorem main : ∀ (l : ℕ) [Fact l.Prime] (a e : ℕ) [NeZero a] [NeZero e]
   intro l _ a e _ _ O K _ _ _ _ _ _ _ _ _ _ t ϖ g
   have he : e + 1 = l ^ a := TameDescentExponentData.succ_eq (K := K)
   obtain ⟨h, hh, k, hk, hg⟩ :=
-    GlobalTheory.T.galoisQl_eq_galoisKPrime_mul_galoisKinfty l a e ϖ he (BKGal.sQ l g)
+    _root_.GlobalTheory.NgalDecomp.galQ_eq_GK_mul_GKinf l a e ϖ he (BKGal.sQ l g)
   let h' : BKGal.Gl l :=
     ⟨h, GK_le (K := Formalism.MainNotions.ElementDenominator.qlExt l) (K' := ϖ.field a) bot_le hh⟩
   refine ⟨h', h'⁻¹ * g, by rw [mul_inv_cancel_left], hh, ?_⟩

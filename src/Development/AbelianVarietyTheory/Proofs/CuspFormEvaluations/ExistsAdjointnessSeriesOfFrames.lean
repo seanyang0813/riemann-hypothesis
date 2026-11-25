@@ -2,7 +2,7 @@ module
 
 public import Formalism.SharpRestriction.Divisibility.GeneratorPowers.GermBPrim
 public import Formalism.SharpRestriction.Divisibility.GeneratorPowers.GermBSer
-import Formalism.SharpRestriction.Divisibility.GeneratorPowers.GermBFr
+import Formalism.SharpRestriction.Divisibility.GeneratorPowers.GermBPf
 import Formalism.SharpRestriction.Divisibility.GeneratorPowers.GermDJet
 import Formalism.SharpRestriction.Divisibility.GeneratorPowers.GermFunPf
 import Mathlib.Algebra.Order.Floor.Extended
@@ -61,49 +61,6 @@ namespace GlobalTheory.FrameAdjSeries
 
 open Formalism.MainNotions.ModuliIntegralCharts.H1.GermB Formalism.MainNotions.ModuliIntegralCharts.H1.GermD Formalism.MainNotions.ModuliIntegralCharts.H1.GermFun
 
-section Pts
-
-variable {S : Type} [CommRing S] (d : ℕ)
-
-theorem subst_copy (m : ℕ) {n : ℕ} (φ : Fin 2 → Fin d → MvPolynomial (Fin n × Fin d) S) (i : Fin 2) :
-    (jetSubstP m (fun p : Fin 2 × Fin d => φ p.1 p.2)).comp (jetCopy d m i) =
-      jetSubstP m (fun p : Fin 1 × Fin d => φ i p.2) := by
-  apply jet_hom_ext
-  intro p
-  simp only [AlgHom.comp_apply, jetSubstP, jetCopy, jetMap_mk, MvPolynomial.aeval_X]
-
-theorem substX (m : ℕ) {n : ℕ} (k : Fin n) :
-    jetSubstP m (fun p : Fin 1 × Fin d => (MvPolynomial.X (k, p.2) : MvPolynomial (Fin n × Fin d) S)) =
-      jetCopy d m k := by
-  apply jet_hom_ext
-  intro p
-  simp [jetSubstP, jetCopy, jetMap_mk]
-
-def jetRen (m : ℕ) {n n' : ℕ} (r : Fin n → Fin n') : Jet S (Fin n × Fin d) m →ₐ[S] Jet S (Fin n' × Fin d) m :=
-  jetMap (fun q : Fin n × Fin d => MvPolynomial.X (r q.1, q.2)) fun _ => X_mem_orig _
-
-theorem ren_copy (m : ℕ) {n n' : ℕ} (r : Fin n → Fin n') (i : Fin n) :
-    (jetRen (S := S) d m r).comp (jetCopy d m i) = jetCopy d m (r i) := by
-  apply jet_hom_ext
-  intro p
-  simp only [AlgHom.comp_apply, jetRen, jetCopy, jetMap_mk, MvPolynomial.aeval_X]
-
-theorem ren_one (m : ℕ) {n' : ℕ} (r : Fin 1 → Fin n') : jetRen (S := S) d m r = jetCopy d m (r 0) := by
-  apply jet_hom_ext
-  rintro ⟨i, j⟩
-  obtain rfl : i = 0 := Subsingleton.elim _ _
-  simp only [jetRen, jetCopy, jetMap_mk, MvPolynomial.aeval_X]
-
-theorem subst_psIn (m : ℕ) {n n' : ℕ} (r : Fin n → Fin n') (g : Fin d → MvPowerSeries (Fin n × Fin d) S) :
-    jetSubstP m (fun p : Fin 1 × Fin d => psIn d m r (g p.2)) =
-      (jetRen d m r).comp (jetSubstP m (fun p : Fin 1 × Fin d => psTrunc m (g p.2))) := by
-  have hr : (MvPolynomial.aeval fun q : Fin n × Fin d => (MvPolynomial.X (r q.1, q.2) : MvPolynomial (Fin n' × Fin d) S)) =
-      MvPolynomial.rename fun p : Fin n × Fin d => (r p.1, p.2) := MvPolynomial.algHom_ext fun q => by simp
-  apply jet_hom_ext
-  intro p
-  simp only [jetSubstP, jetRen, AlgHom.comp_apply, jetMap_mk, MvPolynomial.aeval_X, map_sub, psIn, MvPolynomial.constantCoeff_rename, hr, MvPolynomial.rename_C]
-
-end Pts
 
 theorem jetSubstP_zero_eq {S κ κ' : Type} [CommRing S] (φ ψ : κ → MvPolynomial κ' S) :
     (jetSubstP 0 φ : Jet S κ 0 →ₐ[S] Jet S κ' 0) = jetSubstP 0 ψ := by
@@ -117,74 +74,6 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {X0 : S
 variable {S : Type} [CommRing S] {x0 : Sp S ⟶ X0} {d : ℕ} {x : ∀ m, jOG x0 d m 1 ⟶ t.G}
 variable {F : Fin d → MvPowerSeries (Fin 2 × Fin d) S} {act : 𝓞 E → Fin d → MvPowerSeries (Fin 1 × Fin d) S}
   {κ : Type} [Fintype κ] {tg : κ → (Sp (DualNumber S) ⟶ t.G.left)} {uvec : κ → Fin d → S}
-
-theorem pt_sub (m : ℕ) {n : ℕ} (φ : Fin 2 → Fin d → MvPolynomial (Fin n × Fin d) S) (i : Fin 2) :
-    homAt x0 (jetSubstP m (fun p : Fin 2 × Fin d => φ p.1 p.2)) ≫ jptG t x0 d x m i =
-      homAt x0 (jetSubstP m (fun p : Fin 1 × Fin d => φ i p.2)) ≫ x m := by
-  rw [jptG, ← Category.assoc, homAt_comp, subst_copy]
-
-theorem pt_X (m : ℕ) {n : ℕ} (k : Fin n) :
-    homAt x0 (jetSubstP m (fun p : Fin 1 × Fin d => (MvPolynomial.X (k, p.2) : MvPolynomial (Fin n × Fin d) S))) ≫ x m =
-      jptG t x0 d x m k := by
-  rw [substX]
-  try rfl
-
-theorem pt_law (hch : IsChartG t x0 d F act tg uvec x) (m : ℕ) {n : ℕ} (r : Fin 2 → Fin n) :
-    homAt x0 (jetSubstP m (fun p : Fin 1 × Fin d => psIn d m r (F p.2))) ≫ x m =
-      jptG t x0 d x m (r 0) * jptG t x0 d x m (r 1) := by
-  have hk : ∀ i, homAt x0 (jetRen d m r) ≫ jptG t x0 d x m i = jptG t x0 d x m (r i) := fun i => by
-    rw [jptG, jptG, ← Category.assoc, homAt_comp, ren_copy]
-  rw [subst_psIn, ← homAt_comp, Category.assoc, hch.law m, MonObj.comp_mul, hk, hk]
-
-theorem pt_act (hch : IsChartG t x0 d F act tg uvec x) (m : ℕ) {n : ℕ} (r : Fin 1 → Fin n) (a : 𝓞 E) :
-    homAt x0 (jetSubstP m (fun p : Fin 1 × Fin d => psIn d m r (act a p.2))) ≫ x m =
-      jptG t x0 d x m (r 0) ≫ t.act.act a := by
-  rw [subst_psIn, ← homAt_comp, Category.assoc, ← hch.act m a, ← Category.assoc, ren_one]
-  try rfl
-
-theorem pe_pt (m : ℕ) {n : ℕ} (σ : Jet S (Fin 2 × Fin d) m →ₐ[S] Jet S (Fin n × Fin d) m) (I : ULift.{0} (Finset (Fin 2))) :
-    (homAt x0 σ).left ≫ cφG t ![jptG t x0 d x m (0 : Fin 2), jptG t x0 d x m (1 : Fin 2)] I =
-      (psum t.G ![homAt x0 σ ≫ jptG t x0 d x m (0 : Fin 2), homAt x0 σ ≫ jptG t x0 d x m (1 : Fin 2)] I.down).left := by
-  simp only [cφG, ← Over.comp_left]
-  refine congrArg Over.Hom.left ((psum_hom (preHom _) _ I.down).trans ?_)
-  refine congrArg (fun f => psum t.G f I.down) (funext fun i => ?_)
-  fin_cases i <;> rfl
-
-theorem wl_pt {T : Over X0} (a b : T ⟶ t.G) (c : 𝓞 E) (I : ULift.{0} (Finset (Fin 2))) :
-    (lift a b).left ≫ cφG t ![fst t.G t.G, snd t.G t.G ≫ t.act.act c] I =
-      (psum t.G ![a, b ≫ t.act.act c] I.down).left := by
-  simp only [cφG, ← Over.comp_left]
-  refine congrArg Over.Hom.left ((psum_hom (preHom _) _ I.down).trans ?_)
-  refine congrArg (fun f => psum t.G f I.down) (funext fun i => ?_)
-  fin_cases i
-  · show lift a b ≫ fst t.G t.G = a
-    exact lift_fst _ _
-  · show lift a b ≫ (snd t.G t.G ≫ t.act.act c) = b ≫ t.act.act c
-    exact lift_snd_assoc _ _ _
-
-theorem wl_pt' {T : Over X0} (a b : T ⟶ t.G) (c : 𝓞 E) (I : ULift.{0} (Finset (Fin 2))) :
-    (lift a b).left ≫ cφG t ![fst t.G t.G ≫ t.act.act c, snd t.G t.G] I =
-      (psum t.G ![a ≫ t.act.act c, b] I.down).left := by
-  simp only [cφG, ← Over.comp_left]
-  refine congrArg Over.Hom.left ((psum_hom (preHom _) _ I.down).trans ?_)
-  refine congrArg (fun f => psum t.G f I.down) (funext fun i => ?_)
-  fin_cases i
-  · show lift a b ≫ (fst t.G t.G ≫ t.act.act c) = a ≫ t.act.act c
-    exact lift_fst_assoc _ _ _
-  · show lift a b ≫ snd t.G t.G = b
-    exact lift_snd _ _
-
-theorem frame_origin_jet_one (hch : IsChartG t x0 d F act tg uvec x) : x 0 = 1 := by
-  have hj : (Algebra.ofId S (Jet S (Fin 1 × Fin d) 0)).comp jetAug = AlgHom.id S _ := by
-    apply jet_hom_ext
-    intro p
-    rw [AlgHom.comp_apply, jetAug_X, map_zero, AlgHom.id_apply]
-    exact (Ideal.Quotient.eq_zero_iff_mem.2 (by simpa using X_mem_orig (R := S) p)).symm
-  calc x 0 = 𝟙 _ ≫ x 0 := (Category.id_comp _).symm
-    _ = (homAt x0 (Algebra.ofId S (Jet S (Fin 1 × Fin d) 0)) ≫ homAt x0 jetAug) ≫ x 0 := by
-        rw [homAt_comp, hj, homAt_id]
-    _ = homAt x0 (Algebra.ofId S (Jet S (Fin 1 × Fin d) 0)) ≫ 1 := by rw [Category.assoc, hch.zero 0]
-    _ = 1 := map_one (preHom _)
 
 theorem jpt_trunc' (hch : IsChartG t x0 d F act tg uvec x) (m : ℕ) {n : ℕ} (i : Fin n) :
     homAt x0 (jetTrunc : Jet S (Fin n × Fin d) (m + 1) →ₐ[S] _) ≫ jptG t x0 d x (m + 1) i = jptG t x0 d x m i := by

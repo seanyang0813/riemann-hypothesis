@@ -80,14 +80,4 @@ theorem schr_mem_schA {F : Type} [Field F] [NumberField F] (ψ : AddChar (AF F) 
   rw [this]
   exact Submodule.smul_mem _ _ h2
 
-theorem apply_eq_rho {F : Type} [Field F] [NumberField F] {W : Type} [AddCommGroup W] [Module (AF F) W]
-    {Bf : W → W → AF F} {κ : Type} [Fintype κ] (dc : Darboux Bf κ) (ψ : AddChar (AF F) ℂ) (f : (κ → AF F) → ℂ)
-    (x : κ → AF F) : f x = dc.rho ψ (dc.e.symm (x, 0)) f 0 := by
-  simp [Darboux.rho, schr]
-
-theorem rho_apply_zero {F : Type} [Field F] [NumberField F] {W : Type} [AddCommGroup W] [Module (AF F) W]
-    {Bf : W → W → AF F} {κ : Type} [Fintype κ] (dc : Darboux Bf κ) (ψ : AddChar (AF F) ℂ) (f : (κ → AF F) → ℂ)
-    (z : W) (hz : (dc.e z).1 = 0) : dc.rho ψ z f 0 = f 0 := by
-  simp [Darboux.rho, schr, hz]
-
 end GlobalTheory.EvZeroUniq

@@ -483,7 +483,7 @@ theorem std_iso {X : Stages} {px : PreX X.B.toPre} {I : Col2.ColIn X.B px} {hX :
         ∀ x, e (rhoK (X.B.wts.lamV ((i : ℕ) + 1)) (invTrK fun τ => Formalism.UG.bc (tauE X.toD7 τ) g) x) =
           (z.R.cV i).coef.ρ γ (e x)) ∧
       ∀ (t : TupU I (usedOf I T Wt)) (ok : (Formalism.L2.Col.mtKGSD (Pr := X.B.primes px) X.B.wts I.Ch I.sel t.1 ((i : ℕ) + 1)).Ok) (φ : (Formalism.L2.Col.mtKGSD (Pr := X.B.primes px) X.B.wts I.Ch I.sel t.1 ((i : ℕ) + 1)).EqFun) (h : Bridge.Gf (Vc X.toD7 i)),
-        z.R.B.jL i t ((by with_unfolding_all exact ((Formalism.L2.Col.mtKGSD (Pr := X.B.primes px) X.B.wts I.Ch I.sel t.1 ((i : ℕ) + 1)).res ok φ :))) h =
+        z.R.B.jL i t ((Formalism.L2.Col.mtKGSD (Pr := X.B.primes px) X.B.wts I.Ch I.sel t.1 ((i : ℕ) + 1)).res ok φ) h =
           e (GlobalTheory.CoefSpace.bcVV X.B.embLL (X.B.wts.lamV ((i : ℕ) + 1)) (φ.1 (LiftBrg.ptL X I (usedOf I T Wt) i t 1 1 h))) := by
   have hh := hS.2 i
   unfold BrgStdV StdSide at hh
@@ -501,7 +501,7 @@ theorem std_iso {X : Stages} {px : PreX X.B.toPre} {I : Col2.ColIn X.B px} {hX :
     (fun γ γE g h1 h2 v => hint γ γE g h1 h2 v) hli).elim fun e he => he.elim fun s he => ?_
   have hβ : z.R.toLevCh.βV i = 1 := z.lev.beta.1 i
   have hrd : ∀ (t : TupU I (usedOf I T Wt)) (ok : (Formalism.L2.Col.mtKGSD (Pr := X.B.primes px) X.B.wts I.Ch I.sel t.1 ((i : ℕ) + 1)).Ok) (φ : (Formalism.L2.Col.mtKGSD (Pr := X.B.primes px) X.B.wts I.Ch I.sel t.1 ((i : ℕ) + 1)).EqFun) (h : Bridge.Gf (Vc X.toD7 i)),
-      z.R.B.jL i t ((by with_unfolding_all exact ((Formalism.L2.Col.mtKGSD (Pr := X.B.primes px) X.B.wts I.Ch I.sel t.1 ((i : ℕ) + 1)).res ok φ :))) h = c (φ.1 (LiftBrg.ptL X I (usedOf I T Wt) i t 1 1 h)) := by
+      z.R.B.jL i t ((Formalism.L2.Col.mtKGSD (Pr := X.B.primes px) X.B.wts I.Ch I.sel t.1 ((i : ℕ) + 1)).res ok φ) h = c (φ.1 (LiftBrg.ptL X I (usedOf I T Wt) i t 1 1 h)) := by
     intro t ok φ h
     refine (hx h).elim fun x hm => ?_
     refine (hread hcm t ⟨⟨ok⟩, φ⟩ h x hm).trans (congrArg (fun d => c (φ.1 d)) ?_)
@@ -511,17 +511,17 @@ theorem std_iso {X : Stages} {px : PreX X.B.toPre} {I : Col2.ColIn X.B px} {hX :
     rw [Formalism.L2.Col.decoPt_mk]
     unfold LiftBrg.ptL
     refine congrArg (Formalism.L2.Col.decoOf ∅ _) (hx'.trans ?_)
-    exact (by with_unfolding_all exact ((cast_one (LiftBrg.rkEq X i).symm (Formalism.UG.bc (swapAE X.toD7) (h : GL (Fin (Vc X.toD7 i).rank) _))) :))
+    exact cast_one (LiftBrg.rkEq X i).symm (Formalism.UG.bc (swapAE X.toD7) (h : GL (Fin (Vc X.toD7 i).rank) _))
   refine ⟨e, he.2.2.1, fun γ γE g h1 h2 x => ?_, fun t ok φ h => ?_⟩
   · have h5 := he.2.2.2 γ γE g h1 h2 x
     have h3 : (fun τ => Formalism.UG.bc (X.B.embLL.comp (X.B.fields.emb τ)) g) = fun τ => Formalism.UG.bc (tauE X.toD7 τ) g :=
       funext fun τ => congrArg (fun a => Formalism.UG.bc a g) (hlab τ)
     have h4 := (congrArg (fun q => e (rhoK (X.B.wts.lamV ((i : ℕ) + 1)) (invTrK q) x)) h3).symm
-    exact (by with_unfolding_all exact ((@Eq.trans _ _ _ ((z.R.cV i).coef.ρ γ (e x)) h4 ((by with_unfolding_all exact (h5 :)))) :))
-  · exact (by with_unfolding_all exact ((read_iso (Formalism.L2.Col.mtKGSD (Pr := X.B.primes px) X.B.wts I.Ch I.sel t.1 ((i : ℕ) + 1)) ok (G := Bridge.Gf (Vc X.toD7 i)) (Γ := GQ (Vc X.toD7 i)) (W := (z.R.cV i).W)
-      (ι := Bridge.ratF (Vc X.toD7 i)) (σ := X.B.embLL) (ρ := (z.R.cV i).coef.ρ) (J := (LiftBrg.envL X I hX (usedOf I T Wt) z.Xg z.tr z.R.toLevCh z.R.cV i t).lev.J) (χ := (LiftBrg.envL X I hX (usedOf I T Wt) z.Xg z.tr z.R.toLevCh z.R.cV i t).lev.χ) ((by with_unfolding_all exact ((z.R.B.L i t).pres :))) c (fun h => LiftBrg.ptL X I (usedOf I T Wt) i t 1 1 h)
+    exact @Eq.trans _ _ _ ((z.R.cV i).coef.ρ γ (e x)) h4 h5
+  · exact (by exact ((read_iso (Formalism.L2.Col.mtKGSD (Pr := X.B.primes px) X.B.wts I.Ch I.sel t.1 ((i : ℕ) + 1)) ok (G := Bridge.Gf (Vc X.toD7 i)) (Γ := GQ (Vc X.toD7 i)) (W := (z.R.cV i).W)
+      (ι := Bridge.ratF (Vc X.toD7 i)) (σ := X.B.embLL) (ρ := (z.R.cV i).coef.ρ) (J := (LiftBrg.envL X I hX (usedOf I T Wt) z.Xg z.tr z.R.toLevCh z.R.cV i t).lev.J) (χ := (LiftBrg.envL X I hX (usedOf I T Wt) z.Xg z.tr z.R.toLevCh z.R.cV i t).lev.χ) ((z.R.B.L i t).pres) c (fun h => LiftBrg.ptL X I (usedOf I T Wt) i t 1 1 h)
       (fun v => e (GlobalTheory.CoefSpace.bcVV X.B.embLL (X.B.wts.lamV ((i : ℕ) + 1)) v)) he.1 he.2.1
-      (fun v => (he.2.2.1 _ _).trans (pair_bc X.B.embLL X.B.starLL_cx X.B.fields.emb _ v v).symm) ((by with_unfolding_all exact ((hrd t ok) :))) φ h) :))
+      (fun v => (he.2.2.1 _ _).trans (pair_bc X.B.embLL X.B.starLL_cx X.B.fields.emb _ v v).symm) (hrd t ok) φ h) :))
 
 
 
@@ -536,7 +536,7 @@ theorem rs_coef : ∀ {B B' : Base} {f : Fr B.toPre} {f' : Fr B'.toPre} {T : TwD
       (h : Bridge.Gf (Vc (w.st Z).toD7 i)) (v' : VV (w'.st Z').toD7.what₂.LL (fun τ => Bridge.lamLdef (Vc (w'.st Z').toD7 i').rank ((i' : ℕ) + 1) τ)),
       HEq (MvPolynomial.map (w'.st Z').toD7.what₂.embLL v'.1)
         (MvPolynomial.map (B.embLL : B.fields.K →+* ℂ) (φ.1 (LiftBrg.ptL (w.st Z) w.I (usedOf w.I T Wt) i (mu0F (X := B.fields) (tuOf w.I (usedOf w.I T Wt))) 1 1 h)).1) →
-      HEq (c0L' i' v') (z.R.B.jL i (mu0F (X := B.fields) (tuOf w.I (usedOf w.I T Wt))) ((by with_unfolding_all exact ((Formalism.L2.Col.mtKGSD (Pr := B.primes w.px) B.wts w.I.Ch w.I.sel (mu0F (X := B.fields) (tuOf w.I (usedOf w.I T Wt))).1 ((i : ℕ) + 1)).res ok φ :))) h) := by
+      HEq (c0L' i' v') (z.R.B.jL i (mu0F (X := B.fields) (tuOf w.I (usedOf w.I T Wt))) ((Formalism.L2.Col.mtKGSD (Pr := B.primes w.px) B.wts w.I.Ch w.I.sel (mu0F (X := B.fields) (tuOf w.I (usedOf w.I T Wt))).1 ((i : ℕ) + 1)).res ok φ) h) := by
   intro B B' f f' T T' w w' Z Z' hX hX' Wt Wt' z hE hf hp hS
   choose e he1 he2 he3 using fun i => std_iso z hS i (GlobalTheory.Mem.R3.BrgRead.gram_V (w.st Z) w.ok.spaces i)
   obtain ⟨hPre, -, -, -⟩ := hE
@@ -544,19 +544,19 @@ theorem rs_coef : ∀ {B B' : Base} {f : Fr B.toPre} {f' : Fr B'.toPre} {T : TwD
   change P' = B.toPre at hPre
   subst hPre
   let cp : ∀ i' : Fin (w'.st Z').toD7.R.m, CoefA (Vc (w'.st Z').toD7 i') := fun i' =>
-    @CoefA.mk (w'.st Z').toD7 (Vc (w'.st Z').toD7 i') (z.R.cV ((by with_unfolding_all exact (i' :)))).W (z.R.cV ((by with_unfolding_all exact (i' :)))).nW (z.R.cV ((by with_unfolding_all exact (i' :)))).iW (z.R.cV ((by with_unfolding_all exact (i' :)))).fW
-      ((by with_unfolding_all exact ((z.R.cV ((by with_unfolding_all exact (i' :)))).ρ :)))
+    @CoefA.mk (w'.st Z').toD7 (Vc (w'.st Z').toD7 i') (z.R.cV i').W (z.R.cV i').nW (z.R.cV i').iW (z.R.cV i').fW
+      ((z.R.cV i').ρ)
   have hG := fun i' : Fin (w'.st Z').toD7.R.m => coef_of_iso (D := (w'.st Z').toD7) (Vc (w'.st Z').toD7 i')
-    (cp i') (n := B.R.nV) ((by with_unfolding_all exact ((LiftBrg.rkEq (w.st Z) ((by with_unfolding_all exact (i' :)))) :))) ((i' : ℕ) + 1)
-    ((by with_unfolding_all exact ((B.wts.lamV ((i' : ℕ) + 1)) :))) ((by with_unfolding_all exact ((GlobalTheory.Mem.LiftWt.lamV_eq_lamLdef (w.st Z) ((by with_unfolding_all exact (i' :)))) :)))
-    ((by with_unfolding_all exact ((e ((by with_unfolding_all exact (i' :)))) :))) ((by with_unfolding_all exact ((he1 ((by with_unfolding_all exact (i' :)))) :))) ((by with_unfolding_all exact ((he2 ((by with_unfolding_all exact (i' :)))) :)))
+    (cp i') (n := B.R.nV) (LiftBrg.rkEq (w.st Z) i') ((i' : ℕ) + 1)
+    (B.wts.lamV ((i' : ℕ) + 1)) (GlobalTheory.Mem.LiftWt.lamV_eq_lamLdef (w.st Z) i')
+    (e i') (he1 i') (he2 i')
     (if (w'.st Z').toD7.sp.Vneg ((i' : ℕ) + 1) then -(Vc (w'.st Z').toD7 i').gram else (Vc (w'.st Z').toD7 i').gram)
     (by
-      rw [GlobalTheory.StdFrame.neg_eq_false_of_posDef _ i' ((by with_unfolding_all exact ((B.V_posDef ((i' : ℕ) + 1) (by omega) ((by with_unfolding_all exact (i'.2 :)))) :)))]
+      rw [GlobalTheory.StdFrame.neg_eq_false_of_posDef _ i' (B.V_posDef ((i' : ℕ) + 1) (by omega) i'.2)]
       simp only [Bool.false_eq_true, if_false]
       exact GlobalTheory.Mem.R3.BrgRead.gram_V (w'.st Z') w'.ok.spaces i')
   choose c0 hc1 hc2 hc3 using hG
-  refine ⟨cp, c0, ?_, fun i' => (by with_unfolding_all exact ((z.pins.char.base.models.cV ((by with_unfolding_all exact (i' :)))) :)), hc1, hc2, ?_⟩
+  refine ⟨cp, c0, ?_, fun i' => (z.pins.char.base.models.cV i'), hc1, hc2, ?_⟩
   · rintro i ⟨i', hi'⟩ hi
     dsimp only at hi
     subst hi
@@ -565,10 +565,10 @@ theorem rs_coef : ∀ {B B' : Base} {f : Fr B.toPre} {f' : Fr B'.toPre} {T : TwD
     dsimp only at hi
     subst hi
     intro ok φ h v' hv
-    have h1 := hc3 ⟨i, hi'⟩ v' ((by with_unfolding_all exact ((GlobalTheory.CoefSpace.bcVV B.embLL (B.wts.lamV ((i : ℕ) + 1))
-      (φ.1 (LiftBrg.ptL (w.st Z) w.I (usedOf w.I T Wt) i (mu0F (X := B.fields) (tuOf w.I (usedOf w.I T Wt))) 1 1 h))) :))) ((by with_unfolding_all exact (hv :)))
+    have h1 := hc3 ⟨i, hi'⟩ v' ((by exact ((GlobalTheory.CoefSpace.bcVV B.embLL (B.wts.lamV ((i : ℕ) + 1))
+      (φ.1 (LiftBrg.ptL (w.st Z) w.I (usedOf w.I T Wt) i (mu0F (X := B.fields) (tuOf w.I (usedOf w.I T Wt))) 1 1 h))) :))) hv
     have h2 := he3 i (mu0F (X := B.fields) (tuOf w.I (usedOf w.I T Wt))) ok φ h
-    exact (by with_unfolding_all exact ((glue (a := c0 ⟨i, hi'⟩ v') h2 ((by with_unfolding_all exact ((heq_of_eq h1) :)))) :))
+    exact glue (a := c0 ⟨i, hi'⟩ v') h2 (heq_of_eq h1)
 
 end GlobalTheory.Mem.RsCoef
 

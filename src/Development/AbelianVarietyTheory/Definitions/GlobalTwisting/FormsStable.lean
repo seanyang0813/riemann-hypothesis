@@ -118,10 +118,6 @@ structure PtModel (X : Ch D u) (i : ℕ) where
   Val : Submodule ℂ (X.C.Y i → ℂ)
   act : G →* Module.End ℂ Val
   H : Val →ₗ⋆[ℂ] Val →ₗ[ℂ] ℂ
-  H_act : ∀ g y y', H (act g y) (act g y') = H y y'
-  H_pos : ∀ y, y ≠ 0 → 0 < (H y y).re
-  H_symm : ∀ y y', H y y' = starRingEnd ℂ (H y' y)
-  ipV_eq : ∀ c (y y' : Val), X.fm.ipV i c y y' = H y y'
   mem_Fi : ∀ φ, φ ∈ X.fm.Fi i ↔ ∀ c, ∃ y : Val, φ c = y ∧ ∀ g : G, g • rep c = rep c → act g y = y
   piL : ∀ v c, (Fin (D.R.N i) → (Lc v).K) → X.fm.lv i v c
   piL_add : ∀ v c, ∀ x ∈ ((rep c).2 v).1.L, ∀ y ∈ ((rep c).2 v).1.L, piL v c (x + y) = piL v c x + piL v c y
@@ -129,20 +125,9 @@ structure PtModel (X : Ch D u) (i : ℕ) where
   piL_surj : ∀ v c y, ∃ x ∈ ((rep c).2 v).1.L, piL v c x = y
   piL_f : ∀ v c, ∀ x ∈ ((rep c).2 v).1.L, X.fm.fv i v c (piL v c x) = ((rep c).2 v).1.f x
   piK : ∀ v c, (Fin (D.R.N i) → (Lc v).K) → X.fm.lk i v c
-  piK_add : ∀ v c, ∀ x ∈ ((rep c).2 v).ker, ∀ y ∈ ((rep c).2 v).ker, piK v c (x + y) = piK v c x + piK v c y
-  piK_smul : ∀ v c (a : (Lc v).O), ∀ x ∈ ((rep c).2 v).ker, piK v c (a • x) = (Lc v).res a • piK v c x
-  piK_surj : ∀ v c y, ∃ x ∈ ((rep c).2 v).ker, piK v c x = y
-  piK_te : ∀ v c e, ((rep c).2 v).1.f e = 1 → piK v c ((X.A.T : (Lc v).K) • e) = X.fm.te i v c
   up_eq : ∀ v c x p₁, ((rep c).2 v).1.f x = 1 → ((rep c).2 v).IsUp x p₁ →
     ∃ g : G, g • rep (X.fm.up i v c (piL v c x)) = ((rep c).1, Function.update (rep c).2 v p₁) ∧
       ∀ y : Val, X.fm.upT i v c (piL v c x) y = act g y
-  dn_eq : ∀ v c (γ : Module.Dual (X.A.Fv v) (X.fm.lk i v c)) (p₀ : LocF.PP (Lc v) (D.R.N i)),
-    (p₀.1.L : Set _) = ((rep c).2 v).ker → (∀ x ∈ p₀.1.L, p₀.1.f x = γ (piK v c x)) →
-    ∃ g : G, g • rep (X.fm.dn i v c γ) = ((rep c).1, Function.update (rep c).2 v p₀) ∧
-      ∀ y : Val, X.fm.dnT i v c γ y = act g y
-  dil_eq : ∀ v c (a : (X.A.Fv v)ˣ) p', LocF.PP.IsDil (a : X.A.Fv v) ((rep c).2 v) p' →
-    ∃ g : G, g • rep (X.fm.dil i v a c) = ((rep c).1, Function.update (rep c).2 v p') ∧
-      ∀ y : Val, X.fm.dilT i v a c y = act g y
 
 attribute [instance] PtModel.grp PtModel.actP
 
@@ -239,9 +224,6 @@ variable {X : Ch D u} {i : ℕ} {M : PtModel X i} {M' : PtModel X (i + 1)} (K : 
 
 def TgtEq : Prop := ∀ (g' : M'.G) p p' y, K.k p (g' • p') y = M'.act g' (K.k p p' y)
 
-def DilLaw : Prop :=
-  ∀ v (a : (X.A.Fv v)ˣ) p q p' q', M.Dil v a p q → M'.Dil v a p' q' → K.k q q' = K.k p p'
-
 def UKLaw : Prop :=
   ∀ v p p' y, (∑ᶠ p₁ ∈ {p₁ | M'.Inc v p' p₁}, K.k p p₁ y) =
     ((X.A.T : ℂ) ^ ((D.R.t + 1) / 2)) • ∑ᶠ p₀ ∈ {p₀ | M.Inc v p₀ p}, K.k p₀ p' y
@@ -261,7 +243,6 @@ def KerTie {X : Ch D u} (Lv : LevTie X) : Type :=
 
 structure KerLaws {X : Ch D u} {Lv : LevTie X} (Vt : ValTie Lv) (Kt : KerTie Lv) : Prop where
   tgt : ∀ i h, (Kt i h).TgtEq
-  dil : ∀ i h, (Kt i h).DilLaw
   uk : ∀ i h, (Kt i h).UKLaw
   bar : ∀ i h, (Kt i h).IntBar (Vt i h.le).1 (Vt (i + 1) h).1
   intP : ∀ i h, (Kt i h).IntP (Vt i h.le).1 (Vt (i + 1) h).1

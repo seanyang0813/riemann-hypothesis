@@ -1203,7 +1203,7 @@ open GlobalTheory.IndefiniteRowSideFullHecke.OmegaFactorization GlobalTheory.Hec
 noncomputable section
 namespace GlobalTheory.HeckeTwoUnit
 
-theorem phi_smul (σ : ℂ) {l : ℝ} (hl : l ≠ 0) (w : ℂ) :
+theorem phi_smul (σ : ℂ) {l : ℝ} (w : ℂ) :
     phi σ ((l : ℂ) * w) = ((l : ℂ)⁻¹ ^ 2 * ((|l| : ℝ) : ℂ) ^ (-2 * σ)) * phi σ w := by
   unfold phi
   rw [norm_mul, Complex.norm_real, Real.norm_eq_abs, Complex.ofReal_mul,
@@ -1238,7 +1238,7 @@ theorem hTrans_smul (σ : ℂ) {l : ℝ} (hl : l ≠ 0) (ν y : ℝ) :
         Complex.exp (-(2 * (Real.pi : ℂ) * I * ((l * ν : ℝ) : ℂ) * (t : ℂ)))) := by
     intro t
     rw [show ((l * t : ℝ) : ℂ) + ((l * y : ℝ) : ℂ) * I = (l : ℂ) * ((t : ℂ) + (y : ℂ) * I) by push_cast; ring,
-      phi_smul σ hl]
+      phi_smul σ]
     push_cast; ring_nf
   simp_rw [e2]
   rw [MeasureTheory.integral_const_mul, Complex.real_smul, smul_eq_mul, ← mul_assoc, ← mul_assoc,

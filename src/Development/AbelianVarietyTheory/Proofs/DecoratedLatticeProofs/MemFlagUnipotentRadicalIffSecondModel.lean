@@ -664,8 +664,6 @@ open scoped TensorProduct InnerProductSpace Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
-theorem _root_.GlobalTheory.T.linearIndependent_scaledBasisColumnsMatrix_transpose : ∀ {D : D7} (X : HidaSetting D) (h : X.B.I = Formalism.L2.SG.InstExistsPf.instOf D) (t lam : D.host.E), t ≠ 0 → lam ≠ 0 → LinearIndependent D.host.E (GlobalTheory.Core.SBesEx.eM X h t lam).transpose := by
-  first | exact @GlobalTheory.Core.SBesEx.eM_transpose_linearIndependent
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.LinearIndependentScaledBasisColumnsMatrixTranspoStatement =====
@@ -684,30 +682,6 @@ namespace GlobalTheory.Core.SBesFlagTie
 open Formalism.L2.SG.AdBridge GlobalTheory.BesselChar
 
 variable {D : D7}
-
-theorem unip_joint {A R₁ R₂ : Type} [CommRing A] [CommRing R₁] [CommRing R₂] (f : A →+* R₁) (g : A →+* R₂)
-    (hinj : ∀ y, f y = 0 → g y = 0 → y = 0) (hsurj : ∀ a b, ∃ y, f y = a ∧ g y = b) {n ρ : ℕ}
-    (E : Matrix (Fin n) (Fin ρ) A) (K : Matrix (Fin ρ) (Fin n) A) (M : Matrix (Fin n) (Fin n) A) :
-    Unip E K M ↔ Unip (E.map f) (K.map f) (M.map f) ∧ Unip (E.map g) (K.map g) (M.map g) :=
-  _root_.GlobalTheory.BesselChar.JointSplit.unip_iff_of_joint f g hinj hsurj E K M
-
-theorem unip_pi {ι S : Type} [Fintype ι] [DecidableEq ι] [CommRing S] {n ρ : ℕ} (E : Matrix (Fin n) (Fin ρ) (ι → S))
-    (K : Matrix (Fin ρ) (Fin n) (ι → S)) (M : Matrix (Fin n) (Fin n) (ι → S)) :
-    Unip E K M ↔ ∀ i, Unip (E.map (Pi.evalRingHom (fun _ => S) i)) (K.map (Pi.evalRingHom (fun _ => S) i))
-      (M.map (Pi.evalRingHom (fun _ => S) i)) :=
-  _root_.GlobalTheory.BesselChar.unip_pi_iff E K M
-
-theorem unip_real (I : Formalism.MainNotions.S.AutInst) (v : InfinitePlace I.F) {ρ : ℕ} (x : Fin ρ → Fin I.n → I.E) (c : Fin ρ → I.E)
-    (z : Fin I.n → I.E) (hc : ∀ a, c a ≠ 0) (hz : ∀ a, Formalism.UG.hform (starRingEnd I.E) I.J (x a) z = 0)
-    (N : Matrix (Fin I.n) (Fin I.n) ℂ) :
-    Unip ((Matrix.of fun k a => c a * x a k).map (I.φ v))
-      ((Formalism.UG.cT (starRingEnd I.E) (Matrix.of fun k a => c a * x a k) * I.J).map (I.φ v)) N ↔
-    InN (I.ε v) (fun a => rv I v (x a)) (rv I v z) ((I.P v)⁻¹ * N * I.P v) :=
-  _root_.GlobalTheory.RealUnipFrame.unip_iff_inN I v x c z hc hz N
-
-theorem eM_linIndep (X : HidaSetting D) (h : X.B.I = Formalism.L2.SG.InstExistsPf.instOf D) (t lam : D.host.E) (ht : t ≠ 0)
-    (hl : lam ≠ 0) : LinearIndependent D.host.E (GlobalTheory.Core.SBesEx.eM X h t lam).transpose :=
-  GlobalTheory.T.linearIndependent_scaledBasisColumnsMatrix_transpose X h t lam ht hl
 
 theorem unip_congr {R : Type} [CommRing R] {n ρ : ℕ} {E E' : Matrix (Fin n) (Fin ρ) R}
     {K K' : Matrix (Fin ρ) (Fin n) R} {M M' : Matrix (Fin n) (Fin n) R} (hE : E = E') (hK : K = K') (hM : M = M') :

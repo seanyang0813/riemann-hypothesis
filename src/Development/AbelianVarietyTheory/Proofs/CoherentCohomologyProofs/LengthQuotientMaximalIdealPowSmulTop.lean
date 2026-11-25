@@ -137,10 +137,6 @@ theorem relLength_smul_self_of_addVal_eq (hA : A.FG) {a : R} {n : ℕ} (hn : add
     relLength A (a • A) = ((n * Module.finrank R A : ℕ) : ℕ∞) := by
   rw [relLength_smul_self hA, hn, Nat.cast_mul]
 
-theorem relLength_irreducible_pow_smul_self (hA : A.FG) {ϖ : R} (hϖ : Irreducible ϖ) (e : ℕ) :
-    relLength A (ϖ ^ e • A) = ((e * Module.finrank R A : ℕ) : ℕ∞) :=
-  relLength_smul_self_of_addVal_eq hA (Irreducible.addVal_pow hϖ e)
-
 theorem relLength_smul_self_ne_top (hA : A.FG) {a : R} (ha : a ≠ 0) :
     relLength A (a • A) ≠ ⊤ := by
   rw [relLength_smul_self hA]

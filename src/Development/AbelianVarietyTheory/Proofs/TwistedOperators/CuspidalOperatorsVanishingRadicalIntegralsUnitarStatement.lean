@@ -440,29 +440,17 @@ end Compress
 
 theorem cuspidalOperators : GlobalTheory.Published.CuspTraceClass → ∀ (D : D7) (V : HSp D) (μ : Measure (GA D V))
     [μ.IsHaarMeasure] [μ.IsMulRightInvariant], CuspidalOperators V μ := by
-  intro hCT D V μ _ _ f hf h1 h2
+  intro hCT D V μ _ _ f hf _ h2
   have c := GlobalTheory.Orb.continuous_of_mem_ccAd hf
-  have m1 : GlobalTheory.IndefiniteRowSideFullHecke.TraceKernelDecomposition.MapsIntoCusp V μ f := GlobalTheory.T.unitaryAutomorphicConvolution_mem_cuspidal_of_radical_zero D V μ f hf h1
   have m2 : GlobalTheory.IndefiniteRowSideFullHecke.TraceKernelDecomposition.MapsIntoCusp V μ (starFn f) :=
     GlobalTheory.T.unitaryAutomorphicConvolution_mem_cuspidal_of_radical_zero D V μ (starFn f) (GlobalTheory.Orb.starFn_mem_ccAd hf) h2
   have hd := GlobalTheory.CuspSpectrum.traceIsDiagonal (μ := μ) hCT hf m2
-  have hk := fun (F : DividedPowerChartLift V μ) (x : GA D V) =>
-    GlobalTheory.AutomorphicL2KernelIntegral.convR_eq_integral_kernelQ (GA D V) (GQ V) μ f c.1 c.2 F x
-  obtain ⟨t1, t2, t3⟩ := GlobalTheory.T.hasSum_cuspidalMultiplicity_trace hCT D V μ f hf
+  obtain ⟨t1, -, t3⟩ := GlobalTheory.T.hasSum_cuspidalMultiplicity_trace hCT D V μ f hf
   have etr : trace (RopG V μ f) = trace (RcuspOp V μ f) := by
     rw [GlobalTheory.TraceDiagonal.RopG_eq_comp c.1 c.2 m2]
     exact trace_comp_comp_of_comp_eq_id _ _
       (fun y => Submodule.orthogonalProjection_mem_subspace_eq_self y) (hCT D V μ f hf)
-  refine ⟨m1, fun F hF => ?_, hd.1, fun F p => ?_, fun F => ?_, hd.2.1, hd.2.2, fun c' => ?_, t1, t2, etr ▸ t3⟩
-  · rw [GlobalTheory.TraceDiagonal.RopG_eq_comp c.1 c.2 m2]
-    simp [Submodule.orthogonalProjection_eq_zero_iff.2 hF]
-  · induction p using Quotient.inductionOn with
-    | h x => exact (hk F x).1
-  · refine ae_quotMeasure_iff.2 ?_
-    filter_upwards [(AutomorphicL2Pointwise.lift_Rop_eq_convR (GA D V) (GQ V) μ f
-      (c.1.integrable_of_hasCompactSupport c.2) F).2] with x hx
-    exact hx.trans (hk F x).2
-  · exact GlobalTheory.CuspSpectrum.multIn_L2cusp_lt (GlobalTheory.Published.cuspDiscreteDecomposition_of_traceClass hCT D V μ) c'.rep.isIrr
+  exact ⟨hd.1, hd.2.2, t1, etr ▸ t3⟩
 
 end GlobalTheory.CuspidalOpAssembly
 

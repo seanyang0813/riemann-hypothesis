@@ -71,33 +71,15 @@ private theorem co_dvd_of_unitsMap {N d : ℕ} [NeZero N] (hd : d ∣ N) (u : (Z
   have := congrArg (Int.cast : ℤ → ZMod N) ht
   simpa using this
 
-private theorem co_toUnitHom {O : Type} [CommRing O] {N : ℕ} (r : ℕ) (χ : DirichletCharacter O N) (u : (ZMod N)ˣ) :
-    (comp r χ).toUnitHom u = χ.toUnitHom (proj r N u) := by
-  simp [comp]
-
-private theorem co_pow_toUnitHom {O : Type} [CommRing O] {N : ℕ} (χ : DirichletCharacter O N) (k : ℕ) (u : (ZMod N)ˣ) :
-    (χ ^ k).toUnitHom u = χ.toUnitHom u ^ k := by
-  ext
-  simp [MulChar.pow_apply_coe]
-
-private theorem co_pow_eq_one_iff {O : Type} [CommRing O] {N : ℕ} (χ : DirichletCharacter O N) (k : ℕ) :
-    χ ^ k = 1 ↔ ∀ u, χ.toUnitHom u ^ k = 1 := by
-  simp_rw [← co_pow_toUnitHom]
-  constructor
-  · intro h u
-    rw [h]
-    ext
-    simp
-  · intro h
-    ext u
-    simpa using congrArg Units.val (h u)
-
 private theorem co_ord_dvd {O : Type} [CommRing O] {N : ℕ} [NeZero N] (χ : DirichletCharacter O N) (r : ℕ)
     (hr : r.Prime) : orderOf (comp r χ) ∣ Nat.totient (ordProj[r] N) := by
-  rw [orderOf_dvd_iff_pow_eq_one, co_pow_eq_one_iff]
+  rw [orderOf_dvd_iff_pow_eq_one, ← MulChar.mulEquivToUnitHom.map_eq_one_iff, map_pow,
+    DFunLike.ext_iff]
   intro u
   have : NeZero (ordProj[r] N) := ⟨(pow_pos hr.pos _).ne'⟩
-  rw [← map_pow, co_toUnitHom, co_proj_eq_one r hr, map_one]
+  simp only [MonoidHom.pow_apply, MonoidHom.one_apply, MulChar.mulEquivToUnitHom_apply, comp,
+    MulChar.ofUnitHom_eq, Equiv.apply_symm_apply, MonoidHom.comp_apply]
+  rw [← map_pow, ← map_pow, co_proj_eq_one r hr, map_one]
   apply co_dvd_of_unitsMap (Nat.ordProj_dvd N r)
   rw [map_pow, ZMod.pow_totient]
 
@@ -116,12 +98,17 @@ private theorem co_tame {O : Type} [CommRing O] {N : ℕ} [NeZero N] (χ : Diric
     rw [MonoidHom.mem_ker] at hu ⊢
     have h2 := dvd_sub_pow_of_dvd_sub (co_dvd_of_unitsMap hN u hu) (N.factorization r)
     have h3 : (comp r χ).toUnitHom u ^ (r ^ N.factorization r) = 1 := by
-      rw [← map_pow, co_toUnitHom, co_proj_eq_one r hr, map_one]
+      simp only [comp, MulChar.toUnitHom_eq, MulChar.ofUnitHom_eq, Equiv.apply_symm_apply,
+        MonoidHom.comp_apply]
+      rw [← map_pow, ← map_pow, co_proj_eq_one r hr, map_one]
       rw [one_pow] at h2
       refine dvd_trans ?_ (by simpa using h2)
       rw [Nat.cast_pow]
       exact pow_dvd_pow _ (Nat.le_succ _)
-    have h4 := (co_pow_eq_one_iff (comp r χ) _).1 (pow_orderOf_eq_one _) u
+    have h4 : (comp r χ).toUnitHom u ^ orderOf (comp r χ) = 1 := by
+      have hpow : MulChar.mulEquivToUnitHom (comp r χ) ^ orderOf (comp r χ) = 1 := by
+        rw [← map_pow, pow_orderOf_eq_one, map_one]
+      simpa [MonoidHom.pow_apply] using DFunLike.congr_fun hpow u
     have h5 := pow_gcd_eq_one.2 ⟨h4, h3⟩
     rwa [hc.pow_right _, pow_one] at h5
   · rw [Nat.factorization_eq_zero_of_not_dvd hN, pow_zero, Nat.totient_one, Nat.dvd_one] at h1
@@ -146,10 +133,12 @@ theorem UpperTheory.V.HV.compOrd :
     exact ⟨k, hk⟩
   · intro l s hl hlr hχ hne
     have h1 : orderOf (comp r χ) ∣ l ^ s := by
-      rw [orderOf_dvd_iff_pow_eq_one, co_pow_eq_one_iff]
+      rw [orderOf_dvd_iff_pow_eq_one, ← MulChar.mulEquivToUnitHom.map_eq_one_iff, map_pow,
+        DFunLike.ext_iff]
       intro u
-      rw [co_toUnitHom]
-      exact (co_pow_eq_one_iff χ _).1 hχ _
+      have hχpow : MulChar.mulEquivToUnitHom χ ^ l ^ s = 1 := by
+        rw [← map_pow, hχ, map_one]
+      simpa [comp, MonoidHom.pow_apply] using DFunLike.congr_fun hχpow (proj r N u)
     obtain ⟨k, -, hk⟩ := (Nat.dvd_prime_pow hl).1 h1
     have hk0 : k ≠ 0 := by
       rintro rfl

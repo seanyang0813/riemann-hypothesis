@@ -1135,8 +1135,6 @@ open GlobalTheory.IndefiniteRowSideFullHecke.UnitaryConjugation (skewGram mulG c
 open Formalism.IndefR.Datum.Brg (GG GI cA_inc GG_herm GI_GG)
 open scoped ContDiff
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 variable {D : D7}
 
 end PartA
@@ -1144,8 +1142,6 @@ end PartA
 section Datum
 open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.L2.Theta Formalism.IndefR.Datum Formalism.IndefR.Links Formalism.MainNotions.StandardLattice GlobalTheory.ChiGrid GlobalTheory.FunObj GlobalTheory.StdFrames
 open GlobalTheory.IndefiniteRowSideFullHecke.UnitaryConjugation (boxB IsDatumB)
-
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 end Datum
 
@@ -1158,4 +1154,4 @@ open IsDedekindDomain NumberField MeasureTheory Matrix
 open scoped TensorProduct
 open GlobalTheory.FunObj GlobalTheory.ChiGrid GlobalTheory.SplitFlip GlobalTheory.SplitWeil GlobalTheory.StdFrames Formalism.L2.DIV
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
+attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField

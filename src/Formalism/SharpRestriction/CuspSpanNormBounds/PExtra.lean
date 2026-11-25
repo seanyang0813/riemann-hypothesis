@@ -13,8 +13,6 @@ section GroupS0
 
 open Formalism.BasicNotions Formalism.MainNotions.S NumberField IsDedekindDomain
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 def Exp (D : D7) : Prop := ∀ u u' : D.what₂.Word, KExpansion D.s u u' ∧ KAbsConv D.s u u'
 
 def GDr (D : D7) (X : TermTie D) : Prop :=

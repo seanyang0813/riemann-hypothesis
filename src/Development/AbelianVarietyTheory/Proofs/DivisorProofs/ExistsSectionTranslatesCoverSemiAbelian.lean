@@ -124,7 +124,7 @@ theorem exists_section_translate_mem : ∀ (R : Type) [CommRing R] [IsDomain R] 
     rw [← Over.comp_left, hσ, Hom.one_def, Over.comp_left]
     exact hη _
   have he : (η[G] : 𝟙_ (Over (Sp R)) ⟶ G).left ≫ G.hom = 𝟙 _ := (Over.w _).trans (by simp)
-  obtain ⟨a, aΩ, ha, h1, h2, h3⟩ := GlobalTheory.T.smoothGroup_sections_dense_in_fibres R hC G ‹_› _ he k s hs hirr _ hne
+  obtain ⟨a, aΩ, ha, h1, h2, h3⟩ := _root_.GlobalTheory.DenseSec.dense_sections R hC G ‹_› _ he k s hs hirr _ hne
   let A : 𝟙_ (Over (Sp R)) ⟶ G := Over.homMk a (ha.trans (by simp))
   let AΩ : Sx ⟶ T := Over.homMk aΩ (by simp [T, Sx, reassoc_of% h2])
   have f1 : AΩ ≫ p1 = X' := by ext; simp [AΩ, p1, X', reassoc_of% h2]

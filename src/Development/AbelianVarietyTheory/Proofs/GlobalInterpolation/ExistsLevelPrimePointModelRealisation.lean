@@ -473,11 +473,6 @@ def model : PtModel B.ch i where
   Val := ValC (Gr B.emb D.what₂.embLL (D.R.N i)) (B.lam i)
   act := actV B.emb D.what₂.embLL (B.lam i)
   H := ipV B.emb D.what₂.embLL (B.lam i)
-  H_act g y y' := ipVal_trFr B.emb D.what₂.embLL (B.lam i) B.fok g y.2 y'.2
-  H_pos y hy := (Complex.lt_def.1
-    (ClassSumPos.ipVal_pos B.emb D.what₂.embLL (B.lam i) y.1 y.2 fun e => hy (Subtype.ext e))).1
-  H_symm y y' := ClassSumPos.ipVal_herm B.emb D.what₂.embLL (B.lam i) y.1 y'.1
-  ipV_eq _ _ _ := rfl
   mem_Fi φ := by
     refine forall_congr' fun c => ⟨fun hc => ⟨⟨φ c, hc.1⟩, rfl, fun k hk => ?_⟩, ?_⟩
     · obtain ⟨g, rfl, hg⟩ := (smul_eq_iff (hyp B i) sp k c.1 _ _).1 hk
@@ -494,25 +489,10 @@ def model : PtModel B.ch i where
     exact ⟨x, le_locP (B.pr v).1 _ hx, e⟩
   piL_f v c _ hx := fv_redL (hyp B i) (B.lf.lev i) (B.pr v) c hx
   piK v c x := redL ((B.J.A i).dnN c.1 ((B.I.S i).rep c) (B.pr v)) (B.pr v).1 x
-  piK_add v c x hx y hy :=
-    redL_add ((mem_ker (hyp B i) sp c.1 _ (B.pr v) x).1 hx) ((mem_ker (hyp B i) sp c.1 _ (B.pr v) y).1 hy)
-  piK_smul v c a x hx := redL_smul a ((mem_ker (hyp B i) sp c.1 _ (B.pr v) x).1 hx)
-  piK_surj v c y := by
-    obtain ⟨x, hx, e⟩ := redL_surj (M := (B.J.A i).dnN c.1 ((B.I.S i).rep c) (B.pr v)) (P := (B.pr v).1) y
-    exact ⟨x, (mem_ker (hyp B i) sp c.1 _ (B.pr v) x).2 (le_locP (B.pr v).1 _ hx), e⟩
-  piK_te v c e he := redL_te (hyp B i) sp (B.lf.lev i) (B.pr v) c e he
   up_eq v c x p₁ hf hp := by
     obtain ⟨a1, a2, a3⟩ := up_spec (hyp B i) sp (B.lf.lev i) (B.pr v) c x p₁ hf hp
     exact ⟨phi (hyp B i) c.1 ((B.I.S i).mv c.1 ((B.J.A i).upPt (B.pr v) c (redL _ (B.pr v).1 x))),
       mk_move (hyp B i) sp c.1 _ _ (B.pr v) p₁ a1 a2 a3, fun _ => rfl⟩
-  dn_eq v c γ p₀ hp hf := by
-    obtain ⟨a1, a2, a3⟩ := dn_spec (hyp B i) sp (B.pr v) c γ p₀ hp hf
-    exact ⟨phi (hyp B i) c.1 ((B.I.S i).mv c.1 ((B.J.A i).dnPt (B.pr v) c γ)),
-      mk_move (hyp B i) sp c.1 _ _ (B.pr v) p₀ a1 a2 a3, fun _ => rfl⟩
-  dil_eq v c a p' hp := by
-    obtain ⟨a1, a2, a3⟩ := dil_spec (hyp B i) sp (B.pr v) c a p' hp
-    exact ⟨phi (hyp B i) c.1 ((B.I.S i).mv c.1 ((B.J.A i).diaPt (B.pr v) a c)),
-      mk_move (hyp B i) sp c.1 _ _ (B.pr v) p' a1 a2 a3, fun _ => rfl⟩
 
 def real : B.Real i sp (model B i sp) where
   iK _ := RingEquiv.refl B.E

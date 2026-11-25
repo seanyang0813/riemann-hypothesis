@@ -163,8 +163,6 @@ end One
 
 section Lev0
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 variable {D : D7} {u : D.what₂.Word} {μ : D.what₂.Tup} {w : D.what₂.places.Pl}
   {h : GIdx D.host (D.mem u).A.T (D.what₂.places.resChar w)}
   {T : ℕ} {bad : Set (HeightOneSpectrum (𝓞 D.host.F))} {cl : Type} {stab : cl → Type} [∀ c, Group (stab c)]

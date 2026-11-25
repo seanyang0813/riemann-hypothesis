@@ -1720,7 +1720,7 @@ open GlobalTheory.CoefDuty GlobalTheory.HeightCounting.Up
 theorem exists_etaJ_alt : _root_.GlobalTheory.HeightCounting.Up.PublishedInputsThirdLayerAlt → ∀ hL : _root_.UpperTheory.Zero.LLC.RecTExists, _root_.GlobalTheory.HeightCounting.Up.PointStatement hL → AllSt fun _ _ _ _ _ P x => ∀ l : _root_.GlobalTheory.HeightCounting.Up.StrictHenselianAcyclicLevel hL x, _root_.GlobalTheory.CoefDuty.ForcedByAutomorphicSemisimpleData l.a.A l.mt.M l.c.ch l.c.tp.tup fun D' => SumRepresentations.hypO D' → ∀ j v, 1 ≤ j → j ≤ (Dof x).R.m → ∀ v' : D'.what₂.places.Pl, HEq v' v → D'.what₂.etaJ j v' = P.q.eta j v := by
   intro hPr hL hPt
   have hG := _root_.GlobalTheory.T.allSt_goodFTAll_of_levelA hPr hL
-  have hI := GlobalTheory.T.twistedPlace_innerProduct_classSum_rows
+  have hI := _root_.GlobalTheory.FormInner.sumTw_rows
   have hcheb := GlobalTheory.ChebSplitDense.chebSplit_nd hPr.what₂.cheb
   unfold _root_.GlobalTheory.HeightCounting.Up.PointStatement at hPt
   unfold AllSt at hPt hG ⊢

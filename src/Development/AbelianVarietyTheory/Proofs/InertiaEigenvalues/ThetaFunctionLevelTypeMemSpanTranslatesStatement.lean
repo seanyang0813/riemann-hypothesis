@@ -1883,7 +1883,7 @@ theorem gen_of_type_clean : GlobalTheory.Hk3.HoweUnram → ∀ (D : D7) (G : Typ
     (fun PP a ha tr ε hε _ κ hκ _ => hC PP a ha tr ε hε κ hκ) hL
   intro Sb v hv f hT hC hL
   by_cases hpg : ∃ PP ∈ R.Pg, Over PP v
-  · exact GlobalTheory.T.local_generation_thetaFun_at_type_prime D G Pl0 T A Ks R F hG hP i t Sb v hv hpg f hT hC hL
+  · exact _root_.GlobalTheory.DownLift.GenSplit.gen_at_type_prime D G Pl0 T A Ks R F hG hP i t Sb v hv hpg f hT hC hL
   by_cases hq : ∃ PP ∈ R.Q t, Over PP v
   · exact GlobalTheory.T.localGeneration_thetaFunctions_twistPlace D G Pl0 T A Ks R F hG hP i t Sb v hv (fun PP h ho => hpg ⟨PP, h, ho⟩) hq f hT hC hL
   have hoff : ∀ PP, PP ∈ R.Pg ∨ PP ∈ R.Q t → ¬ Over PP v := by

@@ -18,19 +18,7 @@ public import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.UnimodularLocalS
 public import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.UnimodularLocalStandard.RepSingleSat
 public import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.UnimodularLocalStandard.RepKeyRam
 public import Formalism.LocalToGlobal.TorsionIntegrality.QuadraticSemicharacters.QuadraticSemicharactersFactAltForm
-import Mathlib.Algebra.Order.Star.Int
-import Mathlib.RingTheory.Coalgebra.IsFrobenius
-import Mathlib.RingTheory.Etale.Weakly
-import Mathlib.RingTheory.Finiteness.ModuleFinitePresentation
-import Mathlib.RingTheory.HopfAlgebra.Basic
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.RingTheory.TotallySplit
 import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.UnimodularLocalStandard.SelfDualStd
-import Mathlib.Tactic.Lemma
-import Mathlib.Tactic.TypeStar
-import Mathlib.RingTheory.Coalgebra.CoassocSimps
-import Mathlib.Algebra.Ring.IsFormallyReal
-import Mathlib.GroupTheory.Nilpotent
 import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.UnimodularLocalStandard.RepBasic
 import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.UnimodularLocalStandard.RepHSelfInt
 

@@ -1025,7 +1025,7 @@ theorem hTrans_zero (ν y : ℝ) (hy : y ≠ 0) :
     · have h2 : ¬ 0 < ν * y := by nlinarith
       rw [if_neg hν, if_neg h2]
 
-theorem fTerm_zero [IsTotallyReal F] {z : Emb F → ℂ} (hz : z ∈ upperHalf F) {b ν : F} (hb : b ≠ 0) (hν : ν ≠ 0) :
+theorem fTerm_zero [IsTotallyReal F] {z : Emb F → ℂ} (hz : z ∈ upperHalf F) {b ν : F} (hb : b ≠ 0) :
     fTerm 0 z b ν = if ∀ τ : Emb F, 0 < τ (ν * b) then
       (-4 * (Real.pi : ℂ) ^ 2) ^ Fintype.card (Emb F) * ((|(Algebra.norm ℚ ν : ℝ)| : ℝ) : ℂ) * qPow (ν * b) z
       else 0 := by
@@ -1074,7 +1074,7 @@ theorem bOne_zero_expansion [IsTotallyReal F] (𝔞 𝔟 : Frac F) (z : Emb F �
   refine tsum_congr fun c => ?_
   rw [← tsum_mul_left]
   refine tsum_congr fun ν => ?_
-  rw [fTerm_zero hz c.out.2.2 ν.2.2]
+  rw [fTerm_zero hz c.out.2.2]
   split_ifs with hc
   · have hk := kFac_zero_mul (F := F)
     unfold qTerm

@@ -14,7 +14,7 @@ public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.FockToSchrod
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.LieFirstOfLieSecond
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.SchwartzFockVacuumLineUniqueOfHeisenbergDerivati
 public import Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.LieSecondOrderOfRealLift
-public import Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.WeilLieAlgebraScalarAction
+import Development.AbelianVarietyTheory.Proofs.DivisorProofs.HoweSplittingActsFockActionPlusTraceMultiples
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.EigenIntertwinerSkewPlaneUniqueDual
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsRealmapsIsomorphism
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.FockPolynomialsLocallyFiniteRationalWeights
@@ -360,7 +360,7 @@ theorem exists_fockMap_first_order_of_real_lift (hP : _root_.GlobalTheory.FunPr.
   have hder : DerEx := _root_.GlobalTheory.HeisDer.derEx
   have hvl : VacLine := _root_.GlobalTheory.VacLn.vacLine_of_derEx hder
   have hfe : FockEx := _root_.GlobalTheory.FockMapEx.fockEx_of_derEx hder
-  have hsec : LieSecond := _root_.GlobalTheory.T.real_lift_lie_second_order hP hder hfe hvl (_root_.GlobalTheory.T.weil_lie_algebra_scalar_action hP hder hvl)
+  have hsec : LieSecond := _root_.GlobalTheory.T.real_lift_lie_second_order hP hder hfe hvl _root_.GlobalTheory.HoweD.lieScalar
   have hfst : LieFirst := GlobalTheory.RealLift.LieFirstPf.lieFirst_of_lieSecond hsec
   have hpr : PolRange := _root_.GlobalTheory.RealLift.PolRangePf.polRange_of GlobalTheory.RealLift.actsLaws hder hvl
   obtain ⟨Φ, hΦ⟩ := hfe F E σ _ _ _ _ _ _ _ B.ψ B.emb _ _ G.M.co 1 Complex.I A C hb.cm hb.std fr

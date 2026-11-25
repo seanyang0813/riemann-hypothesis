@@ -202,7 +202,7 @@ theorem exists_qfGroup_kernel : ∀ (R : Type) [CommRing R] [IsDomain R] [IsNoet
     infer_instance
   · refine { isOver := ?_, mul := ?_, inj := ?_, kernel := ?_ }
     · show (𝟙 _ ≫ j.left) ≫ B.hom = A.hom ≫ 𝟙 _
-      simpa using Over.w j
+      simp
     · intro Y y z y₀ z₀ hy hz
       have hy' : y ≫ j = toIdMk Y ≫ y₀ := hv y₀ y (by rw [hy]; simp)
       have hz' : z ≫ j = toIdMk Y ≫ z₀ := hv z₀ z (by rw [hz]; simp)
@@ -1036,8 +1036,7 @@ theorem isIso_of_fibre (R : Type) [CommRing R] [IsLocalRing R] [IsNoetherianRing
   have hco : ⇑(φ.toLinearMap.lTensor (IsLocalRing.ResidueField R)) =
       ⇑(Algebra.TensorProduct.map (AlgHom.id R (IsLocalRing.ResidueField R)) φ) := by
     funext x
-    induction x using TensorProduct.induction_on with
-    | zero => simp
+    induction x using TensorProduct.inductionOn with
     | tmul a b => simp
     | add x y hx hy => simp only [map_add (f := _), hx, hy]
   have hφ : Function.Bijective φ :=
@@ -1082,7 +1081,7 @@ theorem main (R : Type) [CommRing R] [IsLocalRing R] [IsNoetherianRing R] (C A B
     rwa [toUnit_unique (pullback.snd _ _) (toUnit _)] at h
   have hKl := hK.map (Over.forget _)
   have hKl' : IsPullback (pullback.fst b e).left (pullback b e).hom b.left e.left := by
-    have hA : (toUnit (pullback b e)).left = (pullback b e).hom := by simpa using Over.w (toUnit (pullback b e))
+    have hA : (toUnit (pullback b e)).left = (pullback b e).hom := by simp
     rw [← hA]; exact hKl
   have hbfin : IsFinite b.left := by
     have : IsFinite (b.left ≫ B.hom) := by rw [Over.w b]; infer_instance
@@ -1093,7 +1092,7 @@ theorem main (R : Type) [CommRing R] [IsLocalRing R] [IsNoetherianRing R] (C A B
   have hclosed : IsClosedImmersion (pullback.fst b e).left := by
     have he : IsClosedImmersion e.left := by
       have : IsClosedImmersion (e.left ≫ B.hom) := by
-        have : e.left ≫ B.hom = 𝟙 _ := by simpa using Over.w e
+        have : e.left ≫ B.hom = 𝟙 _ := by simp
         rw [this]; infer_instance
       exact IsClosedImmersion.of_comp _ B.hom
     exact MorphismProperty.of_isPullback hKl'.flip he
@@ -1469,7 +1468,8 @@ theorem pullTop_val {Y Z : Scheme.{0}} (f : Y ⟶ Z) (w : Γ(Z, ⊤)ˣ) :
     ((pullTop f w : Γ(Y, ⊤)ˣ) : Γ(Y, ⊤)) = f.appTop.hom (w : Γ(Z, ⊤)) :=
   map_rfl' _
 
-set_option synthInstance.maxHeartbeats 200000 in
+-- TODO: Stopgap for https://github.com/leanprover-community/riemann-hypothesis/issues/1038: remove once Mathlib lowers its priority.
+attribute [-instance] CategoryTheory.Monoidal.fromInducedMonoidal in
 theorem one_fst {S S' : Scheme.{0}} (f : S' ⟶ S) (B : Over S) [GrpObj B] (T : Over S') :
     (toUnit T ≫ η[(Over.pullback f).obj B]).left ≫ pullback.fst B.hom f = T.hom ≫ f ≫ η[B].left := by
   have e := congrArg (fun z => z.left) (ReciprocityTheory.ChartRestriction.G.Geo.Tor.pushHom
@@ -1680,7 +1680,7 @@ theorem kernelOf : ∀ (S : Scheme.{0}) [IsLocallyNoetherian S] (P : Over S) [Gr
   refine ⟨_, g1, g2, _, g3, hp, ?_, h1⟩
   have hl := hp.map (Over.forget S)
   have hA : (toUnit (pullback ((𝟙 P) ^ N) η[P])).left = (pullback ((𝟙 P) ^ N) η[P]).hom := by
-    simpa using Over.w (toUnit (pullback ((𝟙 P) ^ N) η[P]))
+    simp
   have hl' : IsPullback (pullback.fst ((𝟙 P) ^ N) η[P]).left (pullback ((𝟙 P) ^ N) η[P]).hom ((𝟙 P) ^ N).left (η[P]).left := by
     rw [← hA]; exact hl
   exact MorphismProperty.of_isPullback hl' hfin

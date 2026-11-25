@@ -189,23 +189,6 @@ theorem nv_strictAnti {a : ℕ} {y : Fin a → ℤ} (hy : StrictAnti y) : Strict
 theorem nv_rev {a : ℕ} (y : Fin a → ℤ) (i : Fin a) : nv y i.rev = -nv y i := by
   simp [nv]
 
-theorem diagT_mem_iwGL' (w : Pl E) (n : ℕ) (s : Fin n → (w.adicCompletion E)ˣ)
-    (hs : ∀ i, Valued.v (s i : w.adicCompletion E) = 1) : GlobalTheory.SmGL.diagT (w.adicCompletion E) (Fin n) s ∈ iwGL n w := by
-  rw [(GlobalTheory.T.iwahori_and_maximal_compact_criteria E w n _).1]
-  have hinv : ((GlobalTheory.SmGL.diagT (w.adicCompletion E) (Fin n) s)⁻¹ : GLw n w) =
-      GlobalTheory.SmGL.diagT (w.adicCompletion E) (Fin n) s⁻¹ := (map_inv _ _).symm
-  refine ⟨fun i j => ?_, fun i j => ?_, fun i j hij => ?_⟩
-  · rw [GlobalTheory.SmGL.val_diagT, diagonal_apply]
-    split_ifs with h
-    · subst h; rw [hs]
-    · simp
-  · rw [hinv, GlobalTheory.SmGL.val_diagT, diagonal_apply]
-    split_ifs with h
-    · subst h; simp [Units.val_inv_eq_inv_val, map_inv₀, hs]
-    · simp
-  · rw [GlobalTheory.SmGL.val_diagT, diagonal_apply_ne _ (ne_of_gt hij)]
-    simp
-
 theorem nrmL_eq (w : Pl E) (hw : ¬ IsSplitAt w) (a : ℕ) (g : GLw a w) : nrmL a w g = g * thL a w g := by
   simp only [nrmL, thL, if_neg hw]
 

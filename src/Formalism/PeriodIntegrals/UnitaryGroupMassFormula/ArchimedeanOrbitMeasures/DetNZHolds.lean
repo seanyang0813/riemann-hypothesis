@@ -25,8 +25,6 @@ theorem tupH_eq {D : D7} (X : HidaSetting D) (u' : D.what₂.Word) :
     · simp only [Fin.snoc_castSucc]; rfl
   · simp only [tupH, wF, Fin.append_right]; rfl
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem gram_eq {D : D7} (X : HidaSetting D) (u' : D.what₂.Word) (i j : Fin (D.R.rS + 1 + D.R.rS)) :
     gramE X.B.I.cm.sig X.B.I.J (tupH (frameOf X u')) i j = X.ιE.symm ((VS D).hT (wF X u' i) (wF X u' j)) := by
   rw [tupH_eq, ← Formalism.L2.SG.PoincareInHH.Cut.hform_crd X, RingEquiv.symm_apply_apply]

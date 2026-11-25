@@ -472,14 +472,6 @@ end Diagonal
 section Valuation
 variable {C : Type} [Field C] (v : AddValuation C (WithTop ℝ))
 
-theorem val_nat_nonneg (n : ℕ) : 0 ≤ v (n : C) := by
-  classical
-  induction n with
-  | zero => simp
-  | succ n ih =>
-    push_cast
-    exact le_trans (le_min ih (AddValuation.map_one v).ge) (AddValuation.map_add v _ _)
-
 theorem val_coprime {l : ℕ} (hl : l.Prime) (hv : v (l : C) = 1) {n : ℕ} (hn : ¬ l ∣ n) :
     v (n : C) = 0 := by
   apply GlobalTheory.FGDepth.val_natCast_eq_zero <;> assumption

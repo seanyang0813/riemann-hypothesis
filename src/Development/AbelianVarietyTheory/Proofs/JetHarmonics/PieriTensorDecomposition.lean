@@ -69,37 +69,10 @@ theorem l1_add_le {n : ℕ} (x y : Fin n → ℤ) : n1 (x + y) ≤ n1 x + n1 y :
   rw [← Finset.sum_add_distrib]
   exact Finset.sum_le_sum fun i _ => Int.natAbs_add_le _ _
 
-theorem l1_sub_le {n : ℕ} (x y : Fin n → ℤ) : n1 (x - y) ≤ n1 x + n1 y := by
-  unfold n1
-  rw [← Finset.sum_add_distrib]
-  exact Finset.sum_le_sum fun i _ => Int.natAbs_sub_le _ _
-
 theorem n1_eZ_eq_card {n : ℕ} (I : Finset (Fin n)) : n1 (eZ I) = I.card := by
   unfold n1 eZ
   have : ∀ i : Fin n, (if i ∈ I then (1 : ℤ) else 0).natAbs = if i ∈ I then 1 else 0 := by
     intro i; split_ifs <;> rfl
   simp [this]
-
-theorem l1_single {n : ℕ} (s : Fin n) : n1 (Pi.single s (1 : ℤ)) = 1 := by
-  unfold n1
-  rw [Finset.sum_eq_single s]
-  · simp
-  · intro b _ hb; simp [hb]
-  · simp
-
-theorem addSet_inj {n l : ℕ} (mu : Fin n → ℝ) : Function.Injective (fun I : Sub n l => addSet mu I.1) := by
-  intro I J hIJ
-  apply Subtype.ext
-  ext a
-  have h := congrFun hIJ a
-  simp only [addSet, add_right_inj] at h
-  by_cases h1 : a ∈ I.1 <;> by_cases h2 : a ∈ J.1 <;> simp_all
-
-theorem sub_single_inj {n : ℕ} (mu : Fin n → ℝ) :
-    Function.Injective (fun s : Fin n => mu - (Pi.single s 1 : Fin n → ℝ)) := by
-  intro s t hst
-  by_contra hne
-  have h := congrFun hst s
-  simp [hne] at h
 
 end GlobalTheory.TensExists

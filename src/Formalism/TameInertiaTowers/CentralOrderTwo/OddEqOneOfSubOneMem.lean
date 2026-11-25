@@ -1,10 +1,8 @@
 module
 
 public import Formalism.TameInertiaTowers.StatementField
-public import Formalism.TameInertiaTowers.InvLength
 public import Mathlib.NumberTheory.NumberField.Cyclotomic.Basic
 public import Mathlib.RingTheory.SimpleRing.Principal
-public import Formalism.TameInertiaTowers.CentralOrderTwo.NormalOrderTwoCentral
 import Mathlib.Algebra.AffineMonoid.Basic
 import Mathlib.Algebra.Order.Star.Int
 import Mathlib.Order.CompletePartialOrder
@@ -378,48 +376,5 @@ theorem layerFrob_of (hG : LayerGalois) : LayerFrob := by
     (Prod.ext (Units.ext (hσ.2.1.trans hτv.2.1.symm)) (Units.ext (hσ.2.2.trans hτv.2.2.symm))))
   subst this
   exact hτ
-
-theorem invLength : InvLength := by
-  intro N u hu1
-  set k := (u - 1).natAbs with hkdef
-  have hk : k ≠ 0 := by
-    rw [hkdef]; intro h; apply hu1; have := Int.natAbs_eq_zero.mp h; linarith
-  have hN : (2 ^ N : ℕ) ≠ 0 := by positivity
-  have : NeZero (2 ^ N) := ⟨hN⟩
-  set c : ZMod (2 ^ N) := ((u - 1 : ℤ) : ZMod (2 ^ N)) with hc
-  let f : ZMod (2 ^ N) →+ ZMod (2 ^ N) := AddMonoidHom.mulLeft c
-  have hcard : Nat.card {x : ZMod (2 ^ N) // c * x = 0} = Nat.card f.ker :=
-    Nat.card_congr (Equiv.subtypeEquivRight (fun x => (AddMonoidHom.mem_ker (f := f)).symm))
-  have hrange : f.range = AddSubgroup.zmultiples c := by
-    ext y
-    simp only [AddMonoidHom.mem_range, AddSubgroup.mem_zmultiples_iff]
-    constructor
-    · rintro ⟨x, rfl⟩
-      refine ⟨(x.val : ℤ), ?_⟩
-      simp only [f, AddMonoidHom.coe_mulLeft, zsmul_eq_mul, Int.cast_natCast, ZMod.natCast_zmod_val]
-      ring
-    · rintro ⟨n, rfl⟩
-      refine ⟨(n : ZMod (2 ^ N)), ?_⟩
-      simp only [f, AddMonoidHom.coe_mulLeft, zsmul_eq_mul]
-      ring
-  have hord : addOrderOf c = 2 ^ N / Nat.gcd (2 ^ N) k := by
-    have : c = (k : ZMod (2 ^ N)) ∨ c = -(k : ZMod (2 ^ N)) := by
-      rcases Int.natAbs_eq (u - 1) with h | h
-      · left; rw [hc, h]; simp [hkdef]
-      · right; rw [hc, h]; simp [hkdef]
-    rcases this with h | h
-    · rw [h, ZMod.addOrderOf_coe _ hN]
-    · rw [h, addOrderOf_neg, ZMod.addOrderOf_coe _ hN]
-  have hmul := AddSubgroup.card_mul_index f.ker
-  rw [AddSubgroup.index_ker, hrange, Nat.card_zmultiples, hord, Nat.card_zmod] at hmul
-  have hg : Nat.gcd (2 ^ N) k ∣ 2 ^ N := Nat.gcd_dvd_left _ _
-  have hgpos : 0 < Nat.gcd (2 ^ N) k := Nat.gcd_pos_of_pos_left _ (by positivity)
-  have hd : Nat.gcd (2 ^ N) k * (2 ^ N / Nat.gcd (2 ^ N) k) = 2 ^ N := Nat.mul_div_cancel' hg
-  have hdpos : 0 < 2 ^ N / Nat.gcd (2 ^ N) k :=
-    Nat.div_pos (Nat.le_of_dvd (by positivity) hg) hgpos
-  have hker : Nat.card f.ker = Nat.gcd (2 ^ N) k :=
-    Nat.eq_of_mul_eq_mul_right hdpos (hmul.trans hd.symm)
-  rw [hcard, hker, gcd_two_pow N k hk]
-  simp [hkdef, padicValInt, padicValNat]
 
 end Formalism.TwoAdicCyclotomicDecomposition

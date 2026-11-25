@@ -1191,7 +1191,7 @@ section -- clump:auto
 
 theorem UpperTheory.Cb.etale_cohomology_class_killed_on_neighborhood :
     LateralTheory.E.SecondDegreeKilling.Nbhd.LeafKillNbhd :=
-  LateralTheory.E.NeighbourhoodKilling.goal_of UpperTheory.etaleCohomology_class_killed_on_nbhd_pair UpperTheory.Cb.neighbourhood_cohomology_obstruction_exact UpperTheory.relativeCohomology_connecting_naturality
+  LateralTheory.E.NeighbourhoodKilling.goal_of UpperTheory.etaleCohomology_class_killed_on_nbhd_pair
     (LateralTheory.E.Bridge_yfiPf.Bridge_of_geo_pack
       (LateralTheory.E.GeoProof.Geo_of (UpperTheory.Cb.affineGeometricCase_of_obstructionExact_natural UpperTheory.Cb.neighbourhood_cohomology_obstruction_exact UpperTheory.relativeCohomology_connecting_naturality)
         (UpperTheory.Cb.neighbourhoodShrinking_of_obstructionExact_natural UpperTheory.Cb.neighbourhood_cohomology_obstruction_exact UpperTheory.relativeCohomology_connecting_naturality))

@@ -114,16 +114,4 @@ theorem optionEquivLeft_rename_some {σ : Type} [Finite σ] (f : MvPowerSeries �
     rw [hy, Finsupp.optionElim_apply_none] at h1
     exact h1
 
-theorem pderiv_coeff_optionEquivLeft {σ : Type} (f : MvPowerSeries (Option σ) C) (n : ℕ) (s : σ) :
-    pderiv s (PowerSeries.coeff n (optionEquivLeft σ C f)) =
-      PowerSeries.coeff n (optionEquivLeft σ C (pderiv (some s) f)) := by
-  classical
-  ext μ
-  rw [coeff_pderiv, coeff_coeff_optionEquivLeft, coeff_coeff_optionEquivLeft, coeff_pderiv]
-  have key : Finsupp.optionElim n (μ + Finsupp.single s 1) =
-      Finsupp.optionElim n μ + Finsupp.single (some s) 1 := by
-    ext t
-    cases t <;> simp [Finsupp.single_apply]
-  rw [key, Finsupp.optionElim_apply_some]
-
 end GlobalTheory.CurveJet

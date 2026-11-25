@@ -1,7 +1,6 @@
 module
 
 public import Mathlib.Analysis.CStarAlgebra.Module.Constructions
-import Mathlib.Algebra.Order.Star.Real
 
 @[expose] public section
 
@@ -14,19 +13,8 @@ theorem norm_sq_comb {κ : Type} {W : Type} [NormedAddCommGroup W] [InnerProduct
     (y : κ → W) :
     ((‖∑ j ∈ J, b j • y j‖ ^ 2 : ℝ) : ℂ) = ∑ j ∈ J, ∑ l ∈ J, conj (b j) * b l * ⟪y j, y l⟫_ℂ := by
   rw [show ((‖∑ j ∈ J, b j • y j‖ ^ 2 : ℝ) : ℂ) = ⟪∑ j ∈ J, b j • y j, ∑ j ∈ J, b j • y j⟫_ℂ by
-    rw [inner_self_eq_norm_sq_to_K]; norm_cast, sum_inner]
-  refine sum_congr rfl fun j _ => ?_
-  rw [inner_sum]
-  refine sum_congr rfl fun l _ => ?_
-  rw [inner_smul_left, inner_smul_right]
-  ring
-
-theorem sum_sq_le_sq_sum {I : Type} [Fintype I] (x : I → ℝ) (hx : ∀ i, 0 ≤ x i) :
-    ∑ i, x i ^ 2 ≤ (∑ i, x i) ^ 2 := by
-  rw [sq, sum_mul]
-  refine sum_le_sum fun i _ => ?_
-  rw [sq]
-  exact mul_le_mul_of_nonneg_left (single_le_sum (fun j _ => hx j) (mem_univ i)) (hx i)
+    rw [inner_self_eq_norm_sq_to_K]; norm_cast]
+  simp_rw [sum_inner, inner_sum, inner_smul_left, inner_smul_right, ← mul_assoc]
 
 theorem norm_sum_le_of_gram {ι κ I : Type} [Fintype I] {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
     {W : Type} [NormedAddCommGroup W] [InnerProductSpace ℂ W] (k : ι → ι → ℂ) (v : ι → H)
@@ -60,9 +48,10 @@ theorem norm_sum_le_of_gram {ι κ I : Type} [Fintype I] {H : Type} [NormedAddCo
       refine sum_congr rfl fun i _ => ?_
       rw [mul_pow, Real.sq_sqrt (hc i)]
     rw [this]
-    exact sum_sq_le_sq_sum _ fun i => mul_nonneg (Real.sqrt_nonneg _) (norm_nonneg _)
+    exact Finset.sum_sq_le_sq_sum_of_nonneg fun i _ =>
+      mul_nonneg (Real.sqrt_nonneg _) (norm_nonneg _)
   have hb : 0 ≤ ∑ i, √(c i) * ‖∑ j ∈ J, conj (a j) • Y i (P j)‖ :=
     sum_nonneg fun i _ => mul_nonneg (Real.sqrt_nonneg _) (norm_nonneg _)
-  nlinarith [norm_nonneg (∑ j ∈ J, a j • v (P j))]
+  exact (sq_le_sq₀ (norm_nonneg _) hb).mp h3
 
 end Formalism.FourierDecayAlt.P.GermRateSplit

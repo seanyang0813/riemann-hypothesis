@@ -16,7 +16,7 @@ noncomputable section
 
 namespace Formalism.FourierDecayAlt.P5.Rad
 
-open Formalism.REAL Formalism.QuantumDeterminants Formalism.FourierDecayAlt Formalism.FourierDecayAlt.Q Formalism.FourierDecayAlt.P.Ux10
+open Formalism.REAL Formalism.QuantumDeterminants Formalism.FourierDecayAlt Formalism.FourierDecayAlt.Q Formalism.FourierDecayAlt.P.Ux1 Formalism.FourierDecayAlt.P.Ux10
 
 attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
@@ -60,7 +60,7 @@ private lemma prj_eq_self_of_inLie {X : B.Mat k r} (hX : B.inLie k r X) : prj X 
   have hX' : Xᴴ * Hpk k r + Hpk k r * X = 0 := hX
   have h1 : Xᴴ * Hpk k r = -(Hpk k r * X) := eq_neg_of_add_eq_zero_left hX'
   have h2 : Hpk k r * Xᴴ * Hpk k r = -X := by
-    rw [Matrix.mul_assoc, h1, Matrix.mul_neg, ← Matrix.mul_assoc, Formalism.FourierDecayAlt.P.Ux10.hpk_sq', Matrix.one_mul]
+    rw [Matrix.mul_assoc, h1, Matrix.mul_neg, ← Matrix.mul_assoc, Formalism.FourierDecayAlt.P.Ux1.hpk_sq', Matrix.one_mul]
   unfold prj
   rw [h2, sub_neg_eq_add, ← two_smul ℂ X, smul_smul]
   norm_num

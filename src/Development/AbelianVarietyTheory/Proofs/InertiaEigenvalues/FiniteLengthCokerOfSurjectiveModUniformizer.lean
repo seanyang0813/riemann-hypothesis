@@ -213,7 +213,6 @@ open scoped Formalism.Per
 noncomputable section
 namespace GlobalTheory.CokerFinLen
 
-theorem divApprox : ∀ (O K : Type) [CommRing O] [NormedField K] [IsUltrametricDist K] [Algebra O K] [IsUnitBall O K] (g : K⟦X⟧), g ∈ A O K → ∀ n₀ : ℕ, ‖coeff n₀ g‖ = 1 → (∀ i < n₀, ‖coeff i g‖ < 1) → ∀ δ : ℝ, 0 < δ → ∀ f ∈ A O K, ∃ q ∈ A O K, ∃ r : K⟦X⟧, (∀ i, n₀ ≤ i → coeff i r = 0) ∧ (∀ i, ‖coeff i r‖ ≤ 1) ∧ ∀ n, ‖coeff n (f - q * g - r)‖ ≤ δ := _root_.GlobalTheory.BK.DivApprox.exists_div_approx
 
 theorem exists_net {K : Type} [NormedField K] (l : ℕ) [Fact l.Prime] [NormedAlgebra ℚ_[l] K]
     [FiniteDimensional ℚ_[l] K] {δ : ℝ} (hδ : 0 < δ) :
@@ -240,7 +239,7 @@ theorem exists_finset_reps {O K : Type} [CommRing O] [NormedField K] [IsUltramet
   let mkR : (Fin n₀ → T) → K⟦X⟧ := fun t => PowerSeries.mk fun n =>
     if h : n < n₀ then ((t ⟨n, h⟩ : T) : K) else 0
   refine ⟨Finset.univ.image mkR, fun f hf => ?_⟩
-  obtain ⟨q, hq, r, hr0, hr1, hrem⟩ := divApprox O K g hg n₀ hn₀ hlow _ hδ f hf
+  obtain ⟨q, hq, r, hr0, hr1, hrem⟩ := _root_.GlobalTheory.BK.DivApprox.exists_div_approx O K g hg n₀ hn₀ hlow _ hδ f hf
   choose t ht hrt using fun i : Fin n₀ => hT (coeff i r) (hr1 i)
   let r' := mkR fun i => ⟨t i, ht i⟩
   have hcoeff : ∀ n, coeff n r' = if h : n < n₀ then t ⟨n, h⟩ else 0 := fun n => by

@@ -476,8 +476,6 @@ variable {r : ℕ} (pN : Formalism.MainNotions.S.Point ℂ (r + 1))
 
 local notation "W" => wPt pN
 
-theorem w_symm (x : Fin (r + 1)) : (W).symm x = W x := wPt_symm pN x
-
 def sw (q : Formalism.FourierDecayAlt.C2.Lstidx W) : Formalism.FourierDecayAlt.C2.Lstidx W :=
   ⟨(W q.1.2, W q.1.1), by
     exact ⟨by simpa only [_root_.Formalism.MainNotions.BigCellDensity.wPt_symm] using q.2.2,

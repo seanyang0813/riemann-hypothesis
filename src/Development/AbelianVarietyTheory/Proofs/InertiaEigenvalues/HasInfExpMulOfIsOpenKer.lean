@@ -64,7 +64,6 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 open Formalism.IndefR.Links (PolF)
 open GlobalTheory.OneMapRef.RealMove (adele_ext detPlus_one exists_root hasInfExp_twist)
 open scoped TensorProduct ComplexOrder
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace GlobalTheory.RealFockAction
 

@@ -361,10 +361,6 @@ end GlobalTheory.MumUniq
 
 namespace GlobalTheory.MumUniq
 
-theorem stalk_eq_of_thick : ∀ (R : Type) [CommRing R] [IsLocalRing R] [IsNoetherianRing R] (G : Over (Spec (CommRingCat.of R))), LocallyOfFiniteType G.hom → ∀ (b b' : G ⟶ G), (∀ e : ℕ, (Over.pullback (thick R (maximalIdeal R) e)).map b = (Over.pullback (thick R (maximalIdeal R) e)).map b') → ∀ x : G.left, G.hom x = closedPoint R → G.left.fromSpecStalk x ≫ b.left = G.left.fromSpecStalk x ≫ b'.left := _root_.GlobalTheory.ThickStalkEq.fromSpecStalk_comp_eq
-
-theorem irreducible_of_smooth : ∀ (R : Type) [CommRing R] [IsDomain R] (G : Over (Spec (CommRingCat.of R))), Smooth G.hom → GeometricallyConnected G.hom → Nonempty G.left → IrreducibleSpace G.left := _root_.GlobalTheory.irreducibleSpace_of_smooth_of_geometricallyConnected_domain
-
 theorem eq_of_stalk {R : Type} [CommRing R] [IsDomain R] (G : Over (Sp R)) [Smooth G.hom]
     [IsSeparated G.hom] [GeometricallyConnected G.hom] (b b' : G ⟶ G) (x : G.left)
     (h : G.left.fromSpecStalk x ≫ b.left = G.left.fromSpecStalk x ≫ b'.left) : b = b' := by

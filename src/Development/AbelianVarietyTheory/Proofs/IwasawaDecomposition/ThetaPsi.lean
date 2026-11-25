@@ -45,19 +45,11 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N Number
 
 structure CopyN (D : D7) {D' : D7} (N : TwNew D') (ι : D.what₂.LL →+* D'.what₂.LL) (e : ↥D'.LL0 ≃+* ↥D.LL0) : Prop where
   cp : GlobalTheory.TwInputs.Move.CopyTw D N.toD7 ι e
-  ThetaPsi : HEq D.ntw.ThetaPsi N.tw.ThetaPsi
-  topO : HEq D.ntw.topO N.tw.topO
-  finLam : HEq D.ntw.finLam N.tw.finLam
   jL : HEq D.ntw.jL N.tw.jL
   s2 : HEq D.ntw.s2 N.tw.s2
   lamG : HEq D.ntw.lamG N.tw.lamG
   Xv : HEq D.ntw.Xv N.tw.Xv
   qs : HEq D.ntw.qs N.tw.qs
-  res : HEq D.ntw.res N.tw.res
-  eLL0 : ∀ g g', HEq g g' → e (N.ex.eLL0 g') = D.nexp.eLL0 g
-  twPsi : HEq D.nexp.twPsi N.ex.twPsi
-  twDel : HEq D.nexp.twDel N.ex.twDel
-  eH : HEq D.nexp.eH N.ex.eH
 
 theorem CopyN.carried {D D' : D7} {N : TwNew D'} {ι : D.what₂.LL →+* D'.what₂.LL} {e : ↥D'.LL0 ≃+* ↥D.LL0} (h : CopyN D N ι e) :
     Carried D N.toD7 := by

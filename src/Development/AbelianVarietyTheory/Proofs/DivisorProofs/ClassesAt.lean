@@ -47,8 +47,6 @@ open Formalism.CohomologicalDescent.ShortWeightBounds (Wts)
 
 namespace GlobalTheory.FrameOf
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 section Ring
 
 variable {l : ℕ} [Fact l.Prime] (Lf : IntermediateField ℚ_[l] (PadicAlgCl l))

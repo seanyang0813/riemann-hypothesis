@@ -46,7 +46,6 @@ noncomputable section
 namespace GlobalTheory.Mem.Top.Bl
 open Formalism.BasicNotions Formalism.MainNotions Formalism.L2 Formalism.L2.Host Formalism.L2.DIV Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Lev Formalism.IndefR.NX ReciprocityTheory.Gal
   NumberField IsDedekindDomain GlobalTheory.Mem GlobalTheory.Mem.Col2 GlobalTheory.HeightCounting
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 set_option genInjectivity false in
 set_option genSizeOfSpec false in
 

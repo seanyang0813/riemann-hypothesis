@@ -54,8 +54,6 @@ namespace GlobalTheory.FunObj
 
 open GlobalTheory.ChiGrid GlobalTheory.SplitFlip GlobalTheory.SplitWeil GlobalTheory.StdFrames Formalism.L2.DIV
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 variable {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} {G : GridData L sc}
 
 abbrev routeBig (t : T) (i j : ℕ) : Path T (.grid i (j + 1)) (.grid (i + 1) j) :=

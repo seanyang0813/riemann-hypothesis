@@ -1211,8 +1211,7 @@ theorem rowsFinDim_of (hCore : Core) (hFin : FiniteDimensionalFromLinearForms) (
     exact {}
   have hlf : IsLocallyFiniteMeasure μf := inferInstance
   let X : Formalism.MainNotions.BridgeLemma.CData :=
-    { I := I, b := 0, lam := 0, g := 0, g₀ := 0, e := e, H := fun _ => ℂ, σ := fun _ _ => 0, w := 0,
-      Hs := ℂ, σs := fun _ => 0, tens := fun _ => 0, μf := μf, fund := fund, R := R, Re := Re, h := 0 }
+    { I := I, μf := μf, fund := fund, R := R }
   have hd : RegData X := ⟨‹_›, hfund, hR⟩
   have hu : UnimodA X := hright
   obtain ⟨hmul, -, hiso, -⟩ := adelic_regular_rep_unitary_continuous X hd hu hlf

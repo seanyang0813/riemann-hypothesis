@@ -16,16 +16,6 @@ public import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.FundamentalDo
 public import Formalism.SharpRestriction.Divisibility.GeneratorPowers.PhiCMinF
 public import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.FundamentalDomains.NonvanishingNearHalfMax
 public import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.FundamentalDomains.MaxPointFrameOfTransference
-import Mathlib.Algebra.AffineMonoid.Basic
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.Algebra.Order.Star.Real
-import Mathlib.RingTheory.Henselian
-import Mathlib.RingTheory.RegularLocalRing.Defs
-import Mathlib.Algebra.Module.StablyFree.Basic
-import Mathlib.Tactic.Lemma
-import Mathlib.Algebra.Order.Star.Rat
-import Mathlib.RingTheory.Etale.Weakly
-import Mathlib.RingTheory.TotallySplit
 import Development.AbelianVarietyTheory.Proofs.CubicalLineBundles.CmApproximationTransference
 
 -- This file was produced by scripts/clump.py from the modules listed below.

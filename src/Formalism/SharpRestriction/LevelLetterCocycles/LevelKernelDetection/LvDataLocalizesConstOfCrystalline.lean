@@ -146,22 +146,6 @@ theorem comparison_of_reduction {T : LocLat G Qp LL O} (C : Coord W (baseIdOf hR
   rw [hX, add_zero, Finset.sum_congr rfl (fun k _ => hC k)] at hF
   exact hF
 
-theorem gamma_reduction_pi0_pow {T : LocLat G Qp LL O} (C : Coord W (baseIdOf hR) T) (i : ZMod n) (hs1 : W.s = 1)
-    (hp2 : PD.p ≠ 2) (x : C.V) (hx : x ∈ (latOf C).N i) (M : ℕ)
-    (hγ : (latOf C).γ i x - x ∈ E.sm ((PowerSeries.X : PowerSeries O) ^ M) ((latOf C).N i)) :
-    ∃ (y : ↥(W.N T)) (_ : W.γD T W.gam (C.t i x) ∈ W.N T),
-      W.γD T W.gam (C.t i x) - C.t i x = W.π₀ ^ M • (y : W.DD T) := by
-  obtain ⟨z, hz, hzeq⟩ := Submodule.mem_map.1 hγ
-  rw [LinearMap.lsmul_apply] at hzeq
-  have hg : W.gamK = W.gam := W.gamK_eq_one hs1 hp2
-  have h1 : C.t i ((latOf C).γ i x) = W.γD T W.gam (C.t i x) := by rw [t_γ, hg]
-  have h2 : W.γD T W.gam (C.t i x) - C.t i x = W.π₀ ^ M • C.t i z := by
-    rw [← h1, ← C.t_sub, ← hzeq, C.t_smul, map_pow, BaseId.d_X]
-  refine ⟨⟨C.t i z, hz⟩, ?_, h2⟩
-  have h3 : W.γD T W.gam (C.t i x) = W.π₀ ^ M • C.t i z + C.t i x := by rw [← h2]; abel
-  rw [h3]
-  exact (W.N T).add_mem ((W.N T).smul_mem _ hz) hx
-
 end Formalism.MainNotions.N.Ln03.Pf
 end -- clump:auto
 end -- clump:auto

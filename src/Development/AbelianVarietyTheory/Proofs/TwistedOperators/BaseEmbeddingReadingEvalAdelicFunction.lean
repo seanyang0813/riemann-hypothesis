@@ -70,8 +70,6 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.BasicNotions.TH Form
   Formalism.IndefR.FWT Formalism.L2.Pj Formalism.IndefR.Lev Formalism.L2.NTheta
 open GlobalTheory.IndefiniteRowSideFullHecke.LatticesOverBalls
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 variable {D : D7} {G : Type} [Group G] [Fintype G] {Pl0 T0 : Type} {A : FamIn D.what₂.LL G Pl0 T0 D.R.m}
 
 section Comm

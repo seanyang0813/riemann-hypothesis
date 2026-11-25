@@ -39,15 +39,6 @@ theorem homog_sub {f g : MRing ι} {a : K → ℕ} (hf : IsMultiHomog f a) (hg :
   rw [sub_eq_add_neg]
   exact homog_add hf (GroundTheory.Heights₂.Heights.HilbertSamuel.SectionBounded.homog_neg hg)
 
-theorem homog_C (r : ℤ) : IsMultiHomog (C r : MRing ι) 0 := by
-  classical
-  intro m hm k
-  rw [mem_support_iff, coeff_C] at hm
-  split_ifs at hm with h
-  · subst h
-    simp
-  · exact absurd rfl hm
-
 theorem homog_mul {f g : MRing ι} {a b : K → ℕ} (hf : IsMultiHomog f a) (hg : IsMultiHomog g b) :
     IsMultiHomog (f * g) (a + b) := by
   classical

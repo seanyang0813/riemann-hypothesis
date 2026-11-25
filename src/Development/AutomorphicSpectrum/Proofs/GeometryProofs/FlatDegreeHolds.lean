@@ -35,7 +35,6 @@ public import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
 public import Mathlib.Topology.MetricSpace.Ultra.Basic
 public import Development.AutomorphicSpectrum.Proofs.AlgebraProofs.UltrametricDetNormLe
 public import Development.WeilBound.CoreStatements.SesquilinearFractions.DTrans
-public import Development.AutomorphicSpectrum.Proofs.AdelicProofs.ExistsExtensionEmbeddingAlgClosed
 public import Development.AutomorphicSpectrum.Proofs.AlgebraProofs.ExistsTransitionMatrixGram
 public import Development.AutomorphicSpectrum.Proofs.AlgebraProofs.GramDetNeZeroLocalBasisCofinite
 public import Development.AutomorphicSpectrum.Proofs.AlgebraProofs.GramDeterminantLogDifferent
@@ -120,6 +119,31 @@ import Mathlib.RingTheory.Etale.Weakly
 import Mathlib.RingTheory.Finiteness.ModuleFinitePresentation
 import Mathlib.Tactic.Linter.Style
 import Development.AutomorphicSpectrum.Proofs.GeometryProofs.TangentVectorsBaseChange
+
+section
+@[expose] public section
+
+open NumberField GlobalTheory.CompanionTheory.Ar GlobalTheory.CompanionTheory.Ar.Fl
+
+namespace GlobalTheory.CompanionTheory.Ar.Fl
+
+theorem exists_comp_eq_of_numberField (k k' A : Type) [Field k] [NumberField k] [Field k']
+    [NumberField k'] [Field A] [CharZero A] [IsAlgClosed A] (f : k →+* k') (j : k →+* A) :
+    ∃ j' : k' →+* A, j'.comp f = j := by
+  let _ : Algebra k k' := f.toAlgebra
+  let _ : Algebra k A := j.toAlgebra
+  have : IsScalarTower ℚ k k' := IsScalarTower.of_algebraMap_eq fun q => by
+    rw [RingHom.algebraMap_toAlgebra, eq_ratCast (algebraMap ℚ k') q, eq_ratCast (algebraMap ℚ k) q,
+      map_ratCast]
+  have : Module.Finite k k' := Module.Finite.of_restrictScalars_finite ℚ k k'
+  have : Algebra.IsAlgebraic k k' := Algebra.IsAlgebraic.of_finite k k'
+  refine ⟨(IsAlgClosed.lift : k' →ₐ[k] A).toRingHom, ?_⟩
+  ext x
+  exact (IsAlgClosed.lift : k' →ₐ[k] A).commutes x
+
+end GlobalTheory.CompanionTheory.Ar.Fl
+end
+
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Development.AutomorphicSpectrum.Proofs.AlgebraProofs.HermitianLogNormLocalSum, Development.AutomorphicSpectrum.Proofs.AdelicProofs.HermitianMetricLogNormFormula, Development.AutomorphicSpectrum.Proofs.GeometryProofs.ChowlaSelbergPeriod, Development.AbelianVarietyTheory.Statements.PlaceShiftStatements.PointShiftStOfPlaceShiftSt, Development.WeilBound.CoreStatements.SesquilinearFractions.DTransUnit, Development.AutomorphicSpectrum.Proofs.AlgebraProofs.PadicNormTransitionDetOne, Development.AutomorphicSpectrum.Proofs.GeometryProofs.FrameFunctionCmHeight, Development.AutomorphicArithmetic.IntegralCasts.CapelliIdentities.ImportsAlt, Development.AutomorphicSpectrum.Proofs.GeometryProofs.DualBasisHermitianSum, Development.WeilBound.CoreStatements.SesquilinearFractions.GGramPush, Development.AutomorphicSpectrum.Proofs.GeometryProofs.HodgeGramInvariantPullback, Development.AutomorphicSpectrum.Proofs.GeometryProofs.LieNormSqBaseChange, Development.AutomorphicSpectrum.Proofs.GeometryProofs.CmPackPeriodProduct, Development.AutomorphicSpectrum.Proofs.GeometryProofs.FrameFunctionCmNumberField, Development.AutomorphicSpectrum.Proofs.GeometryProofs.FrameFunctionCmValue, Development.AutomorphicSpectrum.Proofs.GeometryProofs.FlatDegreeHolds

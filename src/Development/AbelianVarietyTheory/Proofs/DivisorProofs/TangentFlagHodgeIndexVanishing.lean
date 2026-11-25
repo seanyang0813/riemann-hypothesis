@@ -166,7 +166,7 @@ theorem exists_isFilLift_dir (P : AbelianDeRham) {ι : Type} [Fintype ι] {C : O
     rw [GrpMor.pull_pull (liftMor κ h₀) μ n (fun _ => rfl) rfl c,
       ← GrpMor.pull_pull (bcMor hφ) (liftMor (epsDP R) hj) n (fun _ => rfl) (by simpa using sq) c]
     exact ex c
-  refine ⟨d', mem_Fil_of_corr (hφ := hφ) hF ex hd, fun c => ?_⟩
+  refine ⟨d', (mem_Fil_of_corr (hφ := hφ) hF ex hd :), fun c => ?_⟩
   rw [← GrpMor.pull_pull cst μ (constMor A) (fun r => (TrivSqZeroExt.map _).commutes r) (by simp) c, em]
   refine TrivSqZeroExt.ext ?_ ?_
   · exact (TrivSqZeroExt.fst_map _ _).trans ((ef c).trans (by simp))

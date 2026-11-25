@@ -66,7 +66,6 @@ open GlobalTheory.Mem.R3.HasLabelling
 
 open GlobalTheory.Hk3 (Core Good IsSF SchurAll EEc Wcc IsLab SphOp hyp)
 open GlobalTheory.StdFrame (StdPsi)
-attribute [local instance] Formalism.IndefR.principalLevelFrame.instCMHostI
 
 noncomputable section
 

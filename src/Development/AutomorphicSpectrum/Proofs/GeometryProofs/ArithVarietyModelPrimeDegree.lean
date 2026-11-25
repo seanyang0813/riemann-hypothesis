@@ -185,13 +185,6 @@ open GlobalTheory.CompanionTheory.Ar.Num.FamEx GlobalTheory.CompanionTheory.Ar.B
 
 namespace PositivityTheory.Xgn.SequenceTestFunction
 
-def zp (Ω : Type) [Field Ω] [CharZero Ω] (p : ℕ) [Fact p.Prime] : Subring Ω :=
-  PositivityTheory.Xgn.PackingFacts.zp Ω p
-
-theorem mem_range_zp (Ω : Type) [Field Ω] [CharZero Ω] (p : ℕ) [Fact p.Prime] (x : Ω) :
-    x ∈ (algebraMap (zp Ω p) Ω).range ↔ ∃ (a : ℤ) (b : ℕ), ¬ p ∣ b ∧ x = (a : Ω) / (b : Ω) :=
-  PositivityTheory.Xgn.PackingFacts.mem_range_zp Ω p x
-
 theorem chart_facts : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H) (l : Level H) (Xo : Moduli D l) (c : Coeff l) (O₀ : Type) [CommRing O₀] (β : O₀ →+* c.F) (Y : Model Xo c β) (S : Finset ℕ) (Ω : Type) [Field Ω] (K : Type) [Fintype K] [DecidableEq K] (J : K → Type) [∀ k, Fintype (J k)] (y : (Σ k, J k) → Ω) (𝔐 : HodgeCpt Y S y) (d : ℕ), IsArithVar (mCoordIdeal y) (d + 1) → ∀ (p : ℕ) [Fact p.Prime], p ∈ S → ∀ (A : Type) [CommRing A] [Algebra A Ω] [IsIntegralClosure A ℤ Ω] (m : Ideal A) [m.IsPrime], (p : A) ∈ m → ∀ (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Algebra A O] [IsLocalization.AtPrime O m] [Algebra O Ω] [IsScalarTower A O Ω] (c' : ∀ k, J k), mseg y c' ≠ 0 → CharZero Ω ∧ IsNoetherianRing (CR O y c') ∧ IsIntegrallyClosed (CR O y c') ∧ IsFractionRing (CR O y c') Ω := by
   intro E _ _ _ H D l Xo c O₀ _ β Y S Ω _ K _ _ J _ y 𝔐 d hV p _ hpS A _ _ _ m _ hpm O _ _ _ _ _ _ _ c' hc'
   obtain ⟨h₀, hN, hI, hF, _⟩ :=
@@ -397,7 +390,7 @@ theorem PositivityTheory.Xgn.sequence_test_function : GlobalTheory.CompanionTheo
   obtain ⟨h0, hNoe, hIC, hFr⟩ :=
     chart_facts E H D l Xo c O₀ β Y S Ω K J y 𝔐 d hV p hpS A m hpm O c' hc'
   obtain ⟨-, hN, hprop, hT, hrk, -, -⟩ := _root_.GlobalTheory.CompanionTheory.Ar.HT.hcpt_generic_point E H D l Xo c O₀ β Y S Ω K J y 𝔐 p hpS
-    (zp Ω p) (mem_range_zp Ω p)
+    (PositivityTheory.Xgn.PackingFacts.zp Ω p) (PositivityTheory.Xgn.PackingFacts.mem_range_zp Ω p)
   have hp := (Fact.out : p.Prime)
   have hn : p ^ 𝔐.R p ≠ 0 := pow_ne_zero _ hp.ne_zero
   haveI : NeZero (p ^ 𝔐.R p) := ⟨hn⟩

@@ -1206,8 +1206,6 @@ open scoped TensorProduct InnerProductSpace
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.RawLift
 
-theorem _root_.GlobalTheory.T.exists_finset_levW_mul_heckeOn_mem_wall : ∀ {D : D7} {G : Type} [Group G] [Fintype G] {Pl0 T : Type} {A : FamIn D.what₂.LL G Pl0 T D.R.m} {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] {R : RealDat D A Ks} {i : Fin D.R.m}, LevProd R i → ∀ (γ : GA D (Wc D i)), γ ∈ GfC (Wc D i) → ∃ C : Finset (GA D (Wc D i)), C.Nonempty ∧ (∀ δ ∈ C, ∃ k ∈ levW R i, δ = k * γ) ∧ ∀ T ∈ R.Wall i (sg0 D A), heckeOn (R.MW i (sg0 D A)) C T ∈ R.Wall i (sg0 D A) := by
-  first | exact @GlobalTheory.TransSum.heckeOn_doubleCoset_mem_wall
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.DoubleCosetHeckeSumPreservesPrincipalFormsStatement =====
@@ -1267,8 +1265,6 @@ open scoped TensorProduct InnerProductSpace
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.RawLift
 
-theorem _root_.GlobalTheory.T.exists_finite_local_double_coset_representatives : ∀ {D : D7} (V : HSp D) (β : GL (Fin V.rank) (Formalism.IndefR.Lev.EAf D)) (L : LevDat D.host.E ℂ V.rank) (v : HeightOneSpectrum (𝓞 D.host.F)) (f : AE D), IsFinIdem D v f → ∀ α : GA D V, SuppF V f α → ∃ C : Finset (GA D V), (∀ γ ∈ C, SuppF V f γ) ∧ IsCosetRep V {k | k ∈ levG V β L ∧ SuppF V f k} α C := by
-  first | exact @GlobalTheory.LocalRepsFin.exists_isCosetRep_finIdem
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsFiniteLocalDoubleCosetRepresentativesStatement =====
@@ -1325,11 +1321,6 @@ open GlobalTheory.RawLift
 
 namespace GlobalTheory.RawLiftTrans
 
-theorem exists_cosetRep_levG {D : D7} (V : HSp D) (β : GL (Fin V.rank) (Formalism.IndefR.Lev.EAf D)) (L : LevDat D.host.E ℂ V.rank)
-    (v : HeightOneSpectrum (𝓞 D.host.F)) (f : AE D) (hf : IsFinIdem D v f) (α : GA D V) (hα : SuppF V f α) :
-    ∃ C : Finset (GA D V), (∀ γ ∈ C, SuppF V f γ) ∧ IsCosetRep V {k | k ∈ levG V β L ∧ SuppF V f k} α C :=
-  GlobalTheory.T.exists_finite_local_double_coset_representatives V β L v f hf α hα
-
 variable {D : D7} {G : Type} [Group G] [Fintype G] {Pl0 T : Type} {A : FamIn D.what₂.LL G Pl0 T D.R.m}
   {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] {R : RealDat D A Ks} {i : Fin D.R.m}
 
@@ -1338,11 +1329,6 @@ theorem heckeOn_mem_wall (hLP : LevProd R i) (v : HeightOneSpectrum (𝓞 D.host
     (hR : IsCosetRep (Wc D i) {k | k ∈ levW R i ∧ SuppF (Wc D i) f k} α C) (T : MMap (R.MW i (sg0 D A)))
     (hT : T ∈ R.Wall i (sg0 D A)) : heckeOn (R.MW i (sg0 D A)) C T ∈ R.Wall i (sg0 D A) :=
   GlobalTheory.T.local_hecke_sum_preserves_principal_level_forms hLP v f hf α hα C hC hR T hT
-
-theorem exists_doubleCoset_sum (hLP : LevProd R i) (γ : GA D (Wc D i)) (hγ : γ ∈ GfC (Wc D i)) :
-    ∃ C : Finset (GA D (Wc D i)), C.Nonempty ∧ (∀ δ ∈ C, ∃ k ∈ levW R i, δ = k * γ) ∧
-      ∀ T ∈ R.Wall i (sg0 D A), heckeOn (R.MW i (sg0 D A)) C T ∈ R.Wall i (sg0 D A) :=
-  GlobalTheory.T.exists_finset_levW_mul_heckeOn_mem_wall hLP γ hγ
 
 theorem wall_props {T : MMap (R.MW i (sg0 D A))} (hT : T ∈ R.Wall i (sg0 D A)) :
     IsMultMap R.θ (R.MW i (sg0 D A)) (levS _ (R.βW i) (R.datWp i R.triv)) (levChi _ (R.βW i) (R.datWp i R.triv)) T :=

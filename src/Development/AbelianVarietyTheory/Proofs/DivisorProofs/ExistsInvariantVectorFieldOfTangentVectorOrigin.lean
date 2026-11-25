@@ -113,8 +113,6 @@ open GlobalTheory.RayEv (Ray)
 open GlobalTheory.Toroidal GlobalTheory.LogKS GlobalTheory.LogKSChart GlobalTheory.Heat
 attribute [local instance] Over.cartesianMonoidalCategory
 
-theorem _root_.GlobalTheory.T.existsUnique_dualNumberThickening_open_decomp : ∀ (R : Type) [CommRing R] {Z P : Scheme.{0}} (h : Z ⟶ Sp R) (p₁ : P ⟶ Sp (DualNumber R)) (p₂ : P ⟶ Z), IsPullback p₂ p₁ h (spMap (algebraMap R (DualNumber R))) → ∀ (O : Z.Opens) (F : Γ(P, p₂ ⁻¹ᵁ O)), ∃! ab : Γ(Z, O) × Γ(Z, O), F = (p₂.app O).hom ab.1 + constFn p₁ _ DualNumber.eps * (p₂.app O).hom ab.2 := by
-  first | exact @GlobalTheory.SpThickening.existsUnique_decomp
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsUniqueDualNumberThickeningOpenDecompStatement =====
@@ -142,29 +140,6 @@ section Val
 
 variable {A : Type} [CommRing A] {Y : Scheme.{0}}
 
-theorem valR_of' (x : Sp A ⟶ Y) (V : Y.Opens) (h : ⊤ ≤ x ⁻¹ᵁ V) (f : Γ(Y, V)) :
-    valR x V f = (Scheme.ΓSpecIso (CommRingCat.of A)).hom.hom ((x.appLE V ⊤ h).hom f) := by
-  unfold valR
-  rw [dite_eq_left h]
-
-theorem valR_appLE' {Z : Scheme.{0}} (x : Sp A ⟶ Z) (g : Z ⟶ Y) (V : Y.Opens) (W : Z.Opens) (e : W ≤ g ⁻¹ᵁ V)
-    (h : ⊤ ≤ x ⁻¹ᵁ W) (f : Γ(Y, V)) : valR x W ((g.appLE V W e).hom f) = valR (x ≫ g) V f := by
-  have h' : ⊤ ≤ (x ≫ g) ⁻¹ᵁ V := h.trans (x.preimage_mono e)
-  rw [valR_of' x W h, valR_of' (x ≫ g) V h', ← Scheme.Hom.appLE_comp_appLE x g V W ⊤ e h]
-  rfl
-
-theorem valR_constFn' {B : Type} [CommRing B] (x : Sp A ⟶ Y) (p : Y ⟶ Sp B) (ψ : B →+* A) (hx : x ≫ p = spMap ψ)
-    (V : Y.Opens) (h : ⊤ ≤ x ⁻¹ᵁ V) (a : B) : valR x V (constFn p V a) = ψ a := by
-  unfold constFn
-  refine (valR_appLE' x p ⊤ V (fun _ _ => trivial) h _).trans ?_
-  rw [hx, valR_of' _ _ le_rfl]
-  have n := congrArg (fun q => q.hom a) (Scheme.ΓSpecIso_inv_naturality (CommRingCat.ofHom ψ))
-  have e' : ((spMap ψ).appLE ⊤ ⊤ le_rfl) = (spMap ψ).appTop := (Scheme.Hom.app_eq_appLE _).symm
-  change (Scheme.ΓSpecIso (CommRingCat.of A)).inv.hom (ψ a) =
-    (spMap ψ).appTop.hom ((Scheme.ΓSpecIso (CommRingCat.of B)).inv.hom a) at n
-  rw [e', ← n]
-  exact (Scheme.ΓSpecIso (CommRingCat.of A)).inv_hom_id_apply _
-
 end Val
 
 section Geo
@@ -185,32 +160,6 @@ theorem spMap_fst_comp' (R : Type) [CommRing R] :
     spMap (TrivSqZeroExt.fstHom R R R).toRingHom ≫ spMap (algebraMap R (DualNumber R)) = 𝟙 _ := by
   rw [← Spec.map_comp, ← Spec.map_id]
   congr 1
-
-theorem app_injective' {Y Z : Scheme.{0}} (f : Y ⟶ Z) [IsOpenImmersion f] (O : Z.Opens) (hO : O ≤ f.opensRange) :
-    Function.Injective (f.app O).hom := by
-  have := f.isIso_app O hO
-  exact (ConcreteCategory.bijective_of_isIso (f.app O)).1
-
-theorem appLE_appLE' {Y Z Q : Scheme.{0}} (g : Z ⟶ Y) (k : Q ⟶ Z) (V : Y.Opens) (W : Z.Opens) (W' : Q.Opens)
-    (e : W ≤ g ⁻¹ᵁ V) (e' : W' ≤ k ⁻¹ᵁ W) (f : Γ(Y, V)) :
-    (k.appLE W W' e').hom ((g.appLE V W e).hom f) = ((k ≫ g).appLE V W' (e'.trans (k.preimage_mono e))).hom f := by
-  rw [← Scheme.Hom.appLE_comp_appLE k g V W W' e e']
-  rfl
-
-theorem appLE_constFn' {R : Type} [CommRing R] {Z Q : Scheme.{0}} (p : Z ⟶ Sp R) (k : Q ⟶ Z) (W : Z.Opens)
-    (W' : Q.Opens) (e' : W' ≤ k ⁻¹ᵁ W) (a : R) : (k.appLE W W' e').hom (constFn p W a) = constFn (k ≫ p) W' a := by
-  unfold constFn
-  exact appLE_appLE' p k ⊤ W W' _ e' _
-
-theorem constFn_eps_sq' {R : Type} [CommRing R] {Y : Scheme.{0}} (p : Y ⟶ Sp (DualNumber R)) (O : Y.Opens) :
-    constFn p O DualNumber.eps * constFn p O DualNumber.eps = 0 := by
-  simp only [constFn, ← map_mul, DualNumber.eps_mul_eps, map_zero]
-
-theorem res_app' {Y Z : Scheme.{0}} (f : Z ⟶ Y) {V W : Y.Opens} (h : W ≤ V) (h' : f ⁻¹ᵁ W ≤ f ⁻¹ᵁ V) (a : Γ(Y, V)) :
-    resG Z h' ((f.app V).hom a) = (f.app W).hom (resG Y h a) := by
-  change (f.app V ≫ Z.presheaf.map (homOfLE h').op).hom a = (Y.presheaf.map (homOfLE h).op ≫ f.app W).hom a
-  rw [Scheme.Hom.naturality]
-  rfl
 
 end Geo
 
@@ -240,77 +189,11 @@ theorem redPt_tv : redPt R ≫ tv v = 1 := by
   rw [← MonObj.comp_one (redPt R), ← h, smT, ← Category.assoc]
   exact congrArg (fun k => k ≫ tv v) (redPt_smT (R := R)).symm
 
-theorem whisker_transl : redPt R ▷ G ≫ transl G v = redPt R ▷ G ≫ snd _ G := by
-  unfold transl
-  rw [MonObj.comp_mul, ← Category.assoc, whiskerRight_fst, Category.assoc, redPt_tv, whiskerRight_snd, MonObj.comp_one,
-    _root_.mul_one]
-
 end Group
 
 section Group2
 
 variable {R : Type} [CommRing R] (G : Over (Sp R)) [GrpObj G] [IsCommMonObj G] (v : TanM (𝟙 (Sp R)) G)
-
-theorem isPullback_red :
-    IsPullback (redPt R ▷ G).left (fst (Over.mk (𝟙 (Sp R))) G).left (fst (tEpsG (𝟙 (Sp R))) G).left
-      (redPt R).left := by
-  refine IsPullback.of_right (h₁₂ := (snd (tEpsG (𝟙 (Sp R))) G).left) (v₁₃ := G.hom)
-    (h₂₂ := (tEpsG (𝟙 (Sp R))).hom) ?_ ?_ (IsPullback.of_hasPullback (tEpsG (𝟙 (Sp R))).hom G.hom).flip
-  · rw [← Over.comp_left, whiskerRight_snd, Over.w (redPt R)]
-    exact (IsPullback.of_hasPullback (𝟙 (Sp R)) G.hom).flip
-  · rw [← Over.comp_left, whiskerRight_fst, Over.comp_left]
-
-theorem snd_left_red : (redPt R ▷ G).left ≫ (snd (tEpsG (𝟙 (Sp R))) G).left = (snd (Over.mk (𝟙 (Sp R))) G).left := by
-  rw [← Over.comp_left, whiskerRight_snd]
-
-theorem transl_left_red : (redPt R ▷ G).left ≫ (transl G v).left = (snd (Over.mk (𝟙 (Sp R))) G).left := by
-  rw [← Over.comp_left, whisker_transl, Over.comp_left, snd_left_red]
-
-theorem preimage_transl (O : G.left.Opens) :
-    (transl G v).left ⁻¹ᵁ O = (snd (tEpsG (𝟙 (Sp R))) G).left ⁻¹ᵁ O := by
-  have hs : Surjective (redPt R ▷ G).left :=
-    MorphismProperty.of_isPullback (P := @Surjective) (isPullback_red G).flip (surjective_spMap_fst' _)
-  have e : (redPt R ▷ G).left ≫ (transl G v).left = (redPt R ▷ G).left ≫ (snd (tEpsG (𝟙 (Sp R))) G).left := by
-    rw [transl_left_red, snd_left_red]
-  ext x
-  obtain ⟨y, rfl⟩ := hs.surj x
-  change ((redPt R ▷ G).left ≫ (transl G v).left).base y ∈ O ↔
-    ((redPt R ▷ G).left ≫ (snd (tEpsG (𝟙 (Sp R))) G).left).base y ∈ O
-  rw [e]
-
-theorem real_part (O : G.left.Opens) (f a b : Γ(G.left, O))
-    (h : ((transl G v).left.appLE O _ (preimage_transl G v O).ge).hom f =
-      ((snd (tEpsG (𝟙 (Sp R))) G).left.app O).hom a + constFn (fst (tEpsG (𝟙 (Sp R))) G).left _ DualNumber.eps *
-        ((snd (tEpsG (𝟙 (Sp R))) G).left.app O).hom b) : a = f := by
-  have hP₀ : IsPullback (snd (Over.mk (𝟙 (Sp R))) G).left (fst (Over.mk (𝟙 (Sp R))) G).left G.hom (𝟙 (Sp R)) :=
-    (IsPullback.of_hasPullback (𝟙 (Sp R)) G.hom).flip
-  have : IsOpenImmersion (snd (Over.mk (𝟙 (Sp R))) G).left :=
-    MorphismProperty.of_isPullback (P := @IsOpenImmersion) hP₀.flip
-      (show IsOpenImmersion (𝟙 (Sp R)) from inferInstance)
-  have hrange : O ≤ (snd (Over.mk (𝟙 (Sp R))) G).left.opensRange := fun x _ => by
-    obtain ⟨z, hz, -⟩ := Scheme.exists_preimage_of_isPullback hP₀ x (G.hom.base x) rfl
-    exact ⟨z, hz⟩
-  have hjO : (snd (Over.mk (𝟙 (Sp R))) G).left ⁻¹ᵁ O ≤
-      (redPt R ▷ G).left ⁻¹ᵁ ((snd (tEpsG (𝟙 (Sp R))) G).left ⁻¹ᵁ O) := by
-    rw [← Scheme.Hom.comp_preimage, snd_left_red]
-  have ef : (redPt R ▷ G).left ≫ (fst (tEpsG (𝟙 (Sp R))) G).left =
-      (fst (Over.mk (𝟙 (Sp R))) G).left ≫ (redPt R).left := by
-    rw [← Over.comp_left, whiskerRight_fst, Over.comp_left]
-  have k := congrArg ((redPt R ▷ G).left.appLE _ _ hjO).hom h
-  simp only [map_add (f := _), map_mul, Scheme.Hom.app_eq_appLE, appLE_appLE', appLE_constFn'] at k
-  rw [_root_.GlobalTheory.ProjSpace.appLE_of_eq (transl_left_red G v) _ _ _ le_rfl, _root_.GlobalTheory.ProjSpace.appLE_of_eq (snd_left_red G) _ _ _ le_rfl, ef] at k
-  have hr : (redPt R).left = spMap (TrivSqZeroExt.fstHom R R R).toRingHom := rfl
-  have h0 : (TrivSqZeroExt.fstHom R R R).toRingHom DualNumber.eps = 0 := by simp
-  rw [hr, _root_.GlobalTheory.KS.DerMorK.constFn_spMap, h0] at k
-  simp only [constFn, map_zero, zero_mul, add_zero] at k
-  rw [← Scheme.Hom.app_eq_appLE] at k
-  exact (app_injective' _ O hrange k).symm
-
-theorem isPullback_thick :
-    IsPullback (snd (tEpsG (𝟙 (Sp R))) G).left (fst (tEpsG (𝟙 (Sp R))) G).left G.hom
-      (spMap (algebraMap R (DualNumber R))) :=
-  IsPullback.of_iso (IsPullback.of_hasPullback (tEpsG (𝟙 (Sp R))).hom G.hom).flip (Iso.refl _) (Iso.refl _)
-    (Iso.refl _) (Iso.refl _) (by simp) (by simp) (by simp) (by simp)
 
 end Group2
 

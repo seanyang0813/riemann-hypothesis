@@ -99,7 +99,7 @@ theorem dvd_and_finite (l : ℕ) [Fact l.Prime] (LL : Type) [Field LL] [Algebra 
     [TopologicalSpace LL] (O : Type) [CommRing O] [Algebra O LL] (hO : GoodO (Qp := ℚ_[l]) LL O)
     (ϖ : O) (hϖ : Irreducible ϖ) (n : ℕ) :
     ϖ ^ n ∣ ((l : ℕ) : O) ^ n ∧ Finite (O ⧸ Ideal.span {ϖ ^ n}) := by
-  obtain ⟨-, -, hfin, hcomp⟩ := _root_.GlobalTheory.GoodCoeff.good_coeff_integers l LL O hO
+  obtain ⟨-, -, hfin, hcomp⟩ := _root_.GlobalTheory.PowerImageOpen.main l LL O hO
   obtain ⟨⟨hdom, hdvr, -⟩, -⟩ := hO
   have hnu : ¬ IsUnit ((l : ℕ) : O) := fun hu => by
     have htop : Ideal.span {((l : ℕ) : O)} = ⊤ := Ideal.span_singleton_eq_top.2 hu

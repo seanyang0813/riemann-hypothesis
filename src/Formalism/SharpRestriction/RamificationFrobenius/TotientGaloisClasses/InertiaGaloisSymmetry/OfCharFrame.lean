@@ -4,7 +4,7 @@ public import Formalism.SharpRestriction.RamificationFrobenius.TotientGaloisClas
 public import Formalism.SharpRestriction.RamificationFrobenius.TotientGaloisClasses.ArtinMapSecondEqJacobiSym
 public import Formalism.SharpRestriction.RamificationFrobenius.TotientGaloisClasses.FrameCyclicGenerator
 public import Formalism.SharpRestriction.RamificationFrobenius.TotientGaloisClasses.ArtinMapSecondEqJacobiSymOfModEq
-import Formalism.TameInertiaTowers.TowerFieldFoundations
+import Formalism.TameInertiaTowers.CentralOrderTwo.OrderOfThreeUnitsTwoPow
 import Mathlib.Algebra.Order.Floor.Extended
 import Mathlib.Algebra.Order.Floor.Semifield
 import Mathlib.Algebra.Order.Interval.Basic
@@ -139,7 +139,7 @@ theorem projection_surjective : Function.Surjective D.p1 := by
   exact ⟨⟨D.eta u, u, rfl⟩, rfl⟩
 
 theorem exists_gen : ∃ a : D.R, ∀ x : D.R, D.p2 x = 1 ↔ x ∈ Subgroup.zpowers a := by
-  have : IsCyclic (HGrp D.e) := (Formalism.TwoAdicCyclotomicDecomposition.towerProperties.1.2.1 D.e).1
+  have : IsCyclic (HGrp D.e) := (Formalism.TwoAdicCyclotomicDecomposition.quotCyclic D.e).1
   let f : D.p2.ker →* HGrp D.e := D.p1.comp D.p2.ker.subtype
   have hf : Function.Injective f := (injective_iff_map_eq_one f).mpr fun x hx =>
     Subtype.ext (D.eq_one_of hx (MonoidHom.mem_ker.mp x.2))

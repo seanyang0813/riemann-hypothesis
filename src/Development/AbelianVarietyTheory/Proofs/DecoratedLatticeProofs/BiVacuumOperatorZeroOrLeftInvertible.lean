@@ -250,12 +250,8 @@ def twoT (x : WO A S × WO S A') : (WO A S → WO S A' → ℂ) →ₗ[ℂ] (WO 
 theorem twoT_apply (x : WO A S × WO S A') (C : WO A S → WO S A' → ℂ) (u : WO A S) (v : WO S A') :
     twoT ψ A S A' x C u v = ψ (symplOH A S u x.1) * (ψ (symplOH S A' v x.2) * C (u + x.1) (v + x.2)) := rfl
 
-theorem symplOH_two (T T' : HSp D) (x y : WO T T') : symplOH T T' x y + symplOH T T' x y = symplO T T' x y := by
-  unfold symplOH
-  rw [← add_mul, ← RingHom.map_add (f := _), add_halves, RingHom.map_one, one_mul]
-
 theorem symplO_skew' (T T' : HSp D) (x y : WO T T') : symplO T T' y x = -symplO T T' x y := by
-  rw [← symplOH_two, ← symplOH_two, symplOH_skew, neg_add]
+  rw [← GlobalTheory.SplitScalar.symplOH_add_self, ← GlobalTheory.SplitScalar.symplOH_add_self, symplOH_skew, neg_add]
 
 theorem psi_ne_zero (z : AF D.host.F) : ψ z ≠ 0 := by
   intro h
@@ -386,9 +382,6 @@ theorem comp_part (P : Pl D → Prop) (op : BiOp A S A') (hop : OpAt P op) (e : 
     refine Finset.sum_congr rfl fun i _ => ?_
     exact (GlobalTheory.ProdLocInv.biComb_comp ψ A S A' e (op.u i) (c i) e' (op.u' i) (c' i) (hcf i) (hcf' i) C).symm
 
-theorem symplO_zero_left (T T' : HSp D) (w : WO T T') : symplO T T' 0 w = 0 := by
-  rw [symplO_skew', show symplO T T' w 0 = 0 from (symplHom T T' w).map_zero, neg_zero]
-
 theorem psi_eq_one_of_neg {z : AF D.host.F} (h : ψ (-z) = 1) : ψ z = 1 := by
   rw [AddChar.map_neg_eq_inv, inv_eq_one] at h
   exact h
@@ -442,7 +435,7 @@ theorem GlobalTheory.FinPl.biInv_main : ∀ D : D7, GlobalTheory.FinPl.BiInv D :
       push_neg at h
       obtain ⟨l, hl, hne⟩ := h
       refine ⟨(l, 0), AddSubgroup.mem_prod.2 ⟨hl, zero_mem _⟩, fun heq => hne ?_⟩
-      simp only [chi, symplO_zero_left, AddChar.map_zero_eq_one, mul_one] at heq
+      simp only [chi, GlobalTheory.SplitScalar.symplO_zero_left, AddChar.map_zero_eq_one, mul_one] at heq
       have hx1 : x.1 = (x - y).1 + y.1 := by rw [Prod.fst_sub, sub_add_cancel]
       rw [hx1, symplO_add_right, AddChar.map_add_eq_mul] at heq
       have h1 : ψ (symplO A S l (x - y).1) = 1 :=
@@ -453,7 +446,7 @@ theorem GlobalTheory.FinPl.biInv_main : ∀ D : D7, GlobalTheory.FinPl.BiInv D :
       push_neg at h
       obtain ⟨l, hl, hne⟩ := h
       refine ⟨(0, l), AddSubgroup.mem_prod.2 ⟨zero_mem _, hl⟩, fun heq => hne ?_⟩
-      simp only [chi, symplO_zero_left, AddChar.map_zero_eq_one, one_mul] at heq
+      simp only [chi, GlobalTheory.SplitScalar.symplO_zero_left, AddChar.map_zero_eq_one, one_mul] at heq
       have hx2 : x.2 = (x - y).2 + y.2 := by rw [Prod.snd_sub, sub_add_cancel]
       rw [hx2, symplO_add_right, AddChar.map_add_eq_mul] at heq
       have h1 : ψ (symplO S A' l (x - y).2) = 1 :=

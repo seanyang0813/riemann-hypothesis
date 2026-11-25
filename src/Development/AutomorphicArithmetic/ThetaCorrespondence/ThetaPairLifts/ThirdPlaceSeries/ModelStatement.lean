@@ -47,7 +47,6 @@ open Formalism.L2.Pj GlobalTheory.BigTop GlobalTheory.BigOn
 open Formalism.CohomologicalDescent.LogSmallConstantBounds (Par)
 open Formalism.CohomologicalDescent.ShortWeightBounds (Wts HidaSetting WInputsLink h0)
 namespace GlobalTheory.ExpTie
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 variable {D : D7}
 section Point
 variable {L : SizeData₂ D} {hT : GatTies D} {Gi : Formalism.MainNotions.G.Inst D L} {Gl : Formalism.MainNotions.G.LatInst D} {Kc : Formalism.MainNotions.G.Consts}

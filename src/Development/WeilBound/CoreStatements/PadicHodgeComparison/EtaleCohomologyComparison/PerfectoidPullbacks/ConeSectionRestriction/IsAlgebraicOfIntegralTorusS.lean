@@ -883,7 +883,7 @@ theorem evV_monomial {d e : ℕ} (i : X ⟶ PSpace K N) (y : Fin (d + 1) → MvP
 
 theorem aeval_mem_torusS {K : Type} [Field K] {X : Scheme.{0}} {N d e : ℕ} (i : X ⟶ PSpace K N)
     (y : Fin (d + 1) → MvPolynomial (Fin (N + 1)) K) (hy : ∀ k, (y k).IsHomogeneous e) {V : X.Opens}
-    (hV : V ≤ ⨅ k, i ⁻¹ᵁ Proj.basicOpen (grK K N) (y k)) (_he : 0 < e)
+    (hV : V ≤ ⨅ k, i ⁻¹ᵁ Proj.basicOpen (grK K N) (y k))
     (q : X ⟶ Spec (CommRingCat.of K)) (hq : i ≫ PSpace.str K N = q) (S : Finset (Fin (d + 1)))
     (hS : V ≤ i ⁻¹ᵁ Proj.basicOpen (grK K N) (yS y S)) (ht : ∀ k, IsUnit (tV i y hy V hV k)) {j : ℕ}
     (c : MvPolynomial (Fin (d + 1)) K) (hc : c.IsHomogeneous (j * S.card)) :
@@ -1034,7 +1034,7 @@ theorem isIntegral_torusS : ∀ {K : Type} [Field K] {X : Scheme.{0}} {N d e : �
     have hc : (MvPolynomial.C (AddMonoidAlgebra.coeff f 0) : MvPolynomial (Fin (d + 1)) K).IsHomogeneous (r * S.card) := by
       rw [hS0, Nat.mul_zero]
       exact MvPolynomial.isHomogeneous_C _ _
-    have hmem := GlobalTheory.CompanionTheory.GeoTorus.aeval_mem_torusS i y hy hV he q hq S hS ht _ hc
+    have hmem := GlobalTheory.CompanionTheory.GeoTorus.aeval_mem_torusS i y hy hV q hq S hS ht _ hc
     have hfe : MvPolynomial.aeval y (MvPolynomial.C (AddMonoidAlgebra.coeff f 0) : MvPolynomial (Fin (d + 1)) K) = f := by
       rw [MvPolynomial.aeval_C]
       exact hfC.symm
@@ -1060,7 +1060,7 @@ theorem isIntegral_torusS : ∀ {K : Type} [Field K] {X : Scheme.{0}} {N d e : �
 
     rw [map_add (f := _), map_sum] at hzero
     simp only [map_mul, map_pow] at hzero
-    have hco := fun l => GlobalTheory.CompanionTheory.GeoTorus.aeval_mem_torusS i y hy hV he q hq S hS ht (c l) (hc' l)
+    have hco := fun l => GlobalTheory.CompanionTheory.GeoTorus.aeval_mem_torusS i y hy hV q hq S hS ht (c l) (hc' l)
     refine ⟨Polynomial.X ^ s + ∑ l ∈ Finset.range s,
       Polynomial.C (⟨_, hco l⟩ : torusS K (fun k => (ht k).unit) S) * Polynomial.X ^ l, ?_, ?_⟩
     · refine Polynomial.monic_X_pow_add ?_

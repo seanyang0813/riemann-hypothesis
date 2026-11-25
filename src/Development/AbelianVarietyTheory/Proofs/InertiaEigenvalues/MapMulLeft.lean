@@ -132,8 +132,8 @@ theorem ioLaws_of_injective (E : EtTie W RA RW inclR φR gR πA)
 
 end Generic
 
-theorem ioLaws : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; let E := ((F l).E K s LL h).tie; IoLaws E := by
-  intro D HW F l _ K s LL h
+theorem ioLaws : ∀ (loc : LocTheory) (locA : ∀ (l : ℕ) [Fact l.Prime], LocAinf l (loc l)) (HW : HWOf loc) (F : FonOf loc locA HW) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; let E := ((F l).E K s LL h).tie; IoLaws E := by
+  intro loc locA HW F l _ K s LL h
   exact ioLaws_of_injective _ Subtype.val_injective
 
 end GlobalTheory.NL
@@ -162,10 +162,10 @@ open Formalism.WeaklyAdmissibleFiltrations Formalism.BasicNotions Formalism.Basi
 
 namespace GlobalTheory.NL.AllLaws
 
-theorem laws : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; let E := ((F l).E K s LL h).tie; Laws (HW l) (F l) h := by
-  intro D HW F l _ K s LL h W E
+theorem laws : ∀ (loc : LocTheory) (locA : ∀ (l : ℕ) [Fact l.Prime], LocAinf l (loc l)) (HW : HWOf loc) (F : FonOf loc locA HW) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; let E := ((F l).E K s LL h).tie; Laws (HW l) (F l) h := by
+  intro loc locA HW F l _ K s LL h W E
   haveI : FiniteDimensional ℚ_[l] ↥LL.1 := LL.2
-  exact ⟨_root_.GlobalTheory.NL.Expansion.levLaws D HW l K s LL h, _root_.GlobalTheory.NL.ioLaws D HW F l K s LL h,
+  exact ⟨_root_.GlobalTheory.NL.Expansion.levLaws loc HW l K s LL h, _root_.GlobalTheory.NL.ioLaws loc locA HW F l K s LL h,
     GlobalTheory.TrivCrys.isCrys_lat_of_trivial W.one W.one_triv⟩
 
 end GlobalTheory.NL.AllLaws
@@ -250,12 +250,12 @@ end
 
 set_option maxHeartbeats 1000000 in
 set_option synthInstance.maxHeartbeats 200000 in
-theorem sandwich : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; let E := ((F l).E K s LL h).tie; ∀ T : Lt K LL, IsCrys ((D.loc l).PD K) T.ρ → ∃ m : ℕ, (∀ x ∈ W.N T, ∃ y : TW (RA LL) T, TWincl (inclR LL) T y = TensorProduct.map (LinearMap.mulLeft ↥(OL LL) (inclR LL (E.io W.X) ^ m)) LinearMap.id (E.jD T x)) ∧ ∀ t : ↥T.L.T, ((inclR LL (E.io W.X) ^ m) ⊗ₜ[↥(OL LL)] t : TW (RW LL) T) ∈ Submodule.span ↥(OL LL) {z : TW (RW LL) T | ∃ a : RA LL, ∃ y ∈ W.N T, z = TensorProduct.map (LinearMap.mulLeft ↥(OL LL) (inclR LL a)) LinearMap.id (E.jD T y)} := by
-  intro D HW F l _ K s LL h
-  have hL : Laws (HW l) (F l) h := _root_.GlobalTheory.NL.AllLaws.laws D HW F l K s LL h
-  have hX := (_root_.GlobalTheory.NL.IoXQ.main D HW F l K s LL h).1
+theorem sandwich : ∀ (loc : LocTheory) (locA : ∀ (l : ℕ) [Fact l.Prime], LocAinf l (loc l)) (HW : HWOf loc) (F : FonOf loc locA HW) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; let E := ((F l).E K s LL h).tie; ∀ T : Lt K LL, IsCrys ((loc l).PD K) T.ρ → ∃ m : ℕ, (∀ x ∈ W.N T, ∃ y : TW (RA LL) T, TWincl (inclR LL) T y = TensorProduct.map (LinearMap.mulLeft ↥(OL LL) (inclR LL (E.io W.X) ^ m)) LinearMap.id (E.jD T x)) ∧ ∀ t : ↥T.L.T, ((inclR LL (E.io W.X) ^ m) ⊗ₜ[↥(OL LL)] t : TW (RW LL) T) ∈ Submodule.span ↥(OL LL) {z : TW (RW LL) T | ∃ a : RA LL, ∃ y ∈ W.N T, z = TensorProduct.map (LinearMap.mulLeft ↥(OL LL) (inclR LL a)) LinearMap.id (E.jD T y)} := by
+  intro loc locA HW F l _ K s LL h
+  have hL : Laws (HW l) (F l) h := _root_.GlobalTheory.NL.AllLaws.laws loc locA HW F l K s LL h
+  have hX := (_root_.GlobalTheory.NL.IoXQ.main loc locA HW F l K s LL h).1
   refine fun T hT => (sand_layers (HW l) (F l) h hL T hT).imp fun m hm => ?_
-  exact of_layers ((F l).E K s LL h).tie ((HW l).W_s K s LL h) (p_prime (D.loc l) K) hL.lev hL.io _ hL.one
+  exact of_layers ((F l).E K s LL h).tie ((HW l).W_s K s LL h) (p_prime (loc l) K) hL.lev hL.io _ hL.one
     ((HW l).W_proj K s LL h) T hT _ _ (incl_pow _ _ hX m) hm
 
 end GlobalTheory.NL.SandArb

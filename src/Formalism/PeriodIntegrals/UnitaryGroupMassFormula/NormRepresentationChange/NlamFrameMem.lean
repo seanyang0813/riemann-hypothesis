@@ -70,8 +70,6 @@ theorem nlam_frame_mem {Λ : Submodule (𝓞 E) S.V} (G : LFlag S r T) {n : S.V 
 
 end Gen
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem stepExp (D : D7) : StepExp D := by
   unfold StepExp
   intro Λ T G n hn

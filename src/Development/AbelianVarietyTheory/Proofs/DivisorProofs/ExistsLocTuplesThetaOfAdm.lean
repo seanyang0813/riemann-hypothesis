@@ -618,7 +618,7 @@ theorem main : ∀ (g n : ℕ), 1 ≤ g → 3 ≤ n → Odd n → ∀ (F : SFam 
     show ξR _ ∈ (U₀ : Set M.Z)
     rw [e3]
     exact hw'U
-  obtain ⟨ρ0, hsurj, hcoord, hequiv⟩ := GlobalTheory.T.exists_surjective_lattice_coordMap_equivariant_dvr R hR G hGsemi D A U V' hBV inferInstance
+  obtain ⟨ρ0, hsurj, hcoord, hequiv⟩ := _root_.GlobalTheory.Poinc.Eq8.GenRestrict.exists_surjective_coordMap_equivMap R hR G hGsemi D A U V' hBV inferInstance
     ((Over.pullback ξ').obj FinalForm.G) hG'semi D' A' U' g' β p hp hpm _ hWo hPsiWo hker hβ hLBβ
   obtain ⟨c', pr', hS', hmat⟩ := GlobalTheory.Poinc.Eq8.PullAlong.main g n _ _ F W o' Ω S ρ u c pr hS M U₀ EE FinalForm V' hBV
     ((Over.pullback ξ').obj FinalForm.G) hG'semi D' A' U' ξ' (pullback.fst FinalForm.G.hom ξ') hpb' hLB' (spMap hK ≫ ξ₀) hξ₀'
@@ -886,7 +886,7 @@ theorem GlobalTheory.Poinc.Clocx.exists_at_closedPoint : ∀ (g n : ℕ), 1 ≤ 
         (x₀ : S.Gam), S.IsoFree T₁ ∧ ee = S.FF T₁ c' κ / S.th x₀) ∧
       M.stalkHom x aa = ee ^ S.N ∧ ∀ r, PsiCoord D.toPre mu r → Associated (j aa) r := by
     intro cl
-    obtain ⟨mu, h1, h2, ee, aa, h3, h4, h5, h6⟩ := GlobalTheory.T.exists_minimal_psiCoordinate_associated_fourierPower o' Ω S ρ hBig M U₀ EE FinalForm hAdm hEE x hx R j hB hcpl G
+    obtain ⟨mu, h1, h2, ee, aa, h3, h4, h5, h6⟩ := _root_.GlobalTheory.QUnit.main o' Ω S ρ hBig M U₀ EE FinalForm hAdm hEE x hx R j hB hcpl G
       gm hpb D A U hLB hpsiU (κE.symm (cz cl))
     exact ⟨mu, ee, aa, h1, h2, h3, h4, h5, h6⟩
   choose mu ee aa hmuC hmuMin hee hFF hEa hassoc using hQ

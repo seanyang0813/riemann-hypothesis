@@ -334,8 +334,6 @@ end Main
 
 section D7
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem iota_surjective_holds : IotaSurj := by
   intro D u u' F0 Λ hΛ x w hw
   have hg : gS D ≠ 0 := by

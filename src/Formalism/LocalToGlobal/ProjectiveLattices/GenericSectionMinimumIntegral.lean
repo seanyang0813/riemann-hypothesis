@@ -5,17 +5,6 @@ public import ReciprocityTheory.SemistableReduction.ComapInclusionIsLocalHom
 public import ReciprocityTheory.SemistableReduction.AlgAll
 public import Formalism.LocalToGlobal.ProjectiveLattices.SumT0MulRatioEqOne
 public import Formalism.LocalToGlobal.ProjectiveLattices.TieInst
-import Mathlib.RingTheory.Henselian
-import Mathlib.RingTheory.MvPolynomial.IrreducibleQuadratic
-import Mathlib.RingTheory.PiTensorProduct
-import Mathlib.RingTheory.RegularLocalRing.Defs
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.RingTheory.Coalgebra.IsFrobenius
-import Mathlib.RingTheory.Etale.Weakly
-import Mathlib.RingTheory.TotallySplit
-import Mathlib.RingTheory.Valuation.LocalSubring
-import Mathlib.Tactic.TypeStar
-import Mathlib.RingTheory.MvPolynomial
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Formalism.LocalToGlobal.ProjectiveLattices.TotalDegreePderivLt, Formalism.LocalToGlobal.ProjectiveLattices.GenericSectionMinimumIntegral

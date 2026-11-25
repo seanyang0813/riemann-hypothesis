@@ -59,31 +59,6 @@ def phiG {T : D.host.E} (G : LFlag (D.sp.Y 0) D.R.rS T) : (VS D).V →ₗ[D.host
 theorem phiG_apply {T : D.host.E} (G : LFlag (D.sp.Y 0) D.R.rS T) (x : (VS D).V) (a : Fin D.R.rS) :
     phiG G x a = (VS D).hT (G.fl.e a) x := rfl
 
-theorem phiG_surj {T : D.host.E} (G : LFlag (D.sp.Y 0) D.R.rS T) : LinearMap.range (phiG G) = ⊤ := by
-  by_contra hne
-  obtain ⟨μ, hμ0, hμ⟩ := Submodule.exists_le_ker_of_lt_top _ (lt_top_iff_ne_top.2 hne)
-  set m : Fin D.R.rS → D.host.E := fun a => μ (fun j => if a = j then 1 else 0) with hm
-  have key : ∀ x, (VS D).hT (∑ a, star (m a) • G.fl.e a) x = 0 := by
-    intro x
-    have h1 := hμ (LinearMap.mem_range_self (phiG G) x)
-    rw [LinearMap.mem_ker, LinearMap.pi_apply_eq_sum_univ μ] at h1
-
-    rw [map_sum, LinearMap.sum_apply, ← h1]
-    refine Finset.sum_congr rfl fun a _ => ?_
-    rw [LinearMap.map_smulₛₗ, LinearMap.smul_apply, starRingEnd_apply, star_star, smul_eq_mul, smul_eq_mul,
-      phiG_apply, mul_comm]
-  have h0 := (VS D).nondeg.1 _ key
-  have hc := Fintype.linearIndependent_iff.1 G.fl.e_indep _ h0
-  apply hμ0
-  apply LinearMap.ext
-  intro v
-  rw [LinearMap.pi_apply_eq_sum_univ μ v, LinearMap.zero_apply]
-  refine Finset.sum_eq_zero fun a _ => ?_
-  have : m a = 0 := star_eq_zero.1 (hc a)
-  rw [hm] at this
-  simp only at this
-  rw [this, smul_zero]
-
 theorem mem_orth_of_phiG {T : D.host.E} (G : LFlag (D.sp.Y 0) D.R.rS T) (x : (VS D).V) (h : phiG G x = 0) :
     x ∈ orth (VS D) (Xsp G) := by
   simp only [orth, Submodule.mem_iInf, LinearMap.mem_ker]

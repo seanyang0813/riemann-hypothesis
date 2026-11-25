@@ -59,13 +59,12 @@ variable {hL : _root_.UpperTheory.Zero.LLC.RecTExists} {K : Ctx} {B : Base} {f :
   {Wt : Set B.places.Pl} {p0 : BaseLevelRowSide (w.D Z)}
 variable {t : RowsT K w Z Wt p0} {nch : NChoice (w.D Z)} {n : NchT w Z Wt nch} {xd : ThData (w.D Z)} {c : _root_.GlobalTheory.Mem.Top.Bl.NormChoiceCore hL t n}
 def twistInputsOfBaseTuples {hH hV hs} (Y : SerSide (realOf t hH hV hs) (twEOf xd))
-    (hS : Y.S = ratDatR t.r.z.R t.r.z.cG c.row.kKs c.row.hk) (hY : HEq Y.YS c.row.nexp) (g : _root_.GlobalTheory.TwInputs.GalSideAlt (w.st Z).toD7)
-    (h1 : g.cf = TC.cf w.I w.l Z) (h2 : g.lam.C = TC.cf w.I w.l Z) (hF : FieldOk (realOf t hH hV hs))
+    (_hS : Y.S = ratDatR t.r.z.R t.r.z.cG c.row.kKs c.row.hk) (_hY : HEq Y.YS c.row.nexp) (g : _root_.GlobalTheory.TwInputs.GalSideAlt (w.st Z).toD7)
+    (_h1 : g.cf = TC.cf w.I w.l Z) (_h2 : g.lam.C = TC.cf w.I w.l Z) (hF : FieldOk (realOf t hH hV hs))
     (cg : _root_.GlobalTheory.HeightCounting.CGTrueT hL (w.st Z).toD7 g.wd)
     (hb : T = TwDat.untw B T.pl → ∀ v, (w.D Z).what₂.muAt v ≠ (w.D Z).what₂.mu0 → BaseTup Y (nch.twI v)) :
     _root_.GlobalTheory.TwInputs.TwistNormChoice hL K B f T w Z Wt p0 t nch n xd c :=
-  ⟨realOf t hH hV hs, rfl, HEq.rfl, HEq.rfl, rfl, rfl, rfl, rfl, HEq.rfl, HEq.rfl, HEq.rfl, HEq.rfl, HEq.rfl, HEq.rfl, Y, hS, hY, g,
-    h1, h2, t.r.z.lev.C, hF, cg, hb⟩
+  ⟨realOf t hH hV hs, Y, g, hF, cg, hb⟩
 def heckeSeriesOfRealHeight {hH hV hs} (e : _root_.GlobalTheory.HeightCounting.defaultExtension hL K B f T w Z Wt p0 t nch n xd c)
     (H : NExpRealH t.r.z.R t.r.z.cG _ c.row.nexp) (hr : GlobalTheory.ExportPin.Reads t.r.z.R t.r.z.cG _ c.row.nexp H.hL)
     (hd : ∀ i b P, P ∉ (w.D Z).ntw.S0 i → ∀ σ : Formalism.ConjugateSelfDual.G (w.D Z).host.E (w.D Z).nd.Om,

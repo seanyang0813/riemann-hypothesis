@@ -188,28 +188,37 @@ variable [MeasurableSpace F] [BorelSpace F]
 
 
 variable (F W) in
-def MultiFEStatement (ψ : AddChar F Circle) (r : ℕ) : Prop :=
+def MultiFEStatement {M : Type} [CommMonoid M]
+    (PH : ∀ (H : Type (max u uF)) [TopologicalSpace H], Prop)
+    (Shape : RatFunc ℂ → M → Prop) (wt : ℕ → ℂ → Prop → M)
+    (ψ : AddChar F Circle) (r : ℕ) : Prop :=
   ∀ (ι : Type u) [Fintype ι] [DecidableEq ι], Fintype.card ι = r →
   ∀ (d : ι → ℕ) [∀ i, NeZero (d i)] (μ : ∀ i, Measure (GL (Fin (d i)) F))
     [∀ i, (μ i).IsHaarMeasure]
     (H : Type (max u uF)) [Group H] [TopologicalSpace H] [IsTopologicalGroup H]
-    [LocallyCompactSpace H] [T2Space H] [TotallyDisconnectedSpace H]
-    (ρ : Representation ℂ ((∀ i, GL (Fin (d i)) F) × H) W), IsAdmissible ρ → ρ.IsIrreducible →
+    [LocallyCompactSpace H] [T2Space H] [TotallyDisconnectedSpace H], PH H →
+    ∀ (ρ : Representation ℂ ((∀ i, GL (Fin (d i)) F) × H) W), IsAdmissible ρ → ρ.IsIrreducible →
     ∀ α : ι → ℂ, (∀ i, α i ≠ 0) →
       (∀ i v, ρ (Pi.mulSingle i (centralUnif F (d i)), 1) v = α i • v) →
       (∀ v : W, ∀ ℓ ∈ smoothVectors (Representation.dual ρ),
         ∃ C : Set (∀ i, GL (Fin (d i)) F), IsCompact C ∧
           ∀ x, ℓ (ρ (x, 1) v) ≠ 0 → ∃ j : ι → ℤ, (fun i => centralUnif F (d i) ^ j i) * x ∈ C) →
-    ∃ γ : RatFunc ℂ, ∀ Ψ : ∀ i, Matrix (Fin (d i)) (Fin (d i)) F → ℂ,
+    ∃ γ : RatFunc ℂ,
+      Shape γ (∏ i, wt (d i) (α i) (∀ g ∈ integralGL F (d i), ρ (Pi.mulSingle i g, 1) = 1)) ∧
+      ∀ Ψ : ∀ i, Matrix (Fin (d i)) (Fin (d i)) F → ℂ,
       (∀ i, IsSchwartzBruhat (Ψ i)) → ∀ w : W, ∀ ℓ ∈ smoothVectors (Representation.dual ρ),
         RatFE F γ (fun s => ∫ x, multiA ρ Ψ w ℓ s x ∂Measure.pi μ)
           (fun s => ∫ x, multiB ρ (fun i => GJMatrix.localMatrixFourier ψ (Ψ i)) w ℓ s x
             ∂Measure.pi μ)
 
-theorem multiFEStatement_zero (ψ : AddChar F Circle) : MultiFEStatement.{uF, u, w} F W ψ 0 := by
-  intro ι _ _ hcard d _ μ _ H _ _ _ _ _ _ ρ _ _ α _ _ _
+theorem multiFEStatement_zero {M : Type} [CommMonoid M]
+    {PH : ∀ (H : Type (max u uF)) [TopologicalSpace H], Prop}
+    {Shape : RatFunc ℂ → M → Prop} {wt : ℕ → ℂ → Prop → M}
+    (h1 : Shape 1 1) (ψ : AddChar F Circle) :
+    MultiFEStatement.{uF, u, w} F W PH Shape wt ψ 0 := by
+  intro ι _ _ hcard d _ μ _ H _ _ _ _ _ _ _ ρ _ _ α _ _ _
   have hempty : IsEmpty ι := Fintype.card_eq_zero_iff.1 hcard
-  refine ⟨1, fun Ψ _ w ℓ _ => ?_⟩
+  refine ⟨1, by simpa using h1, fun Ψ _ w ℓ _ => ?_⟩
   have hval : ∀ f : (∀ i, GL (Fin (d i)) F) → ℂ,
       ∫ x, f x ∂Measure.pi μ = f 1 := by
     intro f
@@ -231,11 +240,33 @@ theorem multiFEStatement_zero (ψ : AddChar F Circle) : MultiFEStatement.{uF, u,
     rw [show ((1 : ∀ i, GL (Fin (d i)) F), (1 : H)) = 1 from rfl, map_one]
     rfl
 
-theorem multiFEStatement_succ {ψ : AddChar F Circle} (hψ : Continuous ψ) (hψ1 : ψ ≠ 1) {r : ℕ}
-    (ih : MultiFEStatement.{uF, u, w} F W ψ r) : MultiFEStatement.{uF, u, w} F W ψ (r + 1) := by
-  intro ι _ _ hcard d _ μ _ H _ _ _ _ _ _ ρ hadm hirr α hα0 hα hsupp
+theorem multiFEStatement_succ {M : Type} [CommMonoid M]
+    {PH : ∀ (H : Type (max u uF)) [TopologicalSpace H], Prop}
+    {Shape : RatFunc ℂ → M → Prop} {wt : ℕ → ℂ → Prop → M}
+    (hmul : ∀ {γ₁ γ₂ m₁ m₂}, Shape γ₁ m₁ → Shape γ₂ m₂ → Shape (γ₁ * γ₂) (m₁ * m₂))
+    (hPH_pi : ∀ (κ : Type u) [Fintype κ] (d : κ → ℕ) [∀ i, NeZero (d i)]
+      (H : Type (max u uF)) [TopologicalSpace H], PH H → PH ((∀ i, GL (Fin (d i)) F) × H))
+    (hPH_prod : ∀ (m : ℕ) [NeZero m] (H : Type (max u uF)) [TopologicalSpace H],
+      PH H → PH (GL (Fin m) F × H))
+    {ψ : AddChar F Circle} (hψ : Continuous ψ) (hψ1 : ψ ≠ 1)
+    (hBlockShape : ∀ (m : ℕ) [NeZero m] (μ₀ : Measure (GL (Fin m) F)) [μ₀.IsHaarMeasure]
+      (H₁ : Type (max u uF)) [Group H₁] [TopologicalSpace H₁] [IsTopologicalGroup H₁]
+      [LocallyCompactSpace H₁] [T2Space H₁] [TotallyDisconnectedSpace H₁], PH H₁ →
+      ∀ (ρ₁ : Representation ℂ (GL (Fin m) F × H₁) W), IsAdmissible ρ₁ → ρ₁.IsIrreducible →
+      ∀ α₁ : ℂ, α₁ ≠ 0 → (∀ v, ρ₁ (centralUnif F m, 1) v = α₁ • v) →
+      (∀ v : W, ∀ ℓ ∈ smoothVectors (Representation.dual ρ₁),
+        ∃ C : Set (GL (Fin m) F), IsCompact C ∧
+          ∀ g, ℓ (ρ₁ (g, 1) v) ≠ 0 → ∃ j : ℤ, centralUnif F m ^ j * g ∈ C) →
+      ∀ γa : RatFunc ℂ,
+        (∀ Φ : Matrix (Fin m) (Fin m) F → ℂ, IsSchwartzBruhat Φ →
+          ∀ v : W, ∀ ℓ ∈ smoothVectors (Representation.dual ρ₁),
+            RatFE F γa (blockA μ₀ ρ₁ Φ v ℓ) (blockB μ₀ ρ₁ (GJMatrix.localMatrixFourier ψ Φ) v ℓ)) →
+        Shape γa (wt m α₁ (∀ g ∈ integralGL F m, ρ₁ (g, 1) = 1)))
+    {r : ℕ} (ih : MultiFEStatement.{uF, u, w} F W PH Shape wt ψ r) :
+    MultiFEStatement.{uF, u, w} F W PH Shape wt ψ (r + 1) := by
+  intro ι _ _ hcard d _ μ _ H _ _ _ _ _ _ hPH ρ hadm hirr α hα0 hα hsupp
   classical
-  obtain ⟨a⟩ : Nonempty ι := Fintype.card_pos_iff.1 (by omega)
+  obtain ⟨a⟩ : Nonempty ι := Fintype.card_pos_iff.1 (by lia)
 
   set ρ₁ : Representation ℂ (GL (Fin (d a)) F × ((∀ i : {i // i ≠ a}, GL (Fin (d i)) F) × H)) W :=
     ρ.comp (peelFst d H a).symm.toMonoidHom with hρ₁def
@@ -275,6 +306,9 @@ theorem multiFEStatement_succ {ψ : AddChar F Circle} (hψ : Continuous ψ) (hψ
     obtain ⟨j, hj⟩ := hCs _ hg
     exact ⟨j a, _, hj, by simp [Pi.mul_apply]⟩
   obtain ⟨γa, sa, hblock⟩ := exists_blockFE (μ a) hadm₁ hψ hψ1 hα₁ hsupp₁
+  have hsh₁ := hBlockShape (d a) (μ a) ((∀ i : {i // i ≠ a}, GL (Fin (d i)) F) × H)
+    (hPH_pi {i // i ≠ a} (fun j => d j) H hPH) ρ₁ hadm₁ hirr₁ (α a) (hα0 a) hα₁ hsupp₁ γa
+    (fun Φ hΦ v ℓ hℓ => (hblock Φ hΦ v ℓ hℓ).2.2)
 
   have hcard' : Fintype.card {i // i ≠ a} = r := by
     rw [Fintype.card_subtype, Finset.filter_ne', Finset.card_erase_of_mem (Finset.mem_univ a),
@@ -300,13 +334,23 @@ theorem multiFEStatement_succ {ψ : AddChar F Circle} (hψ : Continuous ψ) (hψ
     refine ⟨fun k => j k, _, hj, ?_⟩
     funext k
     exact centralPow_mul_splitSymm_apply j y k
-  obtain ⟨γ', hIH⟩ := ih {i // i ≠ a} hcard' (fun j => d j) (fun j => μ j) (GL (Fin (d a)) F × H) ρ₂
-    hadm₂ hirr₂ (fun j => α j) (fun j => hα0 j) hα₂ hsupp₂
+  obtain ⟨γ', hsh₂, hIH⟩ := ih {i // i ≠ a} hcard' (fun j => d j) (fun j => μ j) (GL (Fin (d a)) F × H)
+    (hPH_prod (d a) H hPH) ρ₂ hadm₂ hirr₂ (fun j => α j) (fun j => hα0 j) hα₂ hsupp₂
 
   obtain ⟨s₀, hconv⟩ := exists_integrable_multi ρ hadm.1 hα0 hα hsupp μ
   obtain ⟨s₂, hconv₂⟩ := exists_integrable_multi ρ₂ hadm₂.1 (fun j => hα0 j) hα₂ hsupp₂
     (fun j => μ j)
-  refine ⟨γa * γ', fun Ψ hΨ w ℓ hℓ => ?_⟩
+  refine ⟨γa * γ', ?_, fun Ψ hΨ w ℓ hℓ => ?_⟩
+  · have e₁ : ∀ g : GL (Fin (d a)) F, ρ₁ (g, 1) = ρ (Pi.mulSingle a g, 1) := fun g => by
+      change ρ₁ (g, ((1 : ∀ i : {i // i ≠ a}, GL (Fin (d i)) F), (1 : H))) = _
+      rw [hρ₁, splitSymm_mulSingle_self]
+    have e₂ : ∀ (j : {i // i ≠ a}) (g : GL (Fin (d j)) F),
+        ρ₂ (Pi.mulSingle j g, 1) = ρ (Pi.mulSingle (j : ι) g, 1) := fun j g => by
+      change ρ₂ (Pi.mulSingle j g, ((1 : GL (Fin (d a)) F), (1 : H))) = _
+      rw [hρ₂, splitSymm_one_mulSingle]
+    rw [Fintype.prod_eq_mul_prod_subtype_ne _ a]
+    simp only [e₁, e₂] at hsh₁ hsh₂
+    exact hmul hsh₁ hsh₂
   have hℓ₁ : ℓ ∈ smoothVectors (Representation.dual ρ₁) := (hsm₁ ℓ).2 hℓ
   have hℓ₂ : ℓ ∈ smoothVectors (Representation.dual ρ₂) := (hsm₂ ℓ).2 hℓ
 
@@ -359,6 +403,38 @@ theorem multiFEStatement_succ {ψ : AddChar F Circle} (hψ : Continuous ψ) (hψ
     congr 1
     ext1 <;> simp
 
+  have hfubini : ∀ (f : (∀ i, GL (Fin (d i)) F) → ℂ) (blk : Module.Dual ℂ W → ℂ)
+      (f₂ : W → (∀ j : {i // i ≠ a}, GL (Fin (d j)) F) → ℂ),
+      Integrable f (Measure.pi μ) →
+      (∀ i, Integrable (fun y => f₂ (b i : W) y) (Measure.pi fun j : {i // i ≠ a} => μ j)) →
+      (∀ y, ∫ g, f (splitSymm d a g y) ∂(μ a) = ∑ i, blk (L i) * f₂ (b i : W) y) →
+      ∫ x, f x ∂Measure.pi μ =
+        ∑ i, blk (L i) * ∫ y, f₂ (b i : W) y ∂(Measure.pi fun j : {i // i ≠ a} => μ j) := by
+    intro f blk f₂ hint hf₂int hinner
+    set G : GL (Fin (d a)) F × (∀ j : {i // i ≠ a}, GL (Fin (d j)) F) → ℂ :=
+      fun p => f (splitSymm d a p.1 p.2) with hG
+    have hGF : ∀ x, G (Equiv.piSplitAt a (fun i => GL (Fin (d i)) F) x) = f x := fun x => by
+      simp only [hG]
+      rw [show splitSymm d a (Equiv.piSplitAt a (fun i => GL (Fin (d i)) F) x).1
+        (Equiv.piSplitAt a (fun i => GL (Fin (d i)) F) x).2 = x from
+          (Equiv.piSplitAt a fun i => GL (Fin (d i)) F).symm_apply_apply x]
+    have hGint : Integrable G ((μ a).prod (Measure.pi fun j : {i // i ≠ a} => μ j)) := by
+      rw [← hmp.integrable_comp_emb hemb]
+      exact hint.congr (Filter.Eventually.of_forall fun x => (hGF x).symm)
+    calc ∫ x, f x ∂Measure.pi μ
+        = ∫ x, G (Equiv.piSplitAt a (fun i => GL (Fin (d i)) F) x) ∂Measure.pi μ := by
+          simp_rw [hGF]
+      _ = ∫ p, G p ∂((μ a).prod (Measure.pi fun j : {i // i ≠ a} => μ j)) :=
+          hmp.integral_comp hemb G
+      _ = ∫ y, ∫ g, G (g, y) ∂(μ a) ∂(Measure.pi fun j : {i // i ≠ a} => μ j) :=
+          integral_prod_symm G hGint
+      _ = ∫ y, ∑ i, blk (L i) * f₂ (b i : W) y ∂(Measure.pi fun j : {i // i ≠ a} => μ j) :=
+          integral_congr_ae (Filter.Eventually.of_forall hinner)
+      _ = _ := by
+          rw [integral_finsetSum _ fun i _ => (hf₂int i).const_mul _]
+          refine Finset.sum_congr rfl fun i _ => ?_
+          rw [integral_const_mul]
+
   have hA : ∀ s : ℂ, max sa (max s₀ s₂) < s.re →
       ∫ x, multiA ρ Ψ w ℓ s x ∂Measure.pi μ =
         ∑ i, blockA (μ a) ρ₁ (Ψ a) w (L i) s *
@@ -367,67 +443,40 @@ theorem multiFEStatement_succ {ψ : AddChar F Circle} (hψ : Continuous ψ) (hψ
     intro s hs
     simp only [max_lt_iff] at hs
     obtain ⟨hsa, hs₀, hs₂⟩ := hs
-    have hint := (hconv Ψ hΨ w ℓ hℓ).1 s hs₀
-    set G : GL (Fin (d a)) F × (∀ j : {i // i ≠ a}, GL (Fin (d j)) F) → ℂ :=
-      fun p => multiA ρ Ψ w ℓ s (splitSymm d a p.1 p.2) with hG
-    have hGF : ∀ x, G (Equiv.piSplitAt a (fun i => GL (Fin (d i)) F) x) = multiA ρ Ψ w ℓ s x :=
-      fun x => by
-        simp only [hG]
-        rw [show splitSymm d a (Equiv.piSplitAt a (fun i => GL (Fin (d i)) F) x).1
-          (Equiv.piSplitAt a (fun i => GL (Fin (d i)) F) x).2 = x from
-            (Equiv.piSplitAt a fun i => GL (Fin (d i)) F).symm_apply_apply x]
-    have hGint : Integrable G ((μ a).prod (Measure.pi fun j : {i // i ≠ a} => μ j)) := by
-      rw [← hmp.integrable_comp_emb hemb]
-      exact hint.congr (Filter.Eventually.of_forall fun x => (hGF x).symm)
-    have hinner : ∀ y : ∀ j : {i // i ≠ a}, GL (Fin (d j)) F, ∫ g, G (g, y) ∂(μ a) =
-        ∑ i, blockA (μ a) ρ₁ (Ψ a) w (L i) s *
-          multiA ρ₂ (fun j : {i // i ≠ a} => Ψ j) (b i : W) ℓ s y := by
-      intro y
-      set μy : smoothVectors (Representation.dual ρ₁) :=
-        contragredient ρ₁ ((1 : GL (Fin (d a)) F), (y, (1 : H)))⁻¹ ⟨ℓ, hℓ₁⟩ with hμy
-      have hμyv : ∀ v, (μy : Module.Dual ℂ W) v = ℓ (ρ₁ ((1 : GL (Fin (d a)) F), (y, (1 : H))) v) :=
-        fun v => by rw [hμy, contragredient_apply_apply, inv_inv]
-      set P : ℂ := ∏ j : {i // i ≠ a}, Ψ j (y j : Matrix (Fin (d j)) (Fin (d j)) F) *
-        detPow (y j) s with hP
-      have hGy : ∀ g, G (g, y) = P * (Ψ a (g : Matrix (Fin (d a)) (Fin (d a)) F) * detPow g s *
-          (μy : Module.Dual ℂ W) (ρ₁ (g, 1) w)) := fun g => by
-        simp only [hG, multiA]
-        rw [prod_splitSymm (fun i x => Ψ i (x : Matrix (Fin (d i)) (Fin (d i)) F) * detPow x s) g y,
-          hprod1, Module.End.mul_apply, hμyv]
-        ring
-      simp_rw [hGy]
-      rw [integral_const_mul]
-      have hblockA := blockA_eq_sum (μ₀ := μ a) hadm₁.1 hKc hKo hKa hΨa hwK
-        (fun ν hν => (hblock (Ψ a) (hΨ a) w ν hν).1 s hsa) μy
-      rw [show ∫ g, Ψ a (g : Matrix (Fin (d a)) (Fin (d a)) F) * detPow g s *
-          (μy : Module.Dual ℂ W) (ρ₁ (g, 1) w) ∂(μ a) = blockA (μ a) ρ₁ (Ψ a) w μy s from rfl,
-        hblockA, Finset.mul_sum]
-      refine Finset.sum_congr rfl fun i _ => ?_
-      rw [hμyv]
+    refine hfubini (multiA ρ Ψ w ℓ s) (fun μ' => blockA (μ a) ρ₁ (Ψ a) w μ' s)
+      (fun v y => multiA ρ₂ (fun j : {i // i ≠ a} => Ψ j) v ℓ s y)
+      ((hconv Ψ hΨ w ℓ hℓ).1 s hs₀)
+      (fun i => (hconv₂ (fun j : {i // i ≠ a} => Ψ j) (fun j => hΨ j) (b i : W) ℓ hℓ₂).1 s hs₂)
+      fun y => ?_
+    set μy : smoothVectors (Representation.dual ρ₁) :=
+      contragredient ρ₁ ((1 : GL (Fin (d a)) F), (y, (1 : H)))⁻¹ ⟨ℓ, hℓ₁⟩ with hμy
+    have hμyv : ∀ v, (μy : Module.Dual ℂ W) v = ℓ (ρ₁ ((1 : GL (Fin (d a)) F), (y, (1 : H))) v) :=
+      fun v => by rw [hμy, contragredient_apply_apply, inv_inv]
+    set P : ℂ := ∏ j : {i // i ≠ a}, Ψ j (y j : Matrix (Fin (d j)) (Fin (d j)) F) *
+      detPow (y j) s with hP
+    have hGy : ∀ g, multiA ρ Ψ w ℓ s (splitSymm d a g y) =
+        P * (Ψ a (g : Matrix (Fin (d a)) (Fin (d a)) F) * detPow g s *
+        (μy : Module.Dual ℂ W) (ρ₁ (g, 1) w)) := fun g => by
       simp only [multiA]
-      rw [show ρ₁ ((1 : GL (Fin (d a)) F), (y, (1 : H))) = ρ₂ (y, ((1 : GL (Fin (d a)) F), (1 : H))) by
-        rw [hρ₁, hρ₂]]
-      change P * (ℓ (ρ₂ (y, ((1 : GL (Fin (d a)) F), (1 : H))) (b i : W)) *
-        blockA (μ a) ρ₁ (Ψ a) w (L i) s) = _
-      rw [hP, show ((1 : GL (Fin (d a)) F), (1 : H)) = (1 : GL (Fin (d a)) F × H) from rfl]
+      rw [prod_splitSymm (fun i x => Ψ i (x : Matrix (Fin (d i)) (Fin (d i)) F) * detPow x s) g y,
+        hprod1, mul_apply_eq_comp, hμyv]
       ring
-    calc ∫ x, multiA ρ Ψ w ℓ s x ∂Measure.pi μ
-        = ∫ x, G (Equiv.piSplitAt a (fun i => GL (Fin (d i)) F) x) ∂Measure.pi μ := by
-          simp_rw [hGF]
-      _ = ∫ p, G p ∂((μ a).prod (Measure.pi fun j : {i // i ≠ a} => μ j)) :=
-          hmp.integral_comp hemb G
-      _ = ∫ y, ∫ g, G (g, y) ∂(μ a) ∂(Measure.pi fun j : {i // i ≠ a} => μ j) :=
-          integral_prod_symm G hGint
-      _ = ∫ y, ∑ i, blockA (μ a) ρ₁ (Ψ a) w (L i) s *
-            multiA ρ₂ (fun j : {i // i ≠ a} => Ψ j) (b i : W) ℓ s y
-            ∂(Measure.pi fun j : {i // i ≠ a} => μ j) :=
-          integral_congr_ae (Filter.Eventually.of_forall hinner)
-      _ = _ := by
-          rw [integral_finsetSum _ fun i _ =>
-            ((hconv₂ (fun j : {i // i ≠ a} => Ψ j) (fun j => hΨ j) (b i : W) ℓ hℓ₂).1 s
-              hs₂).const_mul _]
-          refine Finset.sum_congr rfl fun i _ => ?_
-          rw [integral_const_mul]
+    simp_rw [hGy]
+    rw [integral_const_mul]
+    have hblockA := blockA_eq_sum (μ₀ := μ a) hadm₁.1 hKc hKo hKa hΨa hwK
+      (fun ν hν => (hblock (Ψ a) (hΨ a) w ν hν).1 s hsa) μy
+    rw [show ∫ g, Ψ a (g : Matrix (Fin (d a)) (Fin (d a)) F) * detPow g s *
+        (μy : Module.Dual ℂ W) (ρ₁ (g, 1) w) ∂(μ a) = blockA (μ a) ρ₁ (Ψ a) w μy s from rfl,
+      hblockA, Finset.mul_sum]
+    refine Finset.sum_congr rfl fun i _ => ?_
+    rw [hμyv]
+    simp only [multiA]
+    rw [show ρ₁ ((1 : GL (Fin (d a)) F), (y, (1 : H))) = ρ₂ (y, ((1 : GL (Fin (d a)) F), (1 : H))) by
+      rw [hρ₁, hρ₂]]
+    change P * (ℓ (ρ₂ (y, ((1 : GL (Fin (d a)) F), (1 : H))) (b i : W)) *
+      blockA (μ a) ρ₁ (Ψ a) w (L i) s) = _
+    rw [hP, show ((1 : GL (Fin (d a)) F), (1 : H)) = (1 : GL (Fin (d a)) F × H) from rfl]
+    ring
 
   set Ψh : ∀ i, Matrix (Fin (d i)) (Fin (d i)) F → ℂ :=
     fun i => GJMatrix.localMatrixFourier ψ (Ψ i) with hΨhdef
@@ -443,68 +492,41 @@ theorem multiFEStatement_succ {ψ : AddChar F Circle} (hψ : Continuous ψ) (hψ
       lt_of_lt_of_le hs (neg_le_neg ((le_max_left _ _).trans (le_max_right _ _)))
     have hs₂ : s.re < -s₂ :=
       lt_of_lt_of_le hs (neg_le_neg ((le_max_right _ _).trans (le_max_right _ _)))
-    have hint := (hconv Ψh hΨh w ℓ hℓ).2 s hs₀
-    set G : GL (Fin (d a)) F × (∀ j : {i // i ≠ a}, GL (Fin (d j)) F) → ℂ :=
-      fun p => multiB ρ Ψh w ℓ s (splitSymm d a p.1 p.2) with hG
-    have hGF : ∀ x, G (Equiv.piSplitAt a (fun i => GL (Fin (d i)) F) x) = multiB ρ Ψh w ℓ s x :=
-      fun x => by
-        simp only [hG]
-        rw [show splitSymm d a (Equiv.piSplitAt a (fun i => GL (Fin (d i)) F) x).1
-          (Equiv.piSplitAt a (fun i => GL (Fin (d i)) F) x).2 = x from
-            (Equiv.piSplitAt a fun i => GL (Fin (d i)) F).symm_apply_apply x]
-    have hGint : Integrable G ((μ a).prod (Measure.pi fun j : {i // i ≠ a} => μ j)) := by
-      rw [← hmp.integrable_comp_emb hemb]
-      exact hint.congr (Filter.Eventually.of_forall fun x => (hGF x).symm)
-    have hinner : ∀ y : ∀ j : {i // i ≠ a}, GL (Fin (d j)) F, ∫ g, G (g, y) ∂(μ a) =
-        ∑ i, blockB (μ a) ρ₁ (Ψh a) w (L i) s *
-          multiB ρ₂ (fun j : {i // i ≠ a} => Ψh j) (b i : W) ℓ s y := by
-      intro y
-      set μy : smoothVectors (Representation.dual ρ₁) :=
-        contragredient ρ₁ ((1 : GL (Fin (d a)) F), (y⁻¹, (1 : H)))⁻¹ ⟨ℓ, hℓ₁⟩ with hμy
-      have hμyv : ∀ v, (μy : Module.Dual ℂ W) v =
-          ℓ (ρ₁ ((1 : GL (Fin (d a)) F), (y⁻¹, (1 : H))) v) :=
-        fun v => by rw [hμy, contragredient_apply_apply, inv_inv]
-      set P : ℂ := ∏ j : {i // i ≠ a}, Ψh j (y j : Matrix (Fin (d j)) (Fin (d j)) F) *
-        detPow (y j) ((d j : ℂ) - s) with hP
-      have hGy : ∀ g, G (g, y) = P * (Ψh a (g : Matrix (Fin (d a)) (Fin (d a)) F) *
-          detPow g ((d a : ℂ) - s) * (μy : Module.Dual ℂ W) (ρ₁ (g⁻¹, 1) w)) := fun g => by
-        simp only [hG, multiB]
-        rw [prod_splitSymm (fun i x => Ψh i (x : Matrix (Fin (d i)) (Fin (d i)) F) *
-            detPow x ((d i : ℂ) - s)) g y, splitSymm_inv, hprod1, Module.End.mul_apply, hμyv]
-        ring
-      simp_rw [hGy]
-      rw [integral_const_mul]
-      have hblockB := blockB_eq_sum (μ₀ := μ a) hadm₁.1 hKc hKo hKa hΦa hwK
-        (fun ν hν => (hblock (Ψ a) (hΨ a) w ν hν).2.1 s hsa) μy
-      rw [show ∫ g, Ψh a (g : Matrix (Fin (d a)) (Fin (d a)) F) * detPow g ((d a : ℂ) - s) *
-          (μy : Module.Dual ℂ W) (ρ₁ (g⁻¹, 1) w) ∂(μ a) = blockB (μ a) ρ₁ (Ψh a) w μy s from rfl,
-        hblockB, Finset.mul_sum]
-      refine Finset.sum_congr rfl fun i _ => ?_
-      rw [hμyv]
+    refine hfubini (multiB ρ Ψh w ℓ s) (fun μ' => blockB (μ a) ρ₁ (Ψh a) w μ' s)
+      (fun v y => multiB ρ₂ (fun j : {i // i ≠ a} => Ψh j) v ℓ s y)
+      ((hconv Ψh hΨh w ℓ hℓ).2 s hs₀)
+      (fun i => (hconv₂ (fun j : {i // i ≠ a} => Ψh j) (fun j => hΨh j) (b i : W) ℓ hℓ₂).2 s hs₂)
+      fun y => ?_
+    set μy : smoothVectors (Representation.dual ρ₁) :=
+      contragredient ρ₁ ((1 : GL (Fin (d a)) F), (y⁻¹, (1 : H)))⁻¹ ⟨ℓ, hℓ₁⟩ with hμy
+    have hμyv : ∀ v, (μy : Module.Dual ℂ W) v =
+        ℓ (ρ₁ ((1 : GL (Fin (d a)) F), (y⁻¹, (1 : H))) v) :=
+      fun v => by rw [hμy, contragredient_apply_apply, inv_inv]
+    set P : ℂ := ∏ j : {i // i ≠ a}, Ψh j (y j : Matrix (Fin (d j)) (Fin (d j)) F) *
+      detPow (y j) ((d j : ℂ) - s) with hP
+    have hGy : ∀ g, multiB ρ Ψh w ℓ s (splitSymm d a g y) =
+        P * (Ψh a (g : Matrix (Fin (d a)) (Fin (d a)) F) *
+        detPow g ((d a : ℂ) - s) * (μy : Module.Dual ℂ W) (ρ₁ (g⁻¹, 1) w)) := fun g => by
       simp only [multiB]
-      rw [show ρ₁ ((1 : GL (Fin (d a)) F), (y⁻¹, (1 : H))) =
-          ρ₂ (y⁻¹, ((1 : GL (Fin (d a)) F), (1 : H))) by rw [hρ₁, hρ₂]]
-      change P * (ℓ (ρ₂ (y⁻¹, ((1 : GL (Fin (d a)) F), (1 : H))) (b i : W)) *
-        blockB (μ a) ρ₁ (Ψh a) w (L i) s) = _
-      rw [hP, show ((1 : GL (Fin (d a)) F), (1 : H)) = (1 : GL (Fin (d a)) F × H) from rfl]
+      rw [prod_splitSymm (fun i x => Ψh i (x : Matrix (Fin (d i)) (Fin (d i)) F) *
+          detPow x ((d i : ℂ) - s)) g y, splitSymm_inv, hprod1, mul_apply_eq_comp, hμyv]
       ring
-    calc ∫ x, multiB ρ Ψh w ℓ s x ∂Measure.pi μ
-        = ∫ x, G (Equiv.piSplitAt a (fun i => GL (Fin (d i)) F) x) ∂Measure.pi μ := by
-          simp_rw [hGF]
-      _ = ∫ p, G p ∂((μ a).prod (Measure.pi fun j : {i // i ≠ a} => μ j)) :=
-          hmp.integral_comp hemb G
-      _ = ∫ y, ∫ g, G (g, y) ∂(μ a) ∂(Measure.pi fun j : {i // i ≠ a} => μ j) :=
-          integral_prod_symm G hGint
-      _ = ∫ y, ∑ i, blockB (μ a) ρ₁ (Ψh a) w (L i) s *
-            multiB ρ₂ (fun j : {i // i ≠ a} => Ψh j) (b i : W) ℓ s y
-            ∂(Measure.pi fun j : {i // i ≠ a} => μ j) :=
-          integral_congr_ae (Filter.Eventually.of_forall hinner)
-      _ = _ := by
-          rw [integral_finsetSum _ fun i _ =>
-            ((hconv₂ (fun j : {i // i ≠ a} => Ψh j) (fun j => hΨh j) (b i : W) ℓ hℓ₂).2 s
-              hs₂).const_mul _]
-          refine Finset.sum_congr rfl fun i _ => ?_
-          rw [integral_const_mul]
+    simp_rw [hGy]
+    rw [integral_const_mul]
+    have hblockB := blockB_eq_sum (μ₀ := μ a) hadm₁.1 hKc hKo hKa hΦa hwK
+      (fun ν hν => (hblock (Ψ a) (hΨ a) w ν hν).2.1 s hsa) μy
+    rw [show ∫ g, Ψh a (g : Matrix (Fin (d a)) (Fin (d a)) F) * detPow g ((d a : ℂ) - s) *
+        (μy : Module.Dual ℂ W) (ρ₁ (g⁻¹, 1) w) ∂(μ a) = blockB (μ a) ρ₁ (Ψh a) w μy s from rfl,
+      hblockB, Finset.mul_sum]
+    refine Finset.sum_congr rfl fun i _ => ?_
+    rw [hμyv]
+    simp only [multiB]
+    rw [show ρ₁ ((1 : GL (Fin (d a)) F), (y⁻¹, (1 : H))) =
+        ρ₂ (y⁻¹, ((1 : GL (Fin (d a)) F), (1 : H))) by rw [hρ₁, hρ₂]]
+    change P * (ℓ (ρ₂ (y⁻¹, ((1 : GL (Fin (d a)) F), (1 : H))) (b i : W)) *
+      blockB (μ a) ρ₁ (Ψh a) w (L i) s) = _
+    rw [hP, show ((1 : GL (Fin (d a)) F), (1 : H)) = (1 : GL (Fin (d a)) F × H) from rfl]
+    ring
 
   have hterm : ∀ i, RatFE F (γa * γ')
       (fun s => blockA (μ a) ρ₁ (Ψ a) w (L i) s *
@@ -517,10 +539,33 @@ theorem multiFEStatement_succ {ψ : AddChar F Circle} (hψ : Continuous ψ) (hψ
       (hIH (fun j => Ψ j) (fun j => hΨ j) (b i : W) ℓ hℓ₂)
   exact (RatFE.sum Finset.univ fun i _ => hterm i).congr ⟨_, hA⟩ ⟨_, hB⟩
 
-theorem multiFEStatement_all {ψ : AddChar F Circle} (hψ : Continuous ψ) (hψ1 : ψ ≠ 1) :
-    ∀ r, MultiFEStatement.{uF, u, w} F W ψ r
-  | 0 => multiFEStatement_zero ψ
-  | r + 1 => multiFEStatement_succ hψ hψ1 (multiFEStatement_all hψ hψ1 r)
+theorem multiFEStatement_all {M : Type} [CommMonoid M]
+    {PH : ∀ (H : Type (max u uF)) [TopologicalSpace H], Prop}
+    {Shape : RatFunc ℂ → M → Prop} {wt : ℕ → ℂ → Prop → M}
+    (h1 : Shape 1 1)
+    (hmul : ∀ {γ₁ γ₂ m₁ m₂}, Shape γ₁ m₁ → Shape γ₂ m₂ → Shape (γ₁ * γ₂) (m₁ * m₂))
+    (hPH_pi : ∀ (κ : Type u) [Fintype κ] (d : κ → ℕ) [∀ i, NeZero (d i)]
+      (H : Type (max u uF)) [TopologicalSpace H], PH H → PH ((∀ i, GL (Fin (d i)) F) × H))
+    (hPH_prod : ∀ (m : ℕ) [NeZero m] (H : Type (max u uF)) [TopologicalSpace H],
+      PH H → PH (GL (Fin m) F × H))
+    {ψ : AddChar F Circle} (hψ : Continuous ψ) (hψ1 : ψ ≠ 1)
+    (hBlockShape : ∀ (m : ℕ) [NeZero m] (μ₀ : Measure (GL (Fin m) F)) [μ₀.IsHaarMeasure]
+      (H₁ : Type (max u uF)) [Group H₁] [TopologicalSpace H₁] [IsTopologicalGroup H₁]
+      [LocallyCompactSpace H₁] [T2Space H₁] [TotallyDisconnectedSpace H₁], PH H₁ →
+      ∀ (ρ₁ : Representation ℂ (GL (Fin m) F × H₁) W), IsAdmissible ρ₁ → ρ₁.IsIrreducible →
+      ∀ α₁ : ℂ, α₁ ≠ 0 → (∀ v, ρ₁ (centralUnif F m, 1) v = α₁ • v) →
+      (∀ v : W, ∀ ℓ ∈ smoothVectors (Representation.dual ρ₁),
+        ∃ C : Set (GL (Fin m) F), IsCompact C ∧
+          ∀ g, ℓ (ρ₁ (g, 1) v) ≠ 0 → ∃ j : ℤ, centralUnif F m ^ j * g ∈ C) →
+      ∀ γa : RatFunc ℂ,
+        (∀ Φ : Matrix (Fin m) (Fin m) F → ℂ, IsSchwartzBruhat Φ →
+          ∀ v : W, ∀ ℓ ∈ smoothVectors (Representation.dual ρ₁),
+            RatFE F γa (blockA μ₀ ρ₁ Φ v ℓ) (blockB μ₀ ρ₁ (GJMatrix.localMatrixFourier ψ Φ) v ℓ)) →
+        Shape γa (wt m α₁ (∀ g ∈ integralGL F m, ρ₁ (g, 1) = 1))) :
+    ∀ r, MultiFEStatement.{uF, u, w} F W PH Shape wt ψ r
+  | 0 => multiFEStatement_zero h1 ψ
+  | r + 1 => multiFEStatement_succ hmul hPH_pi hPH_prod hψ hψ1 hBlockShape
+      (multiFEStatement_all h1 hmul hPH_pi hPH_prod hψ hψ1 hBlockShape r)
 
 end GodementJacquet
 

@@ -17,8 +17,6 @@ noncomputable section
 
 namespace Formalism.L2.SG.Pf.LsNc5
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 variable {D : D7} (X : HidaSetting D) (u : D.what₂.Word)
 
 theorem uMat_continuous (v : InfinitePlace X.B.I.F) :

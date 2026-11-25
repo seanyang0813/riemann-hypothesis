@@ -195,15 +195,6 @@ end co
 section ext
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] [_root_.NumberField.IsTotallyComplex F]
 
-private theorem totC (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] [_root_.NumberField.IsTotallyComplex F] :
-    IsTotallyComplex E := ⟨fun w => by
-  rw [← not_isReal_iff_isComplex]
-  intro h
-  have h1 := isReal_iff.1 h
-  have h2 := ComplexEmbedding.IsReal.comp (algebraMap F E) h1
-  exact not_isReal_iff_isComplex.2 (IsTotallyComplex.isComplex (mk (w.embedding.comp (algebraMap F E))))
-    (isReal_mk_iff.2 h2)⟩
-
 variable [_root_.NumberField.IsTotallyComplex E]
 
 private theorem co_iota (τ : E →+* ℂ) (y : InfiniteAdeleRing F) :
@@ -374,7 +365,7 @@ end main
 theorem _root_.UpperTheory.ConvolutionTheory.L1.positionOf :
     UpperTheory.ConvolutionTheory.L1.PositionOf := by
   intro F E _ _ _ _ _ _ σ m D
-  have : IsTotallyComplex E := totC F E
+  have : IsTotallyComplex E := _root_.NumberField.isTotallyComplex_of_algebra F E
   have entry : ∀ (n : ℕ) (g : archGroup E n) (i : Fin (m + 1)) (τ : E →+* ℂ),
       D.e (P τ 1) = Pi.single i (P (τ.comp (algebraMap F E)) 1) →
       (mat (((compA D n i g : archGroup F n) : (ArchMatrix F n)ˣ) : ArchMatrix F n)).map (co (τ.comp (algebraMap F E))) =

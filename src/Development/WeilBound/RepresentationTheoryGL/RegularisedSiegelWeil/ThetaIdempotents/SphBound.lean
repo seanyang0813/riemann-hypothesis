@@ -1410,12 +1410,6 @@ namespace GlobalTheory.CompanionTheory.ThTw
 
 variable {D : D7} {n ρ p : ℕ} {hn : ρ + p = n}
 
-theorem adj_B (b₀ : HermE D ρ) : adj (b₀.1.map (incA D)) = b₀.1.map (incA D) := by
-  have h : b₀.1ᴴ = b₀.1 := b₀.2
-  have := rat_conjTranspose (D := D) b₀.1
-  rw [h] at this
-  exact this.symm
-
 theorem pr_def (b₀ : HermE D ρ) (u v : Mx D ρ p) : pr b₀ u v = adj u ⬝ (b₀.1.map (incA D) ⬝ v) := rfl
 
 theorem pr_add_left (b₀ : HermE D ρ) (u u' v : Mx D ρ p) : pr b₀ (u + u') v = pr b₀ u v + pr b₀ u' v := by
@@ -1428,7 +1422,7 @@ theorem pr_neg_left (b₀ : HermE D ρ) (u v : Mx D ρ p) : pr b₀ (-u) v = -pr
   simp only [pr_def, adj_neg, Matrix.neg_mul]
 
 theorem adj_pr (b₀ : HermE D ρ) (u v : Mx D ρ p) : adj (pr b₀ u v) = pr b₀ v u := by
-  simp only [pr_def, adj_mul, adj_adj, adj_B, Matrix.mul_assoc]
+  simp only [pr_def, adj_mul, adj_adj, GlobalTheory.CompanionTheory.FJE.adj_herm, Matrix.mul_assoc]
 
 theorem trace_pr_swap (b₀ : HermE D ρ) (u v : Mx D ρ p) :
     Matrix.trace (pr b₀ v u) = cA D (Matrix.trace (pr b₀ u v)) := by

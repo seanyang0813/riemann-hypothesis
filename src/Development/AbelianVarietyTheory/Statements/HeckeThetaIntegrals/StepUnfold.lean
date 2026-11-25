@@ -46,8 +46,6 @@ open GlobalTheory.IndefiniteRowSideFullHecke.LevelPlusSubgroup (coefPlus)
 
 namespace GlobalTheory.RowClaim
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 variable {D : D7} {T : Type}
 
 def xiVals (L : LevCh D T) (t : T) : Subgroup ℂˣ := Subgroup.closure {z | ∃ w x, z = (L.xiH t).loc w x}

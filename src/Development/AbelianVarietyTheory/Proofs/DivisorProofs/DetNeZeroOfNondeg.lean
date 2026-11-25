@@ -101,9 +101,9 @@ theorem exists_isTransport (D : D7) (B : Base D.host.F D.host.E) (hB : B.IsGood 
   have h2 := GlobalTheory.T.transportedWeil_preserves_schwartz_heisenberg_equivariant D B.ψ hψ S T χW χX hcW hcX rS rT X.J Y.J (-1) eA eB _ Mo.co hMo.rat ω hω om₀ hom₀
   have h3 := GlobalTheory.T.transportedWeilDatum_keeps_admissible_forms D B.ψ hψ S T χW χX hcW hcX rS rT X.J Y.J (-1) eA eB _ Mo.co hMo.rat ω hω om₀ hom₀
   have h4 := GlobalTheory.T.transportedWeilDatum_isUnitary_adelicSchwartz D B.ψ hψ S T χW χX hcW hcX rS rT X.J Y.J (-1) eA eB _ Mo.co hMo.rat ω hω om₀ hom₀
-  have h5 := GlobalTheory.T.continuous_transported_weilDatum_adelicSchwartz D B.ψ hψ S T χW χX hcW hcX rS rT X.J Y.J (-1) eA eB _ Mo.co hMo.rat ω hω om₀ hom₀
-  have h6 := GlobalTheory.T.exists_doubledWeil_blockEmbedding_acts_on_first_boxFactor D B.ψ hψ S T χW χX hcW hcX rS rT X.J Y.J (-1) eA eB _ Mo.co hMo.rat ω hω om₀ hom₀
-  have h7 := GlobalTheory.T.exists_doubled_schrodingerModel_transposed_siegelRule D B.ψ hψ S T χW χX hcW hcX rS rT X.J Y.J (-1) eA eB _ Mo.co hMo.rat ω hω om₀ hom₀
+  have h5 := _root_.GlobalTheory.WeilCont.continuous_transport D B.ψ hψ S T χW χX hcW hcX rS rT X.J Y.J (-1) eA eB _ Mo.co hMo.rat ω hω om₀ hom₀
+  have h6 := _root_.GlobalTheory.DblSchr.doubledModel D B.ψ hψ S T χW χX hcW hcX rS rT X.J Y.J (-1) eA eB _ Mo.co hMo.rat ω hω om₀ hom₀
+  have h7 := _root_.GlobalTheory.WeilSchrodinger.DblTarget.exists_dbl_target D B.ψ hψ S T χW χX hcW hcX rS rT X.J Y.J (-1) eA eB _ Mo.co hMo.rat ω hω om₀ hom₀
   have hsp : GlobalTheory.WeilM.IsUSplitting (GlobalTheory.WeilM.adeleClass D.host.F) B.ψ Mo.co
       (GlobalTheory.WeilM.actAB (GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.cA D.sp.cm.sig)) om₀ := ⟨⟨h2.1, h2.2, h3⟩, h4, h5⟩
   have hw₀ : Mo.IsWeil B.ψ χX χW om₀ :=

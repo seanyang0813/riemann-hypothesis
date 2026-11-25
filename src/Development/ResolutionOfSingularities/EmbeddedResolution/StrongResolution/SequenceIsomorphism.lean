@@ -3,47 +3,7 @@ module
 public import Development.ResolutionOfSingularities.EmbeddedResolution.IteratedBlowups.BlowupSequenceRelations
 public import Development.ResolutionOfSingularities.EmbeddedResolution.StrongResolution.StrongResolution
 public import Development.ResolutionOfSingularities.EmbeddedResolution.IteratedBlowups.BlowupSequenceBasic
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.AlgebraicGeometry.Modules.Sheaf
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Bernstein
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
 import Mathlib.Tactic.Linter.Style
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
 
 @[expose] public section
 
@@ -120,40 +80,13 @@ private theorem vanishingIdeal_preimage_fromSpec_of_isIso {Y Y' : Scheme.{u}} (�
   exact congrArg PrimeSpectrum.vanishingIdeal
     (Set.ext fun z => iff_of_eq (congrArg (fun y => y ∈ T) (hpt z)))
 
-private theorem map_mem_maximalIdeal_ringEquiv {R S : Type u} [CommRing R] [CommRing S]
-    [IsLocalRing R] [IsLocalRing S] (e : R ≃+* S) {a : R}
-    (h : a ∈ IsLocalRing.maximalIdeal R) : e a ∈ IsLocalRing.maximalIdeal S := by
-  rw [IsLocalRing.mem_maximalIdeal, mem_nonunits_iff]
-  rw [IsLocalRing.mem_maximalIdeal, mem_nonunits_iff] at h
-  intro hu
-  exact h (by simpa using hu.map (e.symm : S →+* R))
-
 private theorem isRegularParameterSystem_ringEquiv {R S : Type u} [CommRing R] [CommRing S]
     [IsLocalRing R] [IsLocalRing S] (e : R ≃+* S) (n : ℕ) (x : Fin n → R)
     (h : IsRegularParameterSystem R n x) :
     IsRegularParameterSystem S n (fun i => e (x i)) := by
-  obtain ⟨hspan, hdim⟩ := h
-  have hle : Ideal.span (Set.range fun i => e (x i)) ≤ IsLocalRing.maximalIdeal S := by
-    rw [Ideal.span_le]
-    rintro z ⟨i, rfl⟩
-    show e (x i) ∈ IsLocalRing.maximalIdeal S
-    refine map_mem_maximalIdeal_ringEquiv e ?_
-    rw [← hspan]
-    exact Ideal.subset_span ⟨i, rfl⟩
-  have hge : IsLocalRing.maximalIdeal S ≤ Ideal.span (Set.range fun i => e (x i)) := by
-    intro y hy
-    have h1 : Ideal.span (Set.range x)
-        ≤ Ideal.comap (e : R →+* S) (Ideal.span (Set.range fun i => e (x i))) := by
-      rw [Ideal.span_le]
-      rintro z ⟨i, rfl⟩
-      simp only [SetLike.mem_coe, Ideal.mem_comap, RingHom.coe_coe]
-      exact Ideal.subset_span ⟨i, rfl⟩
-    have h2 : e.symm y ∈ IsLocalRing.maximalIdeal R := map_mem_maximalIdeal_ringEquiv e.symm hy
-    have h3 : e.symm y ∈ Ideal.span (Set.range x) := by rw [hspan]; exact h2
-    have h4 := h1 h3
-    rw [Ideal.mem_comap] at h4
-    simpa using h4
-  exact ⟨le_antisymm hle hge, hdim.trans (ringKrullDim_eq_of_ringEquiv e)⟩
+  refine ⟨?_, h.2.trans (ringKrullDim_eq_of_ringEquiv e)⟩
+  rw [show (fun i => e (x i)) = e ∘ x from rfl, Set.range_comp, ← Ideal.map_span, h.1]
+  exact IsLocalRing.map_ringEquiv_maximalIdeal e
 
 private theorem isRegularParameterSystem_congr {R : Type u} [CommRing R] [IsLocalRing R]
     (n : ℕ) {x y : Fin n → R} (h : ∀ i, x i = y i) (hy : IsRegularParameterSystem R n y) :
@@ -192,26 +125,17 @@ private theorem iso_hom_comp_projectionToBase_of_commute_blowupMorphism {X : Sch
       = B.transitionMapSucc n ≫ B.projectionToBase n
     rw [hstep n hn, Category.assoc, ih hn.le]
 
-private theorem mem_support_of_mem_support_comap {Y Z : Scheme.{u}} (g : Y ⟶ Z)
-    (I : Z.IdealSheafData) {x : Y} (hx : x ∈ (I.comap g).support) : g x ∈ I.support := by
-  have h := Scheme.IdealSheafData.support_comap I g
-  rw [h] at hx
-  exact hx
-
 private theorem inv_mem_support_comap_of_iso {Y Z : Scheme.{u}} (g : Y ≅ Z) (I : Z.IdealSheafData)
     {x : Z} (hx : x ∈ I.support) : g.inv x ∈ (I.comap g.hom).support := by
   have hI : (I.comap g.hom).comap g.inv = I := by
     rw [← Scheme.IdealSheafData.comap_comp, Iso.inv_hom_id, Scheme.IdealSheafData.comap_id]
   have hx' : x ∈ ((I.comap g.hom).comap g.inv).support := by rw [hI]; exact hx
-  exact mem_support_of_mem_support_comap g.inv (I.comap g.hom) hx'
+  rwa [Scheme.IdealSheafData.support_comap] at hx'
 
 private theorem isIso_restrict_of_eq {Y Z : Scheme.{u}} {f₁ f₂ : Y ⟶ Z} (hf : f₁ = f₂)
     (U : Z.Opens) (h : IsIso (f₁ ∣_ U)) : IsIso (f₂ ∣_ U) := by
   subst hf
   exact h
-
-private theorem isOpenMap_iso_hom {Y Z : Scheme.{u}} (g : Y ≅ Z) : IsOpenMap (⇑g.hom) :=
-  (Scheme.homeoOfIso g).isOpenMap
 
 private theorem isStrictNormalCrossingsDivisor_reducedInverseImage_iso_inv_comp {Y Y' X : Scheme.{u}} (g : Y ≅ Y') (p : Y ⟶ X)
     (S : TopologicalSpace.Closeds X) (hS : IsStrictNormalCrossingsDivisor (reducedInverseImage p S)) :
@@ -336,7 +260,7 @@ theorem IsStrongResolution.of_isomorphic (k : Type u) [Field k] (X : Scheme.{u})
       ext x
       simp
     rw [hpre]
-    exact hd.preimage (isOpenMap_iso_hom ε.symm)
+    exact hd.preimage (Scheme.homeoOfIso ε.symm).isOpenMap
   have q5 : B'.CentersLieOver ((smoothLocusComplement f : TopologicalSpace.Closeds X) : Set X) := by
     obtain ⟨hL, eiso, h0, hstep, hcen⟩ := h
     intro i hi x hx

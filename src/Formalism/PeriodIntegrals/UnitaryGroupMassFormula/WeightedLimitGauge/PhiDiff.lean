@@ -98,12 +98,6 @@ lemma psiV_strict (T' : ℝ) : HasStrictFDerivAt (psiV k r T')
     exact hasStrictFDerivAt_exp_zero_of_radius_pos (expSeries_radius_pos ℝ (Mat k r))
   exact (mvL k r (opBase k r T')).hasStrictFDerivAt.comp (0 : TrE k) (h2.comp (0 : TrE k) h1)
 
-lemma dpsi_apply (T' : ℝ) (q : TrE k) (i : Fin (2 * r + k + 1)) :
-    ((mvL k r (opBase k r T')).comp ((1 : Mat k r →L[ℝ] Mat k r).comp (opGenL k r))) q i
-      = (Real.sqrt T' : ℂ) * opGen k r q i (wI k r (Fin.last k)) := by
-  simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.one_apply, opGenL_apply, mvL_apply]
-  exact mulVec_base T' _ i
-
 def dgn (T' : ℝ) : Option (Fin k × Bool) → ℝ := fun o => match o with
   | none => 1
   | some _ => Real.sqrt T' / Real.sqrt 2

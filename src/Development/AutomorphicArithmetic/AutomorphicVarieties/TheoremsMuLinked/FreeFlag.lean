@@ -90,13 +90,6 @@ def RigI : Prop :=
     ∀ (hr : HasMult D.η (push f S.r.hom)) (ι : Qbar l ≃+* ℂ), U3.TypeI D.η (push f S.r.hom) → D.IsAutI ι (push f S.r.hom) hr →
       Af.BlochKatoSelmerVanishes l (adRep (push f S.r.hom))
 
-def RigII : Prop :=
-  ∀ {Ω : Type} [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] {K : Type} [Field K] [NumberField K] [IsCMField K] [Algebra K Ω]
-    {l : ℕ} [Fact l.Prime] {c : Coef l} {N : ℕ} [NeZero N] {e : ℕ} {ψ : DirichletCharacter c.O N} (D : Dat Ω K c e ψ) {U : (_root_.UpperTheory.V.U3.Univ (_root_.UpperTheory.V.U3.GCond.noCondition _ (D.η.comp D.ι) (D.Ψ.comp D.ι)))}
-    {g₁ : G ℚ Ω}, D.Marked g₁ → ∀ (S : D.Ring U g₁) (f : S.R →ₐ[c.O] PadicAlgCl l), IsLocPt f →
-    ∀ ι : Qbar l ≃+* ℂ, TypeII D.η (push f S.r.hom) → ∀ W : G ℚ Ω →* GL (Fin 2) (PadicAlgCl l), Continuous W →
-      D.IsExt (push f S.r.hom) W → (∀ g, (W g).val.det = ((D.η g : ℤˣ) : ℤ)) → D.IsModular ι W → AdZero2 K D.η W
-
 def RigSp4 : Prop :=
   ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (c : Coef l) (D : GradeZeroInterpolatingElement.Raw Ω c),
     Ws.Ctx2 D ∨ Ws.Ctx3 D → ∀ N : ℕ, 1 ≤ N → Af.KillsMu N D.ψ → Af.KillsMu N D.ξ → Af.KillsMu N D.om →

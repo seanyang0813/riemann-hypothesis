@@ -73,24 +73,14 @@ structure LocalRepresentationTheoryHypothesesAlt : Prop where
   zel : ZelevinskyPolynomialRing
   disj : TotallyDisjointProductIrreducible
   mp : MoyPrasadJacquetIso
-  temp : TemperedProductOfSquareIntegrable
-  seg : EssSquareIntegrableSegments
-  sq : SquareIntegrableSegment
-  gen : GenericUnlinkedGL
-  multi : LanglandsMultisegments
-  exh : LanglandsExhaustionGL
   cos : StandardCosocleGL
   llc : _root_.UpperTheory.Zero.LLC.RecTExists
-  dzi : DepthZeroInduction
-  brauer : BrauerDegreeZero
-  chev : ChevalleyUnits
   green : GreenRegularCharacters
 structure GlobalAutomorphicGaloisHypotheses' : Prop where
   decay : CuspRapidDecay
   hc : HarishChandraFinite
   fin : AutomorphicFormsFiniteGL
   js : JacquetShalika
-  cusp : CuspidalSpectrumGL
   bc : _root_.GlobalTheory.Published.BaseChangeIsobaricTransfer
   gk : GelfandKazhdanDual
   gal : _root_.UpperTheory.GalS.PairUAlt

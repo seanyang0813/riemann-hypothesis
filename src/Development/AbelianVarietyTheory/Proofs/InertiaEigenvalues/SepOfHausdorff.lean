@@ -585,7 +585,7 @@ theorem rings_mem (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D
       ∀ a, ∃ a', ((F l).E K' s LL h').tie.ioE a' = ((F l).E K s LL h).tie.ioE a := by
   obtain ⟨c1, -, c3, -, c5⟩ := GlobalTheory.HWL.TensorWitt.main l LL
   have h1 : ∀ a, ∃ a', ((F l).E K' s LL h').tie.io a' = ((F l).E K s LL h).tie.io a :=
-    io_mem _ _ Subtype.val_injective (descends _) c3 (GlobalTheory.NL.IoXQ.main D HW F l K' s LL h').2.2.2.2.2.1
+    io_mem _ _ Subtype.val_injective (descends _) c3 (GlobalTheory.NL.IoXQ.main D.loc D.locA HW F l K' s LL h').2.2.2.2.2.1
       (fun g' hg' => by
         obtain ⟨g, hg, e⟩ := ker_transfer _ _ h h0 g' hg'
         exact ⟨g, hg, congrArg ((D.locA l).gRW LL) e⟩)
@@ -670,13 +670,13 @@ theorem base_indep : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : 
   have e1 := (rings_mem D HW F l K s LL h K' h' h0.symm).2
   have a2 := (rings_mem D HW F l K' s LL h' K h h0).1
   have e2 := (rings_mem D HW F l K' s LL h' K h h0).2
-  have q := (GlobalTheory.NL.IoXQ.main D HW F l K s LL h).2.1
-  have q1 := (GlobalTheory.NL.IoXQ.main D HW F l K' s LL h').2.1
-  have q2 := (GlobalTheory.NL.IoXQ.main D HW F l K' s LL h').2.2.2.1
+  have q := (GlobalTheory.NL.IoXQ.main D.loc D.locA HW F l K s LL h).2.1
+  have q1 := (GlobalTheory.NL.IoXQ.main D.loc D.locA HW F l K' s LL h').2.1
+  have q2 := (GlobalTheory.NL.IoXQ.main D.loc D.locA HW F l K' s LL h').2.2.2.1
   refine ⟨?_, ?_, fun T T' eT hact => ?_⟩
   · exact Set.Subset.antisymm (Set.range_subset_iff.2 a1) (Set.range_subset_iff.2 a2)
   · exact Set.Subset.antisymm (Set.range_subset_iff.2 e1) (Set.range_subset_iff.2 e2)
-  have hb := N_basis D HW F l K s LL h T
+  have hb := N_basis D.loc D.locA HW F l K s LL h T
   have h10 : IsCrys ((D.loc l).PD K') T'.ρ → p10 ((HW l).W K' s LL h') T' := GlobalTheory.NL.FrobeniusMatrixUniqueness.main D HW F l K' s LL h' T'
   exact modules_eq ((F l).E K s LL h) ((F l).E K' s LL h') T T' hle eT hact h0 a1 a2 e1 e2 (q1.trans q.symm)
     q2 hb h10

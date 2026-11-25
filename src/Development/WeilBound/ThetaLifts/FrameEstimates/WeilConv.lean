@@ -375,10 +375,6 @@ open GlobalTheory.WeilM GlobalTheory.AdelicU GlobalTheory.LFun GlobalTheory.Inde
 
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] {σ : E →ₐ[F] E}
 
-theorem rId_zero : rId F 0 = 1 := by
-  rw [rId, Real.exp_zero, sub_self, realAd, map_zero, map_zero, map_zero]
-  exact add_zero (1 : AF F)
-
 def formL (σ : E →ₐ[F] E) {n : ℕ} (J : Matrix (Fin n) (Fin n) E) (y : Fin n → E) : (Fin n → E) →ₗ[E] E where
   toFun x := form σ J x y
   map_add' a b := by simp [form, add_dotProduct]
@@ -488,7 +484,7 @@ theorem frameBasis_of : FrameBasis := by
       · exact hfr.ax t j
       · exact hfr.ay t j
       · have := hfr.a0 t _ ((hK _).1 (bK j).2)
-        simpa [lam0, rId_zero, v] using this
+        simpa [lam0, PositivityTheory.ThKEst.Sieg.rId_zero', v] using this
     ext l k
     have := congrFun (key (e.symm k)) l
     rw [Matrix.mul_diagonal, mul_comm, ← Algebra.smul_def]

@@ -203,8 +203,6 @@ theorem familySlopeLowerOpen_of_std (hS : StdSlopeLow) (hH : HookBound) {eps : �
 
 section ShortVec
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 def ShortAt (D : D7) (u : D.what₂.Word) (c : (D.mem u).C.cls 0) (y : Fin (D.R.N 0) → (D.sp.X 0).V) : Prop :=
   (∀ a, y a ∈ dualSub (D.sp.X 0) (D.clsLat u 0 c)) ∧ LinearIndependent D.host.E y ∧
     ∀ a, ((Algebra.trace ℚ D.host.E ((D.sp.X 0).hT (y a) (y a)) : ℚ) : ℝ) / (2 * D.R.f) ≤

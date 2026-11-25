@@ -287,16 +287,6 @@ theorem IsCuspidal.translate {φ : AdelicGLn.AdelicGL K n → ℂ} (hφ : IsCusp
 
 variable (K n)
 
-def finRep : Representation ℂ (AdelicGLn.FiniteAdelicGL K n) (automorphicForms K n) where
-  toFun h := (rightTranslateL (finEmb K n h)).restrict fun _ hφ => hφ.rightTranslate_finEmb h
-  map_one' := LinearMap.ext fun φ => Subtype.ext (funext fun g => by
-    change φ.val (g * finEmb K n 1) = φ.val g
-    rw [map_one, mul_one])
-  map_mul' h₁ h₂ := LinearMap.ext fun φ => Subtype.ext (funext fun g => by
-    show (φ : AdelicGLn.AdelicGL K n → ℂ) (g * finEmb K n (h₁ * h₂)) =
-      (φ : AdelicGLn.AdelicGL K n → ℂ) (g * finEmb K n h₁ * finEmb K n h₂)
-    rw [map_mul, mul_assoc])
-
 def archCompactRep : Representation ℂ (archCompact K n) (automorphicForms K n) where
   toFun k := (rightTranslateL (infEmb K n k)).restrict fun _ hφ => hφ.rightTranslate_infEmb k.2
   map_one' := LinearMap.ext fun φ => Subtype.ext (funext fun g => by

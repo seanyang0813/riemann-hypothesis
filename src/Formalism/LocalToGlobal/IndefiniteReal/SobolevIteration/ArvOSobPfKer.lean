@@ -146,12 +146,6 @@ theorem polyKernel_holds : PolyKernel := by
       setIntegral_le_integral hg_int hg_nn
     rw [hIdef]; linarith
   have hIpos : 0 < I := lt_of_lt_of_le (mul_pos (pow_pos hα0 N) hm) hI
-  have hcm : ∫ k, I⁻¹ * g k ∂μ = I⁻¹ * ∫ k, g k ∂μ := by
-    first
-      | exact integral_const_mul I⁻¹ _
-  have hnr : ∀ x : ℝ, 0 ≤ x → ‖(x : ℂ)‖ = x := fun x hx => by
-    first
-      | exact Complex.norm_of_nonneg hx
   obtain ⟨q, hqdef⟩ : ∃ q : MvPolynomial ((Fin n × Fin n) ⊕ (Fin n × Fin n)) ℂ,
       q = MvPolynomial.C ((I⁻¹ : ℝ) : ℂ) *
         (MvPolynomial.C 1 - MvPolynomial.C ((R⁻¹ : ℝ) : ℂ) * qP) ^ N := ⟨_, rfl⟩
@@ -168,15 +162,13 @@ theorem polyKernel_holds : PolyKernel := by
   · rw [show evP q = fun k => ((I⁻¹ * g k : ℝ) : ℂ) from funext hF]
     exact hgI
   · simp only [hF]
-    have hc : ∫ k, ((I⁻¹ * g k : ℝ) : ℂ) ∂μ = ((∫ k, I⁻¹ * g k ∂μ : ℝ) : ℂ) := by
-      first
-        | exact integral_complex_ofReal
-    rw [hc, hcm, ← hIdef, inv_mul_cancel₀ hIpos.ne', Complex.ofReal_one]
+    rw [integral_complex_ofReal, integral_const_mul, ← hIdef, inv_mul_cancel₀ hIpos.ne',
+      Complex.ofReal_one]
   · simp only [hF]
     have hae : (fun k => ‖((I⁻¹ * g k : ℝ) : ℂ)‖) =ᵐ[μ] fun k => I⁻¹ * g k := by
       filter_upwards [hg_nn] with k hk
-      exact hnr _ (mul_nonneg (inv_nonneg.2 hIpos.le) hk)
-    rw [integral_congr_ae hae, hcm, ← hIdef, inv_mul_cancel₀ hIpos.ne']
+      exact Complex.norm_of_nonneg (mul_nonneg (inv_nonneg.2 hIpos.le) hk)
+    rw [integral_congr_ae hae, integral_const_mul, ← hIdef, inv_mul_cancel₀ hIpos.ne']
   · simp only [hF]
     have hWU : {k : Fin n → Fin n → ℂ | qr k < ε} ⊆ U := fun k hk =>
       hball (mem_ball_one_of_qr_lt_sq hr k (lt_of_lt_of_le hk hεr))
@@ -196,7 +188,8 @@ theorem polyKernel_holds : PolyKernel := by
         by_contra hc
         exact hkW (not_le.1 hc)
       have hb := hbK k hkK
-      rw [hnr _ (mul_nonneg (inv_nonneg.2 hIpos.le) (by rw [hgk]; exact pow_nonneg hb.1 N)), hgk]
+      rw [Complex.norm_of_nonneg (mul_nonneg (inv_nonneg.2 hIpos.le)
+        (by rw [hgk]; exact pow_nonneg hb.1 N)), hgk]
       exact mul_le_mul_of_nonneg_left (pow_le_pow_left₀ hb.1 (hbW k hkW') N) (inv_nonneg.2 hIpos.le)
     have step3 : ∫ k in {k : Fin n → Fin n → ℂ | qr k < ε}ᶜ, I⁻¹ * β ^ N ∂μ ≤ I⁻¹ * β ^ N := by
       rw [setIntegral_const, smul_eq_mul]

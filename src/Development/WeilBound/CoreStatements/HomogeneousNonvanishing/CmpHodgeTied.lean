@@ -233,16 +233,8 @@ theorem dualMap_algebraMap (f : R →+* S) :
     (dualMap f).comp (algebraMap R (DualNumber R)) = (algebraMap S (DualNumber S)).comp f := by
   ext x <;> simp [dualMap, TrivSqZeroExt.algebraMap_eq_inl]
 
-theorem fstHom_dualMap (f : R →+* S) :
-    (TrivSqZeroExt.fstHom S S S).toRingHom.comp (dualMap f) = f.comp (TrivSqZeroExt.fstHom R R R).toRingHom :=
-  RingHom.ext fun x => by simp [dualMap]
-
 theorem dualMap_comp (f : R →+* S) (g : S →+* T) : dualMap (g.comp f) = (dualMap g).comp (dualMap f) := by
   ext x <;> simp [dualMap]
-
-theorem specMap_comp (f : R →+* S) (g : S →+* T) :
-    Spec.map (CommRingCat.ofHom g) ≫ Spec.map (CommRingCat.ofHom f) = Spec.map (CommRingCat.ofHom (g.comp f)) := by
-  rw [← Spec.map_comp]; rfl
 
 end Ring
 
@@ -314,7 +306,7 @@ theorem valAt_up (e : X' ≅ X) {G : Over X} [GrpObj G] {G' : Over X'} [GrpObj G
         (DualNumber (X.presheaf.stalk (e.hom (centre z)))))) =
       Spec.map (CommRingCat.ofHom (algebraMap (X'.presheaf.stalk (centre z))
         (DualNumber (X'.presheaf.stalk (centre z))))) ≫ Spec.map (e.hom.stalkMap (centre z)) := by
-    rw [specMap_comp, dualMap_algebraMap, ← specMap_comp]
+    rw [GlobalTheory.CompanionTheory.Ar.LieTangent.spec_comp, dualMap_algebraMap, ← GlobalTheory.CompanionTheory.Ar.LieTangent.spec_comp]
     rfl
   let v' : epsAt (R := X'.presheaf.stalk (centre z)) (X'.fromSpecStalk (centre z)) ⟶ G' :=
     Over.homMk (Spec.map (CommRingCat.ofHom (dualMap (e.hom.stalkMap (centre z)).hom)) ≫ v.left ≫ φ.inv) (by
@@ -342,7 +334,7 @@ theorem valAt_up (e : X' ≅ X) {G : Over X} [GrpObj G] {G' : Over X'} [GrpObj G
         Spec.map (e.hom.stalkMap (centre z)) ≫ Spec.map (CommRingCat.ofHom (TrivSqZeroExt.fstHom
         (X.presheaf.stalk (e.hom (centre z))) (X.presheaf.stalk (e.hom (centre z)))
         (X.presheaf.stalk (e.hom (centre z)))).toRingHom) := by
-      rw [specMap_comp, fstHom_dualMap, ← specMap_comp]
+      rw [GlobalTheory.CompanionTheory.Ar.LieTangent.spec_comp, GlobalTheory.CompanionTheory.Ar.SqAdd.fst_comp_dualMap, ← GlobalTheory.CompanionTheory.Ar.LieTangent.spec_comp]
       rfl
     show Spec.map (CommRingCat.ofHom (TrivSqZeroExt.fstHom (X'.presheaf.stalk (centre z))
         (X'.presheaf.stalk (centre z)) (X'.presheaf.stalk (centre z))).toRingHom) ≫ v'.left =
@@ -355,14 +347,14 @@ theorem valAt_up (e : X' ≅ X) {G : Over X} [GrpObj G] {G' : Over X'} [GrpObj G
       have hg : (genMap ξ' ⟨centre z, h'⟩).comp (e.hom.stalkMap (centre z)).hom =
           genMap (ξ' ≫ e.hom) ⟨e.hom (centre z), h⟩ :=
         RingHom.ext (genMap_stalkMap_eq ξ' e.hom ⟨centre z, h'⟩ h)
-      rw [specMap_comp, ← dualMap_comp, hg]
+      rw [GlobalTheory.CompanionTheory.Ar.LieTangent.spec_comp, ← dualMap_comp, hg]
     show (M'.pt b).left = Spec.map (CommRingCat.ofHom (dualMap (genMap ξ' ⟨centre z, h'⟩))) ≫ v'.left
     rw [(Iso.eq_comp_inv φ).2 (hpt b), hve, hv', reassoc_of% k3]
     exact Category.assoc _ _ _
   · have k4 : Spec.map (CommRingCat.ofHom (dualMap (Scheme.stalkClosedPointTo z).hom)) ≫
         Spec.map (CommRingCat.ofHom (dualMap (e.hom.stalkMap (centre z)).hom)) =
         Spec.map (CommRingCat.ofHom (dualMap (Scheme.stalkClosedPointTo (z ≫ e.hom)).hom)) := by
-      refine (specMap_comp (dualMap (e.hom.stalkMap (centre z)).hom) (dualMap (Scheme.stalkClosedPointTo z).hom)).trans ?_
+      refine (GlobalTheory.CompanionTheory.Ar.LieTangent.spec_comp (dualMap (e.hom.stalkMap (centre z)).hom) (dualMap (Scheme.stalkClosedPointTo z).hom)).trans ?_
       rw [Scheme.stalkClosedPointTo_comp]
       exact congrArg (fun f => Spec.map (CommRingCat.ofHom f)) (dualMap_comp _ _).symm
     rw [(Iso.eq_comp_inv φ).2 hww, hvw, hv', ← k4]
@@ -518,12 +510,6 @@ theorem gr_one {S S' T : Scheme.{0}} {G : Over S} {G' : Over S'} [GrpObj G] [Grp
   subst e
   exact congrArg (fun z => z.left) (map_one (pushHom h (Over.mk a)))
 
-theorem gr_dual {R R' : Type} [CommRing R] [CommRing R'] (s : R →+* R') :
-    spMap (dualMap s) ≫ spMap (algebraMap R (DualNumber R)) = spMap (algebraMap R' (DualNumber R')) ≫ spMap s := by
-  rw [← Spec.map_comp, ← Spec.map_comp]
-  congr 1
-  ext a <;> simp [dualMap, TrivSqZeroExt.algebraMap_eq_inl]
-
 theorem gr_core {X : Scheme.{0}} {Ω R : Type} [Field Ω] [CommRing R] {x : Sp R ⟶ X} (hx : Mono x)
     (z : Sp ℂ ⟶ X) (s : R →+* ℂ) (k : R →+* Ω) (hz : spMap s ≫ x = z)
     {G G' : Over X} [GrpObj G] [GrpObj G'] {Gp : Over (Sp R)} [GrpObj Gp]
@@ -541,7 +527,7 @@ theorem gr_core {X : Scheme.{0}} {Ω R : Type} [Field Ω] [CommRing R] {x : Sp R
     ⟨h.1.lift a.left _ (Over.w a), h.1.lift_fst _ _ _, h.1.lift_snd _ _ _⟩
   have w0 : (spMap (dualMap s) ≫ l) ≫ Gp.hom = spMap (algebraMap ℂ (DualNumber ℂ)) ≫ spMap s := by
     rw [Category.assoc, hl2]
-    exact gr_dual _
+    exact PositivityTheory.UnitarySelfGeneration.Isomove.mv_dual_alg _
   have w1 : (l ≫ φ') ≫ G'.hom = spMap (algebraMap R (DualNumber R)) ≫ x := by
     rw [Category.assoc, h'.1.w, ← Category.assoc, hl2]
   have w2 : ((spMap (dualMap s) ≫ l) ≫ φ') ≫ G'.hom = spMap (algebraMap ℂ (DualNumber ℂ)) ≫ z := by

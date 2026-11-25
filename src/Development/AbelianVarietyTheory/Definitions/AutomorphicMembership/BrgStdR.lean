@@ -83,7 +83,7 @@ def BrgStdR (L : Formalism.IndefR.Links.LevCh X.toD7 (TupU I U)) (cX : CoefA X.t
     (fun t => PLift (mtildeKGSD (Pr := X.B.primes px) X.B.wts I.Ch I.sel t.1).Ok ×
       (mtildeKGSD (Pr := X.B.primes px) X.B.wts I.Ch I.sel t.1).EqFun)
     (fun _ φ => φ.2.1)
-    fun t φ => jR t ((by with_unfolding_all exact ((mtildeKGSD (Pr := X.B.primes px) X.B.wts I.Ch I.sel t.1).res φ.1.down φ.2 :)))
+    fun t φ => jR t (((mtildeKGSD (Pr := X.B.primes px) X.B.wts I.Ch I.sel t.1).res φ.1.down φ.2))
 
 
 
@@ -96,7 +96,7 @@ def BrgStdV (L : Formalism.IndefR.Links.LevCh X.toD7 (TupU I U)) (i : Fin X.toD7
     (fun t => PLift (mtKGSD (Pr := X.B.primes px) X.B.wts I.Ch I.sel t.1 ((i : ℕ) + 1)).Ok ×
       (mtKGSD (Pr := X.B.primes px) X.B.wts I.Ch I.sel t.1 ((i : ℕ) + 1)).EqFun)
     (fun _ φ => φ.2.1)
-    fun t φ => jL t ((by with_unfolding_all exact ((mtKGSD (Pr := X.B.primes px) X.B.wts I.Ch I.sel t.1 ((i : ℕ) + 1)).res φ.1.down φ.2 :)))
+    fun t φ => jL t (((mtKGSD (Pr := X.B.primes px) X.B.wts I.Ch I.sel t.1 ((i : ℕ) + 1)).res φ.1.down φ.2))
 
 def BrgStd {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks X.toD7.what₂.LL] (R : RealDat X.toD7 (famR X I hX U Xg tr).A Ks) : Prop :=
   BrgStdR X I hX U Xg tr R.toLevCh R.cX (fun t φ => R.B.jR t φ) ∧

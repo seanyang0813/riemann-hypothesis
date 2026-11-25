@@ -1619,19 +1619,6 @@ namespace GlobalTheory.Honda.KurUnr
 
 variable {K : Type} [NormedField K] [IsUltrametricDist K]
 
-theorem norm_pow_sub_pow_le {y z : K} (hy : ‖y‖ ≤ 1) (hz : ‖z‖ ≤ 1) (i : ℕ) :
-    ‖y ^ i - z ^ i‖ ≤ ‖y - z‖ := by
-  first | exact _root_.GlobalTheory.NormEvalSubBound.norm_pow_sub_pow_le | exact @_root_.GlobalTheory.NormEvalSubBound.norm_pow_sub_pow_le | apply _root_.GlobalTheory.NormEvalSubBound.norm_pow_sub_pow_le <;> assumption
-
-theorem norm_eval_sub_eval_le (f : Polynomial K) (hf : ∀ n, ‖f.coeff n‖ ≤ 1) {y z : K}
-    (hy : ‖y‖ ≤ 1) (hz : ‖z‖ ≤ 1) : ‖f.eval y - f.eval z‖ ≤ ‖y - z‖ := by
-  rw [Polynomial.eval_eq_sum_range y, Polynomial.eval_eq_sum_range z, ← Finset.sum_sub_distrib]
-  refine IsUltrametricDist.norm_sum_le_of_forall_le_of_nonneg (norm_nonneg _) fun i _ => ?_
-  rw [← mul_sub, norm_mul]
-  calc ‖f.coeff i‖ * ‖y ^ i - z ^ i‖ ≤ 1 * ‖y - z‖ :=
-        mul_le_mul (hf i) (norm_pow_sub_pow_le hy hz i) (norm_nonneg _) zero_le_one
-    _ = ‖y - z‖ := one_mul _
-
 theorem norm_root_le_one (f : Polynomial K) (hm : f.Monic) (hf : ∀ n, ‖f.coeff n‖ ≤ 1) {z : K}
     (hz : f.eval z = 0) : ‖z‖ ≤ 1 := by
   apply GlobalTheory.NormEvalSubBound.norm_le_one_of_root <;> assumption
@@ -1711,7 +1698,7 @@ theorem GlobalTheory.Honda.kur_resAlg_unr : ∀ (l : ℕ) [Fact l.Prime], 2 < l 
     exact (Polynomial.eval₂_hom (MaximalUnramifiedExtension l).subtype ⟨y, hyK⟩).symm
   change ‖((f.eval ⟨y, hyK⟩ : MaximalUnramifiedExtension l) : ℂ_[l])‖ < 1
   rw [hev, ← sub_zero (g.eval y), ← hz]
-  calc ‖g.eval y - g.eval z‖ ≤ ‖y - z‖ := norm_eval_sub_eval_le g hgc hy1 hz1
+  calc ‖g.eval y - g.eval z‖ ≤ ‖y - z‖ := GlobalTheory.NormEvalSubBound.norm_eval_sub_le g hgc hy1 hz1
     _ = ‖z - y‖ := norm_sub_rev _ _
     _ < 1 := hzy
 end -- clump:auto

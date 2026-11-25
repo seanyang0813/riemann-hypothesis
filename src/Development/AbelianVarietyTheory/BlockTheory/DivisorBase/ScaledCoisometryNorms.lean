@@ -102,10 +102,4 @@ theorem brSq_eq {ι : Type} [Fintype ι] {N n : ℕ} (hN : N = n + 1) (lam : ι 
   | empty => simp
   | cons a S ha ih => rw [Finset.prod_cons, Finset.sum_cons, zpow_add₀ hT.ne', ih]
 
-def wtOneZero : DomWeight 2 := ⟨![1, 0], by
-  intro i j hij
-  fin_cases i <;> fin_cases j <;> simp_all⟩
-
-def wtZero : DomWeight 1 := ⟨fun _ => 0, fun _ _ _ => le_rfl⟩
-
 end GlobalTheory.IndefiniteRowSideFullHecke.ScaledCoisometryNorms

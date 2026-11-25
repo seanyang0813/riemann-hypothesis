@@ -16,17 +16,6 @@ section Adic
 variable {O : Type} [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [TopologicalSpace O]
   [IsTopologicalRing O]
 
-theorem mem_pow_of_mul {c : O} (hc : c ≠ 0) : ∃ k : ℕ, ∀ (n : ℕ) (y : O),
-    c * y ∈ (IsLocalRing.maximalIdeal O) ^ (n + k) → y ∈ (IsLocalRing.maximalIdeal O) ^ n := by
-  obtain ⟨ϖ, hϖ⟩ := IsDiscreteValuationRing.exists_irreducible O
-  obtain ⟨k, u, rfl⟩ := IsDiscreteValuationRing.eq_unit_mul_pow_irreducible hc hϖ
-  refine ⟨k, fun n y hy => ?_⟩
-  have hm := (IsDiscreteValuationRing.irreducible_iff_uniformizer ϖ).1 hϖ
-  rw [hm, Ideal.span_singleton_pow] at hy ⊢
-  rw [mul_assoc, Ideal.unit_mul_mem_iff_mem _ u.isUnit, Ideal.mem_span_singleton, pow_add, mul_comm (ϖ ^ n)] at hy
-  rw [Ideal.mem_span_singleton]
-  exact (mul_dvd_mul_iff_left (pow_ne_zero k hϖ.ne_zero)).1 hy
-
 theorem continuous_of_mul {X : Type} [TopologicalSpace X] (hadic : IsAdic (IsLocalRing.maximalIdeal O))
     {c : O} (hc : c ≠ 0) {f : X → O} (hf : Continuous fun x => c * f x) : Continuous f := by
   apply GlobalTheory.BlockJumpsCompare.continuous_of_mul <;> assumption

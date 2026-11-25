@@ -756,8 +756,6 @@ open scoped TensorProduct
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
-theorem _root_.GlobalTheory.T.conj_localTwistedLFactor_ratio_inert_eq_zetaSum : ∀ (D : D7) (B : Fam D.host.E) (m : HeightOneSpectrum (𝓞 D.host.E) → ℂˣ) (v : HeightOneSpectrum (𝓞 D.host.F)) (w : HeightOneSpectrum (𝓞 D.host.E)), (∀ u : HeightOneSpectrum (𝓞 D.host.E), u.under (𝓞 D.host.F) = v ↔ u = w) → Ideal.absNorm w.asIdeal = Ideal.absNorm v.asIdeal ^ 2 → (B w).map star = B w → (m w : ℂ) = (-1) ^ D.R.nV → quadSign D v = -1 → starRingEnd ℂ (LvTw B m v ((1 + (D.R.t : ℂ)) / 2) / (dLoc D v : ℂ)) = eulerFac (B w) (((star (m w) : ℂˣ) : ℂ) * ((qV D.host.F v : ℂ) ^ (D.R.t + 1))⁻¹) * ∏ j ∈ Finset.range D.R.r, (1 - (-(qV D.host.F v : ℂ)) ^ j * (((star (m w) : ℂˣ) : ℂ) * ((qV D.host.F v : ℂ) ^ (D.R.r + D.R.t))⁻¹)) := by
-  first | exact @GlobalTheory.FinZeta.conj_LvTw_div_dLoc_inert
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ConjLocalTwistedLFactorRatioInertEqZetaSumStatement =====
@@ -858,8 +856,6 @@ open scoped TensorProduct
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
-theorem _root_.GlobalTheory.T.conj_localTwistedLFactor_ratio_split_eq_zetaSum : ∀ (D : D7) (B : Fam D.host.E) (m : HeightOneSpectrum (𝓞 D.host.E) → ℂˣ) (v : HeightOneSpectrum (𝓞 D.host.F)) (w w' : HeightOneSpectrum (𝓞 D.host.E)), w ≠ w' → (∀ u : HeightOneSpectrum (𝓞 D.host.E), u.under (𝓞 D.host.F) = v ↔ u = w ∨ u = w') → Ideal.absNorm w.asIdeal = Ideal.absNorm v.asIdeal → Ideal.absNorm w'.asIdeal = Ideal.absNorm v.asIdeal → B w' = (B w).map (·⁻¹) → (B w).map star = (B w).map (·⁻¹) → m w * m w' = 1 → ‖(m w : ℂ)‖ = 1 → quadSign D v = 1 → starRingEnd ℂ (LvTw B m v ((1 + (D.R.t : ℂ)) / 2) / (dLoc D v : ℂ)) = eulerFac ((B w).map (star (m w) * ·)) (npow w (-((1 + (D.R.t : ℂ)) / 2))) * eulerFac ((B w).map fun β => (star (m w) * β)⁻¹) (npow w (-((1 + (D.R.t : ℂ)) / 2))) * ∏ i ∈ Finset.Ioc D.R.t (D.R.r + D.R.t), (1 - ((qV D.host.E w : ℂ) ^ i)⁻¹) := by
-  first | exact @GlobalTheory.LocZetaSplit.conj_LvTw_div_dLoc
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ConjLocalTwistedLFactorRatioSplitEqZetaSumStatement =====
@@ -935,8 +931,6 @@ open scoped TensorProduct
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
-theorem _root_.GlobalTheory.T.unramifiedQuadraticCharSign_split_eq_one_inert_eq_neg : ∀ (D : D7) (v : HeightOneSpectrum (𝓞 D.host.F)), (∀ w w' : HeightOneSpectrum (𝓞 D.host.E), w ≠ w' → (∀ u : HeightOneSpectrum (𝓞 D.host.E), u.under (𝓞 D.host.F) = v ↔ u = w ∨ u = w') → quadSign D v = 1) ∧ (∀ w : HeightOneSpectrum (𝓞 D.host.E), (∀ u : HeightOneSpectrum (𝓞 D.host.E), u.under (𝓞 D.host.F) = v ↔ u = w) → quadSign D v = -1) := by
-  first | exact @GlobalTheory.QuadSignLocal.quadSign_split_inert
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.UnramifiedQuadraticCharSignSplitEqOneInertEqNegStatement =====
@@ -996,33 +990,6 @@ theorem kerU_conj {L : Type} [Field L] [Valued L (WithZero (Multiplicative ℤ))
   show starRingEnd ℂ (φ (k₁ * t * k₂)) = _
   rw [hφ d t ht k₁ h₁ k₂ h₂]
   simp [map_zpow₀]
-
-theorem quadSign_eq (D : D7) (v : HeightOneSpectrum (𝓞 D.host.F)) :
-    (∀ w w' : HeightOneSpectrum (𝓞 D.host.E), w ≠ w' → (∀ u, u.under (𝓞 D.host.F) = v ↔ u = w ∨ u = w') →
-      quadSign D v = 1) ∧
-    (∀ w : HeightOneSpectrum (𝓞 D.host.E), (∀ u, u.under (𝓞 D.host.F) = v ↔ u = w) → quadSign D v = -1) :=
-  GlobalTheory.T.unramifiedQuadraticCharSign_split_eq_one_inert_eq_neg D v
-
-theorem value_split (D : D7) (B : Fam D.host.E) (m : HeightOneSpectrum (𝓞 D.host.E) → ℂˣ)
-    (v : HeightOneSpectrum (𝓞 D.host.F)) (w w' : HeightOneSpectrum (𝓞 D.host.E)) (hne : w ≠ w')
-    (hall : ∀ u, u.under (𝓞 D.host.F) = v ↔ u = w ∨ u = w') (hN : Ideal.absNorm w.asIdeal = Ideal.absNorm v.asIdeal)
-    (hN' : Ideal.absNorm w'.asIdeal = Ideal.absNorm v.asIdeal) (hB' : B w' = (B w).map (·⁻¹))
-    (hs : (B w).map star = (B w).map (·⁻¹)) (hm : m w * m w' = 1) (hm1 : ‖(m w : ℂ)‖ = 1) (hq : quadSign D v = 1) :
-    starRingEnd ℂ (LvTw B m v ((1 + (D.R.t : ℂ)) / 2) / (dLoc D v : ℂ)) =
-      eulerFac ((B w).map (star (m w) * ·)) (npow w (-((1 + (D.R.t : ℂ)) / 2))) *
-        eulerFac ((B w).map fun β => (star (m w) * β)⁻¹) (npow w (-((1 + (D.R.t : ℂ)) / 2))) *
-        ∏ i ∈ Finset.Ioc D.R.t (D.R.r + D.R.t), (1 - ((qV D.host.E w : ℂ) ^ i)⁻¹) :=
-  GlobalTheory.T.conj_localTwistedLFactor_ratio_split_eq_zetaSum D B m v w w' hne hall hN hN' hB' hs hm hm1 hq
-
-theorem value_inert (D : D7) (B : Fam D.host.E) (m : HeightOneSpectrum (𝓞 D.host.E) → ℂˣ)
-    (v : HeightOneSpectrum (𝓞 D.host.F)) (w : HeightOneSpectrum (𝓞 D.host.E))
-    (hall : ∀ u, u.under (𝓞 D.host.F) = v ↔ u = w) (hN : Ideal.absNorm w.asIdeal = Ideal.absNorm v.asIdeal ^ 2)
-    (hs : (B w).map star = B w) (hm : (m w : ℂ) = (-1) ^ D.R.nV) (hq : quadSign D v = -1) :
-    starRingEnd ℂ (LvTw B m v ((1 + (D.R.t : ℂ)) / 2) / (dLoc D v : ℂ)) =
-      eulerFac (B w) (((star (m w) : ℂˣ) : ℂ) * ((qV D.host.F v : ℂ) ^ (D.R.t + 1))⁻¹) *
-        ∏ j ∈ Finset.range D.R.r,
-          (1 - (-(qV D.host.F v : ℂ)) ^ j * (((star (m w) : ℂˣ) : ℂ) * ((qV D.host.F v : ℂ) ^ (D.R.r + D.R.t))⁻¹)) :=
-  GlobalTheory.T.conj_localTwistedLFactor_ratio_inert_eq_zetaSum D B m v w hall hN hs hm hq
 
 
 

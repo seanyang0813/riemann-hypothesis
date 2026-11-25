@@ -107,18 +107,6 @@ structure TjCorr {N : ℕ} (F : RepFam b N) (r : ℤ) (w : Ideal (𝓞 D.F)) (j 
   isog : IsPIsog c o o' ψ
   tj : IsTj r w j o o' ψ
 
-  wPrime : w.IsPrime
-
-  uLe : uIdeal D r ≤ w
-
-  pReg : ∀ (U : Y.Opens) (f : Γ(Y, U)), (p : Γ(Y, U)) * f = 0 → f = 0
-
-  sFin : IsFinite s
-
-  tFin : IsFinite t
-
-  sSurj : Surjective s
-
 theorem KilledBy.one {N : ℕ} {s : S ⟶ Sp R} (o : Obj b N s) (v : Ideal (𝓞 D.F)) (T : Over S) :
     KilledBy o v (1 : T ⟶ o.A) := fun a _ => by
   haveI := o.act.hom (algebraMap (𝓞 D.F) D.O a)
@@ -147,12 +135,6 @@ theorem pReg_of_flat {Y : Scheme.{0}} (s : Y ⟶ Sp R) [Flat s] (hR : ∀ a : R,
     refine hreg ?_
     simp only [Algebra.smul_def, map_natCast, map_zero, mul_zero]
     rw [← map_natCast ρ, ← map_mul, hf, map_zero]
-
-theorem pReg_of_isUnit {Y : Scheme.{0}} (s : Y ⟶ Sp R) (hR : IsUnit (p : R))
-    (U : Y.Opens) (f : Γ(Y, U)) (hf : (p : Γ(Y, U)) * f = 0) : f = 0 := by
-  have := hR.map (((Scheme.ΓSpecIso (CommRingCat.of R)).inv ≫ s.appLE ⊤ U le_top).hom)
-  rw [map_natCast] at this
-  exact this.mul_right_eq_zero.1 hf
 
 def IsWOrd {N : ℕ} {s : S ⟶ Sp R} (o : Obj b N s) (w : Ideal (𝓞 D.F)) {k : Type} [Field k] [IsAlgClosed k]
     (x : Sp k ⟶ S) : Prop :=

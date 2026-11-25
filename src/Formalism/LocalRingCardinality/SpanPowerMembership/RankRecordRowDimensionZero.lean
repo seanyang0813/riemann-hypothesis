@@ -92,23 +92,6 @@ def hostSpacesOfNorm (T : ℕ) [hT : Fact T.Prime] (pz : H.E) (hpz : pz * H.conj
     (by rw [star_eq_conj H pz, mul_comm]; exact hpz)
     (exists_adelic_neg_one H (cmData H).sig (fun x => star_eq_conj H x))
 
-variable (hc : Tau2 R → HCParam R) (Del : ℚ) (hDel : 0 < Del)
-  (hgap : ∀ (τ : Tau2 R) (l : ℕ) (h : l + 1 < R.k - 1),
-    (hc τ).v ⟨l, by omega⟩ - (hc τ).v ⟨l + 1, h⟩ = 4 * Del)
-  (hlet : ∀ (τ : Tau2 R) (l : ℕ) (h : l < R.k - 2),
-    (hc τ).u ⟨l + 1, by omega⟩ = (hc τ).v ⟨l, by omega⟩ - 1 / 2)
-  (cdS : ∀ (n : ℕ) (_ : Fin n → Bool), NNReal) (hcdS : ∀ n ε, 0 < cdS n ε)
-  (dsg : Tau2 R → ℝ) (hdsg : ∀ ρ, 0 < dsg ρ) (etaF : ℝ)
-
-variable (T : ℕ) [hT : Fact T.Prime] (Ts : ℝ) (hTs : 0 < Ts) (Gam : ℝ) (hG : 1 < Gam)
-  (hw1 : Ts ≤ T) (hw2 : (T : ℝ) ≤ (1 + 1 / ((R.f : ℝ) * R.k)) * Ts)
-  (hg : ∀ k, (placesOver H.E (H.g k)).ncard = Module.finrank ℚ H.E) (ht : THyp H)
-  (hlev : T ∈ H.levelPrimes) (hpde : T ≠ H.pde ∧ T ≠ H.pde')
-  (pz : 𝓞 H.E) (hK : (pz : H.E) ∈ H.K) (hpz : (pz : H.E) * H.conj (pz : H.E) = (T : H.E))
-  (hcong : (pz - 1) ∈ Ideal.span {((H.QS * H.q * H.d * (H.g 0 * H.g 1) ^ 2 : ℕ) : 𝓞 H.E)})
-  (G : LocalGap H)
-
-
 end Record
 
 end Formalism.BasicNotions.Examples₂

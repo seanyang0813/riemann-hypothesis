@@ -138,17 +138,17 @@ theorem iSup_letter (hc : Nat.card (K₀ →ₐ[Qp] LL) = finrank Qp K₀) (hV :
 
 end General
 
-theorem phi_letters : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; ∀ T : Lt K LL, IsCrys ((D.loc l).PD K) T.ρ → (∀ i : Let K, Set.BijOn (φVB ((D.loc l).PD K) (LL := ↥LL.1) (V := T.V)) (Di (HW l) h T (i - 1)) (Di (HW l) h T i)) ∧ (⨆ i : Let K, Di (HW l) h T i) = Dcris ((D.loc l).PD K) T.ρ ∧ iSupIndep (fun i : Let K => Di (HW l) h T i) ∧ Function.Injective (ιV ((D.loc l).PD K) (LL := ↥LL.1) (V := T.V)) := by
-  intro D HW l _ K s LL h W T hV
-  haveI := GlobalTheory.RegularRing.isDomain_of_tied (D.locT l) K
+theorem phi_letters : ∀ (loc : LocTheory) (locA : ∀ (l : ℕ) [Fact l.Prime], LocAinf l (loc l)) (locT : ∀ (l : ℕ) [Fact l.Prime], Formalism.BasicNotions.LocTied l (loc l) (locA l)) (HW : HWOf loc) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; ∀ T : Lt K LL, IsCrys ((loc l).PD K) T.ρ → (∀ i : Let K, Set.BijOn (φVB ((loc l).PD K) (LL := ↥LL.1) (V := T.V)) (Di (HW l) h T (i - 1)) (Di (HW l) h T i)) ∧ (⨆ i : Let K, Di (HW l) h T i) = Dcris ((loc l).PD K) T.ρ ∧ iSupIndep (fun i : Let K => Di (HW l) h T i) ∧ Function.Injective (ιV ((loc l).PD K) (LL := ↥LL.1) (V := T.V)) := by
+  intro loc locA locT HW l _ K s LL h W T hV
+  haveI := GlobalTheory.RegularRing.isDomain_of_tied (locT l) K
   have hc : Nat.card (↥(K0 K) →ₐ[ℚ_[l]] ↥LL.1) = finrank ℚ_[l] ↥(K0 K) := by
     rw [← Nat.card_eq_of_bijective _ W.emb_bij, Nat.card_zmod]
   refine ⟨fun i => phi_bijOn _ T.ρ hc hV _ _ fun c => ?_, ?_,
-    (iSupIndep_letter ((D.loc l).PD K) T.ρ).comp W.emb_bij.1, iota_injective _⟩
+    (iSupIndep_letter ((loc l).PD K) T.ρ).comp W.emb_bij.1, iota_injective _⟩
   · have := AlgHom.congr_fun (W.emb_σ (i - 1)) c
     rw [sub_add_cancel] at this
     exact this.symm
   · rw [← iSup_letter _ T.ρ hc hV]
-    exact W.emb_bij.2.iSup_comp (fun τ => DcrisL ((D.loc l).PD K) T.ρ τ)
+    exact W.emb_bij.2.iSup_comp (fun τ => DcrisL ((loc l).PD K) T.ρ τ)
 
 end GlobalTheory.NL.PhiD

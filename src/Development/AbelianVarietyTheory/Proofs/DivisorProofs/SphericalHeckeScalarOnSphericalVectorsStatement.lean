@@ -46,7 +46,6 @@ open Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Lev Formalism.Inde
 open scoped TensorProduct InnerProductSpace
 open GlobalTheory.Hk3 (Core Good IsSF SchurAll TwoSided FixAll EEc Wcc eH IsLab HoweUnram SphOp hyp)
 open GlobalTheory.StdFrame (StdPsi)
-attribute [local instance] Formalism.IndefR.principalLevelFrame.instCMHostI
 
 theorem _root_.GlobalTheory.T.sphericalHecke_scalar_on_spherical_vectors : ∀ {D : D7} {V : HSp D} {n : ℕ} (hF : D.host.F = maximalRealSubfield D.host.E) (Q : principalLevelFrame.RowPsi V n), StdPsi hF Q → ∀ (π : Formalism.L2.NG.FinTyp D.host.E n) Pr d B, SphOp V Pr d B → ∃ a : ℂ, ∀ x ∈ π.S, (∀ κ, Q.ψ κ ∈ hyp V Pr → Formalism.L2.NG.rt D.host.E n κ x = x) → principalLevelFrame.Hecke₃ Q B x = a • x := by
   first | exact @GlobalTheory.SphScalar.spherical_scalar

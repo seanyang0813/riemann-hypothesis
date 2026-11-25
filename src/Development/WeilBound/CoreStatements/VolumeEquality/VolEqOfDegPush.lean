@@ -890,14 +890,11 @@ namespace Moeb
 
 variable {Ψ : Type} [Fintype Ψ] {j j' n : ℕ}
 
-theorem sgI_sq : sgI j j' * sgI j j' = 1 := by
-  simp [sgI, fromBlocks_multiply]
-
 def sinv (u : Matrix (Sg j j') (Sg j j') ℂ) : Matrix (Sg j j') (Sg j j') ℂ := sgI j j' * uᴴ * sgI j j'
 
 theorem sinv_mul {u : Matrix (Sg j j') (Sg j j') ℂ} (h : IsSgU u) : sinv u * u = 1 := by
   unfold IsSgU at h
-  rw [sinv, Matrix.mul_assoc, Matrix.mul_assoc, ← Matrix.mul_assoc uᴴ, h, sgI_sq]
+  rw [sinv, Matrix.mul_assoc, Matrix.mul_assoc, ← Matrix.mul_assoc uᴴ, h, GlobalTheory.CompanionTheory.Ar.Cusp.Dict.Stab.sgI_mul_self]
 
 theorem mul_sinv {u : Matrix (Sg j j') (Sg j j') ℂ} (h : IsSgU u) : u * sinv u = 1 :=
   mul_eq_one_comm.1 (sinv_mul h)

@@ -189,8 +189,6 @@ open GlobalTheory.IndefiniteRowSideFullHecke.ModerateGrowthSchwartz (schwartzA)
 open GlobalTheory.StdUnn PositivityTheory.GramSchwartzFunctions PositivityTheory.GramSchwartzFunctions.BC PositivityTheory.PfSWUS PositivityTheory.Rg.Rsw PositivityTheory.Rg.Rsw.L
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
-theorem _root_.GlobalTheory.T.integrable_schwartz_restriction_columns : ∀ {D : D7} {n r t : ℕ} {θ : InfFam D} (hθ : IsInfFam θ) {a : ℕ} (hn : r + t = n) (μt : Measure (Mx D a t)) [μt.IsAddHaarMeasure] (Φ : schwartzA θ a n) (x : Mx D a r), Integrable (fun v => Φ.1 (jn hn x v)) μt := by
-  first | exact @GlobalTheory.CompanionTheory.ColSlice.integrable_slice
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.IntegrableSchwartzRestrictionColumnsStatement =====
@@ -691,9 +689,6 @@ theorem character_quadratic_form_identity (V : HSp D) {ψ : AddChar (AF D.host.F
   congr 1
   simp only [halfTr, trA, map_sub]
   ring
-
-theorem integrable_schwartz_slice {θ : InfFam D} (hθ : IsInfFam θ) {a : ℕ} (hn : r + t = n) (μt : Measure (Mx D a t)) [μt.IsAddHaarMeasure]
-    (Φ : schwartzA θ a n) (x : Mx D a r) : Integrable (fun v => Φ.1 (jn hn x v)) μt := GlobalTheory.T.integrable_schwartz_restriction_columns hθ hn μt Φ x
 
 theorem fub {X Y : Type} [MeasurableSpace X] [MeasurableSpace Y] {μ : Measure Y} {ν : Measure X} [SFinite μ] [SFinite ν]
     {P : X → ℂ} {e : Y → X → ℂ} {O : Y → ℂ} (hP : Integrable P ν) (hO : Integrable O μ)

@@ -1144,11 +1144,11 @@ theorem cenRead_state {K : Ctx} {B : Base} {f : Fr B.toPre} {T : TwDat B} {w : C
   have hz := Bare.coeff_cenPull (x.m.z.R.eG.trans x.m.z.cG) z
   have ha' : ∀ g, (w.st x.o.Z).toD7.what₂.embLL (a.coeff g) = (z' : MonoidAlgebra ℂ (Gc B w.px)).coeff g :=
     fun g => (ha g).trans (hz g).symm
-  have h1 := hc.mt (x.r.Y.tup t) ((i : ℕ) + 1) ((by with_unfolding_all exact (z :))) z' ((by with_unfolding_all exact (hz :)))
-    ((P.q.p.tL (x.r.Y.tup t) ((i : ℕ) + 1)).j ((by with_unfolding_all exact ((x.r.Y.eMt i t v) :))))
+  have h1 := hc.mt (x.r.Y.tup t) ((i : ℕ) + 1) (z) z' (hz)
+    ((P.q.p.tL (x.r.Y.tup t) ((i : ℕ) + 1)).j (x.r.Y.eMt i t v))
   have h2 := cen_heq (fun a => P.q.p.mL a ((i : ℕ) + 1)) (fun a => P.q.p.sL a ((i : ℕ) + 1)) (fun a => P.q.p.tL a ((i : ℕ) + 1))
-    (congrFun x.r.tup t) (x.m.t.hL i t) (fun y => (by with_unfolding_all exact ((x.r.Y.eMt i t ((y))) : _))) ((by with_unfolding_all exact ((x.r.eMt i t) :))) z' ((by with_unfolding_all exact (a :))) ((by with_unfolding_all exact (ha' :))) ((by with_unfolding_all exact (v :)))
-  exact (by with_unfolding_all exact ((h1.trans h2) :))
+    (congrFun x.r.tup t) (x.m.t.hL i t) (fun y => x.r.Y.eMt i t ((y))) (x.r.eMt i t) z' (a) (ha') (v)
+  exact h1.trans h2
 
 
 

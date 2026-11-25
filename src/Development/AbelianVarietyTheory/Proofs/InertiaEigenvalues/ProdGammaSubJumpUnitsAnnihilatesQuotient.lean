@@ -367,9 +367,9 @@ theorem annihilate : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : 
   have hQ : S (Pf Fs x) := hSA Fs x hx'
   refine (_root_.GlobalTheory.NL.WachModulePoleQuotient.mem_N_iff_expansion D HW F Cm l K s LL h T hT y (Pf Fs x) hQ).2 ?_
   intro i ζ hζ
-  obtain ⟨τ, hτ⟩ := (GlobalTheory.NL.Points.points D HW l K s LL h).1 i ζ hζ
+  obtain ⟨τ, hτ⟩ := (GlobalTheory.NL.Points.points D.loc HW l K s LL h).1 i ζ hζ
   obtain ⟨w, hw0, hw⟩ := hgam i ζ hζ
-  have hlat := GlobalTheory.NL.LatFil.lat_eq_fil D HW F Cm l K s LL h T hT i ζ τ hτ
+  have hlat := GlobalTheory.NL.LatFil.lat_eq_fil D.loc D.locA D.locT HW F Cm l K s LL h T hT i ζ τ hτ
   let c : ℤ → (↥(OL LL))ˣ := fun k => uU W ^ (k - (y : ℤ))
   have hu0 : algebraMap ↥(OL LL) ↥LL.1 (W.χΓ W.gam : ↥(OL LL)) ≠ 0 :=
     ((W.χΓ W.gam).isUnit.map (algebraMap ↥(OL LL) ↥LL.1)).ne_zero

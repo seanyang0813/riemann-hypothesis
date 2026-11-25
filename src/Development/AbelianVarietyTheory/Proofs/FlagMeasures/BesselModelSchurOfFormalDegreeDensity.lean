@@ -70,13 +70,6 @@ open scoped InnerProductSpace ENNReal
 
 namespace GlobalTheory.AdDens
 
-theorem det_adjoint' {V : Type} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
-    (A : V →ₗ[ℝ] V) : LinearMap.det (LinearMap.adjoint A) = LinearMap.det A := by
-  classical
-  let b := stdOrthonormalBasis ℝ V
-  rw [← LinearMap.det_toMatrix b.toBasis A, ← LinearMap.det_toMatrix b.toBasis (LinearMap.adjoint A),
-    LinearMap.toMatrix_adjoint b b A, Matrix.det_conjTranspose, star_trivial]
-
 theorem volume_image_eq {V W : Type} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
     [NormedAddCommGroup W] [InnerProductSpace ℝ W] [FiniteDimensional ℝ W]
     [MeasurableSpace V] [BorelSpace V] [MeasurableSpace W] [BorelSpace W]

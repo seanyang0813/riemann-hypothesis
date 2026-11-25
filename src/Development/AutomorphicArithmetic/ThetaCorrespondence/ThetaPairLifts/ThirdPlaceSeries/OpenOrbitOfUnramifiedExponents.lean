@@ -1127,7 +1127,7 @@ theorem loc_piece {L : Type} [Field L] [NumberField L] [IsCMField L] {n g : ℕ}
   subst h
   obtain ⟨i, Tm, hic, hi1, hinj, hmem, heq⟩ := hτ
   refine ⟨ii.trans i.symm, (GlobalTheory.splitCompletion_symm_continuous L s i hic hi1).comp hii, fun f hf hf0 => ?_⟩
-  obtain ⟨p, hp0, hpe⟩ := GlobalTheory.T.finiteType_vector_detected_localComponent_equivariant L n π s τ i Tm hic hi1 hinj hmem heq f hf hf0
+  obtain ⟨p, hp0, hpe⟩ := _root_.GlobalTheory.LocProj.main L n π s τ i Tm hic hi1 hinj hmem heq f hf hf0
   refine ⟨p, hp0, fun y x hx f' hf' => ?_⟩
   have e : ∀ Z : GL (Fin n) ℚ_[g], Matrix.GeneralLinearGroup.map i.toRingHom
       (Matrix.GeneralLinearGroup.map (ii.trans i.symm).toRingHom Z) = Matrix.GeneralLinearGroup.map ii.toRingHom Z := by

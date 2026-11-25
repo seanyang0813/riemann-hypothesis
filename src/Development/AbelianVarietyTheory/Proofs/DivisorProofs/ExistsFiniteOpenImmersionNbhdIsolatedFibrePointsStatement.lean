@@ -979,23 +979,6 @@ theorem isFinite_toBase (X : Scheme.{0}) (F' : X.AffineZariskiSiteᵒᵖ ⥤ Com
     toBase_of_Spec X F' α' h (@LocallyOfFiniteType : MorphismProperty Scheme.{0}) fun V ↦
       (HasRingHomProperty.Spec_iff (P := @LocallyOfFiniteType)).mpr (hfin V).finiteType⟩
 
-theorem isIso_restrict_basicOpen (X : Scheme.{0}) (F F' : X.AffineZariskiSiteᵒᵖ ⥤ CommRingCat)
-    (α : (toOpensFunctor X).op ⋙ X.presheaf ⟶ F) (α' : (toOpensFunctor X).op ⋙ X.presheaf ⟶ F')
-    (hα : α.Coequifibered) (hα' : α'.Coequifibered) (ι : F' ⟶ F) (hι : α' ≫ ι = α)
-    (g : (relativeGluingData hα).glued ⟶ (relativeGluingData hα').glued)
-    (hg₁ : g ≫ (relativeGluingData hα').toBase = (relativeGluingData hα).toBase)
-    (hg₂ : ∀ V, (relativeGluingData hα).cover.f V ≫ g =
-      Spec.map (ι.app (Opposite.op V)) ≫ (relativeGluingData hα').cover.f V)
-    (V : X.AffineZariskiSite) (b : F'.obj (Opposite.op V))
-    (hb : Function.Bijective (Localization.awayMap (ι.app (Opposite.op V)).hom b))
-    (W : (relativeGluingData hα').glued.Opens)
-    (hW : (W : Set (relativeGluingData hα').glued) =
-      (relativeGluingData hα').cover.f V '' (PrimeSpectrum.basicOpen b : Set (PrimeSpectrum (F'.obj (Opposite.op V))))) :
-    IsIso (g ∣_ W) ∧ ((g ⁻¹ᵁ W : (relativeGluingData hα).glued.Opens) : Set (relativeGluingData hα).glued) =
-      (relativeGluingData hα).cover.f V '' (PrimeSpectrum.basicOpen ((ι.app (Opposite.op V)).hom b) :
-        Set (PrimeSpectrum (F.obj (Opposite.op V)))) :=
-  _root_.GlobalTheory.relSpec_map_isIso_over_basicOpen X F F' α α' hα hα' ι hι g hg₁ hg₂ V b hb W hW
-
 theorem exists_basicOpen_cover (U X : Scheme.{0}) (f : U ⟶ X) (h₁ : IsSeparated f)
     (h₂ : LocallyOfFiniteType f) (h₃ : QuasiCompact f) (h₄ : LocallyQuasiFinite f)
     (V : X.AffineZariskiSite) :
@@ -1006,13 +989,6 @@ theorem exists_basicOpen_cover (U X : Scheme.{0}) (f : U ⟶ X) (h₁ : IsSepara
         f.normalizationOpenCover.f V '' (PrimeSpectrum.basicOpen b :
           Set (PrimeSpectrum (f.normalizationDiagram.obj (Opposite.op V.1)))) :=
   _root_.GlobalTheory.normalization_basicOpen_cover U X f V
-
-theorem bijective_awayMap_of_range (R A B : Type) [CommRing R] [CommRing A] [CommRing B]
-    [Algebra R B] (C : Subalgebra R B) (φ : A →+* B) (hφ : Function.Injective φ)
-    (hC : ∀ x, x ∈ C ↔ ∃ y, φ y = x) (a : A) (b : B) (hab : φ a = b)
-    (h : ∀ hb : b ∈ C, Function.Bijective (Localization.awayMap C.val.toRingHom (⟨b, hb⟩ : C))) :
-    Function.Bijective (Localization.awayMap φ a) :=
-  _root_.GlobalTheory.awayMap_bijective_of_range_eq_subalgebra R A B C φ hφ hC a b hab h
 
 
 set_option backward.isDefEq.respectTransparency false in

@@ -27,7 +27,7 @@ public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.AdjointInter
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.DefiniteSideRealisationsCoefMapDifferRootOfUnityStatement
 public import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ConjFunBaseRoot
 public import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsConjugateFormsThetaLiftEqThetaSeries
-public import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.MovedFiniteDatumFourierExpansionChainless
+public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsCcIsEquivAtSerOfOneMapRowOfFive
 public import Development.AbelianVarietyTheory.Proofs.TwistedOperators.RatOfOneMapOverL
 public import Development.AbelianVarietyTheory.Definitions.AutomorphicMembership.SeriesRatSOf
 public import Development.AbelianVarietyTheory.Proofs.TwistedOperators.FactTypePrime
@@ -506,7 +506,7 @@ theorem fixBase_of_fix (hRF : GlobalTheory.NT.RayField) {T : CoreJ D} [Algebra T
     (hroots : ∀ (k : Fin 2) (z : ℂ), z ^ (D.host.g k * (D.host.g k - 1)) = 1 → z ∈ (embLL0 D).fieldRange)
     (j : Fin D.R.m) (τ : ℂ ≃+* ℂ) (hτ : ∀ z ∈ (embLL0 D).fieldRange, τ z = z) :
     FixBase T Rl.toRealDat j τ :=
-  GlobalTheory.T.fixes_untwistedTupleData_of_fixes_smallField D Γ Pl0 I0 T0 A3 hRF T Rl cG S YS F κ v₀ hT hcore hfw hti hgal hval hray hroots j τ hτ
+  _root_.GlobalTheory.FixBaseSmall.fixBase_of_fixes D Γ Pl0 I0 T0 A3 hRF T Rl cG S YS F κ v₀ hT hcore hfw hti hgal hval hray hroots j τ hτ
 
 theorem exists_extC {G : Type} [Group G] [Fintype G] {T1 : Type} {A : FamIn D.what₂.LL G Pl0 T1 D.R.m} {T : CoreJ D}
     [Algebra T.Q.c.F D.what₂.LL] {R : RealDat D A T.Q.c.F} {j : Fin D.R.m} {Tp : Type} {tup : Tp → T1}
@@ -525,7 +525,7 @@ theorem exists_ser_ne_zero {T : CoreJ D} [Algebra T.Q.c.F D.what₂.LL] {Rl : Re
       (∀ m, ∃ q : ℚ, AddMonoidAlgebra.coeff (v : Pol D.what₂.LL D.what₂.Tau (Vc D j).rank) m = (q : D.what₂.LL)) ∧
       (x : Pol ℂ D.what₂.Tau (Vc D j).rank) = MvPolynomial.map D.what₂.embLL (v : Pol D.what₂.LL D.what₂.Tau (Vc D j).rank) ∧
       h ∈ GfC (Vc D j) ∧ ser Rl.toRealDat j A3.A.μ0 (Rl.vP j A3.A.μ0) u h (c x) g ≠ 0 :=
-  GlobalTheory.T.exists_thetaSeries_rational_vector_ne_zero_of_cuspForms D Γ Pl0 I0 T0 A3 T Rl F κ v₀ O hnV hcore hfw hio j hpins hrow0 hcusp c hc u hu
+  _root_.GlobalTheory.SeriesTie.RatNe.exists_ser_rat_ne D Γ Pl0 I0 T0 A3 T Rl F κ v₀ O hnV hcore hfw hio j hpins hrow0 hcusp c hc u hu
 
 theorem expands_of_isRatPhase (hRF : GlobalTheory.NT.RayField) {T : CoreJ D} [Algebra T.Q.c.F D.what₂.LL]
     {Rl : RealDat3 D A3 T.Q.c.F} {cG : G0 Rl.Pg D.R.r ≃* G0g D.nd} {S : NX.RatDat D.ntw} (YS : NX.NExpRealS Rl cG S)
@@ -807,8 +807,8 @@ theorem GlobalTheory.PhaseOneOnto.phase_mem_coefField : GlobalTheory.Published.C
     hph' ▸ GlobalTheory.PhaseOneOnto.isRatPhase_of_smul hb0 hca hrat
 
   have hrow0 : OneMapRow0 T Rl.toRealDat κ v₀ O j :=
-    GlobalTheory.OneMapTies.oneMapRow0_of_ties_base_clauses GlobalTheory.ChartFree.chartIndep D Γ Pl0 T0 A3.A T Rl.toRealDat F κ v₀
-      hR.core.lev hR.core.grp hR.core.fam hR.core.models hR.core.thP hR.tieIn hR.io O j hR.pins
+    GlobalTheory.OneMapTies.oneMapRow0_of_ties_ofFive GlobalTheory.ChartFree.chartIndep D Γ Pl0 T0 A3.A T Rl.toRealDat F κ v₀
+      (GlobalTheory.Core5.of_core hR.core) hR.tieIn hR.io O j hR.pins
   have hone : (fun j => cj (twAt D.what₂.embLL A3.A.v0) (Rl.phs j)) = fun _ => (1 : ℂ) := funext fun j => by rw [hphs, map_one]
   have hphase : PhaseTie T Rl.toRealDat κ v₀ O (fun _ => 1) j := hone ▸ hR.phase
 

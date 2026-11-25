@@ -76,7 +76,7 @@ theorem jumps_finite : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (l 
     (LL : FinExt l) (h : Good K s LL), ∀ T : Lt K LL, IsCrys ((D.loc l).PD K) T.ρ →
     (Jumps (PD := (D.loc l).PD K) T).Finite := by
   intro D HW l _ K s LL h T hcrys
-  have hP := GlobalTheory.NL.Points.points D HW l K s LL h
+  have hP := GlobalTheory.NL.Points.points D.loc HW l K s LL h
   have hfin : Finite (↥K.1 →ₐ[ℚ_[l]] ↥LL.1) := by
     refine Nat.finite_of_card_ne_zero ?_
     rw [hP.2.2.2.1]

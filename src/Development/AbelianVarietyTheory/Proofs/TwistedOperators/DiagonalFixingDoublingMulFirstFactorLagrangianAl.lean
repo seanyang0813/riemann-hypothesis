@@ -47,8 +47,6 @@ open scoped TensorProduct Matrix
 noncomputable section
 namespace GlobalTheory.SplitDblIdent
 
-attribute [-instance] CStarMatrix.instHMulOfFintypeOfMulOfAddCommMonoid
-
 open Matrix in
 theorem fromRows_add_fromRows {R : Type} [Add R] {m₁ m₂ n : Type} (A B : Matrix m₁ n R) (C D : Matrix m₂ n R) :
     fromRows A C + fromRows B D = fromRows (A + B) (C + D) := by

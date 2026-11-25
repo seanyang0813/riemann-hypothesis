@@ -9,8 +9,6 @@ noncomputable section
 namespace Formalism.MainNotions.BridgeLemma
 open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat Formalism.MainNotions.LatticeGluingRadicals NumberField Module
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem tie_trace {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [StarRing E] [Algebra F E]
     (hc : CMData F E) (x : E) : algebraMap F E (Algebra.trace F E x) = x + star x := by
   classical

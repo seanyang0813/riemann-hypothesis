@@ -30,8 +30,6 @@ def vT (T : ℕ) (𝔭 : Ideal (𝓞 F)) : ℕ :=
 
 end Local
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 section Const
 
 variable {K F : Type} [Field K] [NumberField K] [StarRing K] [Field F] [NumberField F] [Algebra F K]

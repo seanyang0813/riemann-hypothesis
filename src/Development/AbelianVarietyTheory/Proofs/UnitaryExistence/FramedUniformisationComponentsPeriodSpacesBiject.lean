@@ -6,7 +6,15 @@ public import Development.AbelianVarietyTheory.Proofs.UniformizationProofs.AllUn
 import Development.AbelianVarietyTheory.Proofs.UnitaryExistence.ExponentialDerivativeAtZeroIsTangent
 import Development.AbelianVarietyTheory.Proofs.UnitaryExistence.RelabelEmbeddingsGoodBijectiveConjCompat
 public import Development.AbelianVarietyTheory.Proofs.UnitaryExistence.TypeFnPeriodExistModuliNonempty
-public import Formalism.LocalToGlobal.ProjectiveLattices.LocFrLoc
+public import Development.AbelianVarietyTheory.Definitions.Divisors.IsLocalRingTrivSqZeroExt
+public import Formalism.LocalToGlobal.ProjectiveLattices.ThetaFramePf
+public import Formalism.LocalToGlobal.ProjectiveLattices.GenSpecV
+public import Formalism.LocalToGlobal.ProjectiveLattices.GenFrPfV
+public import Formalism.LocalToGlobal.ProjectiveLattices.GenFrPfB
+public import Formalism.LocalToGlobal.ProjectiveLattices.GenSpecLocFrM
+public import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.BCRing
+public import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.PullbackSections.LieBridgeB
+public import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.PullbackSections.LieBridgeC
 import Mathlib.Algebra.Order.Floor.Extended
 import Mathlib.Algebra.Order.Floor.Semifield
 import Mathlib.Algebra.Order.Interval.Basic
@@ -83,8 +91,8 @@ theorem ik_bijective : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H
       exact (GlobalTheory.Relab.relab_good E H l c σ hσ).2.2.2 D g e
     obtain ⟨-, P, hPi⟩ := GlobalTheory.PeriodExists.period_of_isTypeFn H (F.Di i) g _ hty
     let _ : Algebra c.F ℂ := σ.toAlgebra
-    obtain ⟨y, hy⟩ := Formalism.L2.Pj.exists_frPt_local (Xo := Xo) (c := c) (L := ℂ)
-      GlobalTheory.firstFiveLaws.2.1.secTwist (F.u i P) ((F.over_σ i P hPi).trans rfl)
+    obtain ⟨y, hy⟩ := GlobalTheory.FlagTan.exists_frPt (Xo := Xo) (c := c) (S := ℂ)
+      (F.u i P) ((F.over_σ i P hPi).trans rfl)
     obtain ⟨k, x, t, hb⟩ := hcov y
     obtain ⟨Pm, -, hPm, hx, -⟩ := hP k x
     exact ⟨k, F.disj _ _ Pm P hPm hPi (hx.symm.trans (hb.1.symm.trans hy))⟩

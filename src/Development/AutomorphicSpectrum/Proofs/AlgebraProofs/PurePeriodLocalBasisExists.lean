@@ -26,66 +26,12 @@ public import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
 public import Mathlib.Topology.MetricSpace.Ultra.Basic
 public import Development.AutomorphicSpectrum.Proofs.AdelicProofs.PadicLogIdealMaxElement
 public import Development.AutomorphicSpectrum.Proofs.AlgebraProofs.LocalBasisGramDeterminantBound
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.CStarAlgebra.Classes
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Bernstein
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Topology.Sheaves.Init
-import Mathlib.RingTheory.Etale.Weakly
-import Mathlib.RingTheory.Finiteness.ModuleFinitePresentation
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.RingTheory.TotallySplit
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.ReduceModChar
 import Mathlib.Tactic.Linter.Style
 import Development.AutomorphicSpectrum.Proofs.AlgebraProofs.PadicIntegralIffDenominator
-import Mathlib.RingTheory.Henselian
-import Mathlib.RingTheory.PiTensorProduct
-import Mathlib.RingTheory.RegularLocalRing.Defs
 import Mathlib.Tactic.Linter.HaveILetI
 import Std.Tactic.BVDecide.Normalize.Prop
 import Development.AutomorphicSpectrum.Definitions.GlobalGeometry.LieModel
-import Mathlib.Tactic.Polynomial.Basic
 import Development.AbelianVarietyTheory.Proofs.CubicalLineBundles.VolumeFundamentalDomainStdRealBasis
-import Mathlib.Algebra.Order.Star.Real
-import Mathlib.RingTheory.Valuation.Integral
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Development.WeilBound.CoreStatements.SesquilinearFractions.ExistsIntegerNearConjVector, Development.WeilBound.CoreStatements.SesquilinearFractions.ExistsIntegralPosDefPerturbation, Development.AutomorphicSpectrum.Proofs.AlgebraProofs.ExistsIntegralPosDefPerturbation, Development.WeilBound.CoreStatements.SesquilinearFractions.AlgebraMapIntegralCoeffsRaw, Development.WeilBound.CoreStatements.SesquilinearFractions.ExistsCommonDenominatorCoeffs, Development.WeilBound.CoreStatements.SesquilinearFractions.ExistsOrthogonalLocalBasisExtension, Development.AutomorphicSpectrum.Proofs.AlgebraProofs.ExistsOrthogonalLocalBasis, Development.WeilBound.CoreStatements.SesquilinearFractions.EqZeroOfCoef, Development.WeilBound.CoreStatements.SesquilinearFractions.ImIMulDivSq, Development.WeilBound.CoreStatements.SesquilinearFractions.PerDiscrete, Development.WeilBound.CoreStatements.SesquilinearFractions.QReInr, Development.WeilBound.CoreStatements.SesquilinearFractions.GramSignatureOrthogonalSplit, Development.AutomorphicSpectrum.Proofs.AlgebraProofs.GramSignatureOrthogonalSplit, Development.AutomorphicSpectrum.Proofs.AlgebraProofs.NegDefBlockOfPosDef, Development.AutomorphicSpectrum.Proofs.AlgebraProofs.PeriodGramHermitianSignature, Development.AutomorphicSpectrum.Proofs.AlgebraProofs.UltrametricDetNormStable, Development.AutomorphicSpectrum.Proofs.AlgebraProofs.PurePeriodLocalBasisExists
@@ -189,9 +135,6 @@ open scoped ComplexOrder
 noncomputable section
 
 namespace PositivityTheory.Xgf
-
-theorem complexEmbedding_conjugate_conjugate {E : Type} [Field E] (τ : E →+* ℂ) :
-    ComplexEmbedding.conjugate (ComplexEmbedding.conjugate τ) = τ := star_star τ
 
 private theorem eventually_posDef_add_mul_conjTranspose {I J : Type} [Fintype I] [Fintype J] [DecidableEq I]
     (C : Matrix I J ℂ) (M : Matrix J J ℂ) (hM : M.IsHermitian) (h : (C * M * Cᴴ).PosDef) :
@@ -1285,15 +1228,6 @@ theorem hermForm_tyPart {g n : ℕ} (ty : Fin g → (E →+* ℂ)) (σ : E →+*
   rw [sum_type ty σ e _ h2]
   refine Finset.sum_congr rfl fun b _ => ?_
   simp [tyPart, (e a).2, (e b).2]
-
-theorem star_hermForm {g : ℕ} {M : Matrix (Fin g) (Fin g) ℂ} (hM : M.IsHermitian) (z w : Fin g → ℂ) :
-    star (hermForm M z w) = hermForm M w z := by
-  rw [hermForm_eq_sum, hermForm_eq_sum]
-  simp only [star_sum]
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun j _ => Finset.sum_congr rfl fun k _ => ?_
-  rw [star_mul', star_mul', star_star, hM.apply]
-  ring
 
 theorem posDef_of_hermForm {g : ℕ} {M : Matrix (Fin g) (Fin g) ℂ} (hM : M.IsHermitian)
     (hpos : ∀ z : Fin g → ℂ, z ≠ 0 → 0 < (hermForm M z z).re) : M.PosDef := by

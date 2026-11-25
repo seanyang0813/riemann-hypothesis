@@ -97,9 +97,6 @@ theorem gC_pos_of_ne_zero : ∀ (l : ℕ) [Fact l.Prime] (x : Formalism.Per.Acri
   rw [he, hz, Real.zero_rpow (sub_pos.2 ht1).ne', mul_zero] at hcv
   linarith
 
-theorem gC_pos_target : ∀ (l : ℕ) [Fact l.Prime] (x : Formalism.Per.Acris l), x ≠ 0 → ∀ ρ : ℝ, (l : ℝ)⁻¹ ≤ ρ → ρ < 1 →
-    0 < gC l ρ x :=
-  gC_pos_of_ne_zero
 
 end GlobalTheory.PMon.Gauss
 

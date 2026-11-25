@@ -14,8 +14,6 @@ open Matrix NumberField Formalism.BasicNotions Formalism.MainNotions.S Formalism
 
 namespace PI.UnitaryDimensionFormula
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 section Alg
 
 variable {A : Type} [CommRing A] (σ : A →+* A) {n k : ℕ} (J : Matrix (Fin n) (Fin n) A)

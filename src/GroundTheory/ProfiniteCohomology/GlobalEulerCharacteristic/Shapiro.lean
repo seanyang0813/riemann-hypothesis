@@ -77,10 +77,11 @@ instance isDiscreteRep_res_gsBaseChange_symm
   IsDiscreteRep.res (continuous_mulEquiv_toMonoidHom _) B
 
 variable (ιr : ∀ v : {v : InfinitePlace K.1 // v.IsReal}, ℚ̄ →ₐ[K.1] AlgebraicClosure v.1.Completion)
-  (B : Rep.{0} (ULift.{0} ℤ) (gsOpenSubgroup S hL : Subgroup (galUnramifiedOutside K.1 ℚ̄ S)))
-  [IsDiscreteRep B]
 
-theorem gsRealH0Card_coind (v : {v : InfinitePlace K.1 // v.IsReal}) :
+theorem gsRealH0Card_coind
+    (B : Rep.{0} (ULift.{0} ℤ) (gsOpenSubgroup S hL : Subgroup (galUnramifiedOutside K.1 ℚ̄ S)))
+    [IsDiscreteRep B]
+    (v : {v : InfinitePlace K.1 // v.IsReal}) :
     gsRealH0Card S (Rep.coind (gsOpenSubgroup S hL : Subgroup (galUnramifiedOutside K.1 ℚ̄ S)).subtype B)
         ιr v =
       ∏ d : MackeyDoubleCoset (gsOpenSubgroup S hL : Subgroup (galUnramifiedOutside K.1 ℚ̄ S))
@@ -90,7 +91,10 @@ theorem gsRealH0Card_coind (v : {v : InfinitePlace K.1 // v.IsReal}) :
   (Nat.card_congr (mackeyCohomologyEquiv (gsOpenSubgroup S hL) (gsRealFamily S ιr v) B 0).toEquiv).trans
     Nat.card_pi
 
-theorem card_cohomology_zero_mackeyRep_of_ne_top (v : {v : InfinitePlace K.1 // v.IsReal})
+theorem card_cohomology_zero_mackeyRep_of_ne_top
+    (B : Rep.{0} (ULift.{0} ℤ) (gsOpenSubgroup S hL : Subgroup (galUnramifiedOutside K.1 ℚ̄ S)))
+    [IsDiscreteRep B]
+    (v : {v : InfinitePlace K.1 // v.IsReal})
     (d : MackeyDoubleCoset (gsOpenSubgroup S hL : Subgroup (galUnramifiedOutside K.1 ℚ̄ S))
       (gsRealFamily S ιr v).toMonoidHom)
     (hd : ¬ mackeySubgroup (gsOpenSubgroup S hL : Subgroup (galUnramifiedOutside K.1 ℚ̄ S))
@@ -141,6 +145,8 @@ private theorem card_cohomology_zero_mackeyRep_top_aux
   exact hleft.trans ((Nat.card_congr (Equiv.subtypeEquivRight hiff)).trans hright.symm)
 
 theorem card_cohomology_zero_mackeyRep_top
+    (B : Rep.{0} (ULift.{0} ℤ) (gsOpenSubgroup S hL : Subgroup (galUnramifiedOutside K.1 ℚ̄ S)))
+    [IsDiscreteRep B]
     (ιrL : ∀ w : {w : InfinitePlace L.1 // w.IsReal}, ℚ̄ →ₐ[L.1] AlgebraicClosure w.1.Completion)
     (p : MackeyTopIndex (gsRealFamily S ιr) (gsOpenSubgroup S hL)) (w : {w : InfinitePlace L.1 // w.IsReal})
     (e : Gal(AlgebraicClosure p.1.1.1.Completion / p.1.1.1.Completion) ≃*
@@ -183,8 +189,6 @@ variable {K : FiniteSubfield} (S : Set (HeightOneSpectrum (𝓞 K.1)))
   {L : FiniteSubfield} [Fact (K ≤ L)]
   (hL : ∀ x : L.1, algebraMap L.1 ℚ̄ x ∈ maxUnramifiedOutside K.1 ℚ̄ S)
   (ιr : ∀ v : {v : InfinitePlace K.1 // v.IsReal}, ℚ̄ →ₐ[K.1] AlgebraicClosure v.1.Completion)
-  (B : Rep.{0} (ULift.{0} ℤ) (gsOpenSubgroup S hL : Subgroup (galUnramifiedOutside K.1 ℚ̄ S)))
-  [IsDiscreteRep B]
 
 
 private theorem prod_sigma_of_subtype_bijective
@@ -204,6 +208,8 @@ private theorem prod_sigma_of_subtype_bijective
 
 open scoped Classical in
 theorem prod_gsRealH0Card_coind
+    (B : Rep.{0} (ULift.{0} ℤ) (gsOpenSubgroup S hL : Subgroup (galUnramifiedOutside K.1 ℚ̄ S)))
+    [IsDiscreteRep B]
     (ιrL : ∀ w : {w : InfinitePlace L.1 // w.IsReal}, ℚ̄ →ₐ[L.1] AlgebraicClosure w.1.Completion)
     (mem : {w : InfinitePlace L.1 // w.IsReal} → MackeyTopIndex (gsRealFamily S ιr) (gsOpenSubgroup S hL))
     (hmem : ∀ w, realMemberPlace S ιr hL (mem w) = w)
@@ -257,7 +263,9 @@ private theorem rat_prod_eq_of_nat_prod_eq {α β : Type*} [Fintype α] [Fintype
     congrArg (fun m : ℕ => (m : ℚ)) h
 
 open scoped Classical in
-theorem gsEulerRatio_coind_eq_of [Finite B]
+theorem gsEulerRatio_coind_eq_of
+    (B : Rep.{0} (ULift.{0} ℤ) (gsOpenSubgroup S hL : Subgroup (galUnramifiedOutside K.1 ℚ̄ S)))
+    [IsDiscreteRep B] [Finite B]
     (ιrL : ∀ w : {w : InfinitePlace L.1 // w.IsReal}, ℚ̄ →ₐ[L.1] AlgebraicClosure w.1.Completion)
     (mem : {w : InfinitePlace L.1 // w.IsReal} → MackeyTopIndex (gsRealFamily S ιr) (gsOpenSubgroup S hL))
     (hmem : ∀ w, realMemberPlace S ιr hL (mem w) = w)

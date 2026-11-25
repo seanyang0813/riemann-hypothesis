@@ -106,19 +106,6 @@ noncomputable def UpperTheory.Reformulated.B.TotalDegreeLinear.sub :
           fun (y : ι × B) ↦
           ∑ j : ι, (MvPolynomial.C : ℂ → MvPolynomial (ι × A ⊕ ι × B) ℂ) (h y.1 j) * MvPolynomial.X (Sum.inr (j, y.2)))
 
-private lemma UpperTheory.Reformulated.B.TotalDegreeLinear.totalDegree_aeval_le {σ τ : Type}
-    (f : σ → MvPolynomial τ ℂ) (hf : ∀ i, (f i).totalDegree ≤ 1) (p : MvPolynomial σ ℂ) :
-    (MvPolynomial.aeval f p).totalDegree ≤ p.totalDegree := by
-  rw [MvPolynomial.aeval_def, MvPolynomial.eval₂_eq]
-  refine (MvPolynomial.totalDegree_finsetSum _ _).trans (Finset.sup_le fun d hd => ?_)
-  refine (MvPolynomial.totalDegree_mul _ _).trans ?_
-  rw [MvPolynomial.algebraMap_eq, MvPolynomial.totalDegree_C, zero_add]
-  refine (MvPolynomial.totalDegree_finsetProd _ _).trans ?_
-  calc ∑ i ∈ d.support, (f i ^ d i).totalDegree
-      ≤ ∑ i ∈ d.support, d i := Finset.sum_le_sum fun i _ =>
-        (MvPolynomial.totalDegree_pow _ _).trans (by simpa using Nat.mul_le_mul_left (d i) (hf i))
-    _ ≤ p.totalDegree := MvPolynomial.le_totalDegree hd
-
 private lemma UpperTheory.Reformulated.B.TotalDegreeLinear.totalDegree_linear_le {ι τ : Type} [Fintype ι]
     (c : ι → ℂ) (v : ι → τ) :
     (∑ j : ι, (MvPolynomial.C (c j) : MvPolynomial τ ℂ) * MvPolynomial.X (v j)).totalDegree ≤ 1 := by
@@ -132,7 +119,7 @@ theorem UpperTheory.Reformulated.B.TotalDegreeLinear.main :
       MvPolynomial.totalDegree ((UpperTheory.Reformulated.B.TotalDegreeLinear.sub g h : UpperTheory.Reformulated.B.TotalDegreeLinear.PV ι A B → UpperTheory.Reformulated.B.TotalDegreeLinear.PV ι A B) p) ≤
         MvPolynomial.totalDegree p := by
   intro ι A B _ g h p
-  refine UpperTheory.Reformulated.B.TotalDegreeLinear.totalDegree_aeval_le _ ?_ p
+  refine PositivityTheory.Rg.Sw.FFTSteps.AsmA.totalDegree_aeval_le _ ?_ p
   rintro (x | y)
   · exact UpperTheory.Reformulated.B.TotalDegreeLinear.totalDegree_linear_le _ _
   · exact UpperTheory.Reformulated.B.TotalDegreeLinear.totalDegree_linear_le _ _

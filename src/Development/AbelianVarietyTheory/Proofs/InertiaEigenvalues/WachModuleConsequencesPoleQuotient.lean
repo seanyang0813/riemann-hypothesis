@@ -204,12 +204,12 @@ set_option synthInstance.maxHeartbeats 400000 in
 theorem approx : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.loc D.locA HW F) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; let C := Cm l; ∀ T : Lt K LL, IsCrys ((D.loc l).PD K) T.ρ → ∀ (i : Let K) (ζ : ↥LL.1), IsPrimitiveRoot ζ (l ^ s) → ∀ g ∈ Lat C h T i ζ, ∀ m : ℕ, ∃ (n : ↥(W.N T)) (c : ↥LL.1), c ≠ 0 ∧ ∃ f ∈ Lat C h T i ζ, ∀ j : ℤ, ex C h T i ζ n j - c • g j = f (j - m) := by
   intro D HW F Cm l _ K s LL h W C T hT i ζ hζ g hg m
   have hζ' : ∃ j : ℕ, IsPrimitiveRoot ζ (l ^ j) := ⟨s, hζ⟩
-  obtain ⟨nb⟩ := GlobalTheory.NL.N_basis D HW F l K s LL h T hT
-  have hFull := GlobalTheory.NL.FullLevel.full_lat D HW F Cm l K s LL h T hT i ζ hζ
-  obtain ⟨hsm, hB⟩ := GlobalTheory.NL.LevInj.expansion_basis D HW F Cm l K s LL h T hT i ζ hζ' hFull
+  obtain ⟨nb⟩ := GlobalTheory.NL.N_basis D.loc D.locA HW F l K s LL h T hT
+  have hFull := GlobalTheory.NL.FullLevel.full_lat D.loc D.locA D.locT HW F Cm l K s LL h T hT i ζ hζ
+  obtain ⟨hsm, hB⟩ := GlobalTheory.NL.LevInj.expansion_basis D.loc D.locA D.locT HW F Cm l K s LL h T hT i ζ hζ' hFull
   obtain ⟨-, hspan, -⟩ := hB _ nb
   obtain ⟨e, rfl⟩ := hspan g hg
-  have hW := (GlobalTheory.NL.WDiv.weierstrass_dense D HW l K s LL h).2.2.1 i ζ hζ'
+  have hW := (GlobalTheory.NL.WDiv.weierstrass_dense D.loc HW l K s LL h).2.2.1 i ζ hζ'
   choose a c hc hdiv using fun j => hW (e j) m
   choose p hp using hdiv
   haveI := LL.2
@@ -315,8 +315,8 @@ theorem ex_smul_O (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D
     (hT : IsCrys ((D.loc l).PD K) T.ρ) (i : Let K) (ζ : ↥LL.1) (hprim : IsPrimitiveRoot ζ (l ^ s))
     (c' : ↥(OL LL)) (x : ↥(((HW l).W K s LL h).N T)) :
     ex (Cm l) h T i ζ (c' • x) = algebraMap ↥(OL LL) ↥LL.1 c' • ex (Cm l) h T i ζ x := by
-  have hfull := GlobalTheory.NL.FullLevel.full_lat D HW F Cm l K s LL h T hT i ζ hprim
-  have hlin := (GlobalTheory.NL.LevInj.expansion_basis D HW F Cm l K s LL h T hT i ζ ⟨s, hprim⟩ hfull).1
+  have hfull := GlobalTheory.NL.FullLevel.full_lat D.loc D.locA D.locT HW F Cm l K s LL h T hT i ζ hprim
+  have hlin := (GlobalTheory.NL.LevInj.expansion_basis D.loc D.locA D.locT HW F Cm l K s LL h T hT i ζ ⟨s, hprim⟩ hfull).1
   exact expansion_smul_scalar (((HW l).W K s LL h).lev i ζ) (ex (Cm l) h T i ζ) hlin c' x
 
 theorem goodP_prod {O L M X : Type} [CommRing O] [Field L] [TopologicalSpace L] [Algebra O L]
@@ -437,12 +437,12 @@ theorem occ : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D
   intro D HW F Cm l _ K s LL h W T hT y hy a ha j hj1 hjy
   classical
   obtain ⟨τ, hτ⟩ := ha
-  have hpts := GlobalTheory.NL.Points.points D HW l K s LL h
+  have hpts := GlobalTheory.NL.Points.points D.loc HW l K s LL h
   obtain ⟨i, ζ, hPt⟩ := hpts.2.2.1 τ
   have hprim : IsPrimitiveRoot ζ (l ^ s) := (hpts.2.1 i ζ τ hPt).1
   obtain ⟨d, hdD, hdA, hdA1⟩ :=
     GlobalTheory.NL.JumpVec.exists_letter_of_jump D HW l K s LL h T hT i ζ τ hPt a hτ
-  have hQ := ((GlobalTheory.NL.IoXQ.main D HW F l K s LL h).2.2.2.2.2.2 0).2
+  have hQ := ((GlobalTheory.NL.IoXQ.main D.loc D.locA HW F l K s LL h).2.2.2.2.2.2 0).2
   simp only [pow_zero, AlgHom.one_apply] at hQ
   have hJ := GlobalTheory.NL.JumpsFinite.jumps_finite D HW l K s LL h T hT
   let Fs : Finset (↥(OL LL))ˣ := (hJ.toFinset ×ˢ Finset.Icc 1 y).image
@@ -462,7 +462,7 @@ theorem occ : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D
         (((D.loc l).PD K).Fil b).restrictScalars ℚ_[l])
   let k : ℤ := (y : ℤ) - a - j
   let g : ℤ → T.V ⊗[ℚ_[l]] (D.loc l).R.B := Pi.single k d
-  have hlat := GlobalTheory.NL.LatFil.lat_eq_fil D HW F Cm l K s LL h T hT i ζ τ hPt
+  have hlat := GlobalTheory.NL.LatFil.lat_eq_fil D.loc D.locA D.locT HW F Cm l K s LL h T hT i ζ τ hPt
   have hg : g ∈ Lat (Cm l) h T i ζ := by
     refine (hlat g).2 ⟨⟨k, fun j' hj' => Pi.single_eq_of_ne hj'.ne _⟩, fun j' => ?_⟩
     by_cases hj' : j' = k

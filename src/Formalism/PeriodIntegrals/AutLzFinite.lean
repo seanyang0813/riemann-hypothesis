@@ -12,8 +12,6 @@ namespace PI.AutLzFinite
 
 open NumberField Formalism.BasicNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 variable (D : D7)
 
 def AutLzFin : Prop :=

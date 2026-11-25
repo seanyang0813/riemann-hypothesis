@@ -96,14 +96,6 @@ variable {G : Type} [Group G] [MeasurableSpace G] [TopologicalSpace G] [IsTopolo
 
 end Quot
 
-theorem quotientIntegral_trivial_count {G : Type} [Group G] [Fintype G] [MeasurableSpace G] [MeasurableSingletonClass G]
-    (f : G → ℂ) : IsQuotIntL1 (R := ⊥) (Measure.dirac 1) Measure.count f (∑ g, f g) := by
-  rw [isQuotIntL1_bot]
-  refine ⟨Integrable.of_finite, ?_⟩
-  rw [integral_fintype]
-  · simp
-  · exact Integrable.of_finite
-
 end GlobalTheory.Grow
 end -- clump:auto
 end -- clump:auto

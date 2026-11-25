@@ -17,8 +17,6 @@ section D7
 
 open PI.UnitaryGroupMassFormula.BetaLUniq
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem positive_weight_holds : PosW := by
   intro D T' F' τ w hT' hw hwX
   by_contra hneg

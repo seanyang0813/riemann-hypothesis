@@ -54,8 +54,6 @@ open Formalism.L2.DIV Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.F
 open GlobalTheory.FormTies GlobalTheory.OnTies
 open scoped TensorProduct
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 section Trace
 
 variable {K Z P : Type} [Field K] [NumberField K] [AddCommGroup Z] [Module K Z] [Module (𝓞 K) Z]

@@ -459,20 +459,20 @@ end Coord
 
 
 
-theorem lat_eq_fil : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.loc D.locA HW F) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let _W := (HW l).W K s LL h; let _E := ((F l).E K s LL h).tie; let C := Cm l; ∀ T : Lt K LL, IsCrys ((D.loc l).PD K) T.ρ → ∀ (i : Let K) (ζ : ↥LL.1) τ, Pt (HW l) h i ζ τ → ∀ f : ℤ → T.V ⊗[ℚ_[l]] (D.loc l).R.B, f ∈ Lat C h T i ζ ↔ (∃ m : ℤ, ∀ k < m, f k = 0) ∧ ∀ k : ℤ, f k ∈ Di (HW l) h T i ∧ ιV ((D.loc l).PD K) (LL := ↥LL.1) (V := T.V) (f k) ∈ FilAt ((D.loc l).PD K) T τ (-k) := by
-  intro D HW F Cm l _ K s LL h W E C T hT i ζ τ hpt f
-  obtain ⟨hprim, hτ, ι, hcomp⟩ := (@GlobalTheory.NL.Points.points D HW l _ K s LL h).2.1 i ζ τ hpt
-  have hfull := _root_.GlobalTheory.NL.FullLevel.full_lat D HW F Cm l K s LL h T hT i ζ hprim
-  have hgr := @GlobalTheory.NL.GradedLat.graded_of_level_le D HW F Cm l _ K s LL h T hT i ζ hprim.pow_eq_one hfull
-  obtain ⟨nb⟩ := @GlobalTheory.NL.N_basis D HW F l _ K s LL h T hT
-  have hgen := ((_root_.GlobalTheory.NL.LevInj.expansion_basis D HW F Cm l K s LL h T hT i ζ ⟨s, hprim⟩ hfull).2 _ nb).2.1
-  obtain ⟨ev, hev, hdiv, htu, ht, sep⟩ := @GlobalTheory.NL.EvdR.exists_ev_dR D l _ K LL s ι
-  obtain ⟨Ψ, hΨ0, hΨs, hΨr⟩ := _root_.GlobalTheory.NL.PerS.image D HW F Cm l K s LL h T hT i ζ τ ι hcomp
+theorem lat_eq_fil : ∀ (loc : LocTheory) (locA : ∀ (l : ℕ) [Fact l.Prime], LocAinf l (loc l)) (locT : ∀ (l : ℕ) [Fact l.Prime], Formalism.BasicNotions.LocTied l (loc l) (locA l)) (HW : HWOf loc) (F : FonOf loc locA HW) (Cm : CmpOf loc locA HW F) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let _W := (HW l).W K s LL h; let _E := ((F l).E K s LL h).tie; let C := Cm l; ∀ T : Lt K LL, IsCrys ((loc l).PD K) T.ρ → ∀ (i : Let K) (ζ : ↥LL.1) τ, Pt (HW l) h i ζ τ → ∀ f : ℤ → T.V ⊗[ℚ_[l]] (loc l).R.B, f ∈ Lat C h T i ζ ↔ (∃ m : ℤ, ∀ k < m, f k = 0) ∧ ∀ k : ℤ, f k ∈ Di (HW l) h T i ∧ ιV ((loc l).PD K) (LL := ↥LL.1) (V := T.V) (f k) ∈ FilAt ((loc l).PD K) T τ (-k) := by
+  intro loc locA locT HW F Cm l _ K s LL h W E C T hT i ζ τ hpt f
+  obtain ⟨hprim, hτ, ι, hcomp⟩ := (@GlobalTheory.NL.Points.points loc HW l _ K s LL h).2.1 i ζ τ hpt
+  have hfull := _root_.GlobalTheory.NL.FullLevel.full_lat loc locA locT HW F Cm l K s LL h T hT i ζ hprim
+  have hgr := @GlobalTheory.NL.GradedLat.graded_of_level_le loc locA HW F Cm l _ K s LL h T hT i ζ hprim.pow_eq_one hfull
+  obtain ⟨nb⟩ := @GlobalTheory.NL.N_basis loc locA HW F l _ K s LL h T hT
+  have hgen := ((_root_.GlobalTheory.NL.LevInj.expansion_basis loc locA locT HW F Cm l K s LL h T hT i ζ ⟨s, hprim⟩ hfull).2 _ nb).2.1
+  obtain ⟨ev, hev, hdiv, htu, ht, sep⟩ := @GlobalTheory.NL.EvdR.exists_ev_dR loc locA locT l _ K LL s ι
+  obtain ⟨Ψ, hΨ0, hΨs, hΨr⟩ := _root_.GlobalTheory.NL.PerS.image loc locA locT HW F Cm l K s LL h T hT i ζ τ ι hcomp
   have hfil := by
-    obtain ⟨-, -, -, hc, hc0⟩ := Points.points D HW l K s LL h
-    exact (GlobalTheory.NL.CompD.component_tied (D.locT l) K LL T hc hc0 hT τ ι hcomp.2.2 _ hτ).2.1
-  have anti : Antitone ((D.loc l).PD K).Fil := antitone_int_of_succ_le ((D.loc l).PD K).Fil_anti
-  have hι : ∀ c, ι c ∈ ((D.loc l).PD K).Fil 0 := fun c => by
+    obtain ⟨-, -, -, hc, hc0⟩ := Points.points loc HW l K s LL h
+    exact (GlobalTheory.NL.CompD.component_tied (locT l) K LL T hc hc0 hT τ ι hcomp.2.2 _ hτ).2.1
+  have anti : Antitone ((loc l).PD K).Fil := antitone_int_of_succ_le ((loc l).PD K).Fil_anti
+  have hι : ∀ c, ι c ∈ ((loc l).PD K).Fil 0 := fun c => by
     have h1 := anti (show (0 : ℤ) ≤ ((1 : ℕ) : ℤ) by simp) (hev (PowerSeries.C c) 1)
     have h2 := (hdiv (PowerSeries.C c) 0).2 (by simp)
     simpa using sub_mem h2 h1
@@ -488,19 +488,19 @@ theorem lat_eq_fil : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : 
     exact sum_mem fun j _ => conv_mem _ _ _ (fun r => ((Cm l).C K s LL h).tie.levB_mem T i ζ _ r) k
   obtain ⟨m₀, hm₀⟩ := hfull
   have main : ∀ d ∈ Di (HW l) h T i, ∀ k : ℤ, Pi.single k d ∈ Lat (Cm l) h T i ζ ↔
-      ιV ((D.loc l).PD K) (LL := ↥LL.1) (V := T.V) d ∈ FilAt ((D.loc l).PD K) T τ (-k) := by
+      ιV ((loc l).PD K) (LL := ↥LL.1) (V := T.V) d ∈ FilAt ((loc l).PD K) T τ (-k) := by
     intro d hd k
     rw [hfil d hd, mem_sup_iff _ T ι bV hι]
-    refine single_mem_iff anti ((D.loc l).PD K).Fil_exh sep ((D.loc l).PD K).Fil_mul ht htu ι hι ev hev hdiv
+    refine single_mem_iff anti ((loc l).PD K).Fil_exh sep ((loc l).PD K).Fil_mul ht htu ι hι ev hev hdiv
       (finrank_le T)
       (fun α => (crd T ι (bV.coord α)).toAddMonoidHom.comp
-        (ιV ((D.loc l).PD K) (LL := ↥LL.1) (V := T.V)).toAddMonoidHom)
+        (ιV ((loc l).PD K) (LL := ↥LL.1) (V := T.V)).toAddMonoidHom)
       (fun α c d => ?_) (ex (Cm l) h T i ζ) (fun x α => crd T ι (bV.coord α) (Ψ x))
       (fun x α => crd_filV _ T ι hι _ _ (hΨ0 x)) (fun z hz => ?_) (fun x a ha α => ?_) nb
       (fun x => ((Cm l).C K s LL h).tie.levB_supp T i ζ x) _ hΛ
       (fun x => Submodule.subset_span ⟨1, x, (conv_one _).symm⟩) d m₀ (fun k hk => hm₀ _ (fun r => ?_) fun r hr => ?_) k
     · simp only [AddMonoidHom.comp_apply, LinearMap.toAddMonoidHom_coe]
-      rw [map_smul (ιV ((D.loc l).PD K) (LL := ↥LL.1) (V := T.V)), crd_smul]
+      rw [map_smul (ιV ((loc l).PD K) (LL := ↥LL.1) (V := T.V)), crd_smul]
     · obtain ⟨m, b, x, hb, hx⟩ := hΨs _ (sum_tmul_mem_filV _ T bV 0 z hz)
       refine ⟨m, b, x, hb, fun α => ?_⟩
       have := crd_compKer T ι (bV.coord α) hx

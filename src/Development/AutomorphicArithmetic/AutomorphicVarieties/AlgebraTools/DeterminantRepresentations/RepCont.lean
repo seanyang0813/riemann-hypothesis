@@ -50,11 +50,6 @@ public import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.Continu
 
 open Polynomial UpperTheory.V.W
 
-private theorem UpperTheory.V.AlgebraTools.Det.cont_charpoly_coeff {n : ℕ} {K : Type} [CommRing K] [TopologicalSpace K]
-    [IsTopologicalRing K] (i : ℕ) :
-    Continuous fun M : Matrix (Fin n) (Fin n) K => M.charpoly.coeff i := by
-  apply _root_.GlobalTheory.TypeLeaf.continuous_charpoly_coeff_of_matrix
-
 theorem UpperTheory.V.AlgebraTools.Det.repCont :
     ∀ {n : ℕ} {A G : Type} [CommRing A] [Group G] [TopologicalSpace A] [IsTopologicalRing A] [TopologicalSpace G] (ρ : G →* Matrix (Fin n) (Fin n) A),
     Continuous ρ → ∀ i, Continuous fun g : G => (GDet.ofRep ρ).lam i (MonoidAlgebra.single g 1) := by
@@ -64,4 +59,5 @@ theorem UpperTheory.V.AlgebraTools.Det.repCont :
     funext g
     rw [GDet.lam, (UpperTheory.V.AlgebraTools.Det.repApi ρ).2.1]
   rw [h]
-  exact continuous_const.mul ((UpperTheory.V.AlgebraTools.Det.cont_charpoly_coeff (n - i)).comp hρ)
+  exact continuous_const.mul
+    ((_root_.GlobalTheory.TypeLeaf.continuous_charpoly_coeff_of_matrix n (n - i)).comp hρ)

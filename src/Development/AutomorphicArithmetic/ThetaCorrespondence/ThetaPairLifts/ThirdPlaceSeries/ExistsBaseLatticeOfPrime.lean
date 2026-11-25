@@ -1087,7 +1087,7 @@ end G
 theorem _root_.UpperTheory.GalS.ghOf'_alt (hL : _root_.UpperTheory.Zero.LLC.RecTExists) (hF : GlobalTheory.Published.AutomorphicFormsFiniteGL)
     (hG : _root_.UpperTheory.GalS.CuspUAlt) (hB : GlobalTheory.Published.DeRhamPotSemistable) (hGL : _root_.UpperTheory.GalS.CarUAlt)
     (D : D7) (T : GlobalTheory.RowTie.WDTie D.nd D.naut) (C : _root_.GlobalTheory.HeightCounting.CGTrueT hL D T) (hl : LabTrue D T) : UpperTheory.GalS.GalHodgeN D T :=
-  ⟨_root_.GlobalTheory.HodgeOfTrue.galHodge0_of_cgTrue hL hF hG hB hGL C, GlobalTheory.T.full_degree_label_forces_trivial_wild_inertia D T hl, fun π hc _ _ hw k => _root_.UpperTheory.GalS.sep_conj_g_alt hL hF C π hc hw k,
+  ⟨_root_.GlobalTheory.HodgeOfTrue.galHodge0_of_cgTrue hL hF hG hB hGL C, _root_.GlobalTheory.WildFull.main D T hl, fun π hc _ _ hw k => _root_.UpperTheory.GalS.sep_conj_g_alt hL hF C π hc hw k,
     fun _ S π w ht => _root_.UpperTheory.GalS.tm_rankOne_alt hL C S π w ht⟩
 end GlobalTheory.HodgeOfTrue
 namespace GlobalTheory.GalAway

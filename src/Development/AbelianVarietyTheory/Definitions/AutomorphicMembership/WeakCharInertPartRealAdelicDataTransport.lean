@@ -65,7 +65,7 @@ def piSigmaIso {ι : Type} {P P' : ι → Type} (M : ι → Type) [∀ k, Group 
 variable {B : Base} {C : Cols B}
 
 def grpIso {a b : Late B C} (e : ∀ k, a.D.nd.PlG k ≃ b.D.nd.PlG k) : G0g a.D.nd ≃* G0g b.D.nd :=
-  (by with_unfolding_all exact ((piSigmaIso (fun k : Fin 2 => GL (Fin a.D.R.r) (ZMod (a.D.host.g k))) e) :))
+  (piSigmaIso (fun k : Fin 2 => GL (Fin a.D.R.r) (ZMod (a.D.host.g k))) e)
 
 structure SameGrp (a b : Late B C) where
 
@@ -112,27 +112,27 @@ omit [Fintype G] in
 theorem grpCl_tr (s : SameGrp a b) {Pg c Dv eG} {eR : G ≃* G0g a.D.nd} (h : GrpCl a.D Pg c Dv eG eR) :
     GrpCl b.D ((Pg)) c ((Dv)) ((eG)) (eR.trans s.iso) := by
   obtain ⟨plg, iso, h1, h2, h3, h4⟩ := h
-  refine ⟨(by with_unfolding_all exact ((s.back.trans plg) :)), fun kv => (by with_unfolding_all exact ((iso (s.back kv)) :)), fun kv => ?_, fun g => ?_, fun kv => ?_, fun g kv => ?_⟩
-  · exact (by with_unfolding_all exact (((h1 (s.back kv)).trans (s.pl_back kv)) :))
-  · exact (by with_unfolding_all exact (((h2 g).trans (s.e0 (eR g)).symm) :))
-  · exact (by with_unfolding_all exact ((h3 (s.back kv)) :))
-  · exact (by with_unfolding_all exact ((h4 g (s.back kv)) :))
+  refine ⟨(s.back.trans plg), fun kv => (iso (s.back kv)), fun kv => ?_, fun g => ?_, fun kv => ?_, fun g kv => ?_⟩
+  · exact ((h1 (s.back kv)).trans (s.pl_back kv))
+  · exact ((h2 g).trans (s.e0 (eR g)).symm)
+  · exact (h3 (s.back kv))
+  · exact (h4 g (s.back kv))
 
 
 omit [Fintype G] in
 theorem psiPPTie_transport (s : SameGrp a b) {P0 P1 : Subgroup G} {ψ0 ψ1} {eR : G ≃* G0g a.D.nd} (h : PsiPPTie a.D P0 ψ0 P1 ψ1 eR) :
     PsiPPTie b.D P0 ((ψ0)) P1 ((ψ1)) (eR.trans s.iso) := by
   obtain ⟨Pg, pl, res, ψ, eC, h1, h2⟩ := h
-  refine ⟨(by with_unfolding_all exact (Pg :)), (by with_unfolding_all exact ((s.back.trans pl) :)), fun kv => (by with_unfolding_all exact ((res (s.back kv)) :)), (by with_unfolding_all exact (ψ :)), (by with_unfolding_all exact (eC :)), ?_, fun kv => ?_⟩
+  refine ⟨Pg, (s.back.trans pl), fun kv => (res (s.back kv)), ψ, eC, ?_, fun kv => ?_⟩
   · constructor
-    case place => intro kv; exact (by with_unfolding_all exact (((h1.place (s.back kv)).trans (s.pl_back kv)) :))
-    case comp => intro g kv; exact (by with_unfolding_all exact ((h1.comp g (s.back kv)) :))
-    case gen => exact (by with_unfolding_all exact (h1.gen :))
-    case p0 => exact (by with_unfolding_all exact (h1.p0 :))
-    case chi0 => exact (by with_unfolding_all exact (h1.chi0 :))
-    case ps => exact (by with_unfolding_all exact (h1.ps :))
-    case chis => exact (by with_unfolding_all exact (h1.chis :))
-  · exact (by with_unfolding_all exact ((h2 (s.back kv)) :))
+    case place => intro kv; exact ((h1.place (s.back kv)).trans (s.pl_back kv))
+    case comp => intro g kv; exact (h1.comp g (s.back kv))
+    case gen => exact h1.gen
+    case p0 => exact h1.p0
+    case chi0 => exact h1.chi0
+    case ps => exact h1.ps
+    case chis => exact h1.chis
+  · exact (h2 (s.back kv))
 
 variable {Ks : Type} [Field Ks] [NumberField Ks] [iK : Algebra Ks a.D.what₂.LL]
 
@@ -142,29 +142,29 @@ variable {A : FamIn a.D.what₂.LL G Pl0 T a.D.R.m} {R : RealDat a.D A Ks} {F : 
 
 theorem grpRecord_tr (s : SameGrp a b) (h : R.grp_record) : letI := alg b iK; (real b R).grp_record := by
   obtain ⟨eR, plg, iso, h2, h3, h4⟩ := h
-  refine ⟨eR.trans s.iso, (by with_unfolding_all exact ((s.back.trans plg) :)), fun kv => (by with_unfolding_all exact ((iso (s.back kv)) :)), fun g => ?_, fun kv => ?_, fun g kv => ?_⟩
-  · exact (by with_unfolding_all exact (((h2 g).trans (s.e0 (eR g)).symm) :))
-  · exact (by with_unfolding_all exact ((h3 (s.back kv)) :))
-  · exact (by with_unfolding_all exact ((h4 g (s.back kv)) :))
+  refine ⟨eR.trans s.iso, (s.back.trans plg), fun kv => (iso (s.back kv)), fun g => ?_, fun kv => ?_, fun g kv => ?_⟩
+  · exact ((h2 g).trans (s.e0 (eR g)).symm)
+  · exact (h3 (s.back kv))
+  · exact (h4 g (s.back kv))
 
 theorem isGrp_tr (s : SameGrp a b) (h : R.IsGrp F) : letI := alg b iK; (real b R).IsGrp (face b F) := by
   letI := alg b iK
   constructor
-  case red_R => exact (by with_unfolding_all exact (h.red_R :))
-  case red_L => exact (by with_unfolding_all exact (h.red_L :))
-  case levels => exact (by with_unfolding_all exact (h.levels :))
-  case record => exact (by with_unfolding_all exact ((grpRecord_tr b s h.record) :))
-  case chiW => exact (by with_unfolding_all exact (h.chiW :))
+  case red_R => exact h.red_R
+  case red_L => exact h.red_L
+  case levels => exact h.levels
+  case record => exact (grpRecord_tr b s h.record)
+  case chiW => exact h.chiW
 
 theorem baseW_tr (s : SameGrp a b) (h : R.BaseW F) : letI := alg b iK; (real b R).BaseW (face b F) := by
   letI := alg b iK
   constructor
-  case lev => exact (by with_unfolding_all exact ((levIs_tr b h.lev) :))
-  case grp => exact (by with_unfolding_all exact ((isGrp_tr b s h.grp) :))
-  case fam => exact (by with_unfolding_all exact ((isFam_tr b h.fam) :))
-  case models => exact (by with_unfolding_all exact ((isModels_tr b h.models) :))
-  case chain => exact (by with_unfolding_all exact ((isChainW_tr b h.chain) :))
-  case thP => exact (by with_unfolding_all exact ((isThPW_tr b h.thP) :))
+  case lev => exact (levIs_tr b h.lev)
+  case grp => exact (isGrp_tr b s h.grp)
+  case fam => exact (isFam_tr b h.fam)
+  case models => exact (isModels_tr b h.models)
+  case chain => exact (isChainW_tr b h.chain)
+  case thP => exact (isThPW_tr b h.thP)
 
 end Two
 
@@ -209,42 +209,43 @@ section Kept
 variable {R : RealDat a.D A.A Ks} {F : Face a.D A.A}
 
 theorem keep_tr (s : SameGrp a b) {cG : G0 R.Pg a.D.R.r ≃* G0g a.D.nd} (h : Keep (A3 := A) R F cG) :
-    @Keep b.D G _ _ Pl0 I0 T (famInThreeCoefficientChange b A) Ks _ _ (alg b iK) ((by with_unfolding_all exact ((real b R) :))) ((by with_unfolding_all exact ((face b F) :))) ((by with_unfolding_all exact ((cG.trans s.iso) :))) := by
+    letI := alg b iK
+    @Keep b.D G _ _ Pl0 I0 T (famInThreeCoefficientChange b A) Ks _ _ (alg b iK) (real (a := a) b R) (face (a := a) b F) (cG.trans s.iso) := by
   apply (config := { synthAssignedInstances := false }) Keep.mk
-  case grp => exact (by with_unfolding_all exact ((grpCl_tr b s (Pg := R.Pg) (c := fun g => a.D.what₂.embLL ((idemOf A.A.X).coeff g)) (Dv := R.C.P.Div)
-    (eG := R.eG) (eR := R.eG.trans cG) ((h.grp))) : _))
-  case psi => exact (by with_unfolding_all exact ((psiPPTie_transport b s h.psi) :))
-  case std => exact (by with_unfolding_all exact (h.std :))
-  case signs => exact (by with_unfolding_all exact (h.signs :))
+  case grp => exact (grpCl_tr b s (Pg := R.Pg) (c := fun g => a.D.what₂.embLL ((idemOf A.A.X).coeff g)) (Dv := R.C.P.Div)
+    (eG := R.eG) (eR := R.eG.trans cG) ((h.grp)))
+  case psi => exact (psiPPTie_transport b s h.psi)
+  case std => exact h.std
+  case signs => exact h.signs
   case frames =>
     intro hf
     exact normalFrames_tr b R.Pg R.βY R.βW (h.frames (framesExist_tr a (real b R).Pg hf))
-  case beta => exact (by with_unfolding_all exact (h.beta :))
-  case prX => exact (by with_unfolding_all exact (h.prX :))
-  case guard => exact (by with_unfolding_all exact (h.guard :))
-  case valKs => exact (by with_unfolding_all exact (h.valKs :))
-  case frameKs => exact (by with_unfolding_all exact (h.frameKs :))
-  case levKs => exact (by with_unfolding_all exact (h.levKs :))
+  case beta => exact h.beta
+  case prX => exact h.prX
+  case guard => exact h.guard
+  case valKs => exact h.valKs
+  case frameKs => exact h.frameKs
+  case levKs => exact h.levKs
 
 theorem keep_back (s : SameGrp b a) {cG : G0 (levCh b R.toLevCh).Pg b.D.R.r ≃* G0g b.D.nd}
-    (h : @Keep b.D G _ _ Pl0 I0 T (famInThreeCoefficientChange b A) Ks _ _ (alg b iK) ((by with_unfolding_all exact ((real b R) :))) ((by with_unfolding_all exact ((face b F) :))) ((by with_unfolding_all exact (cG :)))) :
-    Keep (A3 := A) R F ((by with_unfolding_all exact ((cG.trans s.iso) :))) := by
+    (h : letI := alg b iK; @Keep b.D G _ _ Pl0 I0 T (famInThreeCoefficientChange b A) Ks _ _ (alg b iK) (real (a := a) b R) (face (a := a) b F) cG) :
+    Keep (A3 := A) R F (cG.trans s.iso) := by
   let := alg b iK
   apply (config := { synthAssignedInstances := false }) Keep.mk
-  case grp => exact (by with_unfolding_all exact ((grpCl_tr a s (Pg := (real b R).Pg) (c := fun g => a.D.what₂.embLL ((idemOf A.A.X).coeff g))
-    (Dv := (real b R).C.P.Div) (eG := (real b R).eG) (eR := (real b R).eG.trans ((cG))) ((h.grp))) : _))
-  case psi => exact (by with_unfolding_all exact ((psiPPTie_transport a s h.psi) :))
-  case std => exact (by with_unfolding_all exact (h.std :))
-  case signs => exact (by with_unfolding_all exact (h.signs :))
+  case grp => exact (grpCl_tr a s (Pg := (real b R).Pg) (c := fun g => a.D.what₂.embLL ((idemOf A.A.X).coeff g))
+    (Dv := (real b R).C.P.Div) (eG := (real b R).eG) (eR := (real b R).eG.trans ((cG))) ((h.grp)))
+  case psi => exact (psiPPTie_transport a s h.psi)
+  case std => exact h.std
+  case signs => exact h.signs
   case frames =>
     intro hf
     exact normalFrames_tr a (real b R).Pg (real b R).βY (real b R).βW (h.frames (framesExist_tr b R.Pg hf))
-  case beta => exact (by with_unfolding_all exact (h.beta :))
-  case prX => exact (by with_unfolding_all exact (h.prX :))
-  case guard => exact (by with_unfolding_all exact (h.guard :))
-  case valKs => exact (by with_unfolding_all exact (h.valKs :))
-  case frameKs => exact (by with_unfolding_all exact (h.frameKs :))
-  case levKs => exact (by with_unfolding_all exact (h.levKs :))
+  case beta => exact h.beta
+  case prX => exact h.prX
+  case guard => exact h.guard
+  case valKs => exact h.valKs
+  case frameKs => exact h.frameKs
+  case levKs => exact h.levKs
 
 end Kept
 
@@ -255,37 +256,40 @@ variable {R : RealDat3 a.D A Ks} {F : Face3 a.D A}
 theorem weakCharInertPart_realAdelicDataTransport (s : SameGrp a b) (h : R.WeakCharacterisation F) : letI := alg b iK; (real3 b R).WeakCharacterisation (face3 b F) := by
   letI := alg b iK
   constructor
-  case base => exact (by with_unfolding_all exact ((baseW_tr b s h.base) :))
-  case inert => exact (by with_unfolding_all exact ((isInert_tr b h.inert) :))
+  case base => exact (baseW_tr b s h.base)
+  case inert => exact (isInert_tr b h.inert)
   case fullY =>
     intro t k hk
-    exact (by with_unfolding_all exact (weilFull_imp b _ _ _ _ _ _ (h.fullY t k hk) :))
+    dsimp only [real3, real]
+    exact weilFull_imp b _ _ _ _ _ _ (h.fullY t k hk)
   case fullX =>
     intro t
-    exact (by with_unfolding_all exact (weilFull_imp b _ _ _ _ _ _ (h.fullX t) :))
+    dsimp only [real3, real]
+    exact weilFull_imp b _ _ _ _ _ _ (h.fullX t)
   case fullP =>
     intro i t
-    exact (by with_unfolding_all exact (weilFull_imp b _ _ _ _ _ _ (h.fullP i t) :))
-  case scal => exact (by with_unfolding_all exact ((isScal_tr b h.scal) :))
-  case tup => exact (by with_unfolding_all exact ((isTup_tr b h.tup) :))
-  case phase => exact (by with_unfolding_all exact (h.phase :))
-  case allPl => exact (by with_unfolding_all exact (h.allPl :))
+    dsimp only [real3, real]
+    exact weilFull_imp b _ _ _ _ _ _ (h.fullP i t)
+  case scal => exact (isScal_tr b h.scal)
+  case tup => exact (isTup_tr b h.tup)
+  case phase => exact h.phase
+  case allPl => exact h.allPl
 
-theorem pins_tr (s : SameGrp a b) {cG : G0 R.Pg a.D.R.r ≃* G0g a.D.nd} (h : Pins R F cG) : letI := alg b iK; Pins (real3 b R) (face3 b F) ((by with_unfolding_all exact ((cG.trans s.iso) :))) := by
+theorem pins_tr (s : SameGrp a b) {cG : G0 R.Pg a.D.R.r ≃* G0g a.D.nd} (h : Pins R F cG) : letI := alg b iK; Pins (real3 b R) (face3 b F) ((cG.trans s.iso)) := by
   letI := alg b iK
   constructor
-  case char => exact (by with_unfolding_all exact ((weakCharInertPart_realAdelicDataTransport b s h.char) :))
-  case keep => exact (by with_unfolding_all exact ((keep_tr b s h.keep) :))
-  case phs => exact (by with_unfolding_all exact (h.phs :))
-  case trSem => exact (by with_unfolding_all exact (cast (congrArg (fun P : type_of% (R.TrISem F) => (∃ tr, P tr ∧ SepWith A tr) → P A.trI ∧ A.fam3.TrISep) (trISem_eq b R F)) h.trSem :))
+  case char => exact (weakCharInertPart_realAdelicDataTransport b s h.char)
+  case keep => exact (keep_tr b s h.keep)
+  case phs => exact h.phs
+  case trSem => exact (cast (congrArg (fun P : type_of% (R.TrISem F) => (∃ tr, P tr ∧ SepWith A tr) → P A.trI ∧ A.fam3.TrISep) (trISem_eq b R F)) h.trSem)
 
 theorem holds_tr (h : Holds R F) : letI := alg b iK; Holds (real3 b R) (face3 b F) := by
   letI := alg b iK
   constructor
-  case prim => exact (by with_unfolding_all exact ((primRows3_tr b h.prim) :))
-  case aux => exact (by with_unfolding_all exact ((realAdelicInertTransport_furtherRows b h.aux) :))
-  case ok => exact (by with_unfolding_all exact (h.ok :))
-  case sep => exact (by with_unfolding_all exact (h.sep :))
+  case prim => exact (primRows3_tr b h.prim)
+  case aux => exact (realAdelicInertTransport_furtherRows b h.aux)
+  case ok => exact h.ok
+  case sep => exact h.sep
 
 end Tr
 

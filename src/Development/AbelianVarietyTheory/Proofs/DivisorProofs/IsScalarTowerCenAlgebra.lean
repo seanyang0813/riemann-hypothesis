@@ -110,19 +110,10 @@ def cenIncl (Λ : Subring B) (hΛ : ∀ a : NumberField.RingOfIntegers F, algebr
   (((cenMap ℓ F B).restrictScalars ℤ_[ℓ]).comp (cenOrder ℓ F).val).codRestrict (locOrder ℓ Λ)
     (fun a => cenMap_mem ℓ F B Λ hΛ a.2)
 
-theorem coe_cenIncl (Λ : Subring B)
-    (hΛ : ∀ a : NumberField.RingOfIntegers F, algebraMap F B (a : F) ∈ Λ) (a : cenOrder ℓ F) :
-    (cenIncl ℓ F B Λ hΛ a : ℚ_[ℓ] ⊗[ℚ] B) = cenMap ℓ F B a := rfl
-
 def cenAlgebra (Λ : Subring B)
     (hΛ : ∀ a : NumberField.RingOfIntegers F, algebraMap F B (a : F) ∈ Λ) :
     Algebra (cenOrder ℓ F) (locOrder ℓ Λ) :=
   (cenIncl ℓ F B Λ hΛ).toRingHom.toAlgebra' fun a x => Subtype.ext (_root_.GlobalTheory.CentralizerMapTensor.commute_cenMap ℓ F B a x)
-
-theorem algebraMap_cenAlgebra (Λ : Subring B)
-    (hΛ : ∀ a : NumberField.RingOfIntegers F, algebraMap F B (a : F) ∈ Λ) (a : cenOrder ℓ F) :
-    letI := cenAlgebra ℓ F B Λ hΛ
-    algebraMap (cenOrder ℓ F) (locOrder ℓ Λ) a = cenIncl ℓ F B Λ hΛ a := rfl
 
 theorem isScalarTower_cenAlgebra (Λ : Subring B)
     (hΛ : ∀ a : NumberField.RingOfIntegers F, algebraMap F B (a : F) ∈ Λ) :

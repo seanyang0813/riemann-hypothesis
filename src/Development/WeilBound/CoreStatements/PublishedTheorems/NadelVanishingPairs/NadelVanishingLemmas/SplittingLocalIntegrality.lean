@@ -790,14 +790,8 @@ namespace GlobalTheory.DI.AltClosed
 
 variable {K : Type} [CommRing K] {V : Type} [AddCommGroup V] [Module K V] {ι : Type} [LinearOrder ι]
 
-theorem dtot_add {E : Type} [AddCommGroup E] (d : E →+ E) (c c' : Finset ι → E) :
-    Dtot d (c + c') = Dtot d c + Dtot d c' := by
-  funext t
-  simp only [Dtot, delta, Pi.add_apply, smul_add, Finset.sum_add_distrib, map_add (f := _)]
-  abel
-
 def dtotHom {E : Type} [AddCommGroup E] (d : E →+ E) : (Finset ι → E) →+ (Finset ι → E) :=
-  AddMonoidHom.mk' (Dtot d) (dtot_add d)
+  AddMonoidHom.mk' (Dtot d) (GlobalTheory.DI.Dtot_add d)
 
 
 omit [LinearOrder ι] in

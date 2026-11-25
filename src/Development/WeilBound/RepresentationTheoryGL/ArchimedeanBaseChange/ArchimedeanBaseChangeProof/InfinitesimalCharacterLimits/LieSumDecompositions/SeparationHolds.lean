@@ -1014,7 +1014,7 @@ theorem leaf_of (hC : Core) (hP : GrowPHolds) : Leaf := by
     rw [Ne, LinearEquiv.map_eq_zero_iff]; exact hφ0
   obtain ⟨V, p, hV, hpV, hpe, hp0⟩ :=
     hC E N (tw U (-w)) hU'st hU'A hU'P _ ⟨φ, hφU, rfl⟩ hφ'A2 hφ'0
-  have hUle : ∀ ψ ∈ U, ψ ∈ tw (tw U (-w)) w := fun ψ hψ => ⟨_, ⟨ψ, hψ, rfl⟩, mulChi_absC_neg' N w ψ⟩
+  have hUle : ∀ ψ ∈ U, ψ ∈ tw (tw U (-w)) w := fun ψ hψ => ⟨_, ⟨ψ, hψ, rfl⟩, PositivityTheory.Rg.Rs.ChordArithmetic.mulChi_absC_cancel N w ψ⟩
   refine ⟨.leaf V w, twMap N w p, Or.inr ⟨hN, hV, re_tw hz⟩, hN,
     fun o ψ hψ => twMap_equiv hU'st hpe o ψ (hUle ψ hψ), fun ψ hψ => twMap_mem hpV ψ (hUle ψ hψ), ?_⟩
   rw [twMap_apply, Ne, LinearEquiv.map_eq_zero_iff]
@@ -1236,7 +1236,7 @@ theorem memInd2_tw_iff {W₁ : Submodule ℂ (Sm E r)} {W₂ : Submodule ℂ (Sm
       ∃ φ, (MemInd2 W₁ W₂ φ ∧ φ ∈ GlobalTheory.DiscSpec.finVec (cptRep E (r + s))) ∧ mulChi (r + s) (Model.absC E z) φ = ψ := by
   constructor
   · rintro ⟨h, hK⟩
-    refine ⟨mulChi (r + s) (Model.absC E (-z)) ψ, ⟨?_, Trees.mulChi_mem_finVec _ hK⟩, ParabolicProjection.mulChi_absC_neg' _ z ψ⟩
+    refine ⟨mulChi (r + s) (Model.absC E (-z)) ψ, ⟨?_, Trees.mulChi_mem_finVec _ hK⟩, PositivityTheory.Rg.Rs.ChordArithmetic.mulChi_absC_cancel _ z ψ⟩
     have h2 := memInd2_tw (-z) h
     rwa [tw_tw, tw_tw, add_neg_cancel, tw_zero', tw_zero'] at h2
   · rintro ⟨φ, ⟨hφ, hK⟩, rfl⟩
@@ -1397,7 +1397,7 @@ theorem hyp_tw {N : ℕ} {τ : E →+* ℂ} {U : Submodule ℂ (Sm E N)} (hU : H
     change mulChi N (Model.absC E w) φ ∈ W'
     rw [← e]
     change mulChi N (Model.absC E w) (mulChi N (Model.absC E (-w)) ψ) ∈ W'
-    rw [ParabolicProjection.mulChi_absC_neg']
+    rw [PositivityTheory.Rg.Rs.ChordArithmetic.mulChi_absC_cancel]
     exact hψ
   · rintro _ ⟨φ, hφ, rfl⟩ r hr hrN c hc
     have h := expTw_holds E N φ w (haut φ hφ) r hr hrN c hc

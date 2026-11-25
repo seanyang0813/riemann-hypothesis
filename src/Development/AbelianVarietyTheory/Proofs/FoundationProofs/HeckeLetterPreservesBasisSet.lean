@@ -159,9 +159,6 @@ theorem coset (q : ℕ) (hq : q.Prime) (m : Matrix (Fin 2) (Fin 2) ℤ) (hm : m.
     (∃ g : Matrix (Fin 2) (Fin 2) ℤ, g * !![(q : ℤ), 0; 0, 1] = m) ∨
       ∃ k : ℕ, k < q ∧ ∃ g : Matrix (Fin 2) (Fin 2) ℤ, g * !![1, (k : ℤ); 0, (q : ℤ)] = m := _root_.GlobalTheory.cosetPrimeDet q hq m hm
 
-theorem sgD_spec (N l d : ℕ) (hl : l.Prime) (hN : 0 < N) (hNl : Nat.Coprime N l) (hd : Nat.Coprime d N) :
-    IsDiam N l d (sgD N l d) := _root_.GlobalTheory.KZ.isDiam_sgD_of_prime N l d hl hN hNl hd
-
 theorem zmod_eq_one_iff (N : ℕ) (x : ℤ) : (x : ZMod N) = 1 ↔ (N : ℤ) ∣ x - 1 := by
   rw [← sub_eq_zero, ← Int.cast_one (R := ZMod N), ← Int.cast_sub, ZMod.intCast_zmod_eq_zero_iff_dvd]
 

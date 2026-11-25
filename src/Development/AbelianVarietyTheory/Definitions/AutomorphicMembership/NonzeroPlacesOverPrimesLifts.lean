@@ -46,8 +46,6 @@ open GlobalTheory.Mem GlobalTheory.Mem.Col2 GlobalTheory.Mem.Top GlobalTheory.Me
 
 namespace GlobalTheory.Mem.R3.Rw
 
-attribute [local instance] Formalism.IndefR.principalLevelFrame.instCMHostI
-
 variable {B : Base} {f : Fr B.toPre} {T : TwDat B} {w : ColW B f T} {Z₀ : w.Lt} {hX : B.fields.Ok} {Wt : Set B.places.Pl}
   {z₀ : Dat (w.st Z₀) w.I hX T Wt} {q : RowPk w z₀} {o : q.Over}
 

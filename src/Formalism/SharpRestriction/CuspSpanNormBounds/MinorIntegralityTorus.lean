@@ -109,8 +109,6 @@ theorem one_mem_zpow {R K : Type*} [CommRing R] [IsDedekindDomain R] [Field K] [
     exact FractionalIdeal.coeIdeal_le_one
   exact hle hy
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 section Fr
 
 variable (D : D7)

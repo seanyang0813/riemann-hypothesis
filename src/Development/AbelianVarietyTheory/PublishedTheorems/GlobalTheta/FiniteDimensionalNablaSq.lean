@@ -48,17 +48,6 @@ open Formalism.BasicNotions
 
 namespace GlobalTheory.Published
 
-def WeylDimensionGL : Prop :=
-  ∀ (n : ℕ) (lam : DomWeight n),
-    (FiniteDimensional ℂ (nablaSq ℂ n lam) ∧
-      (Module.finrank ℂ (nablaSq ℂ n lam) : ℚ) =
-        ∏ i : Fin n, ∏ j ∈ Finset.Ioi i,
-          ((lam.w i : ℚ) - (lam.w j : ℚ) + ((j : ℕ) : ℚ) - ((i : ℕ) : ℚ)) / (((j : ℕ) : ℚ) - ((i : ℕ) : ℚ))) ∧
-    (FiniteDimensional ℂ (delSq ℂ n lam) ∧
-      (Module.finrank ℂ (delSq ℂ n lam) : ℚ) =
-        ∏ i : Fin n, ∏ j ∈ Finset.Ioi i,
-          ((lam.w i : ℚ) - (lam.w j : ℚ) + ((j : ℕ) : ℚ) - ((i : ℕ) : ℚ)) / (((j : ℕ) : ℚ) - ((i : ℕ) : ℚ)))
-
 end GlobalTheory.Published
 
 namespace GlobalTheory.WeylDimGL

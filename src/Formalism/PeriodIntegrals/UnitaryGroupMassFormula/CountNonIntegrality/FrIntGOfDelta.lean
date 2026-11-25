@@ -13,8 +13,6 @@ namespace PI.CntNotIntW
 open NumberField IsDedekindDomain Formalism.MainNotions.S Formalism.MainNotions.S.Lat Formalism.MainNotions.S.LocalSplitGroups Formalism.L2.SG.CntLocal
 open Classical ValuativeRel
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 def DiffG : Prop :=
   ∀ (D : Formalism.BasicNotions.D7) (p : PlF D), (D.s.atP p).split.isSome → ∀ t : D.host.F,
     (∀ a : 𝓞 D.host.F, ∃ n : ℤ, Algebra.trace ℚ D.host.F (t * a) = n) → (D.s.atP p).ιF t ∈ 𝒪[(D.s.atP p).Fp]

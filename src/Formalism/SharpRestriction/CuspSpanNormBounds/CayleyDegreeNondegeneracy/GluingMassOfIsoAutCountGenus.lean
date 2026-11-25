@@ -14,8 +14,6 @@ namespace Formalism.MainNotions.BridgeLemma₂
 
 open NumberField Module Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat Formalism.MainNotions.S.Cnt Formalism.HermitianLatticesTheory Formalism.ThetaLiftIndependence.LatticeLiftIndependence
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 section Tr
 
 variable (D : D7)

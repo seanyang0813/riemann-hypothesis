@@ -24,8 +24,6 @@ public import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.DirectS
 public import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.IntegersCompleteDVR
 public import Development.AbelianVarietyTheory.Definitions.LatticeFrames.FiniteDimensionalMram
 public import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsLocalPrimeAinf
-public import Formalism.LocalRingCardinality.SpanPowerMembership.ExampleClassGroupCardPos
-public import Formalism.LocalRingCardinality.SpanPowerMembership
 public import Development.AbelianVarietyTheory.Definitions.Divisors.HasBlockOfOccurs
 public import Development.AbelianVarietyTheory.PublishedTheorems.GaloisCohomology₂.BhattScholzeCrystallineLattices
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsUnramifiedLocalSituationOfEmbedding
@@ -88,7 +86,7 @@ import Mathlib.RingTheory.Etale.Weakly
 import Mathlib.Algebra.Azumaya.Basic
 
 -- This file was produced by scripts/clump.py from the modules listed below.
--- Members: Development.AbelianVarietyTheory.Counterexamples.NonGaloisSurvey.CriterionWithoutRoot, Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.AlgebraMapLocRing, Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.HeightsFromJumpsIff, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsInvariantWachModuleBasisOfNonnegJumps, Development.AbelianVarietyTheory.Proofs.DivisorProofs.FrobeniusMatrixCofactorEqQPowFrame, Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsContinuousCrystallineMatrixRepOfIntertwinesDet, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ImportsExtraFurther, Development.AbelianVarietyTheory.Proofs.DivisorProofs.MatGoodOfBlockExtensionTwist, Development.AbelianVarietyTheory.Proofs.DivisorProofs.RankReducedLetterMatrixEqRankModMaximal, Development.AbelianVarietyTheory.Proofs.DivisorProofs.WachModuleMapMatrixCompMul, Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsLocTheoryTied, Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.LocalGapNonemptyAndRecordNonempty, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsSlotsGlobal
+-- Members: Development.AbelianVarietyTheory.Counterexamples.NonGaloisSurvey.CriterionWithoutRoot, Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.AlgebraMapLocRing, Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.HeightsFromJumpsIff, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsInvariantWachModuleBasisOfNonnegJumps, Development.AbelianVarietyTheory.Proofs.DivisorProofs.FrobeniusMatrixCofactorEqQPowFrame, Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsContinuousCrystallineMatrixRepOfIntertwinesDet, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ImportsExtraFurther, Development.AbelianVarietyTheory.Proofs.DivisorProofs.MatGoodOfBlockExtensionTwist, Development.AbelianVarietyTheory.Proofs.DivisorProofs.RankReducedLetterMatrixEqRankModMaximal, Development.AbelianVarietyTheory.Proofs.DivisorProofs.WachModuleMapMatrixCompMul, Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsLocTheoryTied, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsSlotsGlobal
 
 -- ===== clump member: Development.AbelianVarietyTheory.Counterexamples.NonGaloisSurvey.CriterionWithoutRoot =====
 -- clump-header: {"m": "Development.AbelianVarietyTheory.Counterexamples.NonGaloisSurvey.CriterionWithoutRoot", "h": "module\n\npublic import Formalism.SharpRestriction.LevelLetterCocycles.DeltaInvariantLattices\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\n\n"}
@@ -520,10 +518,10 @@ theorem heights_iff_loc (l : ℕ) [Fact l.Prime] (P : LocPrime l) (AI : LocAinf 
     rw [letterMax_eq, letterMax_eq, partC_iff]
     exact h2 K s LL hg T M h' hT hJ'
 
-theorem heights_iff (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW)
-    (C : CmpOf D.loc D.locA HW F) :
-    (∀ (l : ℕ) [Fact l.Prime], HeightsFromJumps l (D.loc l) (D.locA l) (HW l) (F l) (C l)) ↔
-      P5 D HW F ∧ p5eL D.loc D.locA HW F :=
+theorem heights_iff (loc : LocTheory) (locA : ∀ (l : ℕ) [Fact l.Prime], LocAinf l (loc l)) (HW : HWOf loc) (F : FonOf loc locA HW)
+    (C : CmpOf loc locA HW F) :
+    (∀ (l : ℕ) [Fact l.Prime], HeightsFromJumps l (loc l) (locA l) (HW l) (F l) (C l)) ↔
+      p5L loc HW locA F ∧ p5eL loc locA HW F :=
   ⟨fun h => ⟨fun l _ => ((heights_iff_loc l _ _ _ _ _).1 (h l)).1,
       fun l _ => ((heights_iff_loc l _ _ _ _ _).1 (h l)).2⟩,
     fun h l _ => (heights_iff_loc l _ _ _ _ _).2 ⟨h.1 l, h.2 l⟩⟩
@@ -702,14 +700,14 @@ theorem exists_rem {l : ℕ} [Fact l.Prime] (LL : FinExt l) (g : (↥(OL LL))⟦
     ((mem_maximalIdeal _).2 hl)).1 g
   exact ⟨a, g₁, by rw [e, add_sub_cancel_right]⟩
 
-theorem exists_frame : ∀ (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.loc D.locA HW F) (l : ℕ) [Fact l.Prime] (K LL : FinExt l) (hA : CaseA K LL) (T : LocLat ↥(GK K) ℚ_[l] ↥LL.1 ↥(OL LL)) (U : ZMod (Module.finrank ℚ_[l] ↥(K0 K)) → Multiset ℤ) (n : ℕ), GlobalTheory.AdmLoc.CrysWith ((D.loc l).PD K) ((HW l).W K 1 LL hA.2.2).emb T.ρ U → (∀ i, ∀ u ∈ U i, 0 ≤ u) → Module.finrank ↥(OL LL) ↥T.L.T = n → ∀ γ : ((HW l).W K 1 LL hA.2.2).Gam, ∃ (b : Module.Basis (Fin n) (LetA ↥(OL LL) (Module.finrank ℚ_[l] ↥(K0 K))) ↥(((HW l).W K 1 LL hA.2.2).N T)) (N : Lat (ZMod (Module.finrank ℚ_[l] ↥(K0 K))) n ↥(OL LL)), IsFrame ((HW l).W K 1 LL hA.2.2) T γ b N := by
-  intro D HW F Cm l _ K LL hA T U n hU hpos hn γ
+theorem exists_frame : ∀ (loc : LocTheory) (locA : ∀ (l : ℕ) [Fact l.Prime], LocAinf l (loc l)) (locT : ∀ (l : ℕ) [Fact l.Prime], Formalism.BasicNotions.LocTied l (loc l) (locA l)) (HW : HWOf loc) (F : FonOf loc locA HW) (Cm : CmpOf loc locA HW F) (l : ℕ) [Fact l.Prime] (K LL : FinExt l) (hA : CaseA K LL) (T : LocLat ↥(GK K) ℚ_[l] ↥LL.1 ↥(OL LL)) (U : ZMod (Module.finrank ℚ_[l] ↥(K0 K)) → Multiset ℤ) (n : ℕ), GlobalTheory.AdmLoc.CrysWith ((loc l).PD K) ((HW l).W K 1 LL hA.2.2).emb T.ρ U → (∀ i, ∀ u ∈ U i, 0 ≤ u) → Module.finrank ↥(OL LL) ↥T.L.T = n → ∀ γ : ((HW l).W K 1 LL hA.2.2).Gam, ∃ (b : Module.Basis (Fin n) (LetA ↥(OL LL) (Module.finrank ℚ_[l] ↥(K0 K))) ↥(((HW l).W K 1 LL hA.2.2).N T)) (N : Lat (ZMod (Module.finrank ℚ_[l] ↥(K0 K))) n ↥(OL LL)), IsFrame ((HW l).W K 1 LL hA.2.2) T γ b N := by
+  intro loc locA locT HW F Cm l _ K LL hA T U n hU hpos hn γ
   have hR := _root_.GlobalTheory.WachPlace.ringFacts_of_caseA (HW l) K LL hA
-  have hJ := (GlobalTheory.HeightsClauseCompare.heights_iff D HW F Cm).2
-    ⟨GlobalTheory.NL.Heights.heights_from_jumps D HW F Cm, GlobalTheory.NL.SandJumps.main D HW F Cm⟩
-  have hH := GlobalTheory.WachUse.HeightsProof.heights_of_caseA (D.locA l) (HW l) (F l) (Cm l) ⟨D.locT l⟩
+  have hJ := (GlobalTheory.HeightsClauseCompare.heights_iff loc locA HW F Cm).2
+    ⟨GlobalTheory.NL.Heights.heights_from_jumps loc locA locT HW F Cm, GlobalTheory.NL.SandJumps.main loc locA locT HW F Cm⟩
+  have hH := GlobalTheory.WachUse.HeightsProof.heights_of_caseA (locA l) (HW l) (F l) (Cm l) ⟨locT l⟩
     ((GlobalTheory.HeightsFromJumpsCompare.heightsFromJumps_iff l _ _ _ _ _).2 (hJ l)) K LL hA
-  obtain ⟨b₀⟩ := GlobalTheory.WachFree.wach_free (D.loc l) (HW l) K 1 LL hA.2.2 T hU.1
+  obtain ⟨b₀⟩ := GlobalTheory.WachFree.wach_free (loc l) (HW l) K 1 LL hA.2.2 T hU.1
   obtain ⟨b, hb⟩ := GlobalTheory.WachTie.exists_invariant_basis _ T hR.2.2.2.2.2 ⟨b₀.reindex (finCongr hn)⟩
   obtain ⟨Pm, hP⟩ := exists_phi_matrix _ l (fun a => (hR.2.2.2.2.1 a).1) b hb (phi_mem _ hH U hU hpos)
   obtain ⟨Dm, hD⟩ := exists_gam_matrix _ l (fun a => (hR.2.2.2.2.1 a).1) b hb γ
@@ -806,16 +804,16 @@ end GlobalTheory.WachPlace.FrameHeight
 
 namespace GlobalTheory.WachPlace.FrameHeight
 
-theorem frame_height : ∀ (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.loc D.locA HW F) (l : ℕ) [Fact l.Prime] (K LL : FinExt l) (hA : CaseA K LL) (T : LocLat ↥(GK K) ℚ_[l] ↥LL.1 ↥(OL LL)) (U : ZMod (Module.finrank ℚ_[l] ↥(K0 K)) → Multiset ℤ) (n h : ℕ) (γ : ((HW l).W K 1 LL hA.2.2).Gam) (b : Module.Basis (Fin n) (LetA ↥(OL LL) (Module.finrank ℚ_[l] ↥(K0 K))) ↥(((HW l).W K 1 LL hA.2.2).N T)) (N : Lat (ZMod (Module.finrank ℚ_[l] ↥(K0 K))) n ↥(OL LL)), GlobalTheory.AdmLoc.CrysWith ((D.loc l).PD K) ((HW l).W K 1 LL hA.2.2).emb T.ρ U → (∀ i, ∀ u ∈ U i, 0 ≤ u ∧ u ≤ (h : ℤ)) → IsFrame ((HW l).W K 1 LL hA.2.2) T γ b N → ∀ i, ∃ Q : Mx (PowerSeries ↥(OL LL)) n n, (N.P i).map (inc l ↥(OL LL)) * Q = (q l ↥(OL LL) ^ h) • (1 : Mx (PowerSeries ↥(OL LL)) n n) := by
-  intro D HW F Cm l _ K LL hA T U n h γ b N hU hb hfr i
+theorem frame_height : ∀ (loc : LocTheory) (locA : ∀ (l : ℕ) [Fact l.Prime], LocAinf l (loc l)) (locT : ∀ (l : ℕ) [Fact l.Prime], Formalism.BasicNotions.LocTied l (loc l) (locA l)) (HW : HWOf loc) (F : FonOf loc locA HW) (Cm : CmpOf loc locA HW F) (l : ℕ) [Fact l.Prime] (K LL : FinExt l) (hA : CaseA K LL) (T : LocLat ↥(GK K) ℚ_[l] ↥LL.1 ↥(OL LL)) (U : ZMod (Module.finrank ℚ_[l] ↥(K0 K)) → Multiset ℤ) (n h : ℕ) (γ : ((HW l).W K 1 LL hA.2.2).Gam) (b : Module.Basis (Fin n) (LetA ↥(OL LL) (Module.finrank ℚ_[l] ↥(K0 K))) ↥(((HW l).W K 1 LL hA.2.2).N T)) (N : Lat (ZMod (Module.finrank ℚ_[l] ↥(K0 K))) n ↥(OL LL)), GlobalTheory.AdmLoc.CrysWith ((loc l).PD K) ((HW l).W K 1 LL hA.2.2).emb T.ρ U → (∀ i, ∀ u ∈ U i, 0 ≤ u ∧ u ≤ (h : ℤ)) → IsFrame ((HW l).W K 1 LL hA.2.2) T γ b N → ∀ i, ∃ Q : Mx (PowerSeries ↥(OL LL)) n n, (N.P i).map (inc l ↥(OL LL)) * Q = (q l ↥(OL LL) ^ h) • (1 : Mx (PowerSeries ↥(OL LL)) n n) := by
+  intro loc locA locT HW F Cm l _ K LL hA T U n h γ b N hU hb hfr i
   have hJ : Formalism.MainNotions.DeltaInvariantLattices.JumpsLet ((HW l).W K 1 LL hA.2.2) T (fun _ => 0) (fun _ => h) := by
     intro τ i' hτ a ha
-    haveI := (GlobalTheory.Per.TiedDdR.ddR_finrank_le l (D.loc l) (D.locA l) (D.locT l) K LL T.V T.ρ).1
-    have h1 := (GlobalTheory.Per.JumpMult.jump_iff_of_finite ((D.loc l).PD K) T.ρ τ a).2.2.1 ha
+    haveI := (GlobalTheory.Per.TiedDdR.ddR_finrank_le l (loc l) (locA l) (locT l) K LL T.V T.ρ).1
+    have h1 := (GlobalTheory.Per.JumpMult.jump_iff_of_finite ((loc l).PD K) T.ρ τ a).2.2.1 ha
     rw [hU.2 i' τ (fun x => DFunLike.congr_fun hτ x) a] at h1
     have h2 := hb i' a (Multiset.count_ne_zero.1 (by exact_mod_cast h1))
     exact ⟨by simpa using h2.1, h2.2⟩
-  have h5 := (GlobalTheory.NL.Heights.heights_from_jumps D HW F Cm l K 1 LL hA.2.2 T (fun _ => 0) (fun _ => h)
+  have h5 := (GlobalTheory.NL.Heights.heights_from_jumps loc locA locT HW F Cm l K 1 LL hA.2.2 T (fun _ => 0) (fun _ => h)
     hU.1 hJ).2.1 i
   obtain ⟨Qm, hQm⟩ := exists_inv ((HW l).W K 1 LL hA.2.2) T b
     (fun m k => fun i => inc l ↥(OL LL) (N.P i m k)) hfr.2.1 h i h5
@@ -827,7 +825,7 @@ theorem frame_height : ∀ (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW
     rw [e1]
     change ((HW l).W K 1 LL hA.2.2).q₀ = q l ↥(OL LL)
     have e2 := ((HW l).W K 1 LL hA.2.2).q₀_def
-    rw [(D.loc l).PD_p K, ← (q_multiplicative_holds l ↥(OL LL)).1] at e2
+    rw [(loc l).PD_p K, ← (q_multiplicative_holds l ↥(OL LL)).1] at e2
     refine PowerSeries.ext fun j => ?_
     have e3 := congrArg (PowerSeries.coeff (j + 1)) e2
     simpa only [PowerSeries.coeff_succ_X_mul] using e3
@@ -1294,8 +1292,8 @@ end Generic
 
 
 
-theorem main : ∀ (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (l : ℕ) [Fact l.Prime] (K LL : FinExt l) (hA : CaseA K LL) (T T' : LocLat ↥(GK K) ℚ_[l] ↥LL.1 ↥(OL LL)) (n n' : ℕ) (b : Module.Basis (Fin n) (LetA ↥(OL LL) (Module.finrank ℚ_[l] ↥(K0 K))) ↥(((HW l).W K 1 LL hA.2.2).N T)) (b' : Module.Basis (Fin n') (LetA ↥(OL LL) (Module.finrank ℚ_[l] ↥(K0 K))) ↥(((HW l).W K 1 LL hA.2.2).N T')) (g : LatHom T.L T'.L) (A : ZMod (Module.finrank ℚ_[l] ↥(K0 K)) → Mx (PowerSeries ↥(OL LL)) n' n) (e : Module.Basis (Fin n) ↥(OL LL) ↥T.L.T) (e' : Module.Basis (Fin n') ↥(OL LL) ↥T'.L.T) (a : Mx ↥(OL LL) n' n), IsCrys ((D.loc l).PD K) T.ρ → IsCrys ((D.loc l).PD K) T'.ρ → IsMapMat ((HW l).W K 1 LL hA.2.2) g b b' A → (∀ k, g.f (e k : T.V) = ∑ m, ((a m k : ↥(OL LL)) : ↥LL.1) • (e' m : T'.V)) → ∀ i, lrank ((A i).map (PowerSeries.map (residue ↥(OL LL)))) = (a.map (residue ↥(OL LL))).rank := by
-  intro D HW F l _ K LL hA T T' n n' b b' g A e e' a hT hT' hmap ha i
+theorem main : ∀ (loc : LocTheory) (locA : ∀ (l : ℕ) [Fact l.Prime], LocAinf l (loc l)) (HW : HWOf loc) (F : FonOf loc locA HW) (l : ℕ) [Fact l.Prime] (K LL : FinExt l) (hA : CaseA K LL) (T T' : LocLat ↥(GK K) ℚ_[l] ↥LL.1 ↥(OL LL)) (n n' : ℕ) (b : Module.Basis (Fin n) (LetA ↥(OL LL) (Module.finrank ℚ_[l] ↥(K0 K))) ↥(((HW l).W K 1 LL hA.2.2).N T)) (b' : Module.Basis (Fin n') (LetA ↥(OL LL) (Module.finrank ℚ_[l] ↥(K0 K))) ↥(((HW l).W K 1 LL hA.2.2).N T')) (g : LatHom T.L T'.L) (A : ZMod (Module.finrank ℚ_[l] ↥(K0 K)) → Mx (PowerSeries ↥(OL LL)) n' n) (e : Module.Basis (Fin n) ↥(OL LL) ↥T.L.T) (e' : Module.Basis (Fin n') ↥(OL LL) ↥T'.L.T) (a : Mx ↥(OL LL) n' n), IsCrys ((loc l).PD K) T.ρ → IsCrys ((loc l).PD K) T'.ρ → IsMapMat ((HW l).W K 1 LL hA.2.2) g b b' A → (∀ k, g.f (e k : T.V) = ∑ m, ((a m k : ↥(OL LL)) : ↥LL.1) • (e' m : T'.V)) → ∀ i, lrank ((A i).map (PowerSeries.map (residue ↥(OL LL)))) = (a.map (residue ↥(OL LL))).rank := by
+  intro loc locA HW F l _ K LL hA T T' n n' b b' g A e e' a hT hT' hmap ha i
   haveI : FiniteDimensional ℚ_[l] ↥K.1 := K.2
   haveI : FiniteDimensional ℚ_[l] ↥(K0 K) :=
     Module.Finite.of_injective (IntermediateField.inclusion (inf_le_left : K0 K ≤ K.1)).toLinearMap
@@ -1408,30 +1406,8 @@ end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsLocTheoryTied =====
 
--- ===== clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.LocalGapNonemptyAndRecordNonempty =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.LocalGapNonemptyAndRecordNonempty", "h": "module\n\npublic import Formalism.LocalRingCardinality.SpanPowerMembership.ExampleClassGroupCardPos\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsLocTheoryTied\npublic import Formalism.LocalRingCardinality.SpanPowerMembership\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Sheaves.Init\n\n"}
-section -- clump:auto
-@[expose] public section
-
-open Formalism Formalism.BasicNotions
-namespace GlobalTheory.MemLoc
-
-theorem localGap_nonempty : ∀ {R : Formalism.BasicNotions.Ranks} (H : Formalism.BasicNotions.Host R),
-    Nonempty (Formalism.BasicNotions.Examples₂.LocalGap H) := by
-  intro R H
-  obtain ⟨L, A, ⟨T⟩⟩ := exists_locTheory_tied
-  exact ⟨⟨L, A, T⟩⟩
-
-theorem record_nonempty : Nonempty Formalism.BasicNotions.D7 :=
-  Formalism.BasicNotions.Examples₂.record_nonempty_of_localGap (localGap_nonempty _)
-
-end GlobalTheory.MemLoc
-end -- clump:auto
-end -- clump:auto
--- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.LocalGapNonemptyAndRecordNonempty =====
-
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsSlotsGlobal =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsSlotsGlobal", "h": "module\n\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.RankOfMulEqOne\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.HasBlockOfOccurs\npublic import Development.AbelianVarietyTheory.PublishedTheorems.GaloisCohomology₂.BhattScholzeCrystallineLattices\npublic import Formalism.LocalRingCardinality.SpanPowerMembership.NDLocE\npublic import Formalism.LocalRingCardinality.RhoDetPrimeEqMuTildeMulChiPow\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsInvariantWachModuleBasisOfNonnegJumps\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsUnramifiedLocalSituationOfEmbedding\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsWachModuleMapMatrixReductionComm\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.FrobeniusMatrixCofactorEqQPowFrame\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.FrobeniusMatrixFrameAtPrimitiveRootFactor\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsContinuousCrystallineMatrixRepOfIntertwinesDet\npublic import Formalism.LocalRingCardinality.AdicCompletionLocal.LocTied\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.MatGoodOfBlockExtensionTwist\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.RankReducedLetterMatrixEqRankModMaximal\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.WachModuleMapMatrixCompMul\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsHwFonCmpTies\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.LocalGapNonemptyAndRecordNonempty\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.WachRingFactsUnramifiedLevelOne\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Etale.Weakly\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Mathlib.Algebra.Azumaya.Basic\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsSlotsGlobal", "h": "module\n\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.RankOfMulEqOne\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.HasBlockOfOccurs\npublic import Development.AbelianVarietyTheory.PublishedTheorems.GaloisCohomology₂.BhattScholzeCrystallineLattices\npublic import Formalism.LocalRingCardinality.SpanPowerMembership.NDLocE\npublic import Formalism.LocalRingCardinality.RhoDetPrimeEqMuTildeMulChiPow\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsInvariantWachModuleBasisOfNonnegJumps\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsUnramifiedLocalSituationOfEmbedding\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsWachModuleMapMatrixReductionComm\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.FrobeniusMatrixCofactorEqQPowFrame\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.FrobeniusMatrixFrameAtPrimitiveRootFactor\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsContinuousCrystallineMatrixRepOfIntertwinesDet\npublic import Formalism.LocalRingCardinality.AdicCompletionLocal.LocTied\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.MatGoodOfBlockExtensionTwist\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.RankReducedLetterMatrixEqRankModMaximal\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.WachModuleMapMatrixCompMul\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsHwFonCmpTies\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsLocTheoryTied\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.WachRingFactsUnramifiedLevelOne\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Etale.Weakly\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Mathlib.Algebra.Azumaya.Basic\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -1458,28 +1434,29 @@ theorem eq_zero_of_lrank {F : Type} [Field F] {a b : ℕ} (A : Mx F⟦X⟧ a b) 
 
 section Functor
 
-variable {D : D7} {HW : HWOf D.loc} (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.loc D.locA HW F) {l : ℕ} [Fact l.Prime]
+variable {loc : LocTheory} {locA : ∀ (l : ℕ) [Fact l.Prime], LocAinf l (loc l)}
+  (locT : ∀ (l : ℕ) [Fact l.Prime], Formalism.BasicNotions.LocTied l (loc l) (locA l)) {HW : HWOf loc} (F : FonOf loc locA HW) (Cm : CmpOf loc locA HW F) {l : ℕ} [Fact l.Prime]
   {K LL : FinExt l} (hA : CaseA K LL)
 
-include F Cm in
+include locT F Cm in
 theorem exists_frame {n : ℕ} {r : ↥(GK K) →* GL (Fin n) ↥(OL LL)} {U : ZMod (Module.finrank ℚ_[l] ↥(K0 K)) → Multiset ℤ}
-    (hr : MatGood (D.loc l) ((HW l).W K 1 LL hA.2.2).emb r U) (hU : ∀ i, ∀ u ∈ U i, 0 ≤ u) (γ : ((HW l).W K 1 LL hA.2.2).Gam) :
+    (hr : MatGood (loc l) ((HW l).W K 1 LL hA.2.2).emb r U) (hU : ∀ i, ∀ u ∈ U i, 0 ≤ u) (γ : ((HW l).W K 1 LL hA.2.2).Gam) :
     ∃ (b : Module.Basis (Fin n) (LetA ↥(OL LL) (Module.finrank ℚ_[l] ↥(K0 K))) ↥(((HW l).W K 1 LL hA.2.2).N (latOf r hr.1))) (N : Lat (ZMod (Module.finrank ℚ_[l] ↥(K0 K))) n ↥(OL LL)),
       IsFrame ((HW l).W K 1 LL hA.2.2) (latOf r hr.1) γ b N := by
   have hn : Module.finrank ↥(OL LL) ↥(latOf r hr.1).L.T = n := by
     rw [Module.finrank_eq_card_basis (basisOf r hr.1), Fintype.card_fin]
-  exact _root_.GlobalTheory.WachFrame.exists_frame D HW F Cm l K LL hA (latOf r hr.1) U n hr.2 hU hn γ
+  exact _root_.GlobalTheory.WachFrame.exists_frame loc locA locT HW F Cm l K LL hA (latOf r hr.1) U n hr.2 hU hn γ
 
-include F Cm in
+include locT F Cm in
 theorem latAt_of_frame {n h : ℕ} {r : ↥(GK K) →* GL (Fin n) ↥(OL LL)} {U : ZMod (Module.finrank ℚ_[l] ↥(K0 K)) → Fin n → ℤ}
-    (hr : MatGood (D.loc l) ((HW l).W K 1 LL hA.2.2).emb r fun i => Finset.univ.val.map (U i)) (hU : ∀ i a, 0 ≤ U i a ∧ U i a ≤ h)
+    (hr : MatGood (loc l) ((HW l).W K 1 LL hA.2.2).emb r fun i => Finset.univ.val.map (U i)) (hU : ∀ i a, 0 ≤ U i a ∧ U i a ≤ h)
     {γ : ((HW l).W K 1 LL hA.2.2).Gam} {b : Module.Basis (Fin n) (LetA ↥(OL LL) (Module.finrank ℚ_[l] ↥(K0 K))) ↥(((HW l).W K 1 LL hA.2.2).N (latOf r hr.1))} {N : Lat (ZMod (Module.finrank ℚ_[l] ↥(K0 K))) n ↥(OL LL)}
     (hb : IsFrame ((HW l).W K 1 LL hA.2.2) (latOf r hr.1) γ b N) {u : ℤ_[l]ˣ} {c : ℤ_[l]} {ζ : ↥(OL LL)} {jj : ℕ → (↥(OL LL))⟦X⟧ →+* (↥LL.1)⟦X⟧}
     (hγ : (((HW l).W K 1 LL hA.2.2).χΓ γ : ↥(OL LL)) = algebraMap ℤ_[l] ↥(OL LL) (u : ℤ_[l])) (hu : (u : ℤ_[l]) = 1 + (l : ℤ_[l]) * c)
     (hζ : IsPrimitiveRoot ζ l) (hjj : ∀ a ∈ Finset.Ioo 0 l, IsExpAt (OL LL).val.toRingHom (ζ ^ a) (jj a)) (i : ZMod (Module.finrank ℚ_[l] ↥(K0 K))) :
     LatAt l (N.P i) (N.D i) (N.Th i) h u (U i) (OL LL).val.toRingHom jj := by
   refine ⟨?_, hb.2.2.2 i, ?_⟩
-  · refine _root_.GlobalTheory.WachPlace.FrameHeight.frame_height D HW F Cm l K LL hA (latOf r hr.1) (fun i => Finset.univ.val.map (U i)) n h γ b N hr.2
+  · refine _root_.GlobalTheory.WachPlace.FrameHeight.frame_height loc locA locT HW F Cm l K LL hA (latOf r hr.1) (fun i => Finset.univ.val.map (U i)) n h γ b N hr.2
       (fun i v hv => ?_) hb i
     obtain ⟨a, -, rfl⟩ := Multiset.mem_map.mp hv
     exact hU i a
@@ -1488,7 +1465,7 @@ theorem latAt_of_frame {n h : ℕ} {r : ↥(GK K) →* GL (Fin n) ↥(OL LL)} {U
     have hprim : IsPrimitiveRoot (ζ ^ a) l :=
       hζ.pow_of_coprime a (Nat.coprime_comm.mp
         ((Fact.out : l.Prime).coprime_iff_not_dvd.mpr (Nat.not_dvd_of_pos_of_lt ha0 hal)))
-    exact _root_.GlobalTheory.WachRoots.frame_at_root D HW F Cm l K LL hA (latOf r hr.1) n U γ b N (u : ℤ_[l]) c (ζ ^ a) (jj a) hr.2
+    exact _root_.GlobalTheory.WachRoots.frame_at_root loc locA locT HW F Cm l K LL hA (latOf r hr.1) n U γ b N (u : ℤ_[l]) c (ζ ^ a) (jj a) hr.2
       (fun i a => (hU i a).1) hb hγ hu hprim (hjj a ha) i
 
 private theorem coe_basisOf_eq_stdMap_single {n : ℕ} (r : ↥(GK K) →* GL (Fin n) ↥(OL LL)) (hr : Cont r) (k : Fin n) :
@@ -1498,7 +1475,7 @@ private theorem coe_basisOf_eq_stdMap_single {n : ℕ} (r : ↥(GK K) →* GL (F
 
 include F in
 theorem exists_mapMat {n n' : ℕ} {r : ↥(GK K) →* GL (Fin n) ↥(OL LL)} {r' : ↥(GK K) →* GL (Fin n') ↥(OL LL)}
-    {U U' : ZMod (Module.finrank ℚ_[l] ↥(K0 K)) → Multiset ℤ} (hr : MatGood (D.loc l) ((HW l).W K 1 LL hA.2.2).emb r U) (hr' : MatGood (D.loc l) ((HW l).W K 1 LL hA.2.2).emb r' U')
+    {U U' : ZMod (Module.finrank ℚ_[l] ↥(K0 K)) → Multiset ℤ} (hr : MatGood (loc l) ((HW l).W K 1 LL hA.2.2).emb r U) (hr' : MatGood (loc l) ((HW l).W K 1 LL hA.2.2).emb r' U')
     {γ : ((HW l).W K 1 LL hA.2.2).Gam} {b : Module.Basis (Fin n) (LetA ↥(OL LL) (Module.finrank ℚ_[l] ↥(K0 K))) ↥(((HW l).W K 1 LL hA.2.2).N (latOf r hr.1))} {N : Lat (ZMod (Module.finrank ℚ_[l] ↥(K0 K))) n ↥(OL LL)}
     (hb : IsFrame ((HW l).W K 1 LL hA.2.2) (latOf r hr.1) γ b N)
     {b' : Module.Basis (Fin n') (LetA ↥(OL LL) (Module.finrank ℚ_[l] ↥(K0 K))) ↥(((HW l).W K 1 LL hA.2.2).N (latOf r' hr'.1))} {N' : Lat (ZMod (Module.finrank ℚ_[l] ↥(K0 K))) n' ↥(OL LL)}
@@ -1510,7 +1487,7 @@ theorem exists_mapMat {n n' : ℕ} {r : ↥(GK K) →* GL (Fin n) ↥(OL LL)} {r
   obtain ⟨A, hA1, hA2⟩ := _root_.GlobalTheory.WachMap.exists_mapMat_redHom (HW l) K LL hA (latOf r hr.1) (latOf r' hr'.1) n n' γ b b' N N' u un
     (homOf hr.1 hr'.1 a ha) hr.2.1 hr'.2.1 hb hb' hγ hun
   refine ⟨A, hA1, hA2, fun i => ?_⟩
-  refine _root_.GlobalTheory.WachRank.main D HW F l K LL hA (latOf r hr.1) (latOf r' hr'.1) n n' b b' (homOf hr.1 hr'.1 a ha) A
+  refine _root_.GlobalTheory.WachRank.main loc locA HW F l K LL hA (latOf r hr.1) (latOf r' hr'.1) n n' b b' (homOf hr.1 hr'.1 a ha) A
     (basisOf r hr.1) (basisOf r' hr'.1) a hr.2.1 hr'.2.1 hA1 (fun k => ?_) i
   simp only [coe_basisOf_eq_stdMap_single]
   show (a.map (algebraMap ↥(OL LL) ↥LL.1)).mulVec (stdMap LL n (Pi.single k 1)) =
@@ -1540,12 +1517,12 @@ theorem mapMat_mul {n n' n'' : ℕ} {r : ↥(GK K) →* GL (Fin n) ↥(OL LL)} {
     (homOf hr hr' a ha) (homOf hr' hr'' a' ha') (homOf hr hr'' a'' ha'') A A' A'' h h' h'' hc i, Matrix.map_mul]
 
 
-include F Cm in
+include locT F Cm in
 
 theorem exists_positions {n t h R : ℕ} {r : ↥(GK K) →* GL (Fin n) ↥(OL LL)} {ψ : Fin t → ↥(GK K) →* GL (Fin 1) ↥(OL LL)}
     {U : ZMod (Module.finrank ℚ_[l] ↥(K0 K)) → Fin n → ℤ} {wt : Fin t → ZMod (Module.finrank ℚ_[l] ↥(K0 K)) → ℤ}
-    (hr : MatGood (D.loc l) ((HW l).W K 1 LL hA.2.2).emb r fun i => Finset.univ.val.map (U i)) (hU : ∀ i a, 0 ≤ U i a ∧ U i a ≤ h)
-    (hψ : ∀ s, MatGood (D.loc l) ((HW l).W K 1 LL hA.2.2).emb (ψ s) fun i => {wt s i}) (hwt : ∀ s i, 0 ≤ wt s i ∧ wt s i ≤ h)
+    (hr : MatGood (loc l) ((HW l).W K 1 LL hA.2.2).emb r fun i => Finset.univ.val.map (U i)) (hU : ∀ i a, 0 ≤ U i a ∧ U i a ≤ h)
+    (hψ : ∀ s, MatGood (loc l) ((HW l).W K 1 LL hA.2.2).emb (ψ s) fun i => {wt s i}) (hwt : ∀ s i, 0 ≤ wt s i ∧ wt s i ≤ h)
     {x : GalMats ↥(GK K) ↥(OL LL) n t R} {rs : Fin t → Fin R} {dim : Fin (R + 1) → ℕ}
     (hx : x.Chain (residue ↥(OL LL)) r ψ rs dim) {u : ℤ_[l]ˣ} {c : ℤ_[l]} {un : (↥(OL LL))⟦X⟧} {ζ : ↥(OL LL)}
     {jj : ℕ → (↥(OL LL))⟦X⟧ →+* (↥LL.1)⟦X⟧} (hu : (u : ℤ_[l]) = 1 + (l : ℤ_[l]) * c) (hun : IsUn l ↥(OL LL) (u : ℤ_[l]) un)
@@ -1560,18 +1537,18 @@ theorem exists_positions {n t h R : ℕ} {r : ↥(GK K) →* GL (Fin n) ↥(OL L
     obtain ⟨a, -, rfl⟩ := Multiset.mem_map.mp hv
     exact (hU i a).1
   have hone : ∀ w : ℤ, (Finset.univ.val.map fun _ : Fin 1 => w) = {w} := fun w => by simp
-  have hψ' : ∀ s, MatGood (D.loc l) ((HW l).W K 1 LL hA.2.2).emb (ψ s)
+  have hψ' : ∀ s, MatGood (loc l) ((HW l).W K 1 LL hA.2.2).emb (ψ s)
       (fun i => Finset.univ.val.map fun _ : Fin 1 => wt s i) := fun s => by
     simpa only [hone] using hψ s
   have hψ0 : ∀ s i, ∀ v ∈ Finset.univ.val.map (fun _ : Fin 1 => wt s i), 0 ≤ v := fun s i v hv => by
     rw [hone, Multiset.mem_singleton] at hv
     rw [hv]
     exact (hwt s i).1
-  have hrk : ∀ k, MatGood (D.loc l) ((HW l).W K 1 LL hA.2.2).emb (x.rk k) (fun i => Finset.univ.val.map (U i)) :=
-    fun k => _root_.GlobalTheory.WachPlace.matGood_of_tw (D.loc l) K LL _ n _ r (x.rk k) _ (x.a k) hr (hx.1 k).1 (hx.1 k).2.1
-  have hr2 : ∀ s, MatGood (D.loc l) ((HW l).W K 1 LL hA.2.2).emb (x.r2 s)
+  have hrk : ∀ k, MatGood (loc l) ((HW l).W K 1 LL hA.2.2).emb (x.rk k) (fun i => Finset.univ.val.map (U i)) :=
+    fun k => _root_.GlobalTheory.WachPlace.matGood_of_tw (loc l) K LL _ n _ r (x.rk k) _ (x.a k) hr (hx.1 k).1 (hx.1 k).2.1
+  have hr2 : ∀ s, MatGood (loc l) ((HW l).W K 1 LL hA.2.2).emb (x.r2 s)
       (fun i => Finset.univ.val.map (U i) + {wt s i}) :=
-    fun s => _root_.GlobalTheory.WachPlace.FullRankSum.matGood_sum (D.loc l) (D.locA l) (D.locT l) K LL _ n _ r (ψ s) (x.r2 s) _ _ (x.B s) (x.C s) hr (hψ s)
+    fun s => _root_.GlobalTheory.WachPlace.FullRankSum.matGood_sum (loc l) (locA l) (locT l) K LL _ n _ r (ψ s) (x.r2 s) _ _ (x.B s) (x.C s) hr (hψ s)
       (hx.2.2 s).1 (hx.2.2 s).2.2.1 (hx.2.2 s).2.2.2.2.2.2.2.2.2.2
   have hr20 : ∀ s i, ∀ v ∈ Finset.univ.val.map (U i) + {wt s i}, 0 ≤ v := fun s i v hv => by
     rcases Multiset.mem_add.mp hv with hv | hv
@@ -1579,10 +1556,10 @@ theorem exists_positions {n t h R : ℕ} {r : ↥(GK K) →* GL (Fin n) ↥(OL L
     · rw [Multiset.mem_singleton] at hv
       rw [hv]
       exact (hwt s i).1
-  obtain ⟨b0, N0, hb0⟩ := exists_frame F Cm hA hr hU0 γ
-  choose bk Nk hbk using fun k : Fin (R + 1) => exists_frame F Cm hA (hrk k) hU0 γ
-  choose bψ Nψ hbψ using fun s : Fin t => exists_frame F Cm hA (hψ' s) (hψ0 s) γ
-  choose b2 N2 hb2 using fun s : Fin t => exists_frame F Cm hA (hr2 s) (hr20 s) γ
+  obtain ⟨b0, N0, hb0⟩ := exists_frame locT F Cm hA hr hU0 γ
+  choose bk Nk hbk using fun k : Fin (R + 1) => exists_frame locT F Cm hA (hrk k) hU0 γ
+  choose bψ Nψ hbψ using fun s : Fin t => exists_frame locT F Cm hA (hψ' s) (hψ0 s) γ
+  choose b2 N2 hb2 using fun s : Fin t => exists_frame locT F Cm hA (hr2 s) (hr20 s) γ
   choose Aa hAa1 hAa2 hAa3 using fun k : Fin (R + 1) =>
     exists_mapMat F hA (hrk k) hr (hbk k) hb0 hγ hun (hx.1 k).1
   choose Ab hAb1 hAb2 hAb3 using fun k : Fin R =>
@@ -1609,8 +1586,8 @@ theorem exists_positions {n t h R : ℕ} {r : ↥(GK K) →* GL (Fin n) ↥(OL L
       B' := fun s => (AB' s i).map (PowerSeries.map (residue ↥(OL LL)))
       C := fun s => (AC s i).map (PowerSeries.map (residue ↥(OL LL)))
       E := fun s => (AE s i).map (PowerSeries.map (residue ↥(OL LL))) }, fun i => ⟨?_, fun s => ?_, ?_⟩⟩
-  · exact latAt_of_frame F Cm hA hr hU hb0 hγ hu hζ hjj i
-  · exact latAt_of_frame F Cm hA (hψ' s) (fun i _ => hwt s i) (hbψ s) hγ hu hζ hjj i
+  · exact latAt_of_frame locT F Cm hA hr hU hb0 hγ hu hζ hjj i
+  · exact latAt_of_frame locT F Cm hA (hψ' s) (fun i _ => hwt s i) (hbψ s) hγ hu hζ hjj i
   · refine ⟨fun k => ⟨hAa2 k i, (hAa3 k i).trans (hx.1 k).2.2⟩, fun k => ?_,
       fun s => ⟨hAB2 s i, hAC2 s i, ?_, ?_, ?_, ?_, ?_, ?_⟩⟩
     · exact mapMat_mul hA (hAb1 k) (hAa1 k.succ) (hAa1 k.castSucc) (hx.2.1 k).2 i
@@ -1697,8 +1674,8 @@ theorem exists_positions_global (hBS : GlobalTheory.Published.BhattScholzeCrysta
         ((N.P i).map (PowerSeries.map (residue ↥(OL LL)))) ((N.D i).map (PowerSeries.map (residue ↥(OL LL))))
         (fun s => ((Nψ s).P i).map (PowerSeries.map (residue ↥(OL LL))))
         (fun s => ((Nψ s).D i).map (PowerSeries.map (residue ↥(OL LL)))) rs dim := by
-  obtain ⟨D⟩ := GlobalTheory.MemLoc.record_nonempty
-  obtain ⟨HW, F, ⟨Cm⟩, -⟩ := GlobalTheory.HWL.exists_hw_fon_cmp_ties hBS D.loc D.locA D.locT
+  obtain ⟨L, A, ⟨T⟩⟩ := GlobalTheory.MemLoc.exists_locTheory_tied
+  obtain ⟨HW, F, ⟨Cm⟩, -⟩ := GlobalTheory.HWL.exists_hw_fon_cmp_ties hBS L A T
   obtain ⟨xg, hxg⟩ := glue_orbits
     (X := (Mx (↥(OL LL))⟦X⟧ n n × Mx (↥(OL LL))⟦X⟧ n n × Mx ↥(OL LL) n n) ×
       (Fin t → Mx (↥(OL LL))⟦X⟧ 1 1 × Mx (↥(OL LL))⟦X⟧ 1 1 × Mx ↥(OL LL) 1 1) ×
@@ -1712,8 +1689,8 @@ theorem exists_positions_global (hBS : GlobalTheory.Published.BhattScholzeCrysta
         (fun s => (d.2.1 s).2.1.map (PowerSeries.map (residue ↥(OL LL)))) rs dim)
     (fun i₀ => by
       obtain ⟨K, hA, ι, κ, hκ, hκσ, hi₀, hMG⟩ :=
-        _root_.GlobalTheory.PlaceLetters.exists_place (D.loc l) (D.locA l) (D.locT l) (HW l) E Ω hl hd σ hσ LL hz hE i₀
-      obtain ⟨N, Nψ, y, hy⟩ := exists_positions F Cm hA (U := fun i => J (κ i)) (wt := fun s i => wt s (κ i))
+        _root_.GlobalTheory.PlaceLetters.exists_place (L l) (A l) (T l) (HW l) E Ω hl hd σ hσ LL hz hE i₀
+      obtain ⟨N, Nψ, y, hy⟩ := exists_positions T F Cm hA (U := fun i => J (κ i)) (wt := fun s i => wt s (κ i))
         (hMG n r _ hr) (fun i a => hJ (κ i) a) (fun s => hMG 1 (ψ s) _ (hψ s)) (fun s i => hwt s (κ i))
         (hx.res ι) hu hun hζ hjj
       exact ⟨ZMod (Module.finrank ℚ_[l] ↥(K0 K)), Equiv.subRight 1, κ,

@@ -519,19 +519,6 @@ theorem cechHom_col {A B : Sy.{w} R ι} (m : A.Hom B)
   prod_bij (fun i : Fin (p + 1) → ι => m.φ (ent i))
     (fun i n => h _ ⟨i 0, Finset.mem_image_of_mem _ (Finset.mem_univ _)⟩ n) q
 
-theorem upTo_one {M : Type w} {N : Type w'} [AddCommGroup M] [AddCommGroup N] [Module R M] [Module R N]
-    (f : M →ₗ[R] N) : UpTo (1 : R) f ↔ Function.Bijective f := by
-  constructor
-  · rintro ⟨h1, h2⟩
-    refine ⟨(injective_iff_map_eq_zero f).2 fun x hx => ?_, fun y => ?_⟩
-    · simpa using h1 x hx
-    · simpa using h2 y
-  · intro h
-    refine ⟨fun x hx => ?_, fun y => ?_⟩
-    · rw [one_smul]
-      exact (injective_iff_map_eq_zero f).1 h.1 x hx
-    · simpa using h.2 y
-
 theorem cls_congr {K : Cx.{w} R} {n : ℕ} {a b : K.X n} (h : a = b) (ha : K.d n a = 0) (hb : K.d n b = 0) :
     K.cls a ha = K.cls b hb := by
   subst h; rfl
@@ -558,15 +545,15 @@ theorem mapH_empty_bij {A B : Sy.{w} R ι} (m : A.Hom B) (hA : A.Desc) (hB : B.D
   have eA : Function.Bijective ((cechAug A hA).edge.mapH n) := by
     have := CrystallineSemistableComparison.P.dc_row (cechAug A hA) 1 (cechAug_row A hA) n
     rw [one_pow] at this
-    exact (upTo_one _).1 this
+    exact (CrystallineSemistableComparison.Onto.IsoBijectionLift.upTo_one_iff _).1 this
   have eB : Function.Bijective ((cechAug B hB).edge.mapH n) := by
     have := CrystallineSemistableComparison.P.dc_row (cechAug B hB) 1 (cechAug_row B hB) n
     rw [one_pow] at this
-    exact (upTo_one _).1 this
+    exact (CrystallineSemistableComparison.Onto.IsoBijectionLift.upTo_one_iff _).1 this
   have eT : Function.Bijective ((cechHom m).tot.mapH n) := by
-    have := CrystallineSemistableComparison.P.dc_map_col (cechHom m) 1 n fun p q _ => (upTo_one _).2 (cechHom_col m h p q)
+    have := CrystallineSemistableComparison.P.dc_map_col (cechHom m) 1 n fun p q _ => (CrystallineSemistableComparison.Onto.IsoBijectionLift.upTo_one_iff _).2 (cechHom_col m h p q)
     rw [one_pow] at this
-    exact (upTo_one _).1 this
+    exact (CrystallineSemistableComparison.Onto.IsoBijectionLift.upTo_one_iff _).1 this
   have sq : ∀ x, (cechAug B hB).edge.mapH n ((m.φ ∅).mapH n x) =
       (cechHom m).tot.mapH n ((cechAug A hA).edge.mapH n x) := by
     intro x

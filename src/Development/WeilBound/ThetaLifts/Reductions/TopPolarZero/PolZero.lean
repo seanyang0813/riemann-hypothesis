@@ -690,13 +690,6 @@ open GlobalTheory.WeilM GlobalTheory.AdelicU GlobalTheory.LFun GlobalTheory.Inde
 
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] {σ : E →ₐ[F] E}
 
-theorem I_left {n d : ℕ} {X : Spc F E n} {W : Spc F E d} (M : Model σ X W) {om : Rep σ X W} {Φ : Fn F n d}
-    (h : ∀ γ ∈ ratU σ X.J, ∀ γ' ∈ ratU σ W.J, ∀ g h, theta om Φ (γ * g) (γ' * h) = theta om Φ g h) :
-    ∀ γ ∈ ratU σ W.J, ∀ x, M.I om Φ (γ * x) = M.I om Φ x := fun γ hγ x => by
-  unfold Model.I
-  have e : ∀ g, theta om Φ g (γ * x) = theta om Φ g x := fun g => by simpa only [one_mul] using h 1 (one_mem _) γ hγ g x
-  simp only [e]
-
 theorem swap_bdd {A B : Type} [TopologicalSpace A] [MeasurableSpace A] [BorelSpace A] [SecondCountableTopology A]
     [TopologicalSpace B] [MeasurableSpace B] [BorelSpace B] [SecondCountableTopology B] (μ : Measure A) (ν : Measure B)
     [IsFiniteMeasure μ] [IsFiniteMeasure ν] {f : A × B → ℂ} (c : Continuous f) {C : ℝ} (hC : ∀ x, ‖f x‖ ≤ C) :
@@ -740,7 +733,7 @@ theorem polZero_of (hC : CptAll) (hH : HermLine) (hL : CoefLine) (hT : ThConst) 
     ((c1 _ (s1 y hy)).const_smul s).add ((c2 _ (s2 y hy)).const_smul u)
   have ci : ∀ s u, ∀ y ∈ pairs B G X R Rf, ∀ γ ∈ ratU σ G.W.J, ∀ g, comb G om om' s u y (γ * g) = comb G om om' s u y g :=
     fun s u y hy γ hγ g => by
-      simp only [comb, Pi.add_apply, Pi.smul_apply, I_left G.M (b1 _ (s1 y hy)).2.1 γ hγ, I_left G.M' (b2 _ (s2 y hy)).2.1 γ hγ]
+      simp only [comb, Pi.add_apply, Pi.smul_apply, GlobalTheory.ThK.Dbl.I_inv G.M (b1 _ (s1 y hy)).2.1 γ hγ, GlobalTheory.ThK.Dbl.I_inv G.M' (b2 _ (s2 y hy)).2.1 γ hγ]
   have e01 : ∀ y, comb G om om' 0 1 y = G.M'.I om' y.2 := fun y => by simp [comb]
   haveI : IsFiniteMeasure (μ.restrict D) := isFiniteMeasure_restrict.2 (cW.fin _ _ hμ hD).ne
   have ig : ∀ s u s' u', ∀ y ∈ pairs B G X R Rf, ∀ y' ∈ pairs B G X R Rf,
@@ -1222,13 +1215,6 @@ theorem const_of (hL : LocDist) (hC : ConstOfGood) (hT : ThetaBasic) (h1 : GrpTo
 variable {a a' : ℕ} {B : Base F E} {G : Geo σ a a'} {X : Chars F E} {om : Rep σ G.V G.W} {om' : Rep σ G.V' G.W}
   {R : RealMaps F a a'} {Rf : FinMaps F a a'}
 
-theorem pol_mem {Φ Φ'} (h : PolMatch B G X R Rf Φ Φ') : Φ ∈ PolData B G.M ∧ Φ' ∈ PolData B G.M' := by
-  obtain ⟨T, -, m, m', f, φ, f', φ', h1, h2, rfl, rfl, -⟩ := h
-  exact ⟨Submodule.sum_mem _ fun i _ => Submodule.subset_span
-      ⟨f i, (h1 i).1, φ i, (h1 i).2.1, T.eventually_cofinite_notMem.mono (h1 i).2.2, rfl⟩,
-    Submodule.sum_mem _ fun i _ => Submodule.subset_span
-      ⟨f' i, (h2 i).1, φ' i, (h2 i).2.1, T.eventually_cofinite_notMem.mono (h2 i).2.2, rfl⟩⟩
-
 theorem pol_le {Y : Spc F E n} {W : Spc F E d} {M : Model σ Y W} (hM : M.IsGood B.ψ) : PolData B M ≤ schA F _ := by
   refine Submodule.span_le.2 ?_
   rintro _ ⟨f, -, φ, h1, h2, rfl⟩
@@ -1259,8 +1245,8 @@ theorem exists_maps (hD : KDecay) (hF : Factor) (hm : IsMatched B G X om om' R R
   obtain ⟨d1, d2⟩ := hD F E σ B a a' G X om om' hm.triple
   obtain ⟨f1, f2⟩ := hF F E σ B a a' G X om om' R Rf hm
   let P := (G.M'.So B.ψ B.τ₁).comap (LinearMap.snd ℂ _ _) ⊓ matched hm
-  have m1 : ∀ y : P, y.1.1 ∈ schA F _ := fun y => pol_le hm.triple.geo.hM (pol_mem y.2.2).1
-  have m2 : ∀ y : P, y.1.2 ∈ schA F _ := fun y => pol_le hm.triple.geo.hM' (pol_mem y.2.2).2
+  have m1 : ∀ y : P, y.1.1 ∈ schA F _ := fun y => pol_le hm.triple.geo.hM (PositivityTheory.ThKG.polMatch_mem y.2.2).1
+  have m2 : ∀ y : P, y.1.2 ∈ schA F _ := fun y => pol_le hm.triple.geo.hM' (PositivityTheory.ThKG.polMatch_mem y.2.2).2
   let c : P →ₗ[ℂ] (UA σ G.W.J → ℂ) :=
     { toFun := fun y => comb G om om' s t y.1
       map_add' := fun y z => by
@@ -1301,7 +1287,7 @@ theorem thConst_of (hL : LocDist) (hG : GoodNe) (hC : ConstOfGood) (hF : Factor)
       om (1, h) Φ ∈ PolData B G.M ∧ C (om (1, h) Φ) = fun x => C Φ (x * h) := fun v w h hh Φ hΦ => by
     obtain ⟨Φ', k, k'⟩ := m1 Φ hΦ
     have k2 := pm_fin hS hm w hh k'
-    refine ⟨(pol_mem k2).1, ?_⟩
+    refine ⟨(PositivityTheory.ThKG.polMatch_mem k2).1, ?_⟩
     rw [c1 (_, _) ⟨hO F E σ B a a' G X om om' hm.triple _ _ k, k2⟩, c1 (Φ, Φ') ⟨k, k'⟩]
     funext x
     simp only [comb, Model.I, Pi.add_apply, Pi.smul_apply, theta_act, mul_one]
@@ -1309,18 +1295,18 @@ theorem thConst_of (hL : LocDist) (hG : GoodNe) (hC : ConstOfGood) (hF : Factor)
   have l2 := hm.triple.geo.aBig
   rw [← c1 y hy]
   refine ⟨c2 _ _ hy.2 ▸ const_of hL hC hT h1 h2 h3 h4 hS (pairV hm.triple) (pairV' hm.triple) finSumFinEquiv (by omega) X.T
-    (fun v hv hs => ?_) C' (fun Φ' h => ?_) (fun v w h hh Φ' hΦ => ?_) hμ hD' _ (pol_mem hy.2).2,
+    (fun v hv hs => ?_) C' (fun Φ' h => ?_) (fun v w h hh Φ' hΦ => ?_) hμ hD' _ (PositivityTheory.ThKG.polMatch_mem hy.2).2,
     const_of hL hC hT h1 h2 h3 h4 hS (pairV' hm.triple) (pairV hm.triple) ((Equiv.sumComm _ _).trans finSumFinEquiv) (by omega) X.T
-    (fun v hv hs => ?_) C r1 e1 hμ hD' _ (pol_mem hy.2).1⟩
+    (fun v hv hs => ?_) C r1 e1 hμ hD' _ (PositivityTheory.ThKG.polMatch_mem hy.2).1⟩
   · obtain ⟨⟨t⟩, h⟩ := hg v ⟨hv, hs⟩
     refine ⟨t, fun h' => h t ?_⟩
     rw [chrW_div, div_eq_one] at h'
     rw [Chars.ν, chrW_div, h', div_self']
   · obtain ⟨Φ, k⟩ := m2 Φ' h
-    exact c2 _ _ k ▸ r1 Φ (pol_mem k).1
+    exact c2 _ _ k ▸ r1 Φ (PositivityTheory.ThKG.polMatch_mem k).1
   · obtain ⟨Φ, k⟩ := m2 Φ' hΦ
     have k2 := pm_fin hS hm w hh k
-    exact ⟨(pol_mem k2).2, by rw [c2 _ _ k2, c2 _ _ k, (e1 v w h hh Φ (pol_mem k).1).2]⟩
+    exact ⟨(PositivityTheory.ThKG.polMatch_mem k2).2, by rw [c2 _ _ k2, c2 _ _ k, (e1 v w h hh Φ (PositivityTheory.ThKG.polMatch_mem k).1).2]⟩
   · obtain ⟨⟨t⟩, h⟩ := hg v ⟨hv, hs⟩
     exact ⟨t, h t⟩
 

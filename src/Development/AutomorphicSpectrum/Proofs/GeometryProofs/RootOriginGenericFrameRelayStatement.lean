@@ -418,25 +418,6 @@ open MonoidalCategory CartesianMonoidalCategory MonObj
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E} {Dw : Datum H}
   {l : Level H} {Xo : Moduli Dw l} {c : Coeff l} {O : Type} [CommRing O] {β : O →+* c.F} (Y : Model Xo c β)
 
-theorem tanY_base {S T : Type} [CommRing S] [Algebra c.F S] [CommRing T] [Algebra c.F T] [Algebra S T]
-    [IsScalarTower c.F S T] (y : FrPt Xo c S) (z : FrPt Xo c T) (hx : z.x = spMap (algebraMap S T) ≫ y.x)
-    (τ : E →+* ℂ) (i : Fin (Dw.mult τ))
-    (hu : z.u τ i = spMap (_root_.Formalism.L2.Pj.dualMap (algebraMap S T)) ≫ y.u τ i) :
-    Small.tanY Y z τ i = spMap (_root_.GlobalTheory.CompanionTheory.Ar.dualMap (algebraMap S T)) ≫ Small.tanY Y y τ i := by
-  have hF : Small.ptF z = spMap (algebraMap S T) ≫ Small.ptF y := by
-    apply Limits.pullback.hom_ext
-    · rw [Category.assoc, Small.ptF_fst, Small.ptF_fst, hx]
-    · rw [Category.assoc, Small.ptF_snd, Small.ptF_snd, ← Spec.map_comp, ← CommRingCat.ofHom_comp,
-        ← IsScalarTower.algebraMap_eq]
-  rw [Small.tanY, Small.tanY, ← Category.assoc,
-    Small.eq_tanF Y z τ i (spMap (_root_.GlobalTheory.CompanionTheory.Ar.dualMap (algebraMap S T)) ≫ Small.tanF Y y τ i)]
-  · rw [Category.assoc, Small.tanF_φ, hu]
-    rfl
-  · rw [Category.assoc, Small.tanF_hom, hF, ← Category.assoc, ← Category.assoc, ← Spec.map_comp, ← Spec.map_comp,
-      ← CommRingCat.ofHom_comp, ← CommRingCat.ofHom_comp]
-    congr 3
-    ext a <;> simp [_root_.GlobalTheory.CompanionTheory.Ar.dualMap, TrivSqZeroExt.algebraMap_eq_inl]
-
 theorem exists_basis {X : Scheme.{0}} (tX : SAB H X) (f : X ⟶ Y.X) (m : SABMap tX Y.t f) {S : Type} [CommRing S]
     [Algebra c.F S] (z : Spec (CommRingCat.of S) ⟶ X) (y : FrPt Xo c S) (hy : Small.ptY Y y = z ≫ f) (τ : E →+* ℂ) :
     ∃ ub : Fin (Dw.mult τ) → (GlobalTheory.CompanionTheory.Ar.epsAt z ⟶ tX.G), (∀ i, (ub i).left ≫ m.φ = Small.tanY Y y τ i) ∧
@@ -479,16 +460,6 @@ theorem exists_basis {X : Scheme.{0}} (tX : SAB H X) (f : X ⟶ Y.X) (m : SABMap
 
 end ModelDimension.Tan
 
-theorem ModelDimension.lie_model_local_subring_action : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E) (Dw : Datum H) (l : Level H) (Xo : Moduli Dw l) (c : Coeff l) (O : Type) [CommRing O] (β : O →+* c.F) (Y : Model Xo c β) (X : Scheme.{0}) (tX : SAB H X) (f : X ⟶ Y.X) (m : SABMap tX Y.t f) (Ω : Type) [Field Ω] [Algebra c.F Ω] (A : Subring Ω) [IsLocalRing A] [Algebra c.F A] [IsScalarTower c.F A Ω] (ξ : Spec (CommRingCat.of Ω) ⟶ X), IsCptGen ξ → ∀ (Li : Type) [AddCommGroup Li] [Module Ω Li] (M : LieModel tX.G ξ Li) (ρ : 𝓞 E →+* Module.End Ω Li), M.IsActOf tX.act.act ρ → ∀ (zq : Spec (CommRingCat.of A) ⟶ X), Spec.map (CommRingCat.ofHom (algebraMap A Ω)) ≫ zq = ξ → ∀ (y : FrPt Xo c A), Small.ptY Y y = zq ≫ f → ∀ yΩ : FrPt Xo c Ω, yΩ.x = spMap (algebraMap A Ω) ≫ y.x → (∀ τ i, yΩ.u τ i = spMap (_root_.Formalism.L2.Pj.dualMap (algebraMap A Ω)) ≫ y.u τ i) → ∀ (τ : E →+* ℂ) (r : ℕ) (hr : r = Dw.mult τ), ∃ w : Fin r → Li, (∀ i, (M.pt (w i)).left ≫ m.φ = Small.tanY Y yΩ τ (Fin.cast hr i)) ∧ ∀ e : Li, ((∃ v : GlobalTheory.CompanionTheory.Ar.epsAt zq ⟶ tX.G, GlobalTheory.CompanionTheory.Ar.IsTanAt tX.G zq v ∧ (M.pt e).left = Spec.map (CommRingCat.ofHom (_root_.GlobalTheory.CompanionTheory.Ar.dualMap (algebraMap A Ω))) ≫ v.left) ∧ e ∈ eigSp ρ ((algebraMap c.F Ω).comp (embK c τ))) ↔ e ∈ Submodule.span A (Set.range w) := by
-  intro E _ _ _ H Dw l Xo c O _ β Y X tX f m Ω _ _ A _ _ _ ξ _ Li _ _ M ρ hρ zq hz y hy yΩ hx hu τ r hr
-  subst hr
-  obtain ⟨ub, hb1, hb2, hb3, hb4⟩ := ModelDimension.Tan.exists_basis Y tX f m zq y hy τ
-  obtain ⟨w, hw1, hw2⟩ := ModelDimension.Tan.span_eig (R := A) (F := Ω) Subtype.val_injective zq ξ hz M tX.act.act tX.act.hom ρ hρ
-    ((algebraMap c.F A).comp (embK c τ)) ((algebraMap c.F Ω).comp (embK c τ))
-    (fun a => IsScalarTower.algebraMap_apply c.F A Ω _) ub hb2 hb3 hb4
-  refine ⟨w, fun i => ?_, hw2⟩
-  rw [hw1, Category.assoc, hb1]
-  exact (ModelDimension.Tan.tanY_base Y y yΩ hx τ i (hu τ i)).symm
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -810,9 +781,6 @@ open NumberField IsDedekindDomain Filter Topology
 open Formalism.L2.Pj ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Geo ReciprocityTheory.ChartRestriction.G.Geo.Tor ReciprocityTheory.ChartRestriction.G.FD Formalism.BasicNotions Formalism.MainNotions
 open GlobalTheory.CompanionTheory.Ar GlobalTheory.CompanionTheory.Ar.Rec GlobalTheory.CompanionTheory.Ar.Plug
 
-attribute [local instance 1100] Subalgebra.algebra in
-attribute [local instance 100] IntermediateField.instAlgebraSubtypeMem in
-alias _root_.GlobalTheory.CompanionTheory.Relay.root_origin_generic_frame_relay := _root_.GlobalTheory.CompanionTheory.Ar.Plug.KeyRootZ.diag_root_line
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.RootOriginGenericFrameRelay =====

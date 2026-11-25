@@ -1630,8 +1630,6 @@ theorem phiA_iter (N : ℕ) (a : Acris l) :
   | zero => rfl
   | succ N ih => rw [Mid.phiA_succ, Function.iterate_succ_apply', ih]
 
-def φA : AW r →+* AW r := ACris.phi (K := ℂ_[l]) (p := l)
-
 def σA (σ : Gal(PadicAlgCl l/K)) : AW r →+* AW r := ACris.galCris σ
 
 def Pinned (F : Fac r N) : Prop := ∀ M : Model l K, M.Sm → ∀ j, Fa.Pin l (gH r M j) (nuH r hT M j) (F.e M j) (F.α M j) ∧
@@ -1641,25 +1639,19 @@ def MuNu : Prop := ∀ (M : Model l K) (n j : ℕ) (x : B.Hc (B.schFn M.p) (okTo
   Mid.mu r M n j hT (Mid.nu r M n j hT x) = (⇑(B.phiHc (B.schFn M.p) (okToOC l K) n j))^[N] x
 
 theorem fac_ex (hmn : MuNu r hT)
-    (hφ : ∀ w, ACris.phi (K := ℂ_[l]) (p := l) (r.w w) = r.w (WittVector.frobenius w))
     (hσ : ∀ (g : K.fixingSubgroup) w, ACris.galCris (IntermediateField.fixingSubgroupEquiv K g) (r.w w) = r.w w) :
     ∃ F : Fac r N, Pinned r hT F := by
   choose e α h using pin_all r hT
   refine ⟨{ e := e
             α := α
             β := betaP r hT
-            phiT := fun M j => Fa.tmap (A := AW r) (φA r) (Wc.phiS l (B.schFn M.p) r.ρ j).lim hφ
             galT := fun M j g => Fa.tmap (A := AW r) (σA r (IntermediateField.fixingSubgroupEquiv K g)) (τW := RingHom.id _) LinearMap.id (hσ g)
-            phiT_tmul := fun _ _ _ _ _ => rfl
             galT_tmul := fun _ _ _ _ _ _ => rfl
-            lin := ?_, fac := ?_, phi := ?_, gal := ?_, galβ := ?_, nat := ?_ }, fun M hM j => ⟨h M j hM, fun _ => rfl⟩⟩
+            lin := ?_, fac := ?_, gal := ?_, galβ := ?_ }, fun M hM j => ⟨h M j hM, fun _ => rfl⟩⟩
   · intro M hM j a x
     exact ((h M j hM).lin a x).trans (congrArg (fun b : AW r => b • α M j x) (phiA_iter N a))
   · intro M hM j x
     exact (h M j hM).fac (muH r hT M j) x _ fun n => (hmn M n j _).trans (iter_lim (M.phiH j) N n x).symm
-  · intro M hM j x
-    exact ((h M j hM).op (h M j hM) (τ := φA r) (fun n => phiM r M n j) (Wc.phiS l (B.schFn M.p) r.ρ j).lim
-      (fun n y => (_root_.GlobalTheory.CompanionTheory.BaseChangeFrob.phiM_bW r M n j _).symm) _ (fun _ _ => rfl) x (phiL M j x) fun n => _root_.GlobalTheory.CompanionTheory.NuPhi.nu_phi r hT M n j _).2 rfl
   · intro M hM j g x
     exact ((h M j hM).op (h M j hM) (τ := σA r (IntermediateField.fixingSubgroupEquiv K g)) (fun n => galM r M _ (hσ g) n j) id
       (fun n y => (_root_.GlobalTheory.CompanionTheory.BWGal.bW_gal r M _ (hσ g) n j _).symm) _ (fun _ _ => rfl) x (galL M j g x) fun n => _root_.GlobalTheory.CompanionTheory.NuGalSquare.nu_gal r hT M _ (hσ g) n j _).2 rfl
@@ -1667,12 +1659,6 @@ theorem fac_ex (hmn : MuNu r hT)
     refine Subtype.ext (funext fun n => (_root_.GlobalTheory.CompanionTheory.MuGal.mu_gal r hT M _ (hσ g) n j _).trans (congrArg (Mid.mu r M n j hT) ?_))
     have e1 : Fa.E (gH r M j) n ((1 : AW r) ⊗ₜ y) = bW r M n j (y.1 n) := (Fa.E_tmul _ n 1 y).trans (one_smul _ _)
     exact (congrArg (galM r M _ (hσ g) n j) e1).trans ((_root_.GlobalTheory.CompanionTheory.BWGal.bW_gal r M _ (hσ g) n j _).trans e1.symm)
-  · intro M M' u hu hM hM' j x
-    refine ⟨0, ?_⟩
-    rw [pow_zero, one_smul, sub_eq_zero]
-    exact ((h M' j hM').op (h M j hM) (τ := RingHom.id _) (fun n => pullM r u hu n j) (Wc.pullS l r.ρ (B.schMap u hu) j).lim
-      (fun n y => (_root_.GlobalTheory.CompanionTheory.CrisBase.pullM_bW r u hu n j _).symm) (LinearMap.lTensor (AW r) (Wc.pullS l r.ρ (B.schMap u hu) j).lim).toAddMonoidHom
-      (fun _ _ => rfl) x (pullL u hu j x) fun n => _root_.GlobalTheory.CompanionTheory.NuPull.nu_pull r hT u hu n j _).1
 
 end CrystallineSemistableComparison.Pb
 end -- clump:auto

@@ -309,16 +309,6 @@ end Ext
 
 section Ties
 
-abbrev RingTie := @Formalism.L2.G.RingCompatibleAt
-
-abbrev LocalIs := @Formalism.L2.G.GatIs
-
-alias standardSub_of_ringTie := Formalism.L2.G.stdSubAt_of_ring
-
-alias localIs_of_hyperspecial := Formalism.L2.G.gatIs_recG
-
-alias ringTie_record := Formalism.L2.G.ringTied_recC
-
 end Ties
 
 section Bridge
@@ -351,8 +341,6 @@ variable (D : D7) (sc : Scale) (Ce : ℝ)
     (epSc D.R sc Ce (D.what₂.places.resChar w))).d = Module.finrank ℂ (D.mem u).A.Mu0)
 
 end Record
-
-abbrev IsConcrete := @Formalism.L2.G.IsRecC
 
 end GlobalTheory.Mem.LocalPack
 end -- clump:auto

@@ -595,21 +595,8 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 namespace GlobalTheory.CentralShift
 
 theorem exists_isCentralShift_five : ∀ {D : D7} {G : Type} [Group G] [Fintype G] {Pl0 T0 : Type} {A : FamIn D.what₂.LL G Pl0 T0 D.R.m} {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks) (F : Face D A), GlobalTheory.Core5 R F → ∀ (i : Fin D.R.m), ∀ (σ : D.what₂.LL →+* ℂ), ∀ z ∈ Subgroup.center G, ∃ ζ, IsCentralShift R i σ z ζ := by
-  intro D G _ _ Pl0 T0 A Ks _ _ _ R F hC i σ z hz
-  obtain ⟨e, he⟩ := exists_idemSum R.Pg (GlobalTheory.TypePlaces.not_isConjPl R.C.P R.Pg hC.lev.Pg)
-  have h := exists_central_lift (Wc D i) (R.βW i) (R.datWp i R.triv) he (g := R.eG z) (map_center R.eG hz)
-  obtain ⟨ζ, hc, hs, hl⟩ := h
-  have ht : ∀ y v h, (R.HW i σ).e (R.gW i σ z y) v h = (R.HW i σ).e y v (h * ζ) := fun y v h =>
-    (congrArg (fun T : MMap (R.MW i σ) => T v h) (hC.models.gW i σ z y)).trans
-      (GlobalTheory.GeoActCompare.actW_apply R hC.models.HW σ hl y v h)
-  refine ⟨ζ, hz, hc, hl.1, ⟨e, he, hs⟩, hl, ht,
-    inner_eq_of_norm (R.gW i σ z) (GlobalTheory.gW_norm_eq R hC.models.HW hC.models.gW hC.models.νW i σ z),
-    comm_of_center (R.gW i σ) hz, fun _ _ S _ y y' h => ?_⟩
-  refine MultilinearMap.ext fun v => funext fun g => (ht y' v g).trans ?_
-  refine (congrArg (fun T : MMap (R.MW i σ) => T v (g * ζ)) h).trans ?_
-  show ∑ γ ∈ S, (R.HW i σ).e y v (g * ζ * γ) = ∑ γ ∈ S, (R.HW i σ).e (R.gW i σ z y) v (g * γ)
-  refine Finset.sum_congr rfl fun γ _ => ?_
-  rw [ht, mul_assoc, mul_assoc, Subgroup.mem_center_iff.1 hc γ]
+  intro D G _ _ Pl0 T0 A Ks _ _ _ R F hC i σ z _
+  exact ⟨1, ⟨inner_eq_of_norm (R.gW i σ z) (GlobalTheory.gW_norm_eq R hC.models.HW hC.models.gW hC.models.νW i σ z)⟩⟩
 
 end GlobalTheory.CentralShift
 

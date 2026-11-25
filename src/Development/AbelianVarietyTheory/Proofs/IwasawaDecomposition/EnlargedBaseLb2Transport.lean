@@ -90,15 +90,11 @@ structure Cp (D : D7) {R : Ranks} {H : Host R} {r : Rows.Data R} [NumberField r.
   xmodB : HEq D.ntw.modB X.modB
   xTheta : HEq D.ntw.Theta X.Theta
   xhk : HEq D.ntw.hk X.hk
-  xThetaPsi : HEq D.ntw.ThetaPsi X.ThetaPsi
-  xtopO : HEq D.ntw.topO X.topO
-  xfinLam : HEq D.ntw.finLam X.finLam
   xjL : HEq D.ntw.jL X.jL
   xs2 : HEq D.ntw.s2 X.s2
   xlamG : HEq D.ntw.lamG X.lamG
   xXv : HEq D.ntw.Xv X.Xv
   xqs : HEq D.ntw.qs X.qs
-  xres : HEq D.ntw.res X.res
   yFm : HEq D.nexp.Fm Y.Fm
   yacgFm : HEq D.nexp.acgFm Y.acgFm
   ymodFmK : HEq D.nexp.modFmK Y.modFmK
@@ -122,9 +118,6 @@ structure Cp (D : D7) {R : Ranks} {H : Host R} {r : Rows.Data R} [NumberField r.
   yembB : HEq D.nexp.embB Y.embB
   ythU : HEq D.nexp.thU Y.thU
   ydelU : HEq D.nexp.delU Y.delU
-  ytwPsi : HEq D.nexp.twPsi Y.twPsi
-  ytwDel : HEq D.nexp.twDel Y.twDel
-  yeH : HEq D.nexp.eH Y.eH
   emb0 : ∀ i i', HEq i i' → ∀ x, HEq (D.ntw.emb0 i (e x)) (X.emb0 i' x)
   emb0b : ∀ i i', HEq i i' → ∀ x, HEq (D.ntw.emb0b i (e x)) (X.emb0b i' x)
   eLL0 : ∀ g g', HEq g g' → e (Y.eLL0 g') = D.nexp.eLL0 g
@@ -230,15 +223,11 @@ theorem exists_cp (D : D7) {R : Ranks} {H : Host R} {r : Rows.Data R} [NumberFie
     xmodB := HEq.rfl
     xTheta := HEq.rfl
     xhk := HEq.rfl
-    xThetaPsi := HEq.rfl
-    xtopO := HEq.rfl
-    xfinLam := HEq.rfl
     xjL := HEq.rfl
     xs2 := HEq.rfl
     xlamG := HEq.rfl
     xXv := HEq.rfl
     xqs := HEq.rfl
-    xres := HEq.rfl
     yFm := HEq.rfl
     yacgFm := HEq.rfl
     ymodFmK := HEq.rfl
@@ -262,9 +251,6 @@ theorem exists_cp (D : D7) {R : Ranks} {H : Host R} {r : Rows.Data R} [NumberFie
     yembB := HEq.rfl
     ythU := HEq.rfl
     ydelU := HEq.rfl
-    ytwPsi := HEq.rfl
-    ytwDel := HEq.rfl
-    yeH := HEq.rfl
     emb0 := fun _ _ h _ => by cases h; rfl
     emb0b := fun _ _ h _ => by cases h; rfl
     eLL0 := fun _ _ h => by cases h; exact e.apply_symm_apply _
@@ -290,8 +276,7 @@ theorem exists_copyN (D D' : D7) (hg : GlobalTheory.TwistChoice.SameGalois D.nd 
     ⟨c.xcc, c.xTw, c.xl, c.fixedFieldTransport_baseIntegerRing_heq, c.fixedFieldTransport_baseIntegerCommRing_heq, c.fixedFieldTransport_baseIntegerAlgebra_heq, c.fixedFieldTransport_baseIntegerTopology_heq, c.xO, c.xcrO, c.xalgO, c.xOk, c.xcrOk, c.xalgOk, c.xzk, c.xpD, c.xchi1, c.xSig, c.xfinSig, c.xjS, c.xside, c.xrhoS, c.fixedFieldTransport_initialPlaceSet_heq, c.xhEig, c.xLam, c.xsideL, c.xRCG, c.xgrpRCG, c.xfinRCG, c.xart, c.xth⟩,
     ⟨c.yFm, c.yacgFm, c.ymodFmK, c.ymodFmO, c.yactG, c.yU, c.ypsiU, c.yeAlg, c.yDat, c.yth, c.ylev, c.ythPsi, c.yMtV, c.yacgMt, c.ymodMtK, c.ymodMtO, c.yMtLat, c.ythP, c.yhkF⟩, hb, av⟩,
     sp, Tau, eTau, hc, hι, he, c.emb0, c.emb0b, fun i i' hi => ?_, c.xdelta, c.xB, c.xacgB, c.xmodB, c.xTheta, c.xhk,
-    c.yBsup, c.yembB, c.ythU, c.ydelU⟩, c.xThetaPsi, c.xtopO, c.xfinLam, c.xjL, c.xs2, c.xlamG, c.xXv, c.xqs, c.xres, c.eLL0,
-    c.ytwPsi, c.ytwDel, c.yeH⟩
+    c.yBsup, c.yembB, c.ythU, c.ydelU⟩, c.xjL, c.xs2, c.xlamG, c.xXv, c.xqs⟩
   change D.ntw.NonzeroIndexPlace i ↔ X.NonzeroIndexPlace i'
   constructor
   · rintro ⟨v, h1, h2⟩

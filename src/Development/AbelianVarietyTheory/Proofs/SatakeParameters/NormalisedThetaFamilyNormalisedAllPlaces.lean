@@ -24,6 +24,7 @@ public import Formalism.LocalToGlobal.InertKernelTheory.InertCoprimeLemmas.IntPu
 public import Formalism.LocalToGlobal.InertKernelTheory.InertCoprimeLemmas.IntWAPlaces
 public import Formalism.LocalToGlobal.PairingIndexBounds.SplitPairEquations.FinalEq
 import Mathlib.Algebra.Order.Floor.Extended
+import Formalism.LocalToGlobal.InertKernelTheory.InertCoprimeLemmas.KappaSelfDualFourthPowerLattice
 import Mathlib.Algebra.Order.Floor.Semifield
 import Mathlib.Algebra.Order.Interval.Basic
 import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
@@ -272,35 +273,8 @@ alias stable_of_one := _root_.GlobalTheory.ThLoc.KapNonSplit.stable_of_one
 alias odd_of_cmOK := _root_.GlobalTheory.ThLoc.KapNonSplit.odd_of_cmOK
 
 theorem hermitianSelfDual_of_fourfoldBlock {n : Type} [Fintype n] (h : Matrix n n ℂ) (Λ : AddSubgroup (n → ℂ))
-    (hsd : IsSelfDual (matH (blk4 h)) (pow4 Λ)) : IsSelfDual (matH h) Λ := by
-  have key : ∀ (x : n → ℂ) (y : Fin 4 × n → ℂ), altE (matH (blk4 h)) (CmData.embA 0 x) y = altE (matH h) x (slice 0 y) := by
-    intro x y
-    simp only [altE, matrixForm_fourfoldBlock, CmData.slice_embA]
-    rw [Finset.sum_eq_single (0 : Fin 4)]
-    · simp
-    · intro b _ hb
-      simp [hb]
-    · intro hh
-      exact absurd (Finset.mem_univ _) hh
-  ext x
-  constructor
-  · intro hx
-    have h1 : CmData.embA 0 x ∈ dualLat (matH (blk4 h)) (pow4 Λ) := by
-      intro y hy
-      obtain ⟨m, hm⟩ := hx (slice 0 y) (hy 0)
-      exact ⟨m, by rw [key, hm]⟩
-    rw [hsd] at h1
-    have h2 := h1 0
-    rwa [CmData.slice_embA, if_pos rfl] at h2
-  · intro hx y hy
-    have h1 : CmData.embA 0 x ∈ dualLat (matH (blk4 h)) (pow4 Λ) := by
-      rw [hsd]
-      exact CmData.embA_mem Λ 0 hx
-    obtain ⟨m, hm⟩ := h1 _ (CmData.embA_mem Λ 0 hy)
-    refine ⟨m, ?_⟩
-    rw [key, CmData.slice_embA, if_pos rfl] at hm
-    exact hm
-
+    (hsd : IsSelfDual (matH (blk4 h)) (pow4 Λ)) : IsSelfDual (matH h) Λ :=
+  Formalism.L2.KerInert.Kap.selfDual_of_fourth_power_block h Λ hsd
 section Base
 
 variable {D : D7} {cc : Ideal (𝓞 D.host.K)} {δ : ℂ} (B : Base D cc δ)

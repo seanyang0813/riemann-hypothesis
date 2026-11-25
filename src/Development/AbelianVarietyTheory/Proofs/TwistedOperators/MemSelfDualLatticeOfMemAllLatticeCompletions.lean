@@ -81,10 +81,6 @@ open GlobalTheory.FinPl GlobalTheory.FinPl.KSplit
 
 variable {D : D7}
 
-theorem latV_congr (S : HSp D) (L : Lat S) {P P' : Pl D → Prop} (h : ∀ w, P w ↔ P' w) :
-    latV S L P = latV S L P' :=
-  le_antisymm (latV_mono S L fun w => (h w).1) (latV_mono S L fun w => (h w).2)
-
 theorem latV_le_of_int_smul_on (S : HSp D) (L M : Lat S) (d : ℤ) (hd : d ≠ 0)
     (hLM : ∀ x ∈ L, d • x ∈ M) (R : Pl D → Prop) (hR : ∀ v, R v → ((d : 𝓞 D.host.F)) ∉ v.asIdeal) :
     latV S L R ≤ latV S M R := by
@@ -113,66 +109,6 @@ theorem latV_le_of_int_smul_on (S : HSp D) (L M : Lat S) (d : ℤ) (hd : d ≠ 0
     rw [map_smul, hsupp w hw, smul_zero]
   · funext i
     exact pairA_tmul_int_gen d hd α (x i)
-
-theorem latV_le_finite (S : HSp D) (L N : Lat S) (d : ℤ) (hd : d ≠ 0) (hLN : ∀ x ∈ L, d • x ∈ N)
-    (P : Pl D → Prop) (hP : ∀ w, P w → latV S L (· = w) = latV S N (· = w)) (T : Finset (Pl D)) :
-    latV S L (fun p => P p ∧ p ∈ T) ≤ latV S N (fun p => P p ∧ p ∈ T) := by
-  classical
-  induction T using Finset.induction_on with
-  | empty =>
-    exact latV_le_of_int_smul_on S L N d hd hLN _ fun v hv => absurd hv.2 (Finset.notMem_empty v)
-  | insert a T' ha ih =>
-    intro z hz
-    have hs := GlobalTheory.FinPlLoc.latV_idAt hz
-    obtain ⟨h1, h2⟩ := (mem_latV_iff_parts S L _ {a} hs).1 hz
-    rw [mem_latV_iff_parts S N _ {a} hs]
-    constructor
-    · by_cases hPa : P a
-      · have hiff : ∀ w, ((P w ∧ w ∈ insert a T') ∧ w ∈ ({a} : Finset (Pl D))) ↔ w = a := by
-          intro w
-          simp only [Finset.mem_insert, Finset.mem_singleton]
-          constructor
-          · exact fun h => h.2
-          · rintro rfl; exact ⟨⟨hPa, Or.inl rfl⟩, rfl⟩
-        rw [latV_congr S L hiff, hP a hPa] at h1
-        rw [latV_congr S N hiff]
-        exact h1
-      · refine latV_le_of_int_smul_on S L N d hd hLN _ (fun v hv => ?_) h1
-        exact absurd (Finset.mem_singleton.1 hv.2 ▸ hv.1.1) hPa
-    · have hiff : ∀ w, ((P w ∧ w ∈ insert a T') ∧ w ∉ ({a} : Finset (Pl D))) ↔ (P w ∧ w ∈ T') := by
-        intro w
-        simp only [Finset.mem_insert, Finset.mem_singleton]
-        constructor
-        · rintro ⟨⟨hw, h | h⟩, hne⟩
-          · exact absurd h hne
-          · exact ⟨hw, h⟩
-        · rintro ⟨hw, h⟩
-          exact ⟨⟨hw, Or.inr h⟩, fun e => ha (e ▸ h)⟩
-      rw [latV_congr S L hiff] at h2
-      rw [latV_congr S N hiff]
-      exact ih h2
-
-theorem latV_le_of_local (S : HSp D) (L N : Lat S) (d : ℤ) (hd : d ≠ 0) (hLN : ∀ x ∈ L, d • x ∈ N)
-    (P : Pl D → Prop) (hP : ∀ w, P w → latV S L (· = w) = latV S N (· = w)) : latV S L P ≤ latV S N P := by
-  classical
-  set T := (finite_places_int (D := D) d hd).toFinset
-  intro y hy
-  have hs := GlobalTheory.FinPlLoc.latV_idAt hy
-  obtain ⟨h1, h2⟩ := (mem_latV_iff_parts S L P T hs).1 hy
-  rw [mem_latV_iff_parts S N P T hs]
-  refine ⟨latV_le_finite S L N d hd hLN P hP T h1, latV_le_of_int_smul_on S L N d hd hLN _ (fun v hv => ?_) h2⟩
-  intro hmem
-  exact hv.2 ((Set.Finite.mem_toFinset _).2 hmem)
-
-theorem latV_eq_of_local : ∀ {D : D7} (S : HSp D) (L N : GlobalTheory.FinPl.Lat S) (P : GlobalTheory.FinPl.Pl D → Prop),
-    Submodule.IsFullLattice D.host.E L → Submodule.IsFullLattice D.host.E N →
-    (∀ w, P w → GlobalTheory.FinPl.latV S L (· = w) = GlobalTheory.FinPl.latV S N (· = w)) →
-    GlobalTheory.FinPl.latV S L P = GlobalTheory.FinPl.latV S N P := by
-  intro D S L N P hL hN hP
-  obtain ⟨d₁, hd₁, h₁⟩ := exists_int_smul_le L N hL.fg hN.span_eq_top
-  obtain ⟨d₂, hd₂, h₂⟩ := exists_int_smul_le N L hN.fg hL.span_eq_top
-  exact le_antisymm (latV_le_of_local S L N d₁ hd₁ h₁ P hP)
-    (latV_le_of_local S N L d₂ hd₂ h₂ P fun w hw => (hP w hw).symm)
 
 end GlobalTheory.FinPl.LocAgree
 

@@ -89,9 +89,6 @@ theorem isOpen_levelTwo {K : Subgroup (GL (Fin (r + s)) (Af E))}
   ext u
   exact mem_levelTwo
 
-def sliceMap (k : Kinf E (r + s)) : (Kinf E (r + s) → ℂ) →ₗ[ℂ] (Kinf E s → ℂ) :=
-  LinearMap.funLeft ℂ ℂ fun κ => Slice2.levK E r s κ * k
-
 theorem lev_finGL_right (x : GA E r) (g : GA E s) (u : GL (Fin s) (Af E)) (k : Kinf E (r + s))
     (t : GL (Fin (r + s)) (Af E)) :
     lev (Ad E) r s (x, g * finGL E s u) * cf (r + s) k t =
@@ -117,18 +114,6 @@ theorem lev_infGL_right (x : GA E r) (g : GA E s) (κ : Kinf E s) (k : Kinf E (r
   simp only [mul_assoc]
 
 end GlobalTheory.CompanionTheory.LimV.SliceR
-
-theorem GlobalTheory.CompanionTheory.LimV.SliceR.slice_right : ∀ {E : Type} [Field E] [NumberField E] [_root_.NumberField.IsTotallyComplex E] {r s : ℕ} (k : Kinf E (r + s)) (t : GL (Fin (r + s)) (Af E)) (K : Subgroup (GL (Fin (r + s)) (Af E))) (W : Submodule ℂ (Kinf E (r + s) → ℂ)), IsOpen (K : Set (GL (Fin (r + s)) (Af E))) → FiniteDimensional ℂ W → ∃ (K₂ : Subgroup (GL (Fin s) (Af E))) (W₂ : Submodule ℂ (Kinf E s → ℂ)), IsOpen (K₂ : Set (GL (Fin s) (Af E))) ∧ FiniteDimensional ℂ W₂ ∧ ∀ f ∈ typeF K W, ∀ x : GA E r, (fun y : GA E s => f (lev (Ad E) r s (x, y) * cf (r + s) k t)) ∈ typeF K₂ W₂ := by
-  intro E _ _ _ r s k t K W hK hW
-  refine ⟨SliceR.levelTwo K t, W.map (SliceR.sliceMap k), SliceR.isOpen_levelTwo hK t, inferInstance,
-    fun f hf x => ⟨fun u hu g => ?_, fun g => ?_⟩⟩
-  · change f (lev (Ad E) r s (x, g * finGL E s u) * cf (r + s) k t) = f (lev (Ad E) r s (x, g) * cf (r + s) k t)
-    rw [SliceR.lev_finGL_right]
-    exact hf.1 _ (SliceR.mem_levelTwo.1 hu) _
-  · refine ⟨_, hf.2 (lev (Ad E) r s (x, g) * finGL E (r + s) t), ?_⟩
-    funext κ
-    change f _ = f (lev (Ad E) r s (x, g * infGL E s (Unitary.toUnits κ)) * cf (r + s) k t)
-    rw [SliceR.lev_infGL_right]
 
 end
 end -- clump:auto

@@ -1173,7 +1173,7 @@ theorem cellWt_of_sideRead_of_admTw : _root_.GlobalTheory.HeightCounting.Up.Publ
   have hj1 : 1 ≤ j.1 + 1 := by omega
   have hj2 : j.1 + 1 ≤ (Dof x).R.m := by omega
   choose lam0 hlam0 using fun t => l.b.Bs.exp.rhoW_hw i (j.1 + 1) b t hj1 hj2
-  obtain ⟨lamK, hlamK, TK, hTK⟩ := GlobalTheory.T.irreducible_weight_descends_to_polynomial_module (Dof x).host.E (Dof x).R.nV (Dof x).what₂.Tau
+  obtain ⟨lamK, hlamK, TK, hTK⟩ := _root_.GlobalTheory.WtDescent.weight_descends (Dof x).host.E (Dof x).R.nV (Dof x).what₂.Tau
     (FractionRing ((Dof x).ntw.O i)) (e.comp (NX.toKk (Dof x) i (T.k v))) (NX.kEmb (Dof x) i b)
     (by intro t t' h; beta_reduce at h; rw [hke, hke] at h; exact hinj h)
     (by intro t t'; beta_reduce; rw [hke, hke]; exact hcm t t')

@@ -28,34 +28,20 @@ public import Formalism.LocalToGlobal.Columns.BrpStarLatLattice
 public import Formalism.LocalToGlobal.Columns.CoefficientsModP
 public import Formalism.LocalToGlobal.GlobalTheory.GL4.CoeffMemOfIntSpanAt
 public import Formalism.LocalToGlobal.Columns.FockNormSubstitutionBound
-import Mathlib.Algebra.Order.Star.Int
-import Mathlib.RingTheory.Henselian
-import Mathlib.RingTheory.RegularLocalRing.Defs
-import Mathlib.RingTheory.SimpleRing.Principal
 import Formalism.HermitianLattices.StatementLat
 import Formalism.LocalToGlobal.GlobalTheory.HLatOps
 import Formalism.LocalToGlobal.LatticeGeometry.OperatorNormFibers.StExtInv
 import Formalism.SharpRestriction.LevelLetterCocycles.DataNLoc
 import Formalism.GL3MeanSquares.ConcavityEquidistribution
-import Mathlib.Algebra.Order.Star.Rat
-import Mathlib.Algebra.Ring.IsFormallyReal
 import Formalism.HarderNarasimhan.HarderNarasimhanProofs.FrameHermSharpB
 import Formalism.HarderNarasimhan.HarderNarasimhanProofs.SlopeIneqMean
 import Formalism.HarderNarasimhan.ShiftInvariance
-import Mathlib.Tactic.Lemma
-import Mathlib.Tactic.TypeStar
-import Mathlib.RingTheory.PiTensorProduct
 import Formalism.LocalToGlobal.Columns.CoefficientsModP.LatticeBasisExistsHolds
 import Formalism.LocalToGlobal.Columns.LocWLemmas
 import Formalism.LocalToGlobal.Columns.StdLatUnimodular
-import Mathlib.RingTheory.Coalgebra.IsFrobenius
-import Mathlib.RingTheory.HopfAlgebra.Basic
-import Mathlib.RingTheory.Etale.Weakly
-import Mathlib.RingTheory.TotallySplit
 import Formalism.LocalToGlobal.Columns.PolyFnLemmas
 import Formalism.LocalToGlobal.GlobalTheory.GL4.PZBasis
 import Formalism.LocalToGlobal.GlobalTheory.HLatOpsP
-import Mathlib.RingTheory.Finiteness.ModuleFinitePresentation
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Formalism.LocalToGlobal.LatticeGeometry.OperatorNormFibers.PExtInvMuB, Formalism.LocalToGlobal.Columns.MaxSlopeSummandOfFock, Formalism.LocalToGlobal.Columns.MultiFactorialEqTripleProd, Formalism.LocalToGlobal.GlobalTheory.GL4.FockNExtCNu, Formalism.LocalToGlobal.Columns.MaxSlopeOrthogonalNegLog, Formalism.LocalToGlobal.GlobalTheory.GL4.MuMaxLeMon, Formalism.LocalToGlobal.GlobalTheory.GL4.ShortAtMeanLog, Formalism.LocalToGlobal.GlobalTheory.GL4.ThirdLinkOfArchimedean, Formalism.LocalToGlobal.Columns.BrpColLatOneSpan, Formalism.LocalToGlobal.Columns.TwistedLocalisationComparable, Formalism.LocalToGlobal.GlobalTheory.GL4.CfMemTwId, Formalism.LocalToGlobal.GlobalTheory.GL4.NfAllSelfEq, Formalism.LocalToGlobal.GlobalTheory.GL4.PacketOfFrameDegree

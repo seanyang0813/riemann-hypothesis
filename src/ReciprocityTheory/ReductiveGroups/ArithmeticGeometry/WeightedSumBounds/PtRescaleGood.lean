@@ -162,19 +162,6 @@ theorem ptSumL_lg (G : LogFGL v d) {τ : Type*} :
     rw [ptSumL, ptAdd_lg G (h x (by simp)) (ptSumL_const G l hl), ih hl b,
       List.map_cons, List.sum_cons]
 
-theorem ptSumL_lin (G : LogFGL v d) {τ : Type*} :
-    ∀ l : List (Fin d → MvPowerSeries τ C), (∀ x ∈ l, ∀ a, constantCoeff (x a) = 0) →
-      ∀ a t, coeff (Finsupp.single t 1) (ptSumL G l a) =
-        (l.map fun x => coeff (Finsupp.single t 1) (x a)).sum := by
-  intro l
-  induction l with
-  | nil => simp [ptSumL]
-  | cons x l ih =>
-    intro h a t
-    have hl : ∀ x' ∈ l, ∀ a, constantCoeff (x' a) = 0 := fun x' hx' => h x' (by simp [hx'])
-    rw [ptSumL, ptAdd_lin G (h x (by simp)) (ptSumL_const G l hl), ih hl a t,
-      List.map_cons, List.sum_cons]
-
 private theorem mu_lemma_16 {τ : Type*} {f f' g g' : MvPowerSeries τ C} (n : ℕ)
     (hf : ∀ e : τ →₀ ℕ, e.degree < n → coeff e f = coeff e f')
     (hg : ∀ e : τ →₀ ℕ, e.degree < n → coeff e g = coeff e g') :

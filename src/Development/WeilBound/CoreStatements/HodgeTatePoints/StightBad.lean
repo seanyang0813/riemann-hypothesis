@@ -125,18 +125,11 @@ lemma alg_mem_pInt (p : ℕ) {r : R} (h : r ∈ Ideal.span {(p : R)}) :
   obtain ⟨a, rfl⟩ := Ideal.mem_span_singleton'.1 h
   exact (PositivityTheory.HtPt.Ri.mem_pInt p _).2 ⟨a, rfl⟩
 
-lemma add_zero_mem {p : ℕ} {N : Type} [AddCommGroup N] {g : N → C}
-    (hg : g ∈ addFun (C := C) R p N) : g 0 ∈ pInt (C := C) R p := by
-  have h := (show ∀ x y : N, g (x + y) - g x - g y ∈ GlobalTheory.CompanionTheory.Ar.GR.pInt (C := C) R p
-    from hg) 0 0
-  rw [add_zero, sub_self, zero_sub] at h
-  simpa using Submodule.neg_mem _ h
-
 lemma add_nsmul_mem {p : ℕ} {N : Type} [AddCommGroup N] {g : N → C}
     (hg : g ∈ addFun (C := C) R p N) (y : N) (n : ℕ) :
     g (n • y) - n * g y ∈ pInt (C := C) R p := by
   induction n with
-  | zero => simpa using PositivityTheory.HtPt.Ri.add_zero_mem hg
+  | zero => simpa using PositivityTheory.HtPt.Re.addFun_zero hg
   | succ n ih =>
     have h := (show ∀ x y : N, g (x + y) - g x - g y ∈ GlobalTheory.CompanionTheory.Ar.GR.pInt (C := C) R p
       from hg) (n • y) y
@@ -291,7 +284,7 @@ theorem tight_of (p : ℕ) [hp : Fact p.Prime] (C : Type) [Field C] [IsAlgClosed
           have h1 := hev (g - r0 • 1) ((mem_aug _ _).2
             ⟨Submodule.sub_mem _ hg.1 (Submodule.smul_mem _ _ AA.one_mem), by
               simp [Algebra.smul_def, hr0]⟩)
-          have h2 := Submodule.add_mem _ (Submodule.add_mem _ h1 (hpr (add_zero_mem hg.2)))
+          have h2 := Submodule.add_mem _ (Submodule.add_mem _ h1 (hpr (PositivityTheory.HtPt.Re.addFun_zero hg.2)))
             (hpr (hk 1 trivial))
           convert h2 using 1
           simp [← e1, Algebra.smul_def, hr0]

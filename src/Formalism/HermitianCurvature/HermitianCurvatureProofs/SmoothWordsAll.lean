@@ -196,44 +196,44 @@ lemma ck_all : Formalism.FourierDecayAlt.Q.CkLev k r 0 m (Formalism.FourierDecay
   haveI : CompleteSpace Wp := FiniteDimensional.complete ℂ Wp
   intro g0 hg0
   have hg0G : g0 ∈ GV k r := hg0.1.1
-  have hchart0 : Formalism.FourierDecayAlt.P.Ux10.chart g0 0 = g0 := by
-    have h1 : (0 : Formalism.FourierDecayAlt.P.Ux10.J k r → ℝ) = Formalism.FourierDecayAlt.P.Ux10.co 0 :=
-      funext fun i => (Formalism.FourierDecayAlt.P.Ux10.co_zero i).symm
-    unfold Formalism.FourierDecayAlt.P.Ux10.chart Formalism.FourierDecayAlt.P.Ux10.kap
-    rw [h1, Formalism.FourierDecayAlt.P.Ux10.Mv_co, Formalism.FourierDecayAlt.P.Ux10.prj_zero]
+  have hchart0 : Formalism.FourierDecayAlt.P.Ux1.chart g0 0 = g0 := by
+    have h1 : (0 : Formalism.FourierDecayAlt.P.Ux1.J k r → ℝ) = Formalism.FourierDecayAlt.P.Ux1.co 0 :=
+      funext fun i => (Formalism.FourierDecayAlt.P.Ux1.co_zero i).symm
+    unfold Formalism.FourierDecayAlt.P.Ux1.chart Formalism.FourierDecayAlt.P.Ux1.kap
+    rw [h1, Formalism.FourierDecayAlt.P.Ux1.Mv_co, Formalism.FourierDecayAlt.P.Ux1.prj_zero]
     simp
-  have hcont : ContinuousAt (Formalism.FourierDecayAlt.P.Ux10.chart g0) 0 :=
-    (Formalism.FourierDecayAlt.P.Ux10.chart_diff g0 Formalism.FourierDecayAlt.P.Ux10.zero_mem_dom).continuousAt
-  have hV : Formalism.FourierDecayAlt.P.Ux10.Dom k r ∩ Formalism.FourierDecayAlt.P.Ux10.chart g0 ⁻¹' Formalism.FourierDecayAlt.Q.OmPlus k r D.z D.z' ∈
-      𝓝 (0 : Formalism.FourierDecayAlt.P.Ux10.J k r → ℝ) :=
-    Filter.inter_mem (Formalism.FourierDecayAlt.P.Ux10.dom_open.mem_nhds Formalism.FourierDecayAlt.P.Ux10.zero_mem_dom)
+  have hcont : ContinuousAt (Formalism.FourierDecayAlt.P.Ux1.chart g0) 0 :=
+    (Formalism.FourierDecayAlt.P.Ux1.chart_diff g0 Formalism.FourierDecayAlt.P.Ux1.zero_mem_dom).continuousAt
+  have hV : Formalism.FourierDecayAlt.P.Ux1.Dom k r ∩ Formalism.FourierDecayAlt.P.Ux1.chart g0 ⁻¹' Formalism.FourierDecayAlt.Q.OmPlus k r D.z D.z' ∈
+      𝓝 (0 : Formalism.FourierDecayAlt.P.Ux1.J k r → ℝ) :=
+    Filter.inter_mem (Formalism.FourierDecayAlt.P.Ux1.dom_open.mem_nhds Formalism.FourierDecayAlt.P.Ux1.zero_mem_dom)
       (hcont.preimage_mem_nhds ((isOpen_OmPlus _ _).mem_nhds (by rw [hchart0]; exact hg0.2)))
   obtain ⟨δ1, hδ1, hsub⟩ := Metric.mem_nhds_iff.1 hV
   set δ := δ1 / 2 with hδ
   have hδp : 0 < δ := by rw [hδ]; linarith
-  have hclb : Metric.closedBall (0 : Formalism.FourierDecayAlt.P.Ux10.J k r → ℝ) δ ⊆ Metric.ball 0 δ1 :=
+  have hclb : Metric.closedBall (0 : Formalism.FourierDecayAlt.P.Ux1.J k r → ℝ) δ ⊆ Metric.ball 0 δ1 :=
     Metric.closedBall_subset_ball (by rw [hδ]; linarith)
-  have hcl : Metric.closedBall (0 : Formalism.FourierDecayAlt.P.Ux10.J k r → ℝ) δ ⊆ Formalism.FourierDecayAlt.P.Ux10.Dom k r :=
+  have hcl : Metric.closedBall (0 : Formalism.FourierDecayAlt.P.Ux1.J k r → ℝ) δ ⊆ Formalism.FourierDecayAlt.P.Ux1.Dom k r :=
     fun Y hY => (hsub (hclb hY)).1
-  set K := Formalism.FourierDecayAlt.P.Ux10.chart g0 '' Metric.closedBall (0 : Formalism.FourierDecayAlt.P.Ux10.J k r → ℝ) δ with hKdef
+  set K := Formalism.FourierDecayAlt.P.Ux1.chart g0 '' Metric.closedBall (0 : Formalism.FourierDecayAlt.P.Ux1.J k r → ℝ) δ with hKdef
   have hK : IsCompact K :=
-    (isCompact_closedBall _ _).image_of_continuousOn ((Formalism.FourierDecayAlt.P.Ux10.chart_cd g0).continuousOn.mono hcl)
+    (isCompact_closedBall _ _).image_of_continuousOn ((Formalism.FourierDecayAlt.P.Ux1.chart_cd g0).continuousOn.mono hcl)
   have hKOm : K ⊆ Om k r D.z D.z' := by
     rintro _ ⟨Y, hY, rfl⟩
-    exact (⟨Formalism.FourierDecayAlt.P.Ux10.chart_mem hg0G (hcl hY), (hsub (hclb hY)).2⟩ :
-      Formalism.FourierDecayAlt.P.Ux10.chart g0 Y ∈ GV k r ∩ Formalism.FourierDecayAlt.Q.OmPlus k r D.z D.z')
+    exact (⟨Formalism.FourierDecayAlt.P.Ux1.chart_mem hg0G (hcl hY), (hsub (hclb hY)).2⟩ :
+      Formalism.FourierDecayAlt.P.Ux1.chart g0 Y ∈ GV k r ∩ Formalism.FourierDecayAlt.Q.OmPlus k r D.z D.z')
   have hKG : K ⊆ GV k r := fun x hx => (show x ∈ GV k r ∩ Formalism.FourierDecayAlt.Q.OmPlus k r D.z D.z' from hKOm hx).1
-  have hmemK : ∀ Y ∈ Metric.ball (0 : Formalism.FourierDecayAlt.P.Ux10.J k r → ℝ) δ, Formalism.FourierDecayAlt.P.Ux10.chart g0 Y ∈ K :=
+  have hmemK : ∀ Y ∈ Metric.ball (0 : Formalism.FourierDecayAlt.P.Ux1.J k r → ℝ) δ, Formalism.FourierDecayAlt.P.Ux1.chart g0 Y ∈ K :=
     fun Y hY => ⟨Y, Metric.ball_subset_closedBall hY, rfl⟩
   obtain ⟨bd, hbdI, hbd⟩ := hDom2 K hK hKOm
   set WS : Set (List (Mat k r) × List (Mat k r)) :=
-    (fun w : List (Formalism.FourierDecayAlt.P.Ux10.J k r) => (w.map Formalism.FourierDecayAlt.P.Ux10.Lt, ([] : List (Mat k r)))) ''
+    (fun w : List (Formalism.FourierDecayAlt.P.Ux1.J k r) => (w.map Formalism.FourierDecayAlt.P.Ux1.Lt, ([] : List (Mat k r)))) ''
       {w | w.length ≤ m} with hWSdef
   have hWS : WS.Countable := (Set.to_countable _).image _
-  have hunit : ∀ w : List (Formalism.FourierDecayAlt.P.Ux10.J k r), ∀ X ∈ w.map Formalism.FourierDecayAlt.P.Ux10.Lt, unitLie k r X := by
+  have hunit : ∀ w : List (Formalism.FourierDecayAlt.P.Ux1.J k r), ∀ X ∈ w.map Formalism.FourierDecayAlt.P.Ux1.Lt, unitLie k r X := by
     intro w X hX
     obtain ⟨i, _, rfl⟩ := List.mem_map.1 hX
-    exact Formalism.FourierDecayAlt.P.Ux10.Lt_unit i
+    exact Formalism.FourierDecayAlt.P.Ux1.Lt_unit i
   have hWSl : ∀ uv ∈ WS, (∀ Y ∈ uv.1, unitLie k r Y) ∧ (∀ Y ∈ uv.2, unitLie k r Y) ∧
       uv.1.length + uv.2.length ≤ m := by
     rintro _ ⟨w, hw, rfl⟩
@@ -256,7 +256,7 @@ lemma ck_all : Formalism.FourierDecayAlt.Q.CkLev k r 0 m (Formalism.FourierDecay
       · simp only [hK'def, if_neg hp]; exact ckOn_zero _)
     hg0G hδp hcl
     (fun w hw Y hY => by
-      refine (hDom1 (w.map Formalism.FourierDecayAlt.P.Ux10.Lt) [] (hunit w) (by simp) (by simpa using hw) _
+      refine (hDom1 (w.map Formalism.FourierDecayAlt.P.Ux1.Lt) [] (hunit w) (by simp) (by simpa using hw) _
         (hKOm (hmemK Y hY))).congr ?_
       filter_upwards [goodae] with p hp
       rw [hsel, if_pos hp, dLR_rho D hp.1])
@@ -266,7 +266,7 @@ lemma ck_all : Formalism.FourierDecayAlt.Q.CkLev k r 0 m (Formalism.FourierDecay
       by_cases hp : p ∈ P0
       · rw [if_pos hp]; exact (hp.2 _ ⟨w, hw, rfl⟩ _ (hmemK Y hY)).trans (Real.le_norm_self _)
       · rw [if_neg hp, norm_zero]; exact norm_nonneg _)
-  have hAL' : ContDiffOn ℝ ((m : ℕ) : WithTop ℕ∞) (fun Y => JF D F (Formalism.FourierDecayAlt.P.Ux10.chart g0 Y))
+  have hAL' : ContDiffOn ℝ ((m : ℕ) : WithTop ℕ∞) (fun Y => JF D F (Formalism.FourierDecayAlt.P.Ux1.chart g0 Y))
       (Metric.ball 0 δ) := by
     refine hAL.congr fun Y _ => ?_
     show ∫ p, xiP D p • rho D p F _ ∂D.μSS = _

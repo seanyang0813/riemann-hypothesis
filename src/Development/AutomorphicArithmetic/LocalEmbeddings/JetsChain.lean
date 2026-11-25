@@ -56,8 +56,6 @@ open IsDedekindDomain NumberField MeasureTheory GlobalTheory.ChiGrid GlobalTheor
 open GlobalTheory.IndefiniteRowSideFullHecke.ClassFunctionSumIntegral (IsOpenCompactLevel IsDefiniteSpace)
 open scoped ComplexOrder Topology
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 namespace GlobalTheory.JetsOne
 
 variable {D : D7}
@@ -236,31 +234,6 @@ variable {N : ℕ} (hc : ∀ n < N, ArrowOK comp ρ ker Λ n) {F : GA D (V 0) �
   (hFa : ∀ γ ∈ GQ (V 0), ∀ g, F (γ * g) = F g)
 include hc hF hFa
 
-theorem ptF_left (x : ∀ n, GfC (V n)) : ∀ n ≤ N, ∀ γ ∈ GQ (V n), ∀ g, ptF comp v ρ Λ x n (γ * g) = ptF comp v ρ Λ x n g
-  | 0, _, γ, hγ, g => (hF _).symm.trans ((hFa γ hγ g).trans (hF _))
-  | n + 1, hn, γ, hγ, g => by
-    have hArrow : ArrowOK comp ρ ker Λ n := hc n (Nat.lt_of_succ_le hn)
-    have hDef : IsDefiniteSpace (V n) := hArrow.1
-    have hHaar := exists_haar (V n) hDef
-    rcases hHaar with ⟨κ, h1, h2⟩
-    simp only [ptF_succ hArrow κ h1 h2, hArrow.2.2.2.2.2.1 γ hγ]
-
-theorem ptF_rat {x x' : ∀ n, GfC (V n)} (hx : ∀ j < N, ∃ γ ∈ ratFin (V j), x' j = γ * x j) :
-    ∀ n ≤ N, ptF comp v ρ Λ x' n = ptF comp v ρ Λ x n
-  | 0, _ => rfl
-  | n + 1, hn => by
-    have hn' : n < N := Nat.lt_of_succ_le hn
-    have hArrow : ArrowOK comp ρ ker Λ n := hc n hn'
-    have hDef : IsDefiniteSpace (V n) := hArrow.1
-    have hHaar := exists_haar (V n) hDef
-    rcases hHaar with ⟨κ, h1, h2⟩
-    have hRat : ∃ γ ∈ ratFin (V n), x' n = γ * x n := hx n hn'
-    rcases hRat with ⟨γ, hγ, e⟩
-    funext g
-    rw [ptF_succ hArrow κ h1 h2, ptF_succ hArrow κ h1 h2, ptF_rat hx n (by omega), e]
-    exact avg_rat _ κ (fun z => ker n z g * ptF comp v ρ Λ x n z) (fun q hq z => by
-      rw [hArrow.2.2.2.2.1 q hq, ptF_left hc hF hFa x n (by omega) q hq]) hγ _
-
 
 omit hF in
 theorem liftC_left (μ : ∀ n, Measure (GA D (V n))) (fd : ∀ n, Set (GA D (V n))) :
@@ -276,43 +249,6 @@ theorem liftC_right (μ : ∀ n, Measure (GA D (V n))) (fd : ∀ n, Set (GA D (V
   | n + 1, k, hk, g => by
     have hk' : ∀ g h, ker n g (h * k) = ker n g h := hk
     simp only [liftC, hk']
-
-theorem liftC_real (μ : ∀ n, Measure (GA D (V n))) (fd : ∀ n, Set (GA D (V n)))
-    (K : ∀ n, Subgroup (GL (Fin (V n).rank) (Lev.EAf D)))
-    (hK : ∀ n < N, IsOpenCompactLevel _ (K n) ∧ (∃ K₀, IsOpenCompactLevel _ K₀ ∧ K n ≤ K₀ ∧ IsMeasDef _ K₀ (μ n) (fd n)) ∧
-      ∀ k ∈ Lev.levA _ (K n), FixAt ker F n k ∧ ∀ g h, ker n (g * k) h = ker n g h) :
-    ∀ n ≤ N, IsFinReal (ρ n) (liftC μ fd ker F n) (Λ n)
-      (sumV (A := fun n => FinCl (V n) (K n)) (fun _ c => Quotient.out c) (fun n => wgt (V n) (μ n) (K n)) comp v n)
-  | 0, _ => hF
-  | n + 1, hn => by
-    intro h
-    have ih := liftC_real μ fd K hK n (by omega)
-    have hn' : n < N := Nat.lt_of_succ_le hn
-    have hLevel := hK n hn'
-    rcases hLevel with ⟨h1, ⟨K₀, h2, h3, h4⟩, h5⟩
-    have hArrow : ArrowOK comp ρ ker Λ n := hc n hn'
-    rcases hArrow with ⟨-, a2, a3, a4, a5, -, a7, a8⟩
-    have hAvg := GlobalTheory.DefiniteClassReal.integral_eq_finClSum_avg (V n) a2 K₀ (K n) h2 h1 h3 (μ n) (fd n) h4
-      (fun g => ker n g h * liftC μ fd ker F n g)
-      (fun γ hγ g => by
-        rw [a5 γ hγ, liftC_left hc hFa μ fd n (by omega) γ hγ])
-      (fun k hk g => by
-        rw [(h5 k hk).2, liftC_right μ fd n k (h5 k hk).1])
-      (fun z => (a7 z h).mul (by
-        have e : ∀ k : GinfC (V n), liftC μ fd ker F n (z * k) = Λ n (ρ n (k : GA D (V n))⁻¹ (ρ n z⁻¹ (sumV
-            (A := fun n => FinCl (V n) (K n)) (fun _ c => Quotient.out c) (fun n => wgt (V n) (μ n) (K n)) comp v n
-            (finOf _ z)))) := fun k => by
-          rw [ih, finOf_mul_inf, mul_inv_rev, map_mul, Module.End.mul_apply]
-        simp only [e]
-        exact a4 _))
-    rcases hAvg with ⟨hfin, κ, hκH, hκP, hU⟩
-    haveI := Fintype.ofFinite (FinCl (V n) (K n))
-    simp only [liftC, sumV]
-
-    rw [hU, finsum_eq_sum_of_fintype, finsum_eq_sum_of_fintype, map_sum, map_sum]
-    refine Finset.sum_congr rfl fun c _ => ?_
-    simp only [isFinReal_apply a3 ih]
-    rw [a8 κ hκH hκP, map_smul, map_smul, smul_eq_mul, wgt, div_eq_mul_inv]
 
 end Chain
 

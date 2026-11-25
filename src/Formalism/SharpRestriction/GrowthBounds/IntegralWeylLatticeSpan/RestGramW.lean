@@ -13,8 +13,6 @@ namespace Formalism.L2.G.RelativeIndexFlags
 
 open Formalism.L2.G.Cmp
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 variable {D : D7} {X : Formalism.L2.Herm.Herm0 D}
 
 def RestLatW (T : ∀ u : D.what₂.Word, Forms0 D u) (I : CmpIn D X) : Prop :=

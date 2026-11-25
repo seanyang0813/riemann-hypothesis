@@ -75,20 +75,9 @@ def sOf (I : CarrierIn X u u') : Formalism.FourierDecayAlt.C.HidaSetting D.host.
 
 structure ModelsFor {Wp Wq : InfinitePlace D.host.E → Type} [∀ x, NormedAddCommGroup (Wp x)]
     [∀ x, InnerProductSpace ℂ (Wp x)] [∀ x, NormedAddCommGroup (Wq x)] [∀ x, InnerProductSpace ℂ (Wq x)]
-    (S : Formalism.FourierDecayAlt.C.HidaSetting D.host.E Wp Wq) where
-  L : ∀ v : Fin S.f, Formalism.FourierDecayAlt.R.LevelData (Formalism.FourierDecayAlt.MA.A (Formalism.FourierDecayAlt.D.parOf S v)
-    (Formalism.FourierDecayAlt.MA.DQ (Formalism.FourierDecayAlt.D.parOf S v))) (Formalism.FourierDecayAlt.D.parOf S v).r
-  j : ∀ v : Fin S.f, Formalism.FourierDecayAlt.M.Ty (Formalism.FourierDecayAlt.D.parOf S v) →
-    Formalism.FourierDecayAlt.MA.SmQ (Formalism.FourierDecayAlt.D.parOf S v).r (Formalism.FourierDecayAlt.D.parOf S v).TT
-  lam : ∀ v : Fin S.f, Fin ((Formalism.FourierDecayAlt.D.parOf S v).k + 2 * (Formalism.FourierDecayAlt.D.parOf S v).r + 1) → ℝ
-  c : Formalism.FourierDecayAlt.LE.Cut
-  Cm : Fin S.f → ℝ
-  σ : Fin S.f → ℝ
-  Lw : ℕ → Fin S.f → ℝ
-  Ll : ℕ → ℕ → Fin S.f → ℝ
-  Ll' : ℕ → ℕ → Fin S.f → ℝ
+    (_S : Formalism.FourierDecayAlt.C.HidaSetting D.host.E Wp Wq) where
 
-def CarrierOf (I : CarrierIn X u u') (Mo : ModelsFor (sOf I)) : Parts X u u' where
+def CarrierOf (I : CarrierIn X u u') (_Mo : ModelsFor (sOf I)) : Parts X u u' where
   Wp := I.Wp
   Wq := I.Wq
   S := sOf I
@@ -104,14 +93,5 @@ def CarrierOf (I : CarrierIn X u u') (Mo : ModelsFor (sOf I)) : Parts X u u' whe
   Qi := I.Qi
   eP := I.eP
   eQ := I.eQ
-  L := Mo.L
-  j := Mo.j
-  lam := Mo.lam
-  c := Mo.c
-  Cm := Mo.Cm
-  σ := Mo.σ
-  Lw := Mo.Lw
-  Ll := Mo.Ll
-  Ll' := Mo.Ll'
 
 end Formalism.L2.SG.Pf.Carrier

@@ -39,9 +39,6 @@ def SegreLiftPrime.Statement : Prop :=
     [∀ k, Fintype (ι k)] (W : Ideal (MRing ι F)), IsMultiProjPrime W →
       IsMultiProjPrime (segreLift ι F W)
 
-theorem SegreLiftPrime.hyps : IsMultiProjPrime (⊥ : Ideal (MRing (fun _ : Unit => Fin 2) ℚ)) :=
-  NumbersDVR.isMultiProjPrime_bot
-
 end GroundTheory.Heights₂.Heights.Kleiman.SectionsOverLocalization
 end -- clump:auto
 end -- clump:auto

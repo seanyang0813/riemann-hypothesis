@@ -127,17 +127,6 @@ variable (F Ω) in
 def cycMod (l : ℕ) [Fact l.Prime] (r : ℕ) : G F Ω →* (ZMod (l ^ r))ˣ :=
   (Units.map (PadicInt.toZModPow r : ℤ_[l] →+* ZMod (l ^ r)).toMonoidHom).comp (cycZ F Ω l)
 
-def IsCC (c : G F Ω) : Prop :=
-  ∃ j : Ω →+* ℂ, ∀ x, j (c x) = starRingEnd ℂ (j x)
-
-def IsFinitePlace (F : Type*) [Field F] [NumberField F] {Ω : Type*} [Field Ω] [Algebra F Ω]
-    (A : ValuationSubring Ω) : Prop :=
-  ∃ v : HeightOneSpectrum (𝓞 F), IsPlaceOver A v
-
-def IsPlaceAbove (F : Type*) [Field F] [NumberField F] {Ω : Type*} [Field Ω] [Algebra F Ω]
-    (A : ValuationSubring Ω) (p : ℕ) : Prop :=
-  ∃ v : HeightOneSpectrum (𝓞 F), IsPlaceOver A v ∧ ((p : ℕ) : 𝓞 F) ∈ v.asIdeal
-
 section unram
 
 variable (S : Set (HeightOneSpectrum (𝓞 F)))

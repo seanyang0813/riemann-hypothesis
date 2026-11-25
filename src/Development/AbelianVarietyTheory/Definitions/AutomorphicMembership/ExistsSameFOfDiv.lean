@@ -236,23 +236,23 @@ variable {D : D7} (Z : New D)
 def SPack.re {F : ∀ u, Forms0 D u} (P : SPack D F) {F' : ∀ u, Forms0 (reD D Z) u} (h : SameForms0LevelsAndValues Z F F')
     (hF : FinX (reY Z P.Y)) : SPack (reD D Z) F' where
   X := reX Z P.X
-  hb := (by with_unfolding_all exact (P.hb :))
+  hb := P.hb
   Y := reY Z P.Y
   fin := hF
-  ψ := (by with_unfolding_all exact (P.ψ :))
-  measTie := (by with_unfolding_all exact (measTie_reX Z P.measTie :))
-  ψ_char := (by with_unfolding_all exact (P.ψ_char :))
-  ψ_std := (by with_unfolding_all exact (P.ψ_std :))
-  measCompat := (by with_unfolding_all exact (measCompat_reX Z P.measCompat :))
-  locCompat := (by with_unfolding_all exact (fun w : D.what₂.Word => locCompat_reX Z (P.locCompat w) :))
-  tr := (by with_unfolding_all exact (fun u : D.what₂.Word => reTr Z (P.tr u) (h u).2.1 (h u).2.2 :))
-  into := (by with_unfolding_all exact (fun u : D.what₂.Word => colDictInto_reTr Z (P.tr u) (h u).2.1 (h u).2.2 P.Y (P.into u) :))
-  bij := (by with_unfolding_all exact (fun u : D.what₂.Word => colDictBij_reTr Z (P.tr u) (h u).2.1 (h u).2.2 P.Y (P.bij u) :))
-  lev := (by with_unfolding_all exact (fun u : D.what₂.Word => levelMatch_reTr Z (P.tr u) (h u).1 (h u).2.1 (h u).2.2 P.Y (P.lev u) :))
-  isom := (by with_unfolding_all exact (fun u : D.what₂.Word => colDictIsom_reTr Z (P.tr u) (h u).2.1 (h u).2.2 P.Y P.fin hF (P.isom u) :))
-  inst := (by with_unfolding_all exact (P.inst :))
+  ψ := (P.ψ)
+  measTie := (measTie_reX Z P.measTie)
+  ψ_char := (P.ψ_char)
+  ψ_std := (P.ψ_std)
+  measCompat := (measCompat_reX Z P.measCompat)
+  locCompat := (fun w : D.what₂.Word => locCompat_reX Z (P.locCompat w))
+  tr := (fun u : D.what₂.Word => reTr Z (P.tr u) (h u).2.1 (h u).2.2)
+  into := (fun u : D.what₂.Word => colDictInto_reTr Z (P.tr u) (h u).2.1 (h u).2.2 P.Y (P.into u))
+  bij := (fun u : D.what₂.Word => colDictBij_reTr Z (P.tr u) (h u).2.1 (h u).2.2 P.Y (P.bij u))
+  lev := (fun u : D.what₂.Word => levelMatch_reTr Z (P.tr u) (h u).1 (h u).2.1 (h u).2.2 P.Y (P.lev u))
+  isom := (fun u : D.what₂.Word => colDictIsom_reTr Z (P.tr u) (h u).2.1 (h u).2.2 P.Y P.fin hF (P.isom u))
+  inst := P.inst
   G := reG Z P.G
-  pin := (by with_unfolding_all exact (P.pin :))
+  pin := P.pin
 
 section API
 
@@ -261,7 +261,7 @@ variable {F : ∀ u, Forms0 D u} (P : SPack D F) {F' : ∀ u, Forms0 (reD D Z) u
 end API
 
 theorem conjHH_eEECre {X : HidaSetting D} (G : GoodOp X) (x : EEC X G) :
-    conjHH (reX Z X) (reG Z G) (eEECre Z G x) = eHHre Z X (conjHH X G x) := (by with_unfolding_all exact (Eq.refl (eHHre Z X (conjHH X G x)) :))
+    conjHH (reX Z X) (reG Z G) (eEECre Z G x) = eHHre Z X (conjHH X G x) := (Eq.refl (eHHre Z X (conjHH X G x)))
 
 theorem exists_sameF_ofDiv (N : ∀ u, Submodule (𝓞 D.what₂.LL) (D.div.Nu u).V) (ht : D.what₂.Word → ℝ) (F : ∀ u, Forms0 D u) :
     ∃ F' : ∀ u, Forms0 (reD D (New.ofDiv D N ht)) u, SameForms0LevelsAndValues (New.ofDiv D N ht) F F' := by
@@ -271,10 +271,10 @@ theorem exists_sameF_ofDiv (N : ∀ u, Submodule (𝓞 D.what₂.LL) (D.div.Nu u
       cls0 := { (F u).cls0 with }
       val0 := { (F u).val0 with }
       lv0 := { (F u).lv0 with } }
-  refine ⟨(by with_unfolding_all exact (G :)), fun u => ⟨?_, ?_, ?_⟩⟩
-  · exact (by with_unfolding_all exact (Eq.refl (F u).cls0.lev :))
-  · exact (by with_unfolding_all exact (Eq.refl (F u).cls0.y :))
-  · exact (by with_unfolding_all exact (Eq.refl (F u).val0.eY :))
+  refine ⟨G, fun u => ⟨?_, ?_, ?_⟩⟩
+  · exact (Eq.refl (F u).cls0.lev)
+  · exact (Eq.refl (F u).cls0.y)
+  · exact (Eq.refl (F u).val0.eY)
 
 end GlobalTheory.Mem.SRe
 

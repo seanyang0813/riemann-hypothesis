@@ -52,16 +52,12 @@ open ReciprocityTheory.ChartRestriction.G.PullbackSections.PfModelLatA
 
 namespace GlobalTheory.ShareOn
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 abbrev uAt {D : D7} {J : CoreJ D} {G : Type} (r : TwoRuns J G) (v : HeightOneSpectrum (𝓞 D.what₂.LL)) (i : Fin D.R.m) :=
   (r.used v).full.U ((i : ℕ) + 1) (r.used v).full.σ₀
 
 end GlobalTheory.ShareOn
 
 namespace GlobalTheory.ShareOn
-
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 section Build
 

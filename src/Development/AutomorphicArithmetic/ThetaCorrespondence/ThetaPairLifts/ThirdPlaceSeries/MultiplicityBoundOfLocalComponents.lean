@@ -472,88 +472,86 @@ theorem geo_copy {Z Z' : w.Lt} (z₀ : Dat (w.st Z) w.I hX T Wt) (z : Dat (w.st 
   dsimp only at h1 h2 h3 h4 ⊢
   subst h1 h2
   obtain rfl : core = coreJ (a := Z) Z' z₀.core := eq_of_heq h3
-  have e : al = (by with_unfolding_all exact ((alg (a := Z) Z' z₀.alg) :)) := by
+  have e : al = (alg (a := Z) Z' z₀.alg) := by
     refine Algebra.algebra_ext _ _ fun y => B.embLL.injective ?_
-    exact (alg_eq y).trans ((by with_unfolding_all exact ((z₀.alg_eq ((by with_unfolding_all exact (y :)))).symm :)))
+    exact (alg_eq y).trans (((z₀.alg_eq (y)).symm))
   subst e
-  obtain rfl : R = cpR (a := Z) Z' z₀ := eq_of_heq (h4.trans ((by with_unfolding_all exact ((HEq.refl (cpR (a := Z) Z' z₀)) :))))
+  obtain rfl : R = cpR (a := Z) Z' z₀ := eq_of_heq (h4.trans ((HEq.refl (cpR (a := Z) Z' z₀))))
   refine ⟨?_, ?_, ?_, ?_⟩
-  · with_unfolding_all
-      exact GlobalTheory.Mem.R3.Tr.geoHalf (a := Z) Z' (iK := z₀.alg) z₀.geo
-  · with_unfolding_all
-      exact GlobalTheory.Mem.R3.Tr.inGeo_tr (a := Z) Z' (iK := z₀.alg) hg
+  · exact GlobalTheory.Mem.R3.Tr.geoHalf (a := Z) Z' (iK := z₀.alg) z₀.geo
+  · exact GlobalTheory.Mem.R3.Tr.inGeo_tr (a := Z) Z' (iK := z₀.alg) hg
   · intro B' f' T' w' Z'' hX' Wt' z' e
     exact
-      { H := (by with_unfolding_all exact (e.H :))
-        l := (by with_unfolding_all exact (e.l :))
-        c := (by with_unfolding_all exact (e.c :))
-        Dw := (by with_unfolding_all exact (e.Dw :))
-        Xo := (by with_unfolding_all exact (e.Xo :))
-        U := (by with_unfolding_all exact (e.U :))
-        V := (by with_unfolding_all exact (e.V :))
-        dict := (by with_unfolding_all exact (e.dict :))
-        mu := (by with_unfolding_all exact (e.mu :))
-        Kf := (by with_unfolding_all exact (e.Kf :))
-        cE := (by with_unfolding_all exact (e.cE :))
-        chiW := (by with_unfolding_all exact (e.chiW :))
-        x₀ := (by with_unfolding_all exact (e.x₀ :))
-        iota := (by with_unfolding_all exact (e.iota :))
-        ψ := (by with_unfolding_all exact (e.ψ :))
-        θ := (by with_unfolding_all exact (e.θ :))
-        βW := (by with_unfolding_all exact (e.βW :))
-        βY := (by with_unfolding_all exact (e.βY :))
-        nW := (by with_unfolding_all exact (e.nW :))
-        βV := (by with_unfolding_all exact (e.βV :))
-        ΛV := (by with_unfolding_all exact (e.ΛV :))
-        ΛW := (by with_unfolding_all exact (e.ΛW :))
-        Pg := (by with_unfolding_all exact (e.Pg :))
-        eG := (by with_unfolding_all exact (e.eG :))
-        Sb := (by with_unfolding_all exact (e.Sb :))
-        BV := (by with_unfolding_all exact (e.BV :))
-        MW := (by with_unfolding_all exact (e.MW :))
-        forms := (by with_unfolding_all exact (e.forms :))
-        cV := (by with_unfolding_all exact (e.cV :))
-        pb := (by with_unfolding_all exact (e.pb :))
-        ΛY := (by with_unfolding_all exact (e.ΛY :))
-        κ := (by with_unfolding_all exact (e.κ :))
-        ref := (by with_unfolding_all exact (e.ref :))
-        jL := (by with_unfolding_all exact (e.jL :)) }
+      { H := e.H
+        l := e.l
+        c := e.c
+        Dw := e.Dw
+        Xo := e.Xo
+        U := e.U
+        V := e.V
+        dict := e.dict
+        mu := e.mu
+        Kf := e.Kf
+        cE := e.cE
+        chiW := e.chiW
+        x₀ := e.x₀
+        iota := e.iota
+        ψ := e.ψ
+        θ := e.θ
+        βW := e.βW
+        βY := e.βY
+        nW := e.nW
+        βV := e.βV
+        ΛV := e.ΛV
+        ΛW := e.ΛW
+        Pg := e.Pg
+        eG := e.eG
+        Sb := e.Sb
+        BV := e.BV
+        MW := e.MW
+        forms := e.forms
+        cV := e.cV
+        pb := e.pb
+        ΛY := e.ΛY
+        κ := e.κ
+        ref := e.ref
+        jL := e.jL }
   · intro B' f' T' w' Z'' hX' Wt' z' e
     exact
-      { H := (by with_unfolding_all exact (e.H :))
-        l := (by with_unfolding_all exact (e.l :))
-        c := (by with_unfolding_all exact (e.c :))
-        Dw := (by with_unfolding_all exact (e.Dw :))
-        Xo := (by with_unfolding_all exact (e.Xo :))
-        U := (by with_unfolding_all exact (e.U :))
-        V := (by with_unfolding_all exact (e.V :))
-        dict := (by with_unfolding_all exact (e.dict :))
-        mu := (by with_unfolding_all exact (e.mu :))
-        Kf := (by with_unfolding_all exact (e.Kf :))
-        cE := (by with_unfolding_all exact (e.cE :))
-        chiW := (by with_unfolding_all exact (e.chiW :))
-        x₀ := (by with_unfolding_all exact (e.x₀ :))
-        iota := (by with_unfolding_all exact (e.iota :))
-        ψ := (by with_unfolding_all exact (e.ψ :))
-        θ := (by with_unfolding_all exact (e.θ :))
-        βW := (by with_unfolding_all exact (e.βW :))
-        βY := (by with_unfolding_all exact (e.βY :))
-        nW := (by with_unfolding_all exact (e.nW :))
-        βV := (by with_unfolding_all exact (e.βV :))
-        ΛV := (by with_unfolding_all exact (e.ΛV :))
-        ΛW := (by with_unfolding_all exact (e.ΛW :))
-        Pg := (by with_unfolding_all exact (e.Pg :))
-        eG := (by with_unfolding_all exact (e.eG :))
-        Sb := (by with_unfolding_all exact (e.Sb :))
-        BV := (by with_unfolding_all exact (e.BV :))
-        MW := (by with_unfolding_all exact (e.MW :))
-        forms := (by with_unfolding_all exact (e.forms :))
-        cV := (by with_unfolding_all exact (e.cV :))
-        pb := (by with_unfolding_all exact (e.pb :))
-        ΛY := (by with_unfolding_all exact (e.ΛY :))
-        κ := (by with_unfolding_all exact (e.κ :))
-        ref := (by with_unfolding_all exact (e.ref :))
-        jL := (by with_unfolding_all exact (e.jL :)) }
+      { H := e.H
+        l := e.l
+        c := e.c
+        Dw := e.Dw
+        Xo := e.Xo
+        U := e.U
+        V := e.V
+        dict := e.dict
+        mu := e.mu
+        Kf := e.Kf
+        cE := e.cE
+        chiW := e.chiW
+        x₀ := e.x₀
+        iota := e.iota
+        ψ := e.ψ
+        θ := e.θ
+        βW := e.βW
+        βY := e.βY
+        nW := e.nW
+        βV := e.βV
+        ΛV := e.ΛV
+        ΛW := e.ΛW
+        Pg := e.Pg
+        eG := e.eG
+        Sb := e.Sb
+        BV := e.BV
+        MW := e.MW
+        forms := e.forms
+        cV := e.cV
+        pb := e.pb
+        ΛY := e.ΛY
+        κ := e.κ
+        ref := e.ref
+        jL := e.jL }
 
 end GlobalTheory.HeightCounting.SerMove.ReGeo
 
@@ -561,9 +559,9 @@ namespace GlobalTheory.HeightCounting.SerMove
 
 theorem exists_geo_extN : ∀ {K : Ctx} {B B' : Base} {f : Top.Fr B.toPre} {f' : Top.Fr B'.toPre} {T : TwDat B} {T' : TwDat B'} {w : ColW B f T} {w' : ColW B' f' T'} {P : Pre2 K w} {P' : Pre2 K w'}, Ext P.z P'.z → ∀ (x : St P) (x' : St P'), ∃ (g : Geo x) (g' : Geo x'), GlobalTheory.RealGeo.InGeo g ∧ GlobalTheory.RealGeo.InGeo g' ∧ ExtN (datAt x g) (datAt x' g') := by
   intro K B B' f f' T T' w w' P P' e x x'
-  obtain ⟨g, hg, hL, -⟩ := ReGeo.geo_copy (Z := P.Z₀) (Z' := x.o.Z) P.z x.m.z x.m.Xg x.m.tr ((by with_unfolding_all exact (x.copy.core :))) ((by with_unfolding_all exact (x.copy.R :))) P.inGeo
+  obtain ⟨g, hg, hL, -⟩ := ReGeo.geo_copy (Z := P.Z₀) (Z' := x.o.Z) P.z x.m.z x.m.Xg x.m.tr (x.copy.core) (x.copy.R) P.inGeo
   obtain ⟨g', hg', -, hR⟩ :=
-    ReGeo.geo_copy (Z := P'.Z₀) (Z' := x'.o.Z) P'.z x'.m.z x'.m.Xg x'.m.tr ((by with_unfolding_all exact (x'.copy.core :))) ((by with_unfolding_all exact (x'.copy.R :))) P'.inGeo
+    ReGeo.geo_copy (Z := P'.Z₀) (Z' := x'.o.Z) P'.z x'.m.z x'.m.Xg x'.m.tr (x'.copy.core) (x'.copy.R) P'.inGeo
   exact ⟨g, g', hg, hg', hR _ (hL _ e.extN)⟩
 
 end GlobalTheory.HeightCounting.SerMove
@@ -660,8 +658,8 @@ theorem exists_move_alt (hKP : KPx B' f') (hF : Forced K B' T') (hS' : Start K B
   obtain ⟨h1, h2, h3, h4⟩ := fr_same hE.1 ((heq_of_eq w'.C_eq).trans (hf.trans (heq_of_eq w.C_eq).symm))
   obtain ⟨g, g'', hg, hg'', hX⟩ := GlobalTheory.HeightCounting.SerMove.exists_geo_extN hExt x x''
   have hO' : K.Over B.toPre := hE.1 ▸ hO
-  exact ⟨ι', e', h, ⟨(by with_unfolding_all exact (h1 :)), (by with_unfolding_all exact (h2 :)), (by with_unfolding_all exact (h3 :)), (by with_unfolding_all exact (h4 :))⟩,
-    (by with_unfolding_all exact ((choice_heq hE.1 (p := (l.Pq)) (p' := (l''.Pq)) ((l.Pq_over)) ((l''.Pq_over)) (s := (w.I.sel)) (s' := (w'.I.sel)) ((hsel)) ((l.sel)) ((l''.sel))) : _)),
+  exact ⟨ι', e', h, ⟨h1, h2, h3, h4⟩,
+    (choice_heq hE.1 (p := (l.Pq)) (p' := (l''.Pq)) ((l.Pq_over)) ((l''.Pq_over)) (s := (w.I.sel)) (s' := (w'.I.sel)) ((hsel)) ((l.sel)) ((l''.sel))),
     g, g'', hg, hg'', bigHost_st hO' hB x, bigHost_st hO hB x'',
     GlobalTheory.HeightCounting.SerMove.realMove_of_link x x'' ι' e' g g'' ⟨hO, hKP, hF, hS', hE, hf, hSt, hpx, hsel, hJ, hδ, hExt, h.cp, ⟨h.cp.gal, h.pl⟩, hX⟩ hg hg'' _ _⟩
 end GlobalTheory.HeightCounting.SerGlue
@@ -720,9 +718,9 @@ theorem series_restage_of_carry_alt : _root_.GlobalTheory.HeightCounting.Up.Publ
   obtain ⟨H, hp⟩ := _root_.GlobalTheory.HeightCounting.SerCarry.st_facts_alt lb.toLI g hg a
   obtain ⟨H', hp'⟩ := _root_.GlobalTheory.HeightCounting.SerCarry.st_facts_alt l'' g'' hg'' a''
   obtain ⟨L, hl, hq⟩ := sideB_facts lb.b.Bs lb.b.eF
-  exact (by with_unfolding_all exact ((series_move h m ((x.m.z.geo)) ((x''.m.z.geo)) (kKs := (lb.rat.kKs)) (hk := (lb.rat.hk)) ((l''.rat.kKs))
+  exact (series_move h m ((x.m.z.geo)) ((x''.m.z.geo)) (kKs := (lb.rat.kKs)) (hk := (lb.rat.hk)) ((l''.rat.kKs))
     ((l''.rat.hk)) ((lb.b.YS)) ((lb.b.fi)) hl lb.rat.rat.Sb_le l''.rat.rat.Sb_le H H' (hs := (lb.b.Bs.hs)) (c := lb.b.Bs.cHk)
-    ((l''.rat.In.hs)) (c' := cHk) hc ((L)) hcf lb.a.A.chr l''.a.A.chr hp hp' hPq hq lb.b.tau ((lb.b.ser))) : _))
+    ((l''.rat.In.hs)) (c' := cHk) hc ((L)) hcf lb.a.A.chr l''.a.A.chr hp hp' hPq hq lb.b.tau ((lb.b.ser)))
 end GlobalTheory.HeightCounting.SerCarry
 end
 end
@@ -1178,25 +1176,25 @@ theorem UpperTheory.nonempty_coefficientRingData_of_isomorphic_CMDatum :
   have hst : ∀ x y : ↥D'.LL0, (y : D'.what₂.LL) = star (x : D'.what₂.LL) → embLL0 D' y = starRingEnd ℂ (embLL0 D' x) :=
     fun x y hy => (congrArg D'.what₂.embLL hy).trans (D'.starLL_cx _)
   obtain ⟨r, rfl⟩ := h.cp.exists_rest
-  obtain ⟨m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13⟩ := mid B e ((by with_unfolding_all exact ((overD D r).ntw.emb0 :)))
-    ((by with_unfolding_all exact ((overD D r).ntw.emb0b :))) (embLL0 (overD D r))
-    (fun i x => eq_of_heq ((by with_unfolding_all exact ((h.cp.emb0 i ((i)) (((HEq.refl i))) x) : _))))
-    (fun i x => eq_of_heq ((by with_unfolding_all exact ((h.cp.emb0b i ((i)) (((HEq.refl i))) x) : _)))) h.cp.embLL0_eq
-    ((by with_unfolding_all exact ((overD D r).ntw.jL :))) (eq_of_heq ((by with_unfolding_all exact (h.jL :)))) ((by with_unfolding_all exact ((overD D r).ntw.s2 :))) (eq_of_heq ((by with_unfolding_all exact (h.s2 :))))
-    ((by with_unfolding_all exact ((overD D r).ntw.lamG :))) (eq_of_heq ((by with_unfolding_all exact (h.lamG :)))) ((by with_unfolding_all exact ((overD D r).ntw.qs :))) (eq_of_heq ((by with_unfolding_all exact (h.qs :))))
-    ((by with_unfolding_all exact (cf'.mu0 :))) (eq_of_heq ((by with_unfolding_all exact (hf.mu0 :)))) ((by with_unfolding_all exact (cf'.eta :))) (eq_of_heq ((by with_unfolding_all exact (hf.eta :))))
-    ((by with_unfolding_all exact (cf'.del :))) (eq_of_heq ((by with_unfolding_all exact (hf.del :)))) ((by with_unfolding_all exact (cf'.del' :))) (eq_of_heq ((by with_unfolding_all exact (hf.del' :))))
-  exact ⟨⟨⟨(by with_unfolding_all exact (B.twF.K0 :)), (by with_unfolding_all exact (B.twF.eO0 :)), (by with_unfolding_all exact ((fun i => (B.twF.j0 i).comp e.toRingHom) :)), (by with_unfolding_all exact (B.twF.Lw :)),
-      (by with_unfolding_all exact (B.twF.eO :)), (by with_unfolding_all exact (B.twF.eOk :)), (by with_unfolding_all exact (B.twF.iCq :)), (by with_unfolding_all exact (B.twF.S0x :))⟩,
-    ⟨(by with_unfolding_all exact (m1 :)), (by with_unfolding_all exact (B.tw.ringSpec_baseIntegersEquiv_algebraMap :)), (by with_unfolding_all exact (m2 :)), (by with_unfolding_all exact (B.tw.eO_alg :)), (by with_unfolding_all exact (B.tw.eOk_alg :)), (by with_unfolding_all exact (B.tw.mu_g :)),
-      (by with_unfolding_all exact (B.tw.hk_split :)), (by with_unfolding_all exact (B.tw.ringSpec_excludedPlaces_eq :)), (by with_unfolding_all exact (B.tw.concreteTwistFrame_extraExcludedPlaces_conj :)), (by with_unfolding_all exact (B.tw.B_range :)), (by with_unfolding_all exact (B.tw.sig_inj :)),
-      (by with_unfolding_all exact (m3 :)), (by with_unfolding_all exact (B.tw.concreteTwistFrame_extraExcluded_over_smallPrimes :))⟩,
-    ⟨(by with_unfolding_all exact (B.chiD.mu0 :)), (by with_unfolding_all exact (B.chiD.etaT :)), (by with_unfolding_all exact (B.chiD.del :)), fun a => hE.elim a, (by with_unfolding_all exact (B.chiD.chiI :)),
-      (by with_unfolding_all exact ((fun s b => (B.chiD.embO s b).comp e.toRingHom) :))⟩,
-    ⟨fun a => hE.elim a, (by with_unfolding_all exact (B.chi.del_fix :)), (by with_unfolding_all exact (m4 :)), (by with_unfolding_all exact (m5 :)), (by with_unfolding_all exact (m6 :)), (by with_unfolding_all exact (B.chi.etaT_unr :)),
-      (by with_unfolding_all exact (B.chi.etaT_inf :)), (by with_unfolding_all exact (m7 :))⟩,
-    (by with_unfolding_all exact (m8 :)), (by with_unfolding_all exact (m9 :)), (by with_unfolding_all exact (m10 :)), (by with_unfolding_all exact (m11 :)),
-    (by with_unfolding_all exact ((fun s x y hy => m12 s x y (hst x y hy)) :)), (by with_unfolding_all exact (m13 :))⟩⟩
+  obtain ⟨m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13⟩ := mid B e (((overD D r).ntw.emb0))
+    (((overD D r).ntw.emb0b)) (embLL0 (overD D r))
+    (fun i x => eq_of_heq ((h.cp.emb0 i ((i)) (((HEq.refl i))) x)))
+    (fun i x => eq_of_heq ((h.cp.emb0b i ((i)) (((HEq.refl i))) x))) h.cp.embLL0_eq
+    (((overD D r).ntw.jL)) (eq_of_heq (h.jL)) (((overD D r).ntw.s2)) (eq_of_heq (h.s2))
+    (((overD D r).ntw.lamG)) (eq_of_heq (h.lamG)) (((overD D r).ntw.qs)) (eq_of_heq (h.qs))
+    (cf'.mu0) (eq_of_heq (hf.mu0)) (cf'.eta) (eq_of_heq (hf.eta))
+    (cf'.del) (eq_of_heq (hf.del)) (cf'.del') (eq_of_heq (hf.del'))
+  exact ⟨⟨⟨B.twF.K0, B.twF.eO0, (fun i => (B.twF.j0 i).comp e.toRingHom), B.twF.Lw,
+      B.twF.eO, B.twF.eOk, B.twF.iCq, B.twF.S0x⟩,
+    ⟨m1, B.tw.ringSpec_baseIntegersEquiv_algebraMap, m2, B.tw.eO_alg, B.tw.eOk_alg, B.tw.mu_g,
+      B.tw.hk_split, B.tw.ringSpec_excludedPlaces_eq, B.tw.concreteTwistFrame_extraExcludedPlaces_conj, B.tw.B_range, B.tw.sig_inj,
+      m3, B.tw.concreteTwistFrame_extraExcluded_over_smallPrimes⟩,
+    ⟨B.chiD.mu0, B.chiD.etaT, B.chiD.del, fun a => hE.elim a, B.chiD.chiI,
+      (fun s b => (B.chiD.embO s b).comp e.toRingHom)⟩,
+    ⟨fun a => hE.elim a, B.chi.del_fix, m4, m5, m6, B.chi.etaT_unr,
+      B.chi.etaT_inf, m7⟩,
+    m8, m9, m10, m11,
+    (fun s x y hy => m12 s x y (hst x y hy)), m13⟩⟩
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.UnitTensorPairings.NonemptyCoefficientRingDataOfIsomorphicCMDatum =====
@@ -1299,23 +1297,23 @@ private theorem eigen_zero_one_transfer (h : CopyAll D D' ι e)
   exact hs
 private theorem lowAll_eq (h : CopyAll D D' ι e) : lowAll D' = lowAll D := by
   obtain ⟨r, rfl⟩ := h.cp.exists_rest
-  exact (by with_unfolding_all exact ((Eq.refl (lowAll D)) :))
+  exact (Eq.refl (lowAll D))
 private theorem over_S0_transfer (h : CopyAll D D' ι e) (low : Finset ℕ) (hs : ∀ i, OverSet D (D.ntw.S0 i) (insert (D.ntw.l i) low)) :
     ∀ i, OverSet D' (D'.ntw.S0 i) (insert (D'.ntw.l i) low) := by
   obtain ⟨r, rfl⟩ := h.cp.exists_rest
-  exact (by with_unfolding_all exact (hs :))
+  exact hs
 private theorem hecke_map_transfer (h : CopyAll D D' ι e) (hs : ∀ i j b k P (x : D.ntw.B i j b), 1 ≤ j → j ≤ D.R.m → P ∉ D.ntw.S0 i →
       IsSplitPl D.host P → k ≤ D.R.r →
       D.nexp.embB i j b (D.ntw.hk i j b k P x) = D.nexp.hkF i j b k P (D.nexp.embB i j b x)) :
     ∀ i j b k P (x : D'.ntw.B i j b), 1 ≤ j → j ≤ D'.R.m → P ∉ D'.ntw.S0 i → IsSplitPl D'.host P → k ≤ D'.R.r →
       D'.nexp.embB i j b (D'.ntw.hk i j b k P x) = D'.nexp.hkF i j b k P (D'.nexp.embB i j b x) := by
   obtain ⟨r, rfl⟩ := h.cp.exists_rest
-  exact (by with_unfolding_all exact (hs :))
+  exact hs
 private theorem eigen_system_transfer (h : CopyAll D D' ι e)
     (hs : ∀ i (s : D.ntw.Sig i), GlobalTheory.EigTie.IsEigSys D.nexp i (D.ntw.jS i s) (D.ntw.side i s) (GlobalTheory.EigTie.sigEv s)) :
     ∀ i (s : D'.ntw.Sig i), GlobalTheory.EigTie.IsEigSys D'.nexp i (D'.ntw.jS i s) (D'.ntw.side i s) (GlobalTheory.EigTie.sigEv s) := by
   obtain ⟨r, rfl⟩ := h.cp.exists_rest
-  exact (by with_unfolding_all exact (hs :))
+  exact hs
 private theorem emb_eq_of_equiv {r : Rest D} {ι : D.what₂.LL →+* (overD D r).what₂.LL} {e : ↥(overD D r).LL0 ≃+* ↥D.LL0}
     (h : CopyTw D (overD D r) ι e) (i : D.ntw.Tw) (x : ↥(overD D r).LL0) :
     D.ntw.emb0 i (e x) = (overD D r).ntw.emb0 i x ∧ D.ntw.emb0b i (e x) = (overD D r).ntw.emb0b i x :=
@@ -1331,7 +1329,7 @@ private theorem hecke_coeff_transfer (h : CopyAll D D' ι e) {c : ∀ (i : D.ntw
   intro i b P hP σ hσ
   have h1 := eq_of_heq (hc i i b P P HEq.rfl HEq.rfl)
   have h2 := hs i b P hP σ hσ
-  exact (by with_unfolding_all exact ((h1.trans h2) :))
+  exact (h1.trans h2)
 private theorem psi_law_transfer (h : CopyAll D D' ι e) {S : RatDat D.ntw} {S' : RatDat D'.ntw} {θ θ'} (h1 : PsiStd D θ) (h2 : PsiStd D' θ')
     (h3 : PsiLaw D S θ) : PsiLaw D' S' θ' := by
   obtain ⟨r, rfl⟩ := h.cp.exists_rest
@@ -1349,17 +1347,17 @@ private theorem psi_law_transfer (h : CopyAll D D' ι e) {S : RatDat D.ntw} {S' 
     apply (embLL0 D).injective
     rw [h.cp.embLL0_eq, a1]
     simp only
-    exact (by with_unfolding_all exact (a2 :))
+    exact a2
   have a4 := h3 i b u hu hu'
   rw [← a3] at a4
   have a5 : ∀ (i : D.ntw.Tw) x, readLL0 S i b (e x) = readLL0 S' i b x := fun i x => by
     obtain ⟨b1, b2⟩ := emb_eq_of_equiv h.cp i x
     cases b
-    · exact (by with_unfolding_all exact ((congrArg (IsFractionRing.map (A := D.ntw.O0 i) (B := D.ntw.O i) (K := FractionRing (D.ntw.O0 i))
-        (L := FractionRing (D.ntw.O i)) (D.ntw.O_inj i)) b2) :))
-    · exact (by with_unfolding_all exact ((congrArg (IsFractionRing.map (A := D.ntw.O0 i) (B := D.ntw.O i) (K := FractionRing (D.ntw.O0 i))
-        (L := FractionRing (D.ntw.O i)) (D.ntw.O_inj i)) b1) :))
-  exact (by with_unfolding_all exact ((a4.trans (a5 i _)) :))
+    · exact (congrArg (IsFractionRing.map (A := D.ntw.O0 i) (B := D.ntw.O i) (K := FractionRing (D.ntw.O0 i))
+        (L := FractionRing (D.ntw.O i)) (D.ntw.O_inj i)) b2)
+    · exact (congrArg (IsFractionRing.map (A := D.ntw.O0 i) (B := D.ntw.O i) (K := FractionRing (D.ntw.O0 i))
+        (L := FractionRing (D.ntw.O i)) (D.ntw.O_inj i)) b1)
+  exact (a4.trans (a5 i _))
 open Formalism.L2.DIV GlobalTheory.HeightCounting.ThetaSt in
 private theorem psi_standard_of_units {G : Type} [Group G] {P0 : Subgroup G} {ψ0 : P0 →* D.what₂.LLˣ} {Ps : Subgroup G} {ψs : Ps →* D.what₂.LLˣ}
     {eG : G ≃* G0g D.nd} (h : PsiPPTie D P0 ψ0 Ps ψs eG) {θ}
@@ -1413,14 +1411,14 @@ private theorem lambda_datum_transfer (h : CopyAll D D' ι e) {cf : CharFrame D}
     change cf'.mu0 a * (if l = D.host.pde then cf'.del' else cf'.del) * _ = _
     rw [← hmu, ← hd, ← hd']
     rfl
-  refine ⟨Z', ⟨(by with_unfolding_all exact (hO.places :)), (by with_unfolding_all exact (hO.aux :)), (by with_unfolding_all exact (hO.big :))⟩, (by with_unfolding_all exact (hT :)), rfl, (by with_unfolding_all exact (hq :)), fun i hi => ?_⟩
+  refine ⟨Z', ⟨hO.places, hO.aux, hO.big⟩, hT, rfl, hq, fun i hi => ?_⟩
   obtain ⟨t0, j, t1, t2⟩ := hF i ((h.cp.inW1 i i HEq.rfl).2 hi)
-  refine ⟨(by with_unfolding_all exact (t0 :)), j, fun x => ?_, ?_⟩
-  · exact (by with_unfolding_all exact (((congrArg j (h.cp.embLL0_eq x).symm).trans ((t1 (e x)).trans
-      (congrArg (GlobalTheory.ToricDenom.toBar D.ntw i) (emb_eq_of_equiv h.cp i x).1))) :))
+  refine ⟨t0, j, fun x => ?_, ?_⟩
+  · exact ((congrArg j (h.cp.embLL0_eq x).symm).trans ((t1 (e x)).trans
+      (congrArg (GlobalTheory.ToricDenom.toBar D.ntw i) (emb_eq_of_equiv h.cp i x).1)))
   · simp only [GlobalTheory.LamTie.IsLam, BlochKatoReduction.Gen.SOk, hl, ← hj, ← hs2, ← hX]
     simp only [GlobalTheory.LamTie.IsLam, BlochKatoReduction.Gen.SOk] at t2
-    exact (by with_unfolding_all exact (t2 :))
+    exact t2
 open GlobalTheory.EigTie GlobalTheory.TwInputs Formalism.MainNotions.IntegralHeckeForms in
 private theorem is_eig_sys_sig_ev_of_eig_occ {cf : CharFrame D} {Rw low Pq S hL eig θ} (Bs : SideB D cf Rw low Pq S hL eig θ) {Sb : Finset (PlE D.host)} (hSb : ∀ i, Sb ⊆ D.ntw.S0 i)
     (hKs : ∀ j, 1 ≤ j → j ≤ D.R.m → (S.A j).IsKsForm) (hOcc : EigOcc D S θ hL Sb eig) (i : D.ntw.Tw) (s : D.ntw.Sig i) :
@@ -1537,7 +1535,7 @@ private theorem same_frame_of_eq {B' : Base} {f' : Top.Fr B'.toPre} {T' : TwDat 
     (hB : B'.toPre = B.toPre) (hf : HEq f' f) (x : St P) (x' : St P') : SameFrame (cfOf x) (cfOf x') := by
   have h : HEq w'.I.C w.I.C := (heq_of_eq w'.C_eq).trans (hf.trans (heq_of_eq w.C_eq).symm)
   obtain ⟨h1, h2, h3, h4⟩ := frame_components_heq_alt hB h
-  exact ⟨(by with_unfolding_all exact (h1 :)), (by with_unfolding_all exact (h2 :)), (by with_unfolding_all exact (h3 :)), (by with_unfolding_all exact (h4 :))⟩
+  exact ⟨h1, h2, h3, h4⟩
 theorem psi_std_of_level_i {x : St P} (l : _root_.GlobalTheory.HeightCounting.Up.IntermediateLevel hL x) : PsiStd (Dof x) l.rat.In.θ :=
   psi_standard_of_units x.m.z.pins.keep.psi l.rat.rat.lvl l.rat.rat.psi
 theorem eig_true_and_eig_occ_of_low {x : St P} (l : _root_.GlobalTheory.HeightCounting.Up.IntermediateLevel hL x) {Sb : Finset (PlE (Dof x).host)} (h1 : l.rat.In.Sb ⊆ Sb)
@@ -1690,11 +1688,11 @@ theorem points_preserved_under_level_transfer_alt : _root_.GlobalTheory.HeightCo
       (h : ListPin (Dof y) Lc c b) :
       ListPin (w.st (oTw y N).Z).toD7 (levCh (a := y.o.Z) (oTw y N).Z Lc) c b := by
     obtain ⟨G, h1, h2⟩ := h
-    exact ⟨(by with_unfolding_all exact ((GlobalTheory.Mem.GridMove.gdC (a := y.o.Z) (oTw y N).Z G) :)),
-      ⟨(by with_unfolding_all exact (h1.values :)), (by with_unfolding_all exact (h1.roots :))⟩,
-      (by with_unfolding_all exact ((hN _ h2) :))⟩
+    refine ⟨GlobalTheory.Mem.GridMove.gdC (a := y.o.Z) (oTw y N).Z G,
+      ⟨h1.values, h1.roots⟩, ?_⟩
+    exact hN (BigTop.Fun.lamOf G) h2
   have eL : m'.z.R.toRealDat.toLevCh =
-      (by with_unfolding_all exact ((levCh (a := x.o.Z) (oTw x (thTw (Dof x) (GlobalTheory.GeoTie.geoNTh hlaw))).Z x.m.z.R.toRealDat.toLevCh) :)) := eq_of_heq hLc
+      (levCh (a := x.o.Z) (oTw x (thTw (Dof x) (GlobalTheory.GeoTie.geoNTh hlaw))).Z x.m.z.R.toRealDat.toLevCh) := eq_of_heq hLc
   show ListPin _ m'.z.R.toRealDat.toLevCh cDep K.s.b
   rw [eL]
   exact htrans x _ (fun Z h => hgen _ _ Z h) _ _ _ hLs

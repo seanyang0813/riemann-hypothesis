@@ -145,7 +145,7 @@ theorem one_le_eightMB {m : ℕ} {lam : Fin m → ℝ} {B : ℝ} (hm : 3 ≤ m) 
   have hm' : (3 : ℝ) ≤ m := by exact_mod_cast hm
   nlinarith
 
-theorem degUpper_of (hlog : LogNear) (hlie : LieBound) (_hvol : VolBall) : DegUpper := by
+theorem degUpper_of (hlog : LogNear) (hlie : LieBound) : DegUpper := by
   unfold DegUpper ForDS
   intro m ε lam B hm hlam hgap hB H _ _ π hds d hd
   obtain ⟨v₀, hv₀⟩ := exists_lowUnit hds

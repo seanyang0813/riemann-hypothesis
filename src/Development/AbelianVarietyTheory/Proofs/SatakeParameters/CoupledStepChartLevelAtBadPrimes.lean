@@ -291,12 +291,6 @@ noncomputable section
 
 namespace GlobalTheory.CplLev
 
-theorem cong_of_nearAt {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] {N : ℕ}
-    (P : HeightOneSpectrum (𝓞 E)) (n : ℕ) (x : GL (Fin N) (E ⊗[F] FiniteAdeleRing (𝓞 F) F)) (g₁ g₂ : GL (Fin N) E)
-    (hn : 0 < n) (h₁ : NearAt P n x g₁) (h₂ : NearAt P n x g₂) (a b : Fin N) :
-    IntAt P ((((qOf P : ℕ) : E) ^ n)⁻¹ * (((g₁⁻¹ * g₂ : GL (Fin N) E) : Matrix (Fin N) (Fin N) E) - 1) a b) :=
-  _root_.GlobalTheory.TwU.CongTwo.intAt_inv_mul_of_nearAt P n x g₁ g₂ hn h₁ h₂ a b
-
 section Cong1
 
 open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.HermitianLatticesTheory Formalism.L2.DIV Formalism.L2.Col

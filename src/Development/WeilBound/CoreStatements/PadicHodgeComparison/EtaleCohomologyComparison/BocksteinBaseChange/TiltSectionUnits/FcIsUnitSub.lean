@@ -98,18 +98,6 @@ theorem fc_bcr_le : Bcr l ≤ (period_ring_base.ι l).range := by
 theorem fc_range : (period_ring_base.ι l).range = Bcr l :=
   le_antisymm (fc_range_le (l := l)) (fc_bcr_le (l := l))
 
-theorem factsC : BcrisPeriodFacts := fun l _ K r => by
-  exact ⟨{
-    ι_c := fc_ι_c (l := l)
-    ι_q := period_ring_base.base_ι_q l
-    ι_inj := period_ring_base.base_ι_inj l
-    t_unit := period_ring_base.base_t_unit l
-    φ_c := PositivityTheory.LocInh.φB_cB (l := l)
-    φ_q := period_ring_base.base_φ_q l
-    frobenius_fixes_z := PositivityTheory.LocInh.frob_phi_padicInt (l := l)
-    σ_c := fun g => PositivityTheory.LocInh.σB_cB (l := l) g.1
-    σ_q := fun g => period_ring_base.base_σ_q l g.1
-    φ_σ := fun g a => ACris.phi_gal_smul (IntermediateField.fixingSubgroupEquiv K g) a
-  }, fc_range (l := l)⟩
+theorem factsC : BcrisPeriodFacts := fun l _ _ _ => fc_range (l := l)
 
 end CrystallineSemistableComparison

@@ -52,17 +52,6 @@ open scoped Formalism.Per NNReal
 
 namespace GlobalTheory.AcrisDiscExt
 
-theorem isUnit_natCast_of {l : ℕ} [hl : Fact l.Prime] {R : Type} [CommRing R] (f : ℤ_[l] →+* R)
-    (hu : IsUnit (l : R)) (n : ℕ) (hn : n ≠ 0) : IsUnit (n : R) := by
-  obtain ⟨v, m, hm, rfl⟩ := Nat.exists_eq_pow_mul_and_not_dvd hn l hl.out.ne_one
-  have h : IsUnit (m : ℤ_[l]) := by
-    rw [PadicInt.isUnit_iff, PadicInt.norm_natCast_eq_one_iff]
-    exact (Nat.Prime.coprime_iff_not_dvd hl.out).2 hm
-  have h' := h.map f
-  rw [map_natCast] at h'
-  rw [Nat.cast_mul, Nat.cast_pow]
-  exact (hu.pow v).mul h'
-
 theorem norm_l_disc_le (l : ℕ) [hl : Fact l.Prime] {A : Type} [CommRing A] (u : A) (ρ : ℝ≥0) :
     ‖((l : ℕ) : Disc l u ρ)‖ ≤ (l : ℝ)⁻¹ := by
   have hl0 : (0 : ℝ) < l := Nat.cast_pos.2 hl.out.pos

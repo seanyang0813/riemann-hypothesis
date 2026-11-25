@@ -48,10 +48,6 @@ open Formalism.BasicNotions
 
 def bx (x eps : ℝ) : ℝ := Real.exp (x ^ eps)
 
-def aC (x eps : ℝ) : ℝ := x ^ ((11 : ℝ) / 2) * bx x eps
-
-def bpC (x eps : ℝ) : ℝ := aC x eps / Real.exp (x ^ (eps / 3))
-
 variable (D : D7)
 
 def Top (τ : D.what₂.Tau) : Prop :=

@@ -54,8 +54,6 @@ open GlobalTheory.ConjTwist GlobalTheory.ExportSeries GlobalTheory.SeriesTie Glo
 
 
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 namespace GlobalTheory.TraceLevelPf
 
 variable {D : D7} {S T : HSp D}

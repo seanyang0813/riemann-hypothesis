@@ -54,8 +54,6 @@ open scoped TensorProduct GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorMode
 open GlobalTheory.FunObj GlobalTheory.StdFrames GlobalTheory.AdelicU GlobalTheory.LFun GlobalTheory.LFun.SplitTie
 open GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels (Base Spc Model Chars Rep Acts SInf At piW chrW)
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 private theorem cpt_incl {D : D7} (Q : Pl D.host.E) (x : D.host.E) :
     cpt (D := D) Q (x ⊗ₜ[D.host.F] 1) = algebraMap D.host.E (Q.adicCompletion D.host.E) x := by
   show (toAd D (x ⊗ₜ[D.host.F] 1)) Q = _

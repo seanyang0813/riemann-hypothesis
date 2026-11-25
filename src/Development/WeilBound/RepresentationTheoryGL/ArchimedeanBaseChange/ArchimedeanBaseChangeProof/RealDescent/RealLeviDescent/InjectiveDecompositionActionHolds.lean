@@ -76,11 +76,6 @@ namespace GlobalTheory.CompanionTheory.PairMult.TopCycQ
 
 variable {n : ℕ} {V : Type} [AddCommGroup V] [Module ℂ V]
 
-theorem annq_app (l : Lt n) (x : Cq n V) (B : Finset (Lt n)) :
-    annq l x B = if l ∈ B then 0 else sgL l B • x (insert l B) := rfl
-
-theorem creq_app (l : Lt n) (x : Cq n V) (B : Finset (Lt n)) :
-    creq l x B = if l ∈ B then sgL l B • x (B.erase l) else 0 := rfl
 
 theorem mem_omQ (lev : Fin n → ℕ) (l : Lt n) :
     l ∈ omQ lev ↔ l.1 = true ∧ lev l.2.1.1 < lev l.2.1.2 := by
@@ -122,12 +117,12 @@ theorem topCyc : TopCyc := by
     refine Finset.sum_eq_zero fun t _ => Finset.sum_eq_zero fun i _ => Finset.sum_eq_zero fun j _ =>
       Finset.sum_eq_zero fun k _ => ?_
     split_ifs with ht
-    · rw [Module.End.mul_apply, Module.End.mul_apply, creq_app]
+    · rw [Module.End.mul_apply, Module.End.mul_apply, GlobalTheory.CompanionTheory.PairMult.COU.cre_apply]
       split_ifs with hk
-      · rw [annq_app]
+      · rw [GlobalTheory.CompanionTheory.PairMult.COU.ann_apply]
         split_ifs with h1
         · exact smul_zero _
-        · rw [annq_app]
+        · rw [GlobalTheory.CompanionTheory.PairMult.COU.ann_apply]
           split_ifs with h2
           · simp
           · rw [topq, Pi.single_eq_of_ne (insert_ne_omQ lev s t i j k ht A), smul_zero, smul_zero, smul_zero]
@@ -135,7 +130,7 @@ theorem topCyc : TopCyc := by
     · rfl
   · intro l _
     show Tl E1 E2 l (annq l (topq lev v) A) = 0
-    rw [annq_app]
+    rw [GlobalTheory.CompanionTheory.PairMult.COU.ann_apply]
     split_ifs with hl
     · exact map_zero _
     · by_cases e : insert l A = omQ lev
@@ -1592,8 +1587,6 @@ namespace PositivityTheory.RgBcC.RealD
 
 theorem injective_decomposition_action_holds : InjectiveDecompositionAction :=
   injective_decomposition_action_of _root_.GlobalTheory.CompanionTheory.KPChains.bdSqL _root_.GlobalTheory.CompanionTheory.KostL.vanKL _root_.GlobalTheory.CompanionTheory.InjRL.injRL_of _root_.GlobalTheory.CompanionTheory.LvChain.injUU_of_injRL (hcdecL_of _root_.GlobalTheory.CompanionTheory.RealHCLv.hcdecLv) _root_.GlobalTheory.CompanionTheory.PairBridge.actUU
-
-theorem hc_decomposition_levi_holds : HCdecLv := _root_.GlobalTheory.CompanionTheory.RealHCLv.hcdecLv
 
 end PositivityTheory.RgBcC.RealD
 end -- clump:auto

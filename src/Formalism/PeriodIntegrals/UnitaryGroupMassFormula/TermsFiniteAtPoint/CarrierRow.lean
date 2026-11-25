@@ -38,8 +38,6 @@ def HeisOp : Prop :=
     (∀ c d, s c d + star (s d c) = - S.hT (a c) (a d)) →
     ∃ n ∈ NLam Λ F, ∀ v, n v = heisFun F.fl.e a s v
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 def FrameOp : Prop :=
   ∀ (D : D7) (u : D.what₂.Word), ∃ b : ℕ, 0 < b ∧
     ∀ (F0 : FlagG (VS D) D.R.rS ((Tu D u : ℕ) : D.host.E)) (Λ : Submodule (𝓞 D.host.E) (VS D).V),

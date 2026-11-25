@@ -133,9 +133,6 @@ theorem dl_XR (a : Ix p q) (l : Fin s) :
     dl p q r s (X (a, Sum.inr l)) = (1 : Pol p q r 0) ⊗ₜ[ℂ] (X (a, Sum.inr l) : Pol p q 0 s) := by
   simp [dl, dv]
 
-theorem dl_C (c : ℂ) : dl p q r s (C c) = c • ((1 : Pol p q r 0) ⊗ₜ[ℂ] (1 : Pol p q 0 s)) := by
-  rw [dl, aeval_C, Algebra.algebraMap_eq_smul_one, Algebra.TensorProduct.one_def]
-
 theorem dl_mulL (a : Ix p q) (k : Fin r) (f : Pol p q r s) :
     dl p q r s (X (a, Sum.inl k) * f) =
       (LinearMap.mulLeft ℂ (X (a, Sum.inl k) : Pol p q r 0)).rTensor _ (dl p q r s f) := by

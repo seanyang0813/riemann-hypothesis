@@ -176,13 +176,6 @@ open Matrix
 
 namespace GlobalTheory.CompanionTheory.Ar.GR
 
-theorem val_one_sub_pow_le {K : Type} [Field K] (v : Valuation K NNReal) {x : K} (hx : v x = 1)
-    (i : ℕ) : v (1 - x ^ i) ≤ v (1 - x) := by
-  have h : 1 - x ^ i = (1 - x) * ∑ j ∈ Finset.range i, x ^ j := (mul_neg_geom_sum x i).symm
-  rw [h, map_mul]
-  refine mul_le_of_le_one_right' ?_
-  exact v.map_sum_le (fun j _ => by rw [map_pow, hx, one_pow])
-
 theorem val_eq_one_of_pow_eq_one {K : Type} [Field K] (v : Valuation K NNReal) {x : K} {n : ℕ}
     (hn : n ≠ 0) (hx : x ^ n = 1) : v x = 1 := by
   have h : v x ^ n = 1 := by rw [← map_pow, hx, map_one]

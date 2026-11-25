@@ -77,10 +77,6 @@ theorem norm_term_le_of_pos (m : ℕ) {u T : ℝ} (hT : 0 < T) (hu : 1 ≤ u) {�
   calc u ^ ρ.re / ‖ρ‖ ≤ u / ‖ρ‖ := div_le_div_of_nonneg_right hup hρ0.le
     _ ≤ u / T := div_le_div_of_nonneg_left hu0.le hT0 hρ
 
-theorem norm_term_le (m : ℕ) {u T : ℝ} (hT : 2 ≤ T) (hu : T ≤ u) {ρ : ℂ} (h1 : ρ.re < 1)
-    (h2 : T ≤ |ρ.im|) : ‖(m : ℂ) * ((u : ℂ) ^ ρ / ρ)‖ ≤ (m : ℝ) * (u / T) :=
-  norm_term_le_of_pos m (by linarith) (by linarith) h1 h2
-
 theorem band_le_of_pos (f : ℂ → ℂ) (m : ℂ → ℕ) (B : ℝ → ℝ)
     (hW : ∀ t : ℝ, {ρ : ℂ | 0 < ρ.re ∧ ρ.re < 1 ∧ |ρ.im - t| ≤ 1 ∧ f ρ = 0}.Finite ∧
       ∑ᶠ ρ ∈ {ρ : ℂ | 0 < ρ.re ∧ ρ.re < 1 ∧ |ρ.im - t| ≤ 1 ∧ f ρ = 0}, (m ρ : ℝ) ≤ B t)
@@ -141,16 +137,6 @@ theorem band_le_of_pos (f : ℂ → ℂ) (m : ℂ → ℕ) (B : ℝ → ℝ)
     _ = (∑ ρ ∈ hS'.toFinset \ hS.toFinset, (m ρ : ℝ)) * (u / T) := by rw [Finset.sum_mul]
     _ ≤ (B T + B (-T)) * (u / T) :=
         mul_le_mul_of_nonneg_right hm (div_nonneg (by linarith) hT0.le)
-
-theorem band_le (f : ℂ → ℂ) (m : ℂ → ℕ) (B : ℝ → ℝ)
-    (hW : ∀ t : ℝ, {ρ : ℂ | 0 < ρ.re ∧ ρ.re < 1 ∧ |ρ.im - t| ≤ 1 ∧ f ρ = 0}.Finite ∧
-      ∑ᶠ ρ ∈ {ρ : ℂ | 0 < ρ.re ∧ ρ.re < 1 ∧ |ρ.im - t| ≤ 1 ∧ f ρ = 0}, (m ρ : ℝ) ≤ B t)
-    {u T T' : ℝ} (hT : 2 ≤ T) (hu : T ≤ u) (hT1 : T ≤ T') (hT2 : T' ≤ T + 1) :
-    ‖(∑ᶠ ρ ∈ {ρ : ℂ | 0 < ρ.re ∧ ρ.re < 1 ∧ |ρ.im| < T' ∧ f ρ = 0},
-        (m ρ : ℂ) * ((u : ℂ) ^ ρ / ρ)) -
-      ∑ᶠ ρ ∈ {ρ : ℂ | 0 < ρ.re ∧ ρ.re < 1 ∧ |ρ.im| < T ∧ f ρ = 0},
-        (m ρ : ℂ) * ((u : ℂ) ^ ρ / ρ)‖ ≤ (B T + B (-T)) * (u / T) :=
-  band_le_of_pos f m B hW (by linarith) (by linarith) hT1 hT2
 
 /-- A unit-height change of truncation costs only one logarithm. The height can be any
 positive real number, independently of the evaluation point `u ≥ 1`. -/

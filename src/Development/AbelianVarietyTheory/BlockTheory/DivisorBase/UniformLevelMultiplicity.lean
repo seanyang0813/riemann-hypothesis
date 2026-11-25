@@ -47,8 +47,6 @@ open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.MainNotions F
 open ReciprocityTheory.ChartRestriction.G.Geo.Tor (Datum Level Moduli Coeff)
 open scoped TensorProduct
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 def Side (D : D7) (σ : D.what₂.LL →+* ℂ) : Prop :=
   ∀ x : D.host.K, σ (D.embE (algebraMap D.host.K D.host.E x)) =
     D.what₂.embLL (D.embE (algebraMap D.host.K D.host.E x))

@@ -41,16 +41,6 @@ section Fields
 
 variable {l : ℕ} [Fact l.Prime]
 
-theorem Ks_mono (K : FinExt l) {s s' : ℕ} (h : s ≤ s') : Ks K s ≤ Ks K s' := by
-  unfold Formalism.BasicNotions.Loc.Ks
-  refine sup_le_sup_left ?_ _
-  rw [IntermediateField.adjoin_le_iff]
-  intro x hx
-  apply IntermediateField.subset_adjoin
-  simp only [Set.mem_setOf_eq] at hx ⊢
-  obtain ⟨c, hc⟩ := pow_dvd_pow l h
-  rw [hc, pow_mul, hx, one_pow]
-
 theorem caseA_of_unram (P : LocPrime l) (H : LocHW l P) {K : FinExt l} {LL : FinExt l} (h : Good K 1 LL)
     (hK : K.1 ≤ MaximalUnramifiedExtension l) (hl : l ≠ 2) : Formalism.MainNotions.LiftingTheory.CaseA (H.W K 1 LL h) := by
   refine ⟨⟨RingHom.injective (algebraMap ↥(K0 K) ↥K.1), fun y =>

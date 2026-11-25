@@ -213,8 +213,6 @@ variable {χX χW : Chr F E} {om : Rep σ X W} {r s r' s' : ℕ}
 theorem om_mem (hp : IsPair B M χX χW om r s r' s') (x) {Φ} (hΦ : Φ ∈ schA F (Fin n × Fin d)) : om x Φ ∈ schA F _ :=
   (IsUWeilPair.isUSplitting hp.weil).pres x Φ hΦ
 
-theorem om_om (om : Rep σ X W) (x y) (Φ) : om x (om y Φ) = om (x * y) Φ := by rw [map_mul]; rfl
-
 theorem om_rho (hp : IsPair B M χX χW om r s r' s') (g h) (U : Ten F E n d) {Φ} (hΦ : Φ ∈ schA F (Fin n × Fin d)) :
     om (g, h) (M.co.rho B.ψ U Φ) = M.co.rho B.ψ (mat g * U * (mat h)ᵀ) (om (g, h) Φ) :=
   (IsUWeilPair.isUSplitting hp.weil).impl (g, h) U Φ hΦ

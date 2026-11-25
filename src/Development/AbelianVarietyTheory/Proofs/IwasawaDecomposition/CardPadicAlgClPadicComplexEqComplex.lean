@@ -86,9 +86,6 @@ theorem mk_le_pow_aleph0_of_denseRange {D X : Type} [TopologicalSpace X] [FirstC
     exact tendsto_nhds_unique (hg x) this
   simpa using mk_le_of_injective hinj
 
-theorem mk_padic_le (l : ℕ) [Fact l.Prime] : #ℚ_[l] ≤ 𝔠 := by
-  simpa using mk_le_pow_aleph0_of_denseRange _ (Padic.denseRange_ratCast l)
-
 theorem mk_padicComplex (l : ℕ) [Fact l.Prime] : #ℂ_[l] = 𝔠 := by
   refine le_antisymm ?_ (continuum_le_cardinal_of_nontriviallyNormedField ℂ_[l])
   calc #ℂ_[l] ≤ #(PadicAlgCl l) ^ ℵ₀ :=

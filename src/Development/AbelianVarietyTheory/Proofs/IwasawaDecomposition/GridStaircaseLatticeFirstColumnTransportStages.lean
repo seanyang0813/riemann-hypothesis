@@ -48,40 +48,40 @@ open GlobalTheory.ChiGrid
 variable {B : Base} {C : Cols B} {a : Late B C} (b : Late B C) {T : Type}
 
 def plC {L : Formalism.IndefR.Links.LevCh a.D T} (P : Places L) : Places (levCh b L) where
-  v0 := (by with_unfolding_all exact (P.v0 :))
-  basePlace_over_qZero := (by with_unfolding_all exact (P.basePlace_over_qZero :))
-  w := (by with_unfolding_all exact (P.w :))
-  w_over := (by with_unfolding_all exact (P.w_over :))
-  w_split := (by with_unfolding_all exact (P.w_split :))
-  w_g := (by with_unfolding_all exact (P.w_g :))
-  w_de := (by with_unfolding_all exact (P.w_de :))
-  w_Q := (by with_unfolding_all exact (P.w_Q :))
-  levelPlace_ne_basePlace := (by with_unfolding_all exact (P.levelPlace_ne_basePlace :))
+  v0 := P.v0
+  basePlace_over_qZero := P.basePlace_over_qZero
+  w := P.w
+  w_over := P.w_over
+  w_split := P.w_split
+  w_g := P.w_g
+  w_de := P.w_de
+  w_Q := P.w_Q
+  levelPlace_ne_basePlace := P.levelPlace_ne_basePlace
 
 def chC {L : Formalism.IndefR.Links.LevCh a.D T} {P : Places L} {c : ℝ} (X : Chars P c) : Chars (plC b P) c where
-  chiH := (by with_unfolding_all exact (X.chiH :))
-  chi := (by with_unfolding_all exact (X.chi :))
-  chi_eq := (by with_unfolding_all exact (X.chi_eq :))
-  triv := (by with_unfolding_all exact (X.triv :))
-  inf := (by with_unfolding_all exact (X.inf :))
-  unr := (by with_unfolding_all exact (X.unr :))
-  lev1 := (by with_unfolding_all exact (X.lev1 :))
-  wild := (by with_unfolding_all exact (X.wild :))
-  lev0 := (by with_unfolding_all exact (X.lev0 :))
+  chiH := X.chiH
+  chi := X.chi
+  chi_eq := X.chi_eq
+  triv := X.triv
+  inf := X.inf
+  unr := X.unr
+  lev1 := X.lev1
+  wild := X.wild
+  lev0 := X.lev0
 
-def lsC (X : LSp a.D) : LSp b.D := ⟨(by with_unfolding_all exact (X.sp :)), (by with_unfolding_all exact (X.lat :))⟩
+def lsC (X : LSp a.D) : LSp b.D := ⟨X.sp, X.lat⟩
 
 theorem isVC {X : LSp a.D} {ν q : ℕ} (h : X.IsV ν q) : (lsC b X).IsV ν q :=
-  ⟨(by with_unfolding_all exact (h.rank :)), (by with_unfolding_all exact (h.sigOK :)), (by with_unfolding_all exact (h.sig :)), (by with_unfolding_all exact (h.sd :))⟩
+  ⟨h.rank, h.sigOK, h.sig, h.sd⟩
 
 def adC {A B' : HSp a.D} {c : ℕ} {ε : a.D.host.E} (d : HermitianOrthogonalExtensionData A B' c ε) :
     @HermitianOrthogonalExtensionData b.D ((A)) ((B')) c ((ε)) where
-  ι := (by with_unfolding_all exact (d.ι :))
-  isom := (by with_unfolding_all exact (d.isom :))
-  a := (by with_unfolding_all exact (d.a :))
-  gram := (by with_unfolding_all exact (d.gram :))
-  perp := (by with_unfolding_all exact (d.perp :))
-  rank := (by with_unfolding_all exact (d.rank :))
+  ι := d.ι
+  isom := d.isom
+  a := d.a
+  gram := d.gram
+  perp := d.perp
+  rank := d.rank
 
 section V
 open scoped nonZeroDivisors
@@ -133,22 +133,24 @@ def vtC {𝔞 𝔞' : FractionalIdeal (𝓞 a.D.host.E)⁰ a.D.host.E} (V : Vert
   Vs i j := lsC b (V.Vs i j)
   P i := lsC b (V.P i)
   Xs j := lsC b (V.Xs j)
-  V_is i j h1 h2 h3 := (by with_unfolding_all exact ((isVC b (V.V_is i j h1 h2 h3)) :))
-  P_is i h := (by with_unfolding_all exact ((isVC b (V.P_is i h)) :))
-  X_is j h1 h2 := (by with_unfolding_all exact ((isVC b (V.X_is j h1 h2)) :))
-  dec0 := (by with_unfolding_all exact ((adC b V.dec0) :))
-  lat0 := (by with_unfolding_all exact (V.lat0 :))
+  V_is i j h1 h2 h3 := isVC b (V.V_is i j h1 h2 h3)
+  P_is i h := isVC b (V.P_is i h)
+  X_is j h1 h2 := isVC b (V.X_is j h1 h2)
+  dec0 := adC b (A := Formalism.IndefR.Links.Yc a.D 0) (B' := (V.P 0).sp) V.dec0
+  lat0 := by
+    dsimp only [lsC, adC]
+    exact V.lat0
   colDec i h h' := gridColumnVertexDecompTransport b V.Vs V.P i h (V.colDec i h h')
-  colLat i h h' := (by with_unfolding_all exact ((gridStaircaseLattice_firstColumn_transportStages b V.Vs V.P i h (V.colDec i h h') _ (V.colLat i h h')) :))
-  rowDecS j h := (by with_unfolding_all exact ((gridInteriorVertexDecompTransport b V.Vs V.Xs j a.D.R.m h (V.rowDecS j h)) :))
-  rowLat j h := (by with_unfolding_all exact ((gridLastRowVertexLattice_transportStages b V.Vs V.Xs j a.D.R.m h (V.rowDecS j h) _ (V.rowLat j h)) :))
-  topDec := (by with_unfolding_all exact ((gridDiagonalVertexDecompTransport b V.Vs V.Xs (V.P a.D.R.m) a.D.R.m (by have := a.D.R.two_le_m; omega) V.topDec) :))
-  topLat := (by with_unfolding_all exact ((gridTopVertexLattice_transportStages b V.Vs V.Xs (V.P a.D.R.m) a.D.R.m (by have := a.D.R.two_le_m; omega) V.topDec V.topLat) :))
+  colLat i h h' := gridStaircaseLattice_firstColumn_transportStages b V.Vs V.P i h (V.colDec i h h') _ (V.colLat i h h')
+  rowDecS j h := gridInteriorVertexDecompTransport b V.Vs V.Xs j a.D.R.m h (V.rowDecS j h)
+  rowLat j h := gridLastRowVertexLattice_transportStages b V.Vs V.Xs j a.D.R.m h (V.rowDecS j h) _ (V.rowLat j h)
+  topDec := gridDiagonalVertexDecompTransport b V.Vs V.Xs (V.P a.D.R.m) a.D.R.m (by have := a.D.R.two_le_m; omega) V.topDec
+  topLat := gridTopVertexLattice_transportStages b V.Vs V.Xs (V.P a.D.R.m) a.D.R.m (by have := a.D.R.two_le_m; omega) V.topDec V.topLat
 
 def gdC {sc : Consts} (G : GridData L sc) : GridData (levCh b L) sc where
   pl := plC b G.pl
   ch := chC b G.ch
-  sp := (by with_unfolding_all exact ((vtC b G.sp) :))
+  sp := vtC b G.sp
 
 end W
 
@@ -158,7 +160,7 @@ variable {L : Formalism.IndefR.Links.LevCh a.D T}
 theorem listPin_upL (S' : SStage B C a.W) (Nn : ∀ u, Submodule (𝓞 B.LL) (a.V.div.Nu u).V) (hh : B.Word → ℝ) (c bb : ℝ)
     (h : ListPin a.D L c bb) : ListPin (upL a S' Nn hh).D (levCh (upL a S' Nn hh) L) c bb := by
   obtain ⟨G, h1, h2⟩ := h
-  exact ⟨gdC _ G, ⟨(by with_unfolding_all exact (h1.values :)), (by with_unfolding_all exact (h1.roots :))⟩, (by with_unfolding_all exact (h2 :))⟩
+  exact ⟨gdC _ G, ⟨h1.values, h1.roots⟩, h2⟩
 end Y
 
 
@@ -184,12 +186,12 @@ theorem listPin_rowsSame : ∀ (cDep b : ℝ) (K : Ctx) (B : Base) (f : Fr B.toP
     apply Algebra.algebra_ext
     intro r
     apply (w.st (upL Z S' N h)).B.embLL.injective
-    exact (by with_unfolding_all exact (((alg_eq' r).trans (t.r.z.alg_eq r).symm) :))
+    exact (alg_eq' r).trans (t.r.z.alg_eq r).symm
   subst ha
   change HEq R' _ at hR
   have hR2 := eq_of_heq hR
   subst hR2
-  exact (by with_unfolding_all exact ((listPin_upL (a := ⟨Z.W, Z.V, Z.S, Z.N, Z.G⟩) S' N h cDep b hp) :))
+  exact listPin_upL (a := ⟨Z.W, Z.V, Z.S, Z.N, Z.G⟩) S' N h cDep b hp
 
 end GlobalTheory.Mem.GridMove
 

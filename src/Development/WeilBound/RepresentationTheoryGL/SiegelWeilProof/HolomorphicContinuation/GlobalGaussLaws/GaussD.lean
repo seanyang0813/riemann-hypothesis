@@ -50,26 +50,6 @@ namespace PositivityTheory.Rg.Sw.Glob.GaussH
 
 variable {n : ℕ}
 
-theorem eq_zero_of_siegel {Z : Matrix (Fin n) (Fin n) ℂ} (hZ : IsSiegel Z) {v : Fin n → ℂ}
-    (h : star v ⬝ᵥ ((Z - Zᴴ) *ᵥ v) = 0) : v = 0 := by
-  by_contra hv
-  have hpos := Matrix.PosDef.dotProduct_mulVec_pos hZ hv
-  rw [smul_mulVec, dotProduct_smul, h, smul_zero] at hpos
-  exact lt_irrefl _ hpos
-
-theorem det_CZhD {g : M2 n} (hg : InG g) {Z : Matrix (Fin n) (Fin n) ℂ} (hZ : IsSiegel Z) :
-    IsUnit (g.toBlocks₂₁ * Zᴴ + g.toBlocks₂₂).det := by
-  rw [isUnit_iff_ne_zero]
-  intro hdet
-  obtain ⟨v, hv, hMv⟩ := Matrix.exists_mulVec_eq_zero_iff.mpr hdet
-  have hid := identG hg Zᴴ Zᴴ
-  rw [conjTranspose_conjTranspose] at hid
-  have h0 : star v ⬝ᵥ ((Z - Zᴴ) *ᵥ v) = 0 := by
-    rw [← hid, sub_mulVec, ← mulVec_mulVec, ← mulVec_mulVec, hMv, mulVec_zero, dotProduct_sub,
-      dotProduct_zero, dotProduct_mulVec, ← star_mulVec, hMv]
-    simp
-  exact hv (eq_zero_of_siegel hZ h0)
-
 theorem isSiegel_I : IsSiegel (Complex.I • (1 : Matrix (Fin n) (Fin n) ℂ)) := by
   unfold IsSiegel
   have hs : -(Complex.I / 2) * (Complex.I - star Complex.I) = 1 := by

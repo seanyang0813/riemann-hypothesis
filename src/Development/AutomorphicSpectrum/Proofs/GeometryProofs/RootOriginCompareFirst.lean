@@ -106,36 +106,6 @@ theorem exists_stalkHom {X : Scheme.{0}} {Ω₁ Ω : Type} [Field Ω₁] [Field 
   exact ⟨(i.comp (genMap ξ ⟨centre z, hz⟩)).codRestrict W fun s => (hv _ _ (hm s)).1,
     fun _ => rfl, fun s => (hv _ _ (hm s)).2⟩
 
-theorem isLocalHom_of_value {X : Scheme.{0}} {Ω : Type} [Field Ω] (W : Subring Ω) (φ : W →+* ℂ)
-    (z : Spec (CommRingCat.of ℂ) ⟶ X) (σ : X.presheaf.stalk (centre z) →+* W)
-    (hσ : ∀ s, φ (σ s) = (Scheme.stalkClosedPointTo z).hom s) : IsLocalHom σ :=
-  ⟨fun s hs => GlobalTheory.CompanionTheory.Ar.CxVal.isUnit s (by rw [← hσ]; exact (hs.map φ).ne_zero)⟩
-
-theorem domBy_of_stalkHom {X : Scheme.{0}} {Ω₁ Ω : Type} [Field Ω₁] [Field Ω]
-    (ξ : Spec (CommRingCat.of Ω₁) ⟶ X) (i : Ω₁ →+* Ω) (q : Cpt ξ) (W : Subring Ω) (V : ValuationSubring Ω)
-    (hWV : W ≤ V.toSubring) (hloc : IsLocalHom (Subring.inclusion hWV))
-    (σ : X.presheaf.stalk q.1 →+* W) (hl : IsLocalHom σ) (hσ : ∀ s, (σ s : Ω) = i (genMap ξ q s)) :
-    DomBy V.toSubring i ξ q := by
-  refine ⟨?_, ?_⟩
-  · rintro _ ⟨s, rfl⟩
-    rw [← hσ]
-    exact hWV (σ s).2
-  · rintro _ ⟨s, rfl⟩ h0 hinv
-    have hi : i (genMap ξ q s) ≠ 0 := (map_ne_zero i).2 h0
-    have hu : IsUnit (Subring.inclusion hWV (σ s)) := by
-      refine IsUnit.of_mul_eq_one (⟨_, hinv⟩ : V.toSubring) (Subtype.ext ?_)
-      change ((σ s : W) : Ω) * (i (genMap ξ q s))⁻¹ = 1
-      rw [hσ, mul_inv_cancel₀ hi]
-    obtain ⟨u, rfl⟩ := isUnit_of_map_unit σ s (isUnit_of_map_unit (Subring.inclusion hWV) _ hu)
-    exact ⟨(u⁻¹ : (X.presheaf.stalk q.1)ˣ).val, map_units_inv (genMap ξ q) u⟩
-
-theorem point_closed {X Y : Scheme.{0}} (x : X) (f : X ⟶ Y) {R : Type} [CommRing R] [IsLocalRing R]
-    (σ : X.presheaf.stalk x →+* R) (hl : IsLocalHom σ) :
-    (spMap σ ≫ X.fromSpecStalk x ≫ f) (IsLocalRing.closedPoint R) = f x := by
-  have : IsLocalHom (CommRingCat.ofHom σ).hom := hl
-  change f (X.fromSpecStalk x (Spec.map (CommRingCat.ofHom σ) (IsLocalRing.closedPoint R))) = f x
-  rw [Spec_closedPoint, Scheme.fromSpecStalk_closedPoint]
-
 theorem spec_stalkHom {X : Scheme.{0}} {Ω₁ Ω : Type} [Field Ω₁] [Field Ω]
     (ξ : Spec (CommRingCat.of Ω₁) ⟶ X) (i : Ω₁ →+* Ω) (q : Cpt ξ) (W : Subring Ω)
     (σ : X.presheaf.stalk q.1 →+* W) (hσ : ∀ s, (σ s : Ω) = i (genMap ξ q s)) :

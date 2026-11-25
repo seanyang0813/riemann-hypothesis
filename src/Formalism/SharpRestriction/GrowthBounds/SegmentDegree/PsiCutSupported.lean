@@ -17,15 +17,8 @@ section Dict
 
 variable {n' r : ℕ} [NeZero n'] (F : Frames n' r) {L₁ N₁ : ℕ}
 
-theorem kfr_lt (hV : F.Valid L₁ N₁) (j : ℤ) {a b : ℕ} (hab : a < b) (hb : b < r) : F.fr j a < F.fr j b :=
-  TE.fr_lt hV j a b hab hb
-
 theorem kfr_le (hV : F.Valid L₁ N₁) (j : ℤ) {a b : ℕ} (hab : a ≤ b) (hb : b < r) : F.fr j a ≤ F.fr j b :=
   TE.fr_le hV j a b hab hb
-
-theorem k_mem_letters (j x : ℤ) :
-    x ∈ F.letters j ↔ (F.fr (j - 1) 0 ≤ x ∧ x ≤ F.fr j (r - 1)) ∧ posOf n' x ∈ F.TT := by
-  simp only [Frames.letters, Finset.mem_filter, Finset.mem_Icc]
 
 theorem k_fr_mem_letters (hV : F.Valid L₁ N₁) (j : ℤ) {t : ℕ} (ht : t < r) : F.fr j t ∈ F.letters j :=
   letI : NeZero r := ⟨Nat.ne_of_gt (Nat.zero_lt_of_lt ht)⟩

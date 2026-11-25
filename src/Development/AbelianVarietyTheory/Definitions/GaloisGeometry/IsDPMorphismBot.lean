@@ -75,7 +75,7 @@ structure Base : Type 1 where
 
 attribute [instance] Base.ring
 
-structure LogFun (k : Type) [CommRing k] (τ : k) : Type 1 where
+structure LogFun (k : Type) [CommRing k] (_τ : k) : Type 1 where
 
   ι : Type
   [fin : Fintype ι]
@@ -91,17 +91,13 @@ structure LogFun (k : Type) [CommRing k] (τ : k) : Type 1 where
   in_map : ∀ {α} {B B' : CommRingCat.{0}} (φ : B ⟶ B') {y : Pt.obj B}, In α y → In α (Pt.map φ y)
 
   f : A → ι → ∀ {B : CommRingCat.{0}}, Pt.obj B → B
-  f_map : ∀ {α} (i) {B B' : CommRingCat.{0}} (φ : B ⟶ B') {y : Pt.obj B}, In α y → f α i (Pt.map φ y) = φ.hom (f α i y)
 
   g : A → A → ι → ∀ {B : CommRingCat.{0}}, Pt.obj B → Bˣ
   g_map : ∀ {α β} (i) {B B' : CommRingCat.{0}} (φ : B ⟶ B') {y : Pt.obj B}, In α y → In β y →
     g α β i (Pt.map φ y) = Units.map φ.hom.toMonoidHom (g α β i y)
-  f_eq : ∀ {α β} (i) {B : CommRingCat.{0}} {y : Pt.obj B}, In α y → In β y → f α i y = g α β i y * f β i y
   g_self : ∀ {α} (i) {B : CommRingCat.{0}} {y : Pt.obj B}, In α y → g α α i y = 1
   g_comp : ∀ {α β γ} (i) {B : CommRingCat.{0}} {y : Pt.obj B}, In α y → In β y → In γ y →
     g α β i y * g β γ i y = g α γ i y
-  prod_f : ∀ {α} {B : CommRingCat.{0}} {y : Pt.obj B}, In α y → ∏ i, f α i y = str y τ
-  prod_g : ∀ {α β} {B : CommRingCat.{0}} {y : Pt.obj B}, In α y → In β y → ∏ i, g α β i y = 1
 
 attribute [instance] LogFun.fin
 
@@ -445,14 +441,10 @@ abbrev node (k : Type) [CommRing k] (τ : k) : LogFun k τ where
   In _ _ _ := True
   in_map _ _ _ := trivial
   f _ i _ y := ![y.1.2.1, y.1.2.2] i
-  f_map i _ _ φ y _ := by fin_cases i <;> rfl
   g _ _ _ _ _ := 1
   g_map _ _ _ _ _ _ _ := by simp
-  f_eq _ _ _ _ _ := by simp
   g_self _ _ _ _ := rfl
   g_comp _ _ _ _ _ _ := by simp
-  prod_f {_ _ y} _ := by simpa [Fin.prod_univ_two] using y.2
-  prod_g _ _ := by simp
 
 abbrev nodeL : base.Fun := node _ _
 

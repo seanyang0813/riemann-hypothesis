@@ -75,8 +75,6 @@ def Pc (u : D.what₂.Word) : Matrix (Fin (2 * D.R.rS + D.R.k + 1)) (Fin (D.R.rS
 def fc : Matrix (Fin (2 * D.R.rS + D.R.k + 1)) (Fin D.R.rS) D.host.E :=
   Matrix.of fun i a => crdH X (X.fY a) i
 
-def Tc (u : D.what₂.Word) : D.host.F := (((D.mem u).A.T : ℕ) : D.host.F)
-
 def tauOf (D : D7) (w : InfinitePlace D.host.E) : D.what₂.Tau :=
   (GlobalTheory.RealPlaces.existsUnique_place D w).exists.choose
 
@@ -86,20 +84,6 @@ def A0 {θ : ℝ} (C : Choice X θ) (w : InfinitePlace D.host.E) :
     Matrix (Fin (2 * D.R.rS + D.R.k + 1)) (Fin (2 * D.R.rS + D.R.k + 1)) ℂ :=
   (C.Qi (tauOf D w) * (X.B.I.P (vOf X (tauOf D w)))⁻¹).submatrix id (ci X)
 
-def Ac {θ : ℝ} (C : Choice X θ) (w : InfinitePlace D.host.E) :
-    Matrix (Fin (2 * D.R.rS + D.R.k + 1)) (Fin (2 * D.R.rS + D.R.k + 1)) ℂ :=
-  if Direct D w then A0 X C w else (A0 X C w).map star
-
 def sc (D : D7) (a : Fin D.R.rS) : ℝ := (2 * D.host.v) ^ (D.R.rS - (a : ℕ))
-
-def trX {θ : ℝ} (C : Choice X θ) (x : X.B.I.Ginf) : D.what₂.Tau → Formalism.QuantumDeterminants.Mt D.R.k D.R.rS :=
-  fun τ => Matrix.of.symm (Formalism.L2.SG.RealObj.trG (C.Q τ) (C.Qi τ) (x (vOf X τ)))
-
-def cjw (D : D7) (w : InfinitePlace D.host.E) (M : Formalism.QuantumDeterminants.Mt D.R.k D.R.rS) : Formalism.QuantumDeterminants.Mt D.R.k D.R.rS :=
-  if Direct D w then M else fun i j => star (M i j)
-
-def Gm (D : D7) (y : D.what₂.Tau → Formalism.QuantumDeterminants.Mt D.R.k D.R.rS) :
-    InfinitePlace D.host.E → Formalism.QuantumDeterminants.Mt D.R.k D.R.rS :=
-  fun w => cjw D w (y (tauOf D w))
 
 end GlobalTheory.CovDom

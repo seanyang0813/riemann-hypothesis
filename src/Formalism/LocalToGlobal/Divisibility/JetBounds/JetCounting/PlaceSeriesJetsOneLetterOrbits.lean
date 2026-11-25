@@ -221,24 +221,6 @@ open Formalism.L2.Th1.H (cmL CmOK matH stdH stdLat blk4 pow4 imgLat relIdx IsIso
 open Formalism.L2.Th1.E (IntCurve curveL Unif)
 open Formalism.L2.Th1.GD (LocNorm thetaLin frameM InMul IsPairFrame)
 
-def PlaceSeriesJetsCyclicOrbits : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (Q : OrbSys ℂ_[l] → ℝ → Prop) (g2 g3 s2 ε : MaximalUnramifiedExtension l) (σ : MaximalUnramifiedExtension l →+* MaximalUnramifiedExtension l)
-    (F : MvPowerSeries (Fin 2) (MaximalUnramifiedExtension l)), CurveAt l g2 g3 s2 ε σ F →
-  ∀ (N0 N1 : ℕ) (ιr P : Type) (e : PV ιr N0 N1 → P) (S : OrbSys ℂ_[l]) (x : P → MvPowerSeries S.ι ℂ_[l])
-    (Ψ : MvPowerSeries P ℂ_[l]) (β : ℝ),
-    IsHostA l Q σ (cob F (phFF l g2 g3 s2 ε)) N0 N1 ιr P e S x Ψ β → IsSysW l Q S β
-
-def IntegralSeriesCyclicOrbits : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (Q : OrbSys ℂ_[l] → ℝ → Prop) (g2 g3 s2 ε : MaximalUnramifiedExtension l) (σ : MaximalUnramifiedExtension l →+* MaximalUnramifiedExtension l)
-    (F : MvPowerSeries (Fin 2) (MaximalUnramifiedExtension l)), CurveAt l g2 g3 s2 ε σ F →
-  ∀ (N0 N1 : ℕ) (ιr : Type) [Fintype ιr] [DecidableEq ιr] (P : Type) (e : PV ιr N0 N1 → P) (S : OrbSys ℂ_[l])
-    (x : P → MvPowerSeries S.ι ℂ_[l]) (Ψ : MvPowerSeries P ℂ_[l]) (β : ℝ),
-    IsHostA l Q σ (cob F (phFF l g2 g3 s2 ε)) N0 N1 ιr P e S x Ψ β →
-  ∀ (n : Type) [Fintype n] (f f' : ιr × Fin N0 × Fin N1 → n → MaximalUnramifiedExtension l), IsHypPair σ f f' →
-  ∀ Θ : MvPowerSeries n ℂ_[l], HostInt l g2 g3 s2 ε Θ →
-    ∃ U : MvPowerSeries S.ι ℂ_[l], Integral U ∧
-      MvPowerSeries.subst x (serAlong e (inHyp l f f' Θ)) = MvPowerSeries.subst S.g U * S.E
-
 def HostIntFree : Prop :=
   ∀ (a₀ : ℕ) (b₀ c₀ : ℤ) (dK : ℕ) (ha : 0 < a₀) (hdK : 0 < dK), CmOK a₀ b₀ c₀ dK →
   ∀ (l : ℕ) [Fact l.Prime], 5 ≤ l → ¬ l ∣ dK → (¬ ∃ a : ZMod l, a ^ 2 = -(dK : ZMod l)) →

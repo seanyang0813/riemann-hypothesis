@@ -12,8 +12,6 @@ open MvPolynomial Matrix Real Finset
 
 noncomputable section
 
-def IsPart {r : ℕ} (la : Fin r → ℕ) : Prop := ∀ a b : Fin r, a ≤ b → la b ≤ la a
-
 def shapeCells {r : ℕ} (la : Fin r → ℕ) : Finset (ℕ × ℕ) :=
   Finset.univ.biUnion fun a : Fin r => (Finset.range (la a)).image fun b => ((a : ℕ), b)
 

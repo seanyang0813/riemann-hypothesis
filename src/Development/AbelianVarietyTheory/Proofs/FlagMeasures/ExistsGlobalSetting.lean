@@ -718,7 +718,7 @@ private lemma mem_map_comap_of_star_fixed {F E : Type} [Field F] [NumberField F]
   exact hzQ
 
 theorem le_map_comap_of_le_conj (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E]
-    [StarRing E] [Algebra F E] (hc : Formalism.BasicNotions.CMData F E) (P Q : Ideal (𝓞 E)) (hQ : Q.IsMaximal)
+    [StarRing E] [Algebra F E] (hc : Formalism.BasicNotions.CMData F E) (P Q : Ideal (𝓞 E))
     (h1 : P ≤ Q) (h2 : P ≤ Q.comap (RingOfIntegers.mapRingHom (starRingEnd E))) :
     P ≤ Ideal.map (algebraMap (𝓞 F) (𝓞 E)) (Q.comap (algebraMap (𝓞 F) (𝓞 E))) := by
   have hinv : ∀ z : 𝓞 E, RingOfIntegers.mapRingHom (starRingEnd E)
@@ -841,7 +841,7 @@ theorem exists_ideal_coprime_conj_mul_eq_spanSingleton :
       show RingOfIntegers.mapRingHom (starRingEnd E) (RingOfIntegers.mapRingHom (starRingEnd E) x) ∈ P
       rw [hσσ]
       exact hx
-    have h3 := _root_.GlobalTheory.UnramifiedConj.le_map_comap_of_le_conj F E hcm P Q hQm h1 h2
+    have h3 := _root_.GlobalTheory.UnramifiedConj.le_map_comap_of_le_conj F E hcm P Q h1 h2
     have hpm : (Q.comap (algebraMap (𝓞 F) (𝓞 E))).IsMaximal :=
       Ideal.isMaximal_under_of_isIntegral_of_isMaximal (R := 𝓞 F) Q
     exact hp _ hpm (key _ h3)

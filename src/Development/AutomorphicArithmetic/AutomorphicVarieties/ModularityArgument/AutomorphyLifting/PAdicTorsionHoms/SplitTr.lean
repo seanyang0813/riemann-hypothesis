@@ -50,6 +50,7 @@ import Mathlib.Tactic.NormNum.Prime
 import Mathlib.Tactic.NormNum.RealSqrt
 public import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.IsSubquotientComp
 import Development.AutomorphicArithmetic.AutomorphicVarieties.ModularityArgument.AutomorphyLifting.WeakOfAtt
+import PositivityTheory.AutomorphicForms.PublishedInputs.RealGaloisRepresentations.IwahoriSphericalTransfer.OrbitFiniteType
 
 @[expose] public section
 
@@ -152,39 +153,11 @@ end Fixed
 end UpperTheory.V.Z.Win.SplitTorusFixedPoints
 
 open UpperTheory.V.Z.Win.SplitTorusFixedPoints GlobalTheory.CuspRep.LocEx Matrix in
+open GlobalTheory.RealGal.LocCompRProof (orb orb_comm orb_act annPart exists_type_of_range) in
 theorem UpperTheory.V.Z.Win.splitTr :
     SplitTr := by
   intro F E _ _ _ _ _ _ _ n _ π P hBC v w i hi
   have hReal : ∃ σ, π.IsLocComp v σ ∧ LocIsotypic π.finPart v σ := by
-    let orb {K V : Type} [Group K] [AddCommGroup V] [Module ℂ V]
-        (κ : Representation ℂ K V) (x : V) : (K →₀ ℂ) →ₗ[ℂ] V := Finsupp.linearCombination ℂ fun k => κ k x
-
-    have orb_comm {K V : Type} [Group K] [AddCommGroup V] [Module ℂ V]
-        (κ : Representation ℂ K V) (T : Module.End ℂ V) (hT : ∀ k x, T (κ k x) = κ k (T x)) (x : V)
-        (c : K →₀ ℂ) : orb κ (T x) c = T (orb κ x c) := by
-      set_option synthInstance.maxHeartbeats 100000 in
-        simp only [orb, Finsupp.linearCombination_apply, Finsupp.sum, map_sum, map_smul, hT]
-
-    have orb_act {K V : Type} [Group K] [AddCommGroup V] [Module ℂ V]
-        (κ : Representation ℂ K V) (x : V) (k : K) (c : K →₀ ℂ) :
-        orb κ x (c.mapDomain (k * ·)) = κ k (orb κ x c) := by
-      induction c using Finsupp.induction_linear with
-      | zero => simp
-      | add c c' h h' => rw [Finsupp.mapDomain_add, map_add (f := _), map_add (f := _), map_add (f := _), h, h']
-      | single a b => simp [orb]
-
-    let annPart {K V : Type} [Group K] [AddCommGroup V] [Module ℂ V]
-        (κ : Representation ℂ K V) (φ : V) : Submodule ℂ V := {
-      carrier := {x | ∀ c, orb κ φ c = 0 → orb κ x c = 0}
-      add_mem' := fun {x y} hx hy c hc => by
-        have : orb κ (x + y) c = orb κ x c + orb κ y c := by
-          simp only [orb, Finsupp.linearCombination_apply, Finsupp.sum, map_add (f := _), smul_add, Finset.sum_add_distrib]
-        rw [this, hx c hc, hy c hc, add_zero]
-      zero_mem' := fun c _ => by simp [orb, Finsupp.linearCombination_apply, Finsupp.sum]
-      smul_mem' := fun a x hx c hc => by
-        have := orb_comm κ (a • (1 : Module.End ℂ V)) (fun k x => by simp) x c
-        simpa [hx c hc] using this }
-
     have exists_type {K V : Type} [Group K] [AddCommGroup V] [Module ℂ V]
         (κ : Representation ℂ K V) (φ : V)
         (hφ : FiniteDimensional ℂ (Submodule.span ℂ (Set.range fun k => κ k φ))) :
@@ -196,28 +169,7 @@ theorem UpperTheory.V.Z.Win.splitTr :
       have : FiniteDimensional ℂ (LinearMap.range (orb κ φ)) := by
         change FiniteDimensional ℂ (LinearMap.range (Finsupp.linearCombination ℂ fun k => κ k φ))
         rwa [Finsupp.range_linearCombination]
-      let b := Module.finBasis ℂ (LinearMap.range (orb κ φ))
-      obtain ⟨s, hs⟩ := (orb κ φ).rangeRestrict.exists_rightInverse_of_surjective (LinearMap.range_rangeRestrict _)
-      refine ⟨_, (LinearMap.toMatrixAlgEquiv b).toMonoidHom.comp (sub κ _ hO), fun x hx => ?_⟩
-      have key : ∀ c, orb κ x (s ((orb κ φ).rangeRestrict c)) = orb κ x c := fun c => by
-        rw [← sub_eq_zero, ← map_sub]
-        refine hx _ ?_
-        rw [map_sub, sub_eq_zero]
-        exact congrArg Subtype.val (LinearMap.congr_fun hs ((orb κ φ).rangeRestrict c))
-      refine ⟨orb κ x ∘ₗ s ∘ₗ b.equivFun.symm.toLinearMap, fun k v => ?_,
-        ⟨b.equivFun ((orb κ φ).rangeRestrict (Finsupp.single 1 1)), ?_⟩, fun v => ⟨_, rfl⟩⟩
-      · obtain ⟨y, rfl⟩ := b.equivFun.surjective v
-        obtain ⟨c, rfl⟩ := (orb κ φ).surjective_rangeRestrict y
-        have h1 : (LinearMap.toMatrixAlgEquiv b).toMonoidHom.comp (sub κ _ hO) k *ᵥ b.equivFun ((orb κ φ).rangeRestrict c) =
-            b.equivFun ((orb κ φ).rangeRestrict (c.mapDomain (k * ·))) := by
-          have h2 : (orb κ φ).rangeRestrict (c.mapDomain (k * ·)) = sub κ _ hO k ((orb κ φ).rangeRestrict c) :=
-            Subtype.ext (orb_act κ φ k c)
-          rw [h2]
-          exact LinearMap.toMatrix_mulVec_repr b b _ _
-        rw [h1]
-        simp only [LinearMap.comp_apply, LinearEquiv.coe_coe, LinearEquiv.symm_apply_apply, key, orb_act]
-      · simp only [LinearMap.comp_apply, LinearEquiv.coe_coe, LinearEquiv.symm_apply_apply, key]
-        simp [orb]
+      exact exists_type_of_range κ φ hO
 
     have smooth_fin (π : TR.CuspSub F n) : IsSmooth π.finPart := fun v => by
       convert (π.cusp v.1 v.2).1.level using 1

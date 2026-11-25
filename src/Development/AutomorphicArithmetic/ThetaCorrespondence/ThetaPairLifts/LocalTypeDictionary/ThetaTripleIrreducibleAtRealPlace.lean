@@ -25,14 +25,13 @@ public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.MatchedTripl
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.SchwartzFockVacuumLineUniqueOfHeisenbergDerivati
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.WeakExponentialActionOnFockVectors
 public import Development.AbelianVarietyTheory.Proofs.TwistedOperators.MatchedMapsArchimedeanIdentity
-public import Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.WeilLieAlgebraScalarAction
+import Development.AbelianVarietyTheory.Proofs.DivisorProofs.HoweSplittingActsFockActionPlusTraceMultiples
 public import Development.AbelianVarietyTheory.Definitions.Divisors.PairsOfSquareTriple
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.EqOfComponentTensorAdelicFunctionEq
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ThetaActionExists
 public import Development.AbelianVarietyTheory.Proofs.TwistedOperators.DarbouxModelAlgebraicVectorsLeAdelicSchwartzStatement
 public import Development.AbelianVarietyTheory.Proofs.TwistedOperators.SeesawFramesWeilEquivalence
 public import Development.AbelianVarietyTheory.Proofs.TwistedOperators.ThetaTransformDarbouxModelLinearInjectiveStatement
-public import Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.ILiescalar
 public import Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.ThetaImageEqSpanDarboux
 public import Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.ThetaSumDifferentiableAlongLine
 public import Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.ThetaTripleMapsEquivariantOnFiniteVectors
@@ -785,7 +784,7 @@ open NumberField IsDedekindDomain Formalism.MainNotions.GlobalTheoryTheory.Genus
 open Formalism.BasicNotions.TH GlobalTheory.FockAlg GlobalTheory.RealLift
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
 open scoped Classical in
-theorem kStable_of_lie_stable_subspace (hP : _root_.GlobalTheory.FunPr.ThetaLocalInputs) {σ : E →ₐ[F] E} {B : Base F E} {n d : ℕ} {X : Spc F E n}
+theorem kStable_of_lie_stable_subspace (_hP : _root_.GlobalTheory.FunPr.ThetaLocalInputs) {σ : E →ₐ[F] E} {B : Base F E} {n d : ℕ} {X : Spc F E n}
     {W : Spc F E d} {M : Model σ X W} {χX χW : Chr F E} {om : Rep σ X W} {r s r' s' : ℕ} (hb : B.IsGood σ)
     (hX : X.IsHerm σ B r s) (hW : W.IsSkew σ B r' s') (hw : M.IsWeil B.ψ χX χW om) {Pi : Type} [AddCommGroup Pi]
     [Module ℂ Pi] (p : SInf F (Fin n × Fin d) →ₗ[ℂ] Pi) (N : Submodule ℂ Pi)
@@ -798,7 +797,7 @@ theorem kStable_of_lie_stable_subspace (hP : _root_.GlobalTheory.FunPr.ThetaLoca
   have hder : GlobalTheory.RealLift.DerEx := _root_.GlobalTheory.HeisDer.derEx
   have hvl : GlobalTheory.RealLift.VacLine := _root_.GlobalTheory.VacLn.vacLine_of_derEx hder
   have hfe : GlobalTheory.RealLift.FockEx := _root_.GlobalTheory.FockMapEx.fockEx_of_derEx hder
-  have hls : GlobalTheory.RealLift.LieScalar := _root_.GlobalTheory.T.weil_lie_algebra_scalar_action hP hder hvl
+  have hls : GlobalTheory.RealLift.LieScalar := _root_.GlobalTheory.HoweD.lieScalar
   have hpr : GlobalTheory.RealLift.PolRange := _root_.GlobalTheory.RealLift.PolRangePf.polRange_of hAL hder hvl
   have hkl : GlobalTheory.RealLift.KLine := GlobalTheory.RealLift.kLine_of_lineEx _root_.GlobalTheory.RealLift.exists_line_of_upq
   choose A hA hAθ using fun w => hfr _ _ _ _ _ (hX.sig w) (hX.cartan w)
@@ -897,7 +896,7 @@ theorem theta_triple_irreducible_at_real_place (hP : _root_.GlobalTheory.FunPr.T
   have fr : Framed B.emb (incM F G.V.J) (incM F G.W.J) 1 Complex.I A C := ⟨one_mul _, hA1, hC1⟩
   have hvl := i_vacline i_derex
   have hfe := i_fockex i_derex
-  have hsec := _root_.GlobalTheory.T.real_lift_lie_second_order hP i_derex hfe hvl (_root_.GlobalTheory.LieScal.lie_algebra_acts_by_scalar hP i_derex hvl)
+  have hsec := _root_.GlobalTheory.T.real_lift_lie_second_order hP i_derex hfe hvl _root_.GlobalTheory.HoweD.lieScalar
   obtain ⟨Φ, hΦ⟩ := hfe F E σ _ _ _ _ _ _ _ B.ψ B.emb _ _ G.M.co 1 Complex.I A C hb.cm hb.std fr
   have hr := i_polrange i_actslaws i_derex hvl F E σ _ _ _ _ _ _ G.V G.W G.M B.ψ B.emb A C Φ hb.cm hb.std fr hAθ hCθ hΦ
   have hwp : IsUWeilPair (cA σ) (adeleClass F) B.ψ (-1) (incM F G.V.J) (incM F G.W.J) G.M.co X.β (X.β / X.α) om := hw

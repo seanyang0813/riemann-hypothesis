@@ -259,14 +259,14 @@ namespace GlobalTheory.NL.SandJumps
 
 
 
-theorem main : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW)
-    (Cm : CmpOf D.loc D.locA HW F), p5eL D.loc D.locA HW F := by
-  intro D HW F Cm l _ K s LL h T M hh hT hJ
-  haveI := ((D.loc l).PD K).finK₀
+theorem main : ∀ (loc : LocTheory) (locA : ∀ (l : ℕ) [Fact l.Prime], LocAinf l (loc l)) (locT : ∀ (l : ℕ) [Fact l.Prime], Formalism.BasicNotions.LocTied l (loc l) (locA l)) (HW : HWOf loc) (F : FonOf loc locA HW)
+    (Cm : CmpOf loc locA HW F), p5eL loc locA HW F := by
+  intro loc locA locT HW F Cm l _ K s LL h T M hh hT hJ
+  haveI := ((loc l).PD K).finK₀
   haveI : NeZero (Module.finrank ℚ_[l] ↥(K0 K)) := ⟨Module.finrank_pos.ne'⟩
-  have hp : p5 ((HW l).W K s LL h) T M hh := _root_.GlobalTheory.NL.Heights.heights_from_jumps D HW F Cm l K s LL h T M hh hT hJ
-  obtain ⟨b⟩ := GlobalTheory.NL.N_basis D HW F l K s LL h T hT
-  have hio := GlobalTheory.NL.IoXQ.main D HW F l K s LL h
+  have hp : p5 ((HW l).W K s LL h) T M hh := _root_.GlobalTheory.NL.Heights.heights_from_jumps loc locA locT HW F Cm l K s LL h T M hh hT hJ
+  obtain ⟨b⟩ := GlobalTheory.NL.N_basis loc locA HW F l K s LL h T hT
+  have hio := GlobalTheory.NL.IoXQ.main loc locA HW F l K s LL h
   obtain ⟨-, -, -, -, hφ, -⟩ := hio
   have hx : φRW LL (inclR LL (((F l).E K s LL h).tie.io ((HW l).W K s LL h).X)) =
       inclR LL (((F l).E K s LL h).tie.io ((HW l).W K s LL h).X) *

@@ -176,11 +176,11 @@ theorem exists_weil_of_oriented : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) 
     (Fin S.rank × Fin d) M.co hM.rat ω' hω'' om hom
   have h4 := GlobalTheory.T.transportedWeilDatum_isUnitary_adelicSchwartz D Bs.ψ hω'.std Sh Th χ' χ hω''.hecS hω''.hecT hω''.resS hω''.resT Vs.J Ws.J (-1) hA hB
     (Fin S.rank × Fin d) M.co hM.rat ω' hω'' om hom
-  have h5 := GlobalTheory.T.continuous_transported_weilDatum_adelicSchwartz D Bs.ψ hω'.std Sh Th χ' χ hω''.hecS hω''.hecT hω''.resS hω''.resT Vs.J Ws.J (-1) hA hB
+  have h5 := _root_.GlobalTheory.WeilCont.continuous_transport D Bs.ψ hω'.std Sh Th χ' χ hω''.hecS hω''.hecT hω''.resS hω''.resT Vs.J Ws.J (-1) hA hB
     (Fin S.rank × Fin d) M.co hM.rat ω' hω'' om hom
-  have h6 := GlobalTheory.T.exists_doubledWeil_blockEmbedding_acts_on_first_boxFactor D Bs.ψ hω'.std Sh Th χ' χ hω''.hecS hω''.hecT hω''.resS hω''.resT Vs.J Ws.J (-1) hA hB
+  have h6 := _root_.GlobalTheory.DblSchr.doubledModel D Bs.ψ hω'.std Sh Th χ' χ hω''.hecS hω''.hecT hω''.resS hω''.resT Vs.J Ws.J (-1) hA hB
     (Fin S.rank × Fin d) M.co hM.rat ω' hω'' om hom
-  have h7 := GlobalTheory.T.exists_doubled_schrodingerModel_transposed_siegelRule D Bs.ψ hω'.std Sh Th χ' χ hω''.hecS hω''.hecT hω''.resS hω''.resT Vs.J Ws.J (-1) hA hB
+  have h7 := _root_.GlobalTheory.WeilSchrodinger.DblTarget.exists_dbl_target D Bs.ψ hω'.std Sh Th χ' χ hω''.hecS hω''.hecT hω''.resS hω''.resT Vs.J Ws.J (-1) hA hB
     (Fin S.rank × Fin d) M.co hM.rat ω' hω'' om hom
   have hsp : GlobalTheory.WeilM.IsUSplitting (GlobalTheory.WeilM.adeleClass D.host.F) Bs.ψ M.co
       (GlobalTheory.WeilM.actAB (GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.cA D.sp.cm.sig)) om := ⟨⟨h2.1, h2.2, h3⟩, h4, h5⟩

@@ -123,32 +123,6 @@ theorem blockM_ss {a b n : ℕ} (e0 : Fin a ⊕ Fin b ≃ Fin n) (ρ₁ : Γ →
   show _ = _
   ext i <;> simp [blockM, Matrix.submatrix_mulVec_equiv, Matrix.fromBlocks_mulVec, LinearMap.funLeft] <;> rfl
 
-theorem ss_of_scalar {a : ℕ} (ρ : Γ →* GL (Fin a) k) (c : Γ → k)
-    (h : ∀ g v, (ρ g : Matrix (Fin a) (Fin a) k).mulVec v = c g • v) : IsSSRep ρ := by
-  intro W _
-  obtain ⟨W', hW'⟩ := W.exists_isCompl
-  exact ⟨W', fun g v hv => by rw [h]; exact W'.smul_mem _ hv, hW'⟩
-
-theorem diagM_ss : ∀ {t : ℕ} (χ : Fin t → Γ →* kˣ), IsSSRep (diagM χ).toHomUnits := by
-  intro t
-  induction t with
-  | zero =>
-    intro χ
-    exact ss_of_scalar _ (fun _ => 0) fun g v => funext fun c => c.elim0
-  | succ t ih =>
-    intro χ
-    refine GlobalTheory.Proof.SemisimpleRepresentationIntegralConjugate.isSSRep_of_prod (ρ₁ := (diagM fun c : Fin t => χ (Fin.castAdd 1 c)).toHomUnits)
-      (ρ₂ := (diagM fun c : Fin 1 => χ (Fin.natAdd t c)).toHomUnits)
-      ((LinearEquiv.funCongrLeft k k finSumFinEquiv).trans
-        (LinearEquiv.sumArrowLequivProdArrow _ _ k k)) (fun g v => ?_) (ih _)
-      (ss_of_scalar _ (fun g => ((χ (Fin.last t) g : kˣ) : k)) fun g v => ?_)
-    · show _ = _
-      ext i <;> simp [diagM, Matrix.mulVec_diagonal, LinearMap.funLeft]
-    · funext c
-      obtain rfl : c = 0 := Subsingleton.elim _ _
-      change (Matrix.diagonal fun c : Fin 1 => ((χ (Fin.natAdd t c) g : kˣ) : k)).mulVec v 0 = _
-      exact Matrix.mulVec_diagonal _ _ _
-
 end Rep
 
 end GlobalTheory.SSComplement

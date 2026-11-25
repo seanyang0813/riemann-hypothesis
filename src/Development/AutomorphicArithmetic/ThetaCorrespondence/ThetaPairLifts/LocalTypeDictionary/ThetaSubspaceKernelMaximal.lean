@@ -26,7 +26,7 @@ public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.RestrictedPr
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.SchwartzFockVacuumLineUniqueOfHeisenbergDerivati
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.WeakExponentialActionOnFockVectors
 public import Development.AbelianVarietyTheory.Proofs.TwistedOperators.MatchedMapsArchimedeanIdentity
-public import Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.WeilLieAlgebraScalarAction
+import Development.AbelianVarietyTheory.Proofs.DivisorProofs.HoweSplittingActsFockActionPlusTraceMultiples
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.GoodSplitPlaceTranslationActsThroughWeil
 public import Development.AbelianVarietyTheory.Proofs.TwistedOperators.ConjUInvMemGfC
 public import Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.ThetaSumDifferentiableAlongLine
@@ -502,13 +502,13 @@ theorem kStable_subspace_sums : _root_.GlobalTheory.FunPr.ThetaLocalInputs → �
       Q (∑ i, GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.pure (f i) (φ i)) ∈ N → Q (∑ i, GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.pure (f₁ i) (φ i)) ∈ N) →
     ∀ k ∈ GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.KInf σ W B.emb, ∀ Ψ ∈ GlobalTheory.SquareAgree.algD M B.ψ B.emb,
       om (1, k) Ψ ∈ GlobalTheory.SquareAgree.algD M B.ψ B.emb ∧ (Q Ψ ∈ N → Q (om (1, k) Ψ) ∈ N) := by
-  intro hP F E _ _ _ _ _ σ B n d X W M χX χW om r s r' s' hb hX hW hM hw Pv _ _ Q N hlie k hk Ψ hΨ
+  intro _ F E _ _ _ _ _ σ B n d X W M χX χW om r s r' s' hb hX hW hM hw Pv _ _ Q N hlie k hk Ψ hΨ
   have hAL : ActsLaws := GlobalTheory.RealLift.actsLaws
   have hfr : FrameEx := _root_.GlobalTheory.RealLift.frameEx_holds
   have hder : DerEx := _root_.GlobalTheory.HeisDer.derEx
   have hvl : VacLine := _root_.GlobalTheory.VacLn.vacLine_of_derEx hder
   have hfe : FockEx := _root_.GlobalTheory.FockMapEx.fockEx_of_derEx hder
-  have hls : LieScalar := _root_.GlobalTheory.T.weil_lie_algebra_scalar_action hP hder hvl
+  have hls : LieScalar := _root_.GlobalTheory.HoweD.lieScalar
   have hpr : PolRange := _root_.GlobalTheory.RealLift.PolRangePf.polRange_of hAL hder hvl
   choose A hA hAθ using fun w => hfr _ _ _ _ _ (hX.sig w) (hX.cartan w)
   choose C hC hCθ using fun w => hfr _ _ _ _ _ (hW.sig w) (hW.cartan w)
@@ -970,7 +970,7 @@ theorem exists_derivation_action_weil (hPr : _root_.GlobalTheory.FunPr.ThetaLoca
   have hD := _root_.GlobalTheory.HeisDer.derEx
   have hvl := _root_.GlobalTheory.VacLn.vacLine_of_derEx hD
   have hfe := _root_.GlobalTheory.FockMapEx.fockEx_of_derEx hD
-  have hsec := _root_.GlobalTheory.T.real_lift_lie_second_order hPr hD hfe hvl (_root_.GlobalTheory.T.weil_lie_algebra_scalar_action hPr hD hvl)
+  have hsec := _root_.GlobalTheory.T.real_lift_lie_second_order hPr hD hfe hvl _root_.GlobalTheory.HoweD.lieScalar
   obtain ⟨Φ, hΦ⟩ := hfe F E σ _ _ _ _ _ _ _ B.ψ B.emb _ _ G.M.co 1 Complex.I A C hb.cm hb.std fr
   have hr := _root_.GlobalTheory.RealLift.PolRangePf.polRange_of GlobalTheory.RealLift.actsLaws hD hvl F E σ _ _ _ _ _ _ G.V G.W G.M B.ψ B.emb A C Φ hb.cm hb.std fr
     hAθ hCθ hΦ

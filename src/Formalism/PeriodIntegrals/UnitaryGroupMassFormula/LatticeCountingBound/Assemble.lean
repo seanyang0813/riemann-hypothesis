@@ -14,24 +14,9 @@ public import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.LatticeCountingB
 public import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.LatticeSizeContinuity.LatSizeContOfSteps
 public import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.LatticeCountingBound.ArchPlace
 public import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.LatticeCountingBound.LatCountAllOf
-import Mathlib.Algebra.Order.Star.Real
-import Mathlib.Tactic.Lemma
-import Mathlib.RingTheory.Coalgebra.IsFrobenius
-import Mathlib.RingTheory.Etale.Weakly
-import Mathlib.RingTheory.Henselian
-import Mathlib.RingTheory.HopfAlgebra.Basic
-import Mathlib.RingTheory.RegularLocalRing.Defs
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.RingTheory.TotallySplit
-import Mathlib.Tactic.TypeStar
 import Formalism.SatakeDualWeyl.AdelicIwasawaHecke.CsGlob
 import Formalism.SatakeDualWeyl.AdelicIwasawaHecke.CsGlobApprox
 import Formalism.SatakeDualWeyl.AdelicIwasawaHecke.Stabfin
-import Mathlib.RingTheory.PiTensorProduct
-import Mathlib.Algebra.Order.Star.Int
-import Mathlib.Order.CompletePartialOrder
-import Mathlib.Topology.Separation.CompletelyRegular
-import Mathlib.Algebra.Module.StablyFree.Basic
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Formalism.PeriodIntegrals.UnitaryGroupMassFormula.LatticeCountingBound.ArchIneq, Formalism.PeriodIntegrals.UnitaryGroupMassFormula.LatticeCountingBound.BoxBound, Formalism.PeriodIntegrals.UnitaryGroupMassFormula.LatticeCountingBound.Choose, Formalism.PeriodIntegrals.UnitaryGroupMassFormula.LatticeCountingBound.DualIncl, Formalism.PeriodIntegrals.UnitaryGroupMassFormula.LatticeCountingBound.IndexDual, Formalism.PeriodIntegrals.UnitaryGroupMassFormula.LatticeCountingBound.LatticeIsDiscreteGroup, Formalism.PeriodIntegrals.UnitaryGroupMassFormula.LatticeCountingBound.PackLem, Formalism.PeriodIntegrals.UnitaryGroupMassFormula.LatticeCountingBound.SublatticeOfLattice, Formalism.PeriodIntegrals.UnitaryGroupMassFormula.LatticeSizeContinuity.NormProd, Formalism.PeriodIntegrals.UnitaryGroupMassFormula.LatticeCountingBound.Assemble

@@ -279,33 +279,6 @@ theorem jordan_data (h1 : JordanExists) (h5 : AlphaDisc) (hK : Formalism.Hermiti
 theorem mem_of_isLatIn {X : Submodule K V} {T : Submodule (𝓞 K) V} (hT : IsLatIn X T) :
     ∀ v ∈ T, v ∈ X := fun _ hv => hT.2 ▸ Submodule.subset_span hv
 
-theorem full_of_sameGenusFix {A B : Submodule (𝓞 K) ↥(orthK h U)}
-    (hA : Submodule.IsFullLattice K A) (hB : Submodule.IsLattice K B)
-    (hg : SameGenusFix (F := F) h U (push _ A) (push _ B))
-    (hK : Formalism.HermitianLatticesTheory.IsCMUnram K) (hF : IsFixF K F)
-    (hs : h.IsSymm) (hc : IsCompl U (orthK h U)) : Submodule.IsFullLattice K B := by
-  obtain ⟨𝔭, h𝔭⟩ := Ideal.exists_maximal (α := 𝓞 F)
-  have hg' := (sameGenusFix_push_iff hK hF hs hc A B).1 hg
-  rw [GoodGenusOrbits.sameGenus_iff (F := F) hK hF A B] at hg'
-  obtain ⟨g, hg, he⟩ := hg' ⟨𝔭, h𝔭⟩
-  have hspan : ∀ x ∈ A, g x ∈ Submodule.span K (B : Set ↥(orthK h U)) := by
-    intro x hx
-    apply Formalism.L2.SG.Pf.GluingBases.locF_subset_span h𝔭.isPrime B
-    rw [← he]
-    exact ⟨x, LocF.le_locF 𝔭 A hx, rfl⟩
-  refine { toIsLattice := hB, span_eq_top := ?_ }
-  apply top_unique
-  intro x _
-  have hx : g.symm x ∈ Submodule.span K (A : Set ↥(orthK h U)) := by rw [hA.span_eq_top]; trivial
-  have hk : ∀ y ∈ Submodule.span K (A : Set ↥(orthK h U)), g y ∈ Submodule.span K (B : Set ↥(orthK h U)) := by
-    intro y hy
-    induction hy using Submodule.span_induction with
-    | mem y hy => exact hspan y hy
-    | zero => simp
-    | add y z hy hz ihy ihz => simpa using (Submodule.add_mem _ ihy ihz)
-    | smul a y hy ih => simpa using (Submodule.smul_mem _ a ih)
-  simpa using hk (g.symm x) hx
-
 theorem genusMassW_of (h1 : JordanExists) (h5 : AlphaDisc) : GenusMassW := by
   intro K F V _ _ _ _ _ _ _ _ _ _ _ hK hF h hs hnd U hc hpos T₀ hT₀ hT₀i c hmc
   obtain ⟨T', rfl⟩ : ∃ T', push (orthK h U) T' = T₀ := ⟨_, push_pull (mem_of_isLatIn hT₀)⟩

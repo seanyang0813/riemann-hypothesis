@@ -74,72 +74,14 @@ public import GroundTheory.HeightsAndTheta.Heights.ComplexAnalyticSets.PNormalCu
 public import GroundTheory.HeightsAndTheta.Heights.ElementarySymmetric.PFrameGraphGeneric
 public import GroundTheory.HeightsAndTheta.Heights.ElementarySymmetric.PFrameImplicitGraph
 public import GroundTheory.HeightsAndTheta.Heights.LocalFiniteness.InjectiveHolomorphicJacobianNeZeroHolds
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Bernstein
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.Order.CompletePartialOrder
-import Mathlib.RingTheory.Coalgebra.IsFrobenius
 import Mathlib.RingTheory.Etale.Weakly
-import Mathlib.RingTheory.HopfAlgebra.Basic
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.TotallySplit
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Topology.Sheaves.Init
 import Mathlib.Algebra.Category.ModuleCat.Projective
-import Mathlib.Algebra.Module.StablyFree.Basic
-import Mathlib.RingTheory.WittVector.IsPoly
 import Mathlib.Tactic.Linter.Style
-import Mathlib.Tactic.ReduceModChar
 import Std.Tactic.BVDecide.Normalize.Prop
 import Mathlib.RingTheory.Regular.ProjectiveDimension
-import Mathlib.RingTheory.Finiteness.ModuleFinitePresentation
-import Mathlib.RingTheory.Ideal.KrullsHeightTheorem
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.TypeStar
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Analysis.CStarAlgebra.Classes
 import Mathlib.RingTheory.Artinian.Instances
 import Mathlib.RingTheory.LocalProperties.Reduced
-import Mathlib.Tactic.Basify
-import Mathlib.Algebra.Order.Star.Real
-import Mathlib.Analysis.LocallyConvex.AbsConvexOpen
 import Mathlib.Algebra.Order.Archimedean.Real.Hom
-import Mathlib.RingTheory.PiTensorProduct
-import Mathlib.Topology.Separation.CompletelyRegular
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: GroundTheory.HeightsAndTheta.Heights.ComplexAnalyticSets.PAuslanderBuchsbaumDepthLower, GroundTheory.HeightsAndTheta.Heights.ComplexAnalyticSets.AuslanderBuchsbaumDepthBound, GroundTheory.HeightsAndTheta.Heights.ComplexAnalyticSets.PAuslanderBuchsbaumProjDimUpper, GroundTheory.HeightsAndTheta.Heights.ComplexAnalyticSets.PCMProjDimCriterion, GroundTheory.HeightsAndTheta.Heights.ComplexAnalyticSets.PCMQuotientUnmixed, GroundTheory.HeightsAndTheta.Heights.ComplexAnalyticSets.PCMRingUnmixed, GroundTheory.HeightsAndTheta.Heights.ComplexAnalyticSets.PChartIntSumOffHyperplane, GroundTheory.HeightsAndTheta.Heights.ComplexAnalyticSets.PCurveNormalisationQuotientLength, GroundTheory.HeightsAndTheta.Heights.ComplexAnalyticSets.PGenericFibreRadicalPrime, GroundTheory.HeightsAndTheta.Heights.ComplexAnalyticSets.PInvarianceOfDomain, GroundTheory.HeightsAndTheta.Heights.ComplexAnalyticSets.PLengthLocalizedQuotient, GroundTheory.HeightsAndTheta.Heights.ComplexAnalyticSets.POrdDeterminesPlace, GroundTheory.HeightsAndTheta.Heights.ComplexAnalyticSets.PParametrisationSheetsConnected, GroundTheory.HeightsAndTheta.Heights.ComplexAnalyticSets.PRegularSequenceLengthLeDim, GroundTheory.HeightsAndTheta.Heights.ComplexAnalyticSets.PSheetPieceReachesCentre, GroundTheory.HeightsAndTheta.Heights.ComplexAnalyticSets.PUniformiserGradientIndependent, GroundTheory.HeightsAndTheta.Heights.LocalFiniteness.ParametrisationSheetsConnectedHolds

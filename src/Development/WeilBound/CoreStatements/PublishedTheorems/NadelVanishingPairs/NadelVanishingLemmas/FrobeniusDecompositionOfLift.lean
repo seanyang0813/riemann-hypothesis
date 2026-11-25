@@ -1054,9 +1054,6 @@ theorem frobLift_w_unique (hL : IsFlatLift p π) {z w w' : Kt} (h : F z = z ^ p 
   have e2 := (hL.ann _).mp e
   rwa [map_sub, sub_eq_zero] at e2
 
-theorem kaehlerD_pow_char (x : K) : KaehlerDifferential.D ℤ K (x ^ p) = 0 := by
-  rw [Derivation.leibniz_pow, ← Nat.cast_smul_eq_nsmul K, CharP.cast_eq_zero, zero_smul]
-
 def frobLiftPsi (hL : IsFlatLift p π) (hF : IsFrob p π F) (z : Kt) : Ω[K⁄ℤ] :=
   π z ^ (p - 1) • KaehlerDifferential.D ℤ K (π z) +
     KaehlerDifferential.D ℤ K (π (frobLift_exists_w p π F hL hF z).choose)
@@ -1113,7 +1110,7 @@ theorem frobLiftPsi_mul (hL : IsFlatLift p π) (hF : IsFrob p π F) (z z' : Kt) 
     frobLiftPsi_spec hL hF (w := w * z' ^ p + z ^ p * w' + p * w * w')
       (by rw [map_mul, hw, hw']; ring)]
   simp only [map_add (f := _), map_mul, map_pow, map_natCast, hpK, zero_mul, add_zero, Derivation.leibniz,
-    kaehlerD_pow_char p, smul_zero, zero_add]
+    GlobalTheory.DI.kaehlerZ_D_pow_char p, smul_zero, zero_add]
   have e1 : (π z * π z') ^ (p - 1) * π z = π z ^ p * π z' ^ (p - 1) := by
     rw [mul_pow, mul_right_comm, ← pow_succ, Nat.sub_add_cancel hp1]
   have e2 : (π z * π z') ^ (p - 1) * π z' = π z' ^ p * π z ^ (p - 1) := by
@@ -1130,7 +1127,7 @@ theorem frobLiftPsi_natCast_mul (hL : IsFlatLift p π) (hF : IsFrob p π F) (y :
     rw [← pow_succ', Nat.sub_add_cancel hp1]
   rw [frobLiftPsi_spec hL hF (w := F y - (p : Kt) ^ (p - 1) * y ^ p)
     (by rw [map_mul, map_natCast, mul_pow]; linear_combination (y ^ p) * e)]
-  simp [hF y, kaehlerD_pow_char p, zero_pow hp2]
+  simp [hF y, GlobalTheory.DI.kaehlerZ_D_pow_char p, zero_pow hp2]
 
 theorem frobLiftPsi_congr (hL : IsFlatLift p π) (hF : IsFrob p π F) {z z' : Kt} (h : π z = π z') :
     frobLiftPsi p π F hL hF z = frobLiftPsi p π F hL hF z' := by

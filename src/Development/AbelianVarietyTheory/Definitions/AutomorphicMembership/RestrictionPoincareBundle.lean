@@ -2,7 +2,6 @@ module
 
 public import Development.AbelianVarietyTheory.Definitions.Divisors.ToNatLengthEqRangeAddRange
 public import Development.AbelianVarietyTheory.Definitions.AutomorphicMembership.PullbackAndTensorModule
-public import Development.AbelianVarietyTheory.Definitions.AutomorphicMembership.IsGrpPullbackAbVarModel
 public import Development.AbelianVarietyTheory.Proofs.UniformizationProofs.ExistsRigidifiedIso
 public import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.ExtensionDescent.ChartPullbacks.UniformBaseChange.PullGt
 import Mathlib.Algebra.Order.Floor.Extended

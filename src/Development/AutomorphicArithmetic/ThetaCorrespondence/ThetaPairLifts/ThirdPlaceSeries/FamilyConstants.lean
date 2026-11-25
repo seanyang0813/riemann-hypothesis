@@ -107,7 +107,6 @@ structure AllFamilyConditions (W : _root_.GlobalTheory.MiS.RealPackAlt ex) : Pro
   tq : _root_.GlobalTheory.Fam.GeometricFamilyConditions W
   tw : _root_.GlobalTheory.AdForm.TwStdAlt W
   lev : _root_.GlobalTheory.Fam.LevelCondition' W
-  rc : Nonempty (_root_.Formalism.IndefR.IndefiniteRealisationRecursion W.Q)
 end True
 end GlobalTheory.Fam
 end

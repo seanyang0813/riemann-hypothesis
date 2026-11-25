@@ -1561,9 +1561,6 @@ theorem norm_sq_eq_re' (x : M) : ‖x‖ ^ 2 = (⟪x, x⟫_ℂ).re := by
   rw [@norm_sq_eq_re_inner ℂ]
   rfl
 
-theorem re_inner_real_smul (r : ℝ) (v : M) : (⟪(r : ℂ) • v, v⟫_ℂ).re = r * ‖v‖ ^ 2 := by
-  rw [inner_smul_left, Complex.conj_ofReal, Complex.re_ofReal_mul, ← norm_sq_eq_re']
-
 theorem re_inner_smul_real (r : ℝ) (v : M) : (⟪v, (r : ℂ) • v⟫_ℂ).re = r * ‖v‖ ^ 2 := by
   rw [inner_smul_right, Complex.re_ofReal_mul, ← norm_sq_eq_re']
 
@@ -1580,7 +1577,7 @@ theorem root_bound_of_square_identity : SqId → RootBd := by
   intro n ε M _ _ E hG hU Λ c v hv hc a b hab
   obtain ⟨_, h2, _⟩ := hsq n ε M E hG hU v
   have hK : casimirK ε E v = ((casValK ε Λ : ℝ) : ℂ) • v := casimirK_khwVec ε hG hv
-  rw [hK, hc, re_inner_real_smul, re_inner_real_smul] at h2
+  rw [hK, hc, PositivityTheory.RgHe3.RealScalarQuadraticForm.re_smul_self, PositivityTheory.RgHe3.RealScalarQuadraticForm.re_smul_self] at h2
   have hnn : ∀ x : M, 0 ≤ ‖x‖ ^ 2 := fun x => sq_nonneg _
   have hv2 := hnn v
   by_cases he : ε b = ε a

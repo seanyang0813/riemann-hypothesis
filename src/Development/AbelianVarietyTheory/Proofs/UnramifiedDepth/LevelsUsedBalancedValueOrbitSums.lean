@@ -147,8 +147,9 @@ lemma lpF_eq (l d : ℕ) [NeZero d] (D : ZMod d → ℝ) : lpF l d D = Formalism
   unfold lpF Formalism.IncomingBounds.Fnum Formalism.IncomingBounds.maxFlow Formalism.IncomingBounds.gam
   rw [lpFeasible_eq]
 
-theorem lemmaFe : LemmaFe := by
-  intro l d _ hl hd _ D _ hD
+theorem fnum_eq_of_demand_ratio_le (l d : ℕ) [NeZero d] (hl : 2 ≤ l) (hd : 2 ≤ d)
+    (D : ZMod d → ℝ) (hD : ∀ a a', D a' ≤ l * D a) :
+    Formalism.IncomingBounds.Fnum l d D = Formalism.IncomingBounds.rho l * ∑ a, D a := by
   have hl' : (2 : ℝ) ≤ l := by exact_mod_cast hl
   have hp : (0 : ℝ) < l + 1 := by linarith
   have hg : IsGreatest (lpFeasible l d D) ((∑ a, D a) / ((l : ℝ) + 1)) := by
@@ -179,6 +180,9 @@ theorem lemmaFe : LemmaFe := by
   rw [h2]
   field_simp
   ring
+
+theorem lemmaFe : LemmaFe :=
+  fun l d _ hl hd _ D _ hD => fnum_eq_of_demand_ratio_le l d hl hd D hD
 
 lemma pos_add (N : NumDatum) (l : ℕ) (z : RPl N.R) (s t : ℕ) :
     N.pos l (N.pos l z s) t = N.pos l z (s + t) := by

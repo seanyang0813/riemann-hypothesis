@@ -142,13 +142,18 @@ end Weights
 
 variable {D : D7} {A : Amb D} {N j : ℕ} {S : Sig A N j} {κ : Lv A} {s : FinalTheorems S κ} (Φ : s.Flag)
 
-theorem mem_support_BD_iff (k : s.Comp) (y : (Φ.C k).Y.X) :
-    ((Φ.C k).π ≫ genι s.T.Z) y ∈ s.T.BD.idealSheaf.support ↔ (Φ.C k).π y ∈ genBd s.T.Z :=
-  ⟨fun h => mem_genBd_iff.2 (s.T.BD_supp _ h), s.T.BD_pos _⟩
+theorem mem_genBd_of_mem_support_BD (k : s.Comp) (y : (Φ.C k).Y.X)
+    (h : ((Φ.C k).π ≫ genι s.T.Z) y ∈ s.T.BD.idealSheaf.support) : (Φ.C k).π y ∈ genBd s.T.Z := by
+  have : IsPreimmersion (spMap (algebraMap (𝓞 κ.c.F) κ.c.F)) :=
+    IsPreimmersion.of_isLocalization (S := κ.c.F) (nonZeroDivisors (𝓞 κ.c.F))
+  have hc : (Φ.C k).π y ∈ closure (genBd s.T.Z : Set (gen s.T.Z)) := by
+    rw [(genι s.T.Z).isEmbedding.closure_eq_preimage_closure_image]
+    exact s.isRec.horiz h
+  rwa [(genBd s.T.Z).isClosed.closure_eq] at hc
 
 def bdPull (k : s.Comp) : (Φ.C k).Y.Dv :=
   pullDiv s.T.BD ((Φ.C k).π ≫ genι s.T.Z) fun h => CartierDiv.genericPoint_notMem_supp (Φ.C k).bd
-    (((Φ.C k).bd_supp _).2 ((mem_support_BD_iff Φ k _).1 h))
+    (((Φ.C k).bd_supp _).2 (mem_genBd_of_mem_support_BD Φ k _ h))
 
 
 variable (S) in

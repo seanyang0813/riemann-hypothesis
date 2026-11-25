@@ -18,8 +18,6 @@ theorem oneFI_ne_zero (D : Formalism.BasicNotions.D7) :
   first
   | exact one_ne_zero
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem small_powers_bound : PowSmall := by
   intro Fp _ _ _ _ x y hy
   by_cases hx : valuation Fp x = 0

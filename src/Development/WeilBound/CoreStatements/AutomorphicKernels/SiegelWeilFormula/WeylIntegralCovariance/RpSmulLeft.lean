@@ -53,8 +53,6 @@ open GlobalTheory.WeilM GlobalTheory.AdelicU GlobalTheory.LFun GlobalTheory.Inde
 
 namespace PositivityTheory.SiegelWeilFormula.TW.Twp
 
-attribute [-instance] CStarMatrix.instHMulOfFintypeOfMulOfAddCommMonoid
-
 open PositivityTheory.SiegelWeilFormula.TBij.Adp
 
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] {σ : E →ₐ[F] E}

@@ -75,70 +75,10 @@ import Mathlib.Topology.MetricSpace.Ultra.TotallySeparated
 import ReciprocityTheory.NeutralLocalFields.LocalFieldComparison.HCFFromRecipA
 
 -- This file was produced by scripts/clump.py from the modules listed below.
--- Members: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsGeneratorSqEqOfSqMemZpowers, Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.InertialOrderFifteenCharAuxiliaryPrimeSpec
-
--- ===== clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsGeneratorSqEqOfSqMemZpowers =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsGeneratorSqEqOfSqMemZpowers", "h": "module\n\npublic import Mathlib.Algebra.Group.Subgroup.ZPowers.Basic\npublic import Mathlib.Data.Nat.Prime.Defs\npublic import Mathlib.Data.ZMod.Defs\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Sheaves.Init\npublic import Mathlib.Algebra.Group.Subgroup.Finite\npublic import Mathlib.Algebra.Order.Ring.Abs\npublic import Mathlib.Data.Nat.Prime.Basic\npublic import Mathlib.Data.ZMod.QuotientGroup\npublic import Mathlib.GroupTheory.SpecificGroups.Cyclic.Subgroup\n\n"}
-section -- clump:auto
-@[expose] public section
-
-namespace GlobalTheory
-
-theorem exists_generator_sq_eq_of_sq_mem_zpowers :
-    ∀ (p : ℕ), p.Prime → ∀ a : (ZMod p)ˣ,
-      (∀ b : (ZMod p)ˣ, b ^ 2 ∈ Subgroup.zpowers (a ^ 2)) →
-      ∃ γ : (ZMod p)ˣ, Subgroup.zpowers γ = ⊤ ∧ γ ^ 2 = a ^ 2 := by
-  intro p hp a ha
-  have := Fact.mk hp
-  obtain ⟨g, hg⟩ := IsCyclic.exists_generator (α := (ZMod p)ˣ)
-  have hgn : orderOf g = Nat.card (ZMod p)ˣ := orderOf_eq_card_of_forall_mem_zpowers hg
-  have hn0 : 0 < Nat.card (ZMod p)ˣ := Nat.card_pos
-  have gen : ∀ γ : (ZMod p)ˣ, orderOf γ = Nat.card (ZMod p)ˣ → Subgroup.zpowers γ = ⊤ :=
-    fun γ h => Subgroup.eq_top_of_card_eq _ (by rw [Nat.card_zpowers, h])
-  have hdn : orderOf a ∣ Nat.card (ZMod p)ˣ := orderOf_dvd_natCard a
-  have hd0 : 0 < orderOf a := orderOf_pos a
-  have key : orderOf (g ^ 2) ∣ orderOf (a ^ 2) := orderOf_dvd_of_mem_zpowers (ha g)
-  rw [orderOf_pow' g two_ne_zero, orderOf_pow' a two_ne_zero, hgn] at key
-  generalize Nat.card (ZMod p)ˣ = n at *
-  generalize hd : orderOf a = d at *
-  rcases Nat.even_or_odd n with ⟨m, hm⟩ | hn_odd
-  · rcases Nat.even_or_odd d with ⟨e, he⟩ | hd_odd
-    · refine ⟨a, gen a ?_, rfl⟩
-      have h1 : n.gcd 2 = 2 := Nat.gcd_eq_right ⟨m, by omega⟩
-      have h2 : d.gcd 2 = 2 := Nat.gcd_eq_right ⟨e, by omega⟩
-      rw [h1, h2, show n / 2 = m by omega, show d / 2 = e by omega] at key
-      have h3 : e ∣ m := by
-        rw [he, hm, ← two_mul, ← two_mul] at hdn
-        exact Nat.dvd_of_mul_dvd_mul_left two_pos hdn
-      have := Nat.dvd_antisymm key h3
-      omega
-    · have hcop : d.Coprime 2 := Nat.coprime_two_right.mpr hd_odd
-      have h1 : n.gcd 2 = 2 := Nat.gcd_eq_right ⟨m, by omega⟩
-      rw [h1, hcop.gcd_eq_one, Nat.div_one, show n / 2 = m by omega] at key
-      have h3 : d ∣ m := hcop.dvd_of_dvd_mul_left (by rw [hm] at hdn; rwa [two_mul])
-      have hdm : d = m := Nat.dvd_antisymm h3 key
-      have hgm : orderOf (g ^ m) = 2 := by
-        have := orderOf_pow_orderOf_div (x := g) (by omega) (show 2 ∣ orderOf g from ⟨m, by omega⟩)
-        rwa [show orderOf g / 2 = m by omega] at this
-      refine ⟨a * g ^ m, gen _ ?_, ?_⟩
-      · rw [(Commute.all a (g ^ m)).orderOf_mul_eq_mul_orderOf_of_coprime (by rw [hd, hgm]; exact hcop), hgm, hd]
-        omega
-      · have hg1 : g ^ n = 1 := hgn ▸ pow_orderOf_eq_one g
-        rw [mul_pow, ← pow_mul, show m * 2 = n by omega, hg1, mul_one]
-  · have hd_odd : Odd d := hn_odd.of_dvd_nat hdn
-    refine ⟨a, gen a ?_, rfl⟩
-    rw [(Nat.coprime_two_right.mpr hn_odd).gcd_eq_one, (Nat.coprime_two_right.mpr hd_odd).gcd_eq_one,
-      Nat.div_one, Nat.div_one] at key
-    rw [hd]
-    exact Nat.dvd_antisymm hdn key
-
-end GlobalTheory
-end -- clump:auto
-end -- clump:auto
--- ===== end clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsGeneratorSqEqOfSqMemZpowers =====
+-- Members: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.InertialOrderFifteenCharAuxiliaryPrimeSpec
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.InertialOrderFifteenCharAuxiliaryPrimeSpec =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.InertialOrderFifteenCharAuxiliaryPrimeSpec", "h": "module\n\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.UniversalAnticyclotomicCharacterLaws\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.BijectiveCmType\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.CompletelySplitPrimeHostPlaceProperties\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.DenseRangeUnits\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.EmbeddingClosedIntegral\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsGeneratorSqEqOfSqMemZpowers\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsNatCongrOfAbsNormPrime\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsPadicAlgClRingEquivComplexCompEqOfCountabl\nimport Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.HeckeCharacterUnramifiedAeAndExistsLevel\nimport Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.HostCmEmbeddingProperties\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.IsOpenKerOfInfConn\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.IsPlaceOverMoveValConjPl\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.MemZpowersOfTameGen\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ValuedPowSubOneLtOne\nimport Formalism.LocalToGlobal.UnitaryNorms.CharUniq\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Algebra.Order.Star.Real\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.FieldTheory.Galois.Profinite\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.RootsOfUnity.AlgebraicallyClosed\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Algebra.ProperAction.Basic\nimport Mathlib.Topology.Connected.Separation\nimport Mathlib.Topology.MetricSpace.Ultra.TotallySeparated\nimport Mathlib.Topology.Sheaves.Init\nimport ReciprocityTheory.NeutralLocalFields.LocalFieldComparison.HCFFromRecipA\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.InertialOrderFifteenCharAuxiliaryPrimeSpec", "h": "module\n\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.UniversalAnticyclotomicCharacterLaws\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.BijectiveCmType\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.CompletelySplitPrimeHostPlaceProperties\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.DenseRangeUnits\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.EmbeddingClosedIntegral\npublic import Mathlib.Algebra.Group.Subgroup.ZPowers.Basic\npublic import Mathlib.Data.Nat.Prime.Defs\npublic import Mathlib.Data.ZMod.Defs\npublic import Mathlib.Algebra.Group.Subgroup.Finite\npublic import Mathlib.Algebra.Order.Ring.Abs\npublic import Mathlib.Data.Nat.Prime.Basic\npublic import Mathlib.Data.ZMod.QuotientGroup\npublic import Mathlib.GroupTheory.SpecificGroups.Cyclic.Subgroup\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsNatCongrOfAbsNormPrime\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsPadicAlgClRingEquivComplexCompEqOfCountabl\nimport Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.HeckeCharacterUnramifiedAeAndExistsLevel\nimport Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.HostCmEmbeddingProperties\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.IsOpenKerOfInfConn\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.IsPlaceOverMoveValConjPl\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.MemZpowersOfTameGen\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ValuedPowSubOneLtOne\nimport Formalism.LocalToGlobal.UnitaryNorms.CharUniq\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Algebra.Order.Star.Real\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.FieldTheory.Galois.Profinite\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.RootsOfUnity.AlgebraicallyClosed\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Algebra.ProperAction.Basic\nimport Mathlib.Topology.Connected.Separation\nimport Mathlib.Topology.MetricSpace.Ultra.TotallySeparated\nimport Mathlib.Topology.Sheaves.Init\nimport ReciprocityTheory.NeutralLocalFields.LocalFieldComparison.HCFFromRecipA\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -352,10 +292,6 @@ theorem IsGal.isOpen_ker (ha : IsGlobalArtin art) (h : IsGal art κ ι χ 0 r) {
   convert this using 1
   ext g
   exact (inQ_eq_one κ).symm
-
-theorem IsGal.dec_triv (ha : IsGlobalArtin art) (h : IsGal art κ ι χ 0 r) (hA : IsPlaceOver A v)
-    (hv : ∀ x, χ.loc v x = 1) {σ : G E Ω} (hσ : σ ∈ Dec (F := E) A) : r σ = 1 :=
-  (inQ_eq_one κ).1 ((h.2.2.dec_triv ha (h.cont hO hκ) (Or.inr rfl) hA).2 (MonoidHom.ext hv) σ hσ)
 
 theorem continuous_cyc : Continuous fun g : G E Ω =>
     ((((Units.map (algebraMap ℤ_[l] O).toMonoidHom).comp (cycZ (F := E) (Ω := Ω) l)) g : Oˣ) : O) := by
@@ -725,172 +661,6 @@ theorem hostHeckeFrame_toric_quotient_character (hcc : IsCMConjOm H.E Ω cc) (ha
       (hr.frob ha (Or.inl hPl) (hunr P hP) hA hσ).symm
     exact congrArg (algebraMap O O') (toQ_injective κ ((sideIso ι b).injective e1))
 
-theorem hostHeckeFrame_localisation_character_spec (hcc : IsCMConjOm H.E Ω cc) (ha : IsGlobalArtin art) (he : ∀ j τ, ∃ z : ℤ, e j τ = z) :
-    LocalisationCharacterSpec H cc C art := by
-  have loc_mul (a b : HChar H.E) (v : HeightOneSpectrum (𝓞 H.E)) (x : (v.adicCompletion H.E)ˣ) :
-      (a * b).loc v x = a.loc v x * b.loc v x := rfl
-  intro l _ O _ _ _ _ _ _ _ hO κ hκ ι K _ ε f hf j Q ψ hψ hQ hμ hη hδ hψv
-  have hl : l.Prime := Fact.out
-  obtain ⟨hp, hpl, hpg, -, hD⟩ := inertialOrderFifteenChar_auxiliaryPrime_spec C (l := l)
-  obtain ⟨a, ha'⟩ := hψ.ord
-  have hla : 0 < l ^ a := pow_pos hl.pos a
-  have hψa := isAlgPos_zero_of_orderDvd hla ha'
-  obtain ⟨ps, hps⟩ := exists_isGal hO hκ ha hψa hf (almostIn_of_valuesIn hψv)
-  obtain ⟨n0, h0⟩ := exists_isAlgPos_mu0 C he j
-  obtain ⟨n, hn⟩ := block_alg C ⟨_, isAlgPos_mul h0 (isAlgPos_mul (del_alg C l) hψa)⟩
-  obtain ⟨r, hr⟩ := exists_isGal hO hκ ha hn hf
-    (((almostIn_of_valuesIn hμ).mul ((almostIn_of_valuesIn hδ).mul (almostIn_of_valuesIn hψv))).block hη (odd_r R))
-  let cy : G H.E Ω →* Oˣ := (Units.map (algebraMap ℤ_[l] O).toMonoidHom).comp (cycZ (F := H.E) (Ω := Ω) l)
-  have hcy : Continuous cy := continuous_units cy (continuous_cyc hO hκ)
-  have h1 : r * cy ^ (-(((1 : ℕ) : ℤ) - 1)) = r := by simp
-  refine ⟨fun c => r * cy ^ (-((c : ℤ) - 1)), ps, ⟨n, by beta_reduce; rw [h1]; exact hr⟩, hps, fun c => ?_, fun c => by beta_reduce; rw [h1],
-    fun v hv A hA => ?_, fun g => ⟨a, hps.pow_eq_one ha ha' g⟩, hps.isOpen_ker hO hκ ha hla ha',
-    hps.anti hcc ha (hps.cont hO hκ) hψ.triv, hps.ramExactly ha hψ.ram,
-    fun v hv A hA σ hσ => hps.dec_triv hO hκ ha hA (hψ.atl v hv) hσ, fun w w1 w2 w3 w4 => ?_⟩
-  · exact Units.continuous_val.comp ((continuous_units r hr.2.1).mul (hcy.zpow _))
-  · beta_reduce
-    rw [h1]
-    have hvl : ((l : ℕ) : 𝓞 H.E) ∉ v.asIdeal := fun h => (hψ.ram v).1 (fun x _ => hψ.atl v h x) hv
-    by_contra hn
-    push Not at hn
-    refine (hψ.ram v).1 (fun x hx => ?_) hv
-    have := (hr.unr_iff ha (Or.inl hvl) hA).1 hn x hx
-    rwa [block_loc (C.isEta.unr v) hx, loc_mul, loc_mul, (C.isMu0 j).unr v (hQ v hv).1 x hx,
-      hD.unr v (hQ v hv).2 x hx, one_mul, one_mul] at this
-  · have hu : (C.mu0 j * (delAt H C l * ψ)).UnrAt w := ((C.isMu0 j).unr w w2).mul ((hD.unr w w3).mul ((hψ.ram w).2 w4))
-    refine ⟨hu.mul (C.isEta.unr w).inv, fun B σ hB hσ => ?_⟩
-    beta_reduce
-    rw [h1]
-    have e1 := hr.frob ha (Or.inl w1) (fun x hx => (block_loc (C.isEta.unr w) hx).trans (hu x hx)) hB hσ
-    rw [block_val, mul_inv, ← Complex.cpow_neg, ← Units.val_inv_eq_inv_val] at e1
-    refine Eq.trans ?_ e1.symm
-    congr 2
-    · simp [normV, Ideal.absNorm_apply, Submodule.cardQuot_apply]
-    · unfold Ranks.nV
-      push_cast
-      ring
-
-theorem hostFrame_localisationTwistCharacterCompat (ha : IsGlobalArtin art) : LocalisationTwistCharacterCompat H C art := by
-  intro l₀ _ O₀ _ _ _ _ _ _ _ hO₀ κ₀ hκ₀ ι₀ l _ O _ _ _ _ _ _ _ hO κ hκ ι hll K _ ε f₀ f hf₀ hf t ht j ψ hμ hη hδ
-    n₀ n n' chi1 chi psiL h1 h2 h3
-  have hl : l.Prime := Fact.out
-  have hl0 : ((l : ℕ) : O₀) ≠ 0 := fun h => by
-    have := congrArg (toQ κ₀) h
-    rw [map_natCast, map_zero] at this
-    exact hl.ne_zero (by exact_mod_cast this)
-  have htc := continuous_ringHom hO₀ hO hl0 (GlobalTheory.CoefEmbed.embedding_closed_integral l O hO κ hκ).2.2.2 t
-  haveI : T2Space O := (isEmbedding_toQ hO hκ).t2Space
-  have hb : block (C.mu0 j * (delAt H C l * ψ)) C.eta R.r = block (C.mu0 j * delAt H C l₀) C.eta R.r * ψ := by
-    rw [hll, block, block, ← mul_assoc (C.mu0 j), mul_right_comm]
-  rw [hb] at h2
-  refine eq_of_frob ha (continuous_units _ h2.2.1)
-    ((continuous_units ((Units.map t.toMonoidHom).comp chi1) (htc.comp h1.2.1)).mul (continuous_units _ h3.2.1)) ?_
-  filter_upwards [(((almostIn_of_valuesIn hμ).mul (almostIn_of_valuesIn hδ)).block hη (odd_r R)).inv, unr_ae ψ,
-    unr_ae (block (C.mu0 j * delAt H C l₀) C.eta R.r), away_ae (E := H.E) l hl.ne_zero] with v ⟨y, hy⟩ u1 u2 hv A hA σ hσ
-  have e1 := h1.frob ha (Or.inl (hll ▸ hv)) u2 hA hσ
-  have e2 := h2.frob ha (Or.inl hv) (u2.mul u1) hA hσ
-  have e3 := h3.frob ha (Or.inl hv) u1 hA hσ
-  rw [HChar.val_inv, Units.val_inv_eq_inv_val] at hy
-  have e4 := ht y (chi1 σ : O₀ˣ) (κ₀.injective (ι₀.injective (e1.trans (hy.symm.trans (hf₀ y).symm))))
-  refine Units.ext (toQ_injective κ (ι.injective ?_))
-  rw [e2, MonoidHom.mul_apply, Units.val_mul, map_mul, map_mul, e3, HChar.val_mul, Units.val_mul, mul_inv, ← hy, ← hf, e4]
-  rfl
-
-theorem range_eq_rootsOfUnity {Γ : Type} [CommGroup Γ] [Finite Γ] (χ : Γ →* ℂˣ) (hχ : Function.Injective χ) :
-    χ.range = rootsOfUnity (Nat.card Γ) ℂ := by
-  haveI : NeZero (Nat.card Γ) := ⟨Nat.card_pos.ne'⟩
-  apply Subgroup.eq_of_le_of_card_ge
-  · rintro _ ⟨y, rfl⟩
-    rw [mem_rootsOfUnity, ← map_pow, pow_card_eq_one', map_one]
-  · rw [← Nat.card_congr (MonoidHom.ofInjective hχ).toEquiv]
-    exact card_rootsOfUnity ℂ (Nat.card Γ)
-
-theorem mu0_loc_eq_inv_om_pow_of_div_of_absNorm_eq {k : Fin 2} {w : PlE H} (hw : C.P.Div k w) (hN : Ideal.absNorm w.asIdeal = H.g k)
-    {x : (w.adicCompletion H.E)ˣ} (hx : IsUnitAt w x) :
-    ∃ a : (ZMod (H.g k))ˣ, ∀ j : Fin R.m, (C.mu0 j).loc w x = (C.W.om k a ^ (2 * (j.1 + 1)))⁻¹ := by
-  obtain ⟨a, y, ha, hy, h⟩ := (GlobalTheory.localUnit_congr_global H.E w x hx).2 _ (H.g_prime k) hN
-  refine ⟨ZMod.unitOfCoprime a ha, fun j => ?_⟩
-  have hu := isUnitAt_nat (C.P.overP hw) ha hy
-  have h1 := (C.isMu0 j).tame w (x * (atFin w y)⁻¹) (by
-    unfold IsUnitAt at *
-    rw [Units.val_mul, Units.val_inv_eq_inv_val, map_mul, map_inv₀, hx, hu, inv_one, mul_one]) (by simpa using h)
-  rw [map_mul, map_inv, mul_inv_eq_one] at h1
-  rw [h1]
-  exact (C.isMu0 j).atg k w hw a ha y hy
-
-theorem hostHeckeFrame_tame_galois_characters (ha : IsGlobalArtin art) (he : ∀ j τ, ∃ z : ℤ, e j τ = z)
-    (hg : ∀ k, (placesOver H.E (H.g k)).ncard = Module.finrank ℚ H.E) : TameInertiaGeneratorCharacterSpec H C art := by
-  have loc_mul (a b : HChar H.E) (v : HeightOneSpectrum (𝓞 H.E)) (x : (v.adicCompletion H.E)ˣ) :
-      (a * b).loc v x = a.loc v x * b.loc v x := rfl
-  intro k w hw A hA tg htg teich hinj
-  haveI : Fact (H.g k).Prime := ⟨H.g_prime k⟩
-  have hwg := C.P.overP hw
-  have hN := (GlobalTheory.Mem.Chr.splitsC_main R H _ (H.g_prime k) (hg k) w hwg).1
-  obtain ⟨x, hx, ex⟩ := exists_unit ha hA htg.1
-  obtain ⟨a, hxa⟩ := mu0_loc_eq_inv_om_pow_of_div_of_absNorm_eq C hw hN hx
-
-  have hsq : ∀ b : (ZMod (H.g k))ˣ, b ^ 2 ∈ Subgroup.zpowers (a ^ 2) := by
-    intro b
-    haveI : Fact H.pde.Prime := ⟨H.pde_prime⟩
-    obtain ⟨ι⟩ := GlobalTheory.nonempty_padicAlgCl_ringEquiv_complex H.pde
-    have hm := R.two_le_m
-    let j0 : Fin R.m := ⟨0, by omega⟩
-    obtain ⟨n, hn⟩ := exists_isAlgPos_mu0 C he j0
-    obtain ⟨r, hr, hL⟩ := ha.exists_isLAdicOf ι hn
-    have hv : ((H.pde : ℕ) : 𝓞 H.E) ∉ w.asIdeal := notMem_of_ne (H.g_prime k) H.pde_prime (H.pde_ne_g k).1.symm hwg
-    have hg1 : ((H.g k - 1 : ℕ) : 𝓞 H.E) ∉ w.asIdeal := fun h => by
-      apply w.isPrime.ne_top
-      rw [Ideal.eq_top_iff_one]
-      have := w.asIdeal.sub_mem hwg h
-      rwa [Nat.cast_sub (H.g_prime k).one_le, Nat.cast_one, sub_sub_cancel] at this
-    have hcb := ZMod.val_coe_unit_coprime b
-    have hb0 : (((b : ZMod (H.g k)).val : ℕ) : H.E) ≠ 0 := by
-      rw [Nat.cast_ne_zero]
-      intro h
-      rw [h, Nat.coprime_zero_left] at hcb
-      exact (H.g_prime k).ne_one hcb
-    have hy := isUnitAt_nat hwg hcb (x := Units.mk0 _ hb0) rfl
-    have hyb : (C.mu0 j0).loc w (atFin w (Units.mk0 _ hb0)) = _ := (C.isMu0 j0).atg k w hw _ hcb (Units.mk0 _ hb0) rfl
-    have hu' : ZMod.unitOfCoprime _ hcb = b := by
-      ext
-      rw [ZMod.coe_unitOfCoprime, ZMod.natCast_zmod_val]
-    rw [hu'] at hyb
-    obtain ⟨σ, hσ, eσ⟩ := exists_ine ha hA hy
-    obtain ⟨s, hs⟩ := GlobalTheory.TameGenPowers.mem_zpowers_of_tameGen H.E Ω w A hA tg htg (Qbar H.pde) r hr (H.g k - 1) hg1 (fun τ hτ => by
-      obtain ⟨z, hz, ez⟩ := exists_unit ha hA hτ
-      apply Units.ext
-      rw [Units.val_pow_eq_pow_val, hL.loc_away (Or.inl hv) z τ ez, ← map_pow, ← Units.val_pow_eq_pow_val, ← hN,
-        (GlobalTheory.Mem.WildChar.orders_on_units _ _ w).1 ((C.isMu0 j0).tame w) z hz]
-      simp) σ hσ
-    have h1 := congrArg (fun u : (Qbar H.pde)ˣ => ι (u : Qbar H.pde)) hs
-    simp only [Units.val_zpow_eq_zpow_val, map_zpow₀, hL.loc_away (Or.inl hv) _ _ ex, hL.loc_away (Or.inl hv) _ _ eσ,
-      RingEquiv.apply_symm_apply, hxa j0, hyb] at h1
-    rw [← Units.val_zpow_eq_zpow_val, Units.val_inj, inv_zpow, inv_inj] at h1
-    refine ⟨s, C.W.gen k ?_⟩
-    simp only [map_zpow, map_pow]
-    exact h1
-  obtain ⟨γ, hγ, hγa⟩ := GlobalTheory.exists_generator_sq_eq_of_sq_mem_zpowers (H.g k) (H.g_prime k) a hsq
-  let tU : (ZMod (H.g k))ˣ →* ℂˣ := Units.map (teich.comp
-    (algebraMap (ZMod (H.g k)) (Formalism.CyclotomicNorms.Fbar (H.g k)) : ZMod (H.g k) →* Formalism.CyclotomicNorms.Fbar (H.g k)))
-  have htU : Function.Injective tU := fun y z h => by
-    have hi := (algebraMap (ZMod (H.g k)) (Formalism.CyclotomicNorms.Fbar (H.g k))).injective
-    exact Units.ext (hi (hinj _ _ ((map_ne_zero_iff _ hi).2 y.ne_zero) ((map_ne_zero_iff _ hi).2 z.ne_zero)
-      (congrArg Units.val h)))
-  have hr : (C.W.om k).range = tU.range :=
-    (range_eq_rootsOfUnity _ (C.W.gen k)).trans (range_eq_rootsOfUnity _ htU).symm
-  obtain ⟨γ', hγ'⟩ : C.W.om k γ ∈ tU.range := hr ▸ ⟨γ, rfl⟩
-  refine ⟨γ', ?_, fun l _ hl O _ _ _ κ ι j ξ hξ n chi h => ?_⟩
-  · rw [eq_top_iff]
-    intro y _
-    obtain ⟨z, hz⟩ : tU y ∈ (C.W.om k).range := hr.symm ▸ ⟨y, rfl⟩
-    obtain ⟨n, rfl⟩ : z ∈ Subgroup.zpowers γ := hγ ▸ Subgroup.mem_top z
-    refine ⟨n, htU ?_⟩
-    rw [← hz, map_zpow, map_zpow, hγ']
-  · have e1 := h.loc (Or.inl (notMem_of_ne (H.g_prime k) Fact.out hl.symm hwg)) ex
-    rw [block_loc (C.isEta.unr w) hx, loc_mul, hξ x hx, mul_one, hxa j, pow_mul, ← map_pow, ← hγa, map_pow, ← hγ',
-      ← pow_mul, ← map_pow, ← map_inv] at e1
-    exact e1
-
 end Host
 
 theorem galois_characters_of_artin (R : Ranks) (H : Formalism.BasicNotions.Host R) (Ω : Type) [Field Ω] [Algebra H.E Ω]
@@ -898,10 +668,8 @@ theorem galois_characters_of_artin (R : Ranks) (H : Formalism.BasicNotions.Host 
     (he : ∀ j τ, ∃ z : ℤ, e j τ = z) (C : GlobalTheory.Mem.Chr.HFrame H e)
     (hg : ∀ k, (placesOver H.E (H.g k)).ncard = Module.finrank ℚ H.E) (art : Ideles H.E →* Gab H.E Ω)
     (ha : IsGlobalArtin art) :
-    HeckeTwistCharactersDeltaChi H cc C art ∧ ToricHeckeQuotientCharacter H cc C art ∧ LocalisationCharacterSpec H cc C art ∧ LocalisationTwistCharacterCompat H C art ∧ TameInertiaGeneratorCharacterSpec H C art ∧
-      ∀ l : ℕ, UniversalAnticyclotomicCharLaws H cc l :=
-  ⟨hostHeckeFrame_twist_galois_characters C hcc ha he hg, hostHeckeFrame_toric_quotient_character C hcc ha he, hostHeckeFrame_localisation_character_spec C hcc ha he, hostFrame_localisationTwistCharacterCompat C ha, hostHeckeFrame_tame_galois_characters C ha he hg,
-    fun l => universal_anticyclotomic_character_laws H cc l⟩
+    HeckeTwistCharactersDeltaChi H cc C art :=
+  hostHeckeFrame_twist_galois_characters C hcc ha he hg
 
 end GlobalTheory.GalChar
 

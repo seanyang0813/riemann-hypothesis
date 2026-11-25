@@ -13,8 +13,6 @@ namespace PI.NRCW
 
 open NumberField Formalism.BasicNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat Formalism.L2.SG.TermDef PI.PairValDefs Matrix
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem stepGram (D : D7) : StepGram D := by
   intro T T' G G₁ G₂ n m N M hn hN hM hG
   unfold ZhatL Zhat brS frame at *

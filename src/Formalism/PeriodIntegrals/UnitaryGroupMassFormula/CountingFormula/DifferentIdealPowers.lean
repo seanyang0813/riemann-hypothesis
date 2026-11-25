@@ -13,8 +13,6 @@ namespace PI.UnitaryGroupMassFormula.CntFormula.R6
 
 open Formalism.HermitianLattices.Ext.L3
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 def pbLat {K V ι : Type} [Field K] [NumberField K] [AddCommGroup V] [Module K V] [Module (𝓞 K) V]
     (x : ι → V) (𝔞 : ι → FractionalIdeal (nonZeroDivisors (𝓞 K)) K) : Submodule (𝓞 K) V :=
   Submodule.span (𝓞 K) {v | ∃ i, ∃ c ∈ (𝔞 i : Submodule (𝓞 K) K), v = c • x i}

@@ -806,12 +806,6 @@ theorem ip_sum_left (R : RiemLat E g Λ) {k : ℕ} (a : Fin k → ℂ) (u : Fin 
   simp only [RiemLat.ip, star_sum, star_smul, Matrix.mulVec_sum, Matrix.mulVec_smul,
     dotProduct_sum, dotProduct_smul, smul_eq_mul]
 
-theorem star_ip (R : RiemLat E g Λ) (x y : Fin g → ℂ) : star (R.ip x y) = R.ip y x := by
-  have h := R.herm
-  simp only [RiemLat.ip]
-  rw [← star_dotProduct_star, star_mulVec, star_star, h.eq, dotProduct_comm, dotProduct_mulVec]
-  exact dotProduct_comm _ _
-
 theorem gram_comb (R : RiemLat E g Λ) {k l : ℕ} (T : Matrix (Fin l) (Fin k) ℂ)
     (u : Fin k → Fin g → ℂ) :
     R.gram (fun a => ∑ i, T a i • u i) = T.map star * R.gram u * Tᵀ := by

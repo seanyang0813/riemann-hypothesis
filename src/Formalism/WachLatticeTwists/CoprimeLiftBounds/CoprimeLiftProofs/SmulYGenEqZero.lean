@@ -28,13 +28,6 @@ lemma mkQ_cobZ (ρ : Representation O G M) (v : M) :
   rw [Submodule.mkQ_apply, Submodule.Quotient.mk_eq_zero]
   exact LinearMap.mem_range_self (coD0 ρ) v
 
-lemma mkQ_eq_zero_of (ρ : Representation O G M) (z : coZ1s ρ) (v : M)
-    (h : ∀ g, (z : G → M) g = ρ g v - v) :
-    (Submodule.mkQ ((coB1 ρ).comap (coZ1s ρ).subtype) z : H1z ρ) = 0 := by
-  have hz : z = cobZ ρ v := Subtype.ext (funext h)
-  rw [hz]
-  exact mkQ_cobZ ρ v
-
 end SlopeTestRemainingChoices
 
 section Y

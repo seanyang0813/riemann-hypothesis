@@ -4,16 +4,6 @@ public import Formalism.LocalToGlobal.Columns.StdLatUnimodular
 public import Formalism.LocalToGlobal.Columns.GenericUnipotentCharacter
 public import Formalism.GL3MeanSquares.HookFormulaTorsion.LengthQuotientBoundGeneral
 public import Formalism.HermitianLattices.HermitianLatticesProofs.AutFinite
-import Mathlib.Algebra.Module.StablyFree.Basic
-import Mathlib.LinearAlgebra.Matrix.FiniteDimensional
-import Mathlib.RingTheory.Coalgebra.IsFrobenius
-import Mathlib.RingTheory.Etale.Weakly
-import Mathlib.RingTheory.Henselian
-import Mathlib.RingTheory.HopfAlgebra.Basic
-import Mathlib.RingTheory.PiTensorProduct
-import Mathlib.RingTheory.RegularLocalRing.Defs
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.RingTheory.TotallySplit
 
 @[expose] public section
 

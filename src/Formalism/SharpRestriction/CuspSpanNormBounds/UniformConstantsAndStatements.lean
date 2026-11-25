@@ -14,8 +14,6 @@ export Formalism.MainNotions.S.UnitaryVolumeMass (Kng scalG)
 open Formalism.BasicNotions Formalism.MainNotions.S Formalism.QuantumDeterminants ValuativeRel IsDedekindDomain NumberField
 open scoped ENNReal
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 def adm5 (D : D7) (C : ℝ) : Prop :=
   UnitaryVolumeMass.stNG D C
 

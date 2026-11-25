@@ -11,8 +11,6 @@ open NumberField Formalism.BasicNotions Formalism.MainNotions.S Formalism.L2.SG.
 
 namespace PI.UnitaryDimensionFormula
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem orbitCount : OrbitCount := by
   intro G _ Γ K n t A N hA hAN hK hΓ
   classical

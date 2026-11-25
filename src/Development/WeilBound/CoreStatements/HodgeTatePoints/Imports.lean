@@ -5,10 +5,8 @@ public import GroundTheory.HeightsAndTheta.Heights.KleimanAmpleness.InterNumRest
 public import GroundTheory.HeightsAndTheta.Heights.KleimanAmpleness.RestrLenRestrictSt
 public import GroundTheory.HeightsAndTheta.Heights.KleimanAmpleness.Statements
 public import GroundTheory.HeightsAndTheta.Heights.KleimanAmpleness.StatementsTildeVanish
-public import GroundTheory.HeightsAndTheta.Heights.ElementarySymmetric.PGradedCech
 public import GroundTheory.HeightsAndTheta.Heights.ElementarySymmetric.PRestrictQuotX
 public import GroundTheory.HeightsAndTheta.Heights.ElementarySymmetric.PVanishingCechResidue
-import GroundTheory.HeightsAndTheta.Heights.KleimanAmpleness.ImportsBisAltMore
 import GroundTheory.HeightsAndTheta.Heights.KleimanAmpleness.PExtension
 public import GroundTheory.HeightsAndTheta.Heights.KleimanAmpleness.PIdealTwistFamily
 public import GroundTheory.HeightsAndTheta.Heights.KleimanAmpleness.PInterNumRestrict
@@ -58,15 +56,10 @@ import Mathlib.Topology.Sheaves.Init
 
 namespace PositivityTheory.HtPt.Ktw
 
-theorem a1 :
-    GroundTheory.Heights₂.Heights.Kleiman.SerreVanish.Statement.{0, 0} :=
-  (GroundTheory.Heights₂.Heights.Kleiman.TranslateEq.SerreVanish.equiv
-    GroundTheory.Heights₂.Heights.Swarm.GradedCech.proof).mpr
-    GroundTheory.Heights₂.Heights.KeyFormula.serreVanishing_graded_holds
-
 theorem a2 :
     GroundTheory.Heights₂.Heights.Kleiman.TildeVanish.Statement.{0, 0, 0} :=
-  GroundTheory.Heights₂.Heights.Kleiman.TildeVanish.proof a1
+  GroundTheory.Heights₂.Heights.Kleiman.TildeVanish.proof
+    GroundTheory.Heights₂.Heights.Kleiman.SerreVanish.full.{0, 0}
 
 theorem a3 :
     GroundTheory.Heights₂.Heights.Kleiman.SurjectiveClosed.Statement.{0, 0} :=

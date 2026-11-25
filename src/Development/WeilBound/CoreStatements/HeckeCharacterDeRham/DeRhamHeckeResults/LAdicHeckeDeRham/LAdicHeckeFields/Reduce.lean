@@ -1239,15 +1239,6 @@ theorem char_mul {l : ℕ} [Fact l.Prime] (P : LocPrime l) (AI : LocAinf l P) (T
   rw [IsDR, e1, Finset.sum_congr rfl fun τ _ => hone τ]
   simp [hc]
 
-theorem repE_apply {l : ℕ} [Fact l.Prime] {E Ω : Type} [Field E] [Field Ω] [Algebra E Ω]
-    {Gw : Subgroup (Ω ≃ₐ[E] Ω)} {O : Type} [CommRing O] [Algebra ℤ_[l] O] [TopologicalSpace O]
-    (Bw : LocBridge l E Ω Gw O) (LL' : FinExt l) (ψ : ↥Gw →* (↥LL'.1)ˣ) (g : ↥(GK Bw.Kw))
-    (x : Fin 1 → ↥LL'.1) :
-    Bw.repE LL' ((PositivityTheory.HodgeLocalCharacter.HLC.toGL1 ↥LL'.1).comp ψ) g x = ((ψ (Bw.e.symm g) : (↥LL'.1)ˣ) : ↥LL'.1) • x := by
-  ext i
-  obtain rfl : i = 0 := Subsingleton.elim _ _
-  simp [LocBridge.repE, PositivityTheory.HodgeLocalCharacter.HLC.toGL1, Matrix.mulVec, dotProduct]
-
 theorem isdRJ_mul : ∀ {E Ω : Type} [Field E] [NumberField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω] {l : ℕ} [Fact l.Prime] (P : LocPrime l) (AI : LocAinf l P), Nonempty (LocTied l P AI) →
     ∀ (w : HeightOneSpectrum (𝓞 E)) (A : ValuationSubring Ω), IsPlaceOver A w →
     ∀ (O : Type) [CommRing O] [Algebra ℤ_[l] O] [TopologicalSpace O] (Bw : LocBridge l E Ω (Dec (F := E) A) O),
@@ -1263,8 +1254,8 @@ theorem isdRJ_mul : ∀ {E Ω : Type} [Field E] [NumberField E] [Field Ω] [Alge
     (Bw.repE LL' ((PositivityTheory.HodgeLocalCharacter.HLC.toGL1 ↥LL'.1).comp ψ₂))
     (Bw.repE LL' ((PositivityTheory.HodgeLocalCharacter.HLC.toGL1 ↥LL'.1).comp (ψ₁ * ψ₂)))
     (fun g => ((ψ₁ (Bw.e.symm g) : (↥LL'.1)ˣ) : ↥LL'.1)) (fun g => ((ψ₂ (Bw.e.symm g) : (↥LL'.1)ˣ) : ↥LL'.1))
-    (fun g x => repE_apply Bw LL' ψ₂ g x) (fun g x => repE_apply Bw LL' ψ₁ g x)
-    (fun g x => by rw [repE_apply]; simp) J₁ J₂
+    (fun g x => GlobalTheory.CompanionTheory.DeRhamChar.repE_toGL1 Bw LL' ψ₂ g x) (fun g x => GlobalTheory.CompanionTheory.DeRhamChar.repE_toGL1 Bw LL' ψ₁ g x)
+    (fun g x => by rw [GlobalTheory.CompanionTheory.DeRhamChar.repE_toGL1]; simp) J₁ J₂
     (by unfold IsDR; simpa [LocBridge.IsdRE] using d₂) m₁ m₂
   refine ⟨?_, fun τ c => ?_⟩
   · unfold IsDR at a

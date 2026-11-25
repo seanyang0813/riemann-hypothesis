@@ -11,8 +11,6 @@ namespace PI.UnitaryGroupMassFormula.CntFormula
 open NumberField Formalism.MainNotions.S Formalism.MainNotions.S.Lat Formalism.MainNotions.S.LocalSplitGroups Formalism.L2.SG.CntLocal
 open Classical
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 def fr (D : Formalism.BasicNotions.D7) (x : (Fin D.R.rS → (VS D).V) × (VS D).V) : Fin (D.R.rS + 1) → (VS D).V :=
   Fin.snoc (α := fun _ => (VS D).V) x.1 x.2
 

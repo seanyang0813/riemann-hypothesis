@@ -50,8 +50,6 @@ theorem frameAct_one (f : Fin (r + 1) → S.V) (b : Fin (r + 1)) :
 
 end Gen
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem fmat_sup (D : D7) {T : D.host.E} (G : LFlag (D.sp.Y 0) D.R.rS T) (n : (VS D).V ≃ₗ[D.host.E] (VS D).V)
     (a : Fin D.R.rS) :
     fmat D G n a.castSucc a.succ = G.fl.coefX (n (frame G a.succ) - frame G a.succ) a := by

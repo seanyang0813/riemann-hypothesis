@@ -16,8 +16,6 @@ namespace Formalism.MainNotions.BridgeLemma₂
 
 open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat Formalism.MainNotions.S.Cnt Formalism.HermitianLatticeCounting Formalism.MainNotions.BridgeLemma
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 section Uni
 
 variable {K : Type*} [CommRing K] {N : ℕ}

@@ -47,8 +47,6 @@ open scoped TensorProduct NNReal Matrix
 open NumberField IsDedekindDomain MeasureTheory Filter Topology Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes
 open GlobalTheory.WeilM GlobalTheory.AdelicU GlobalTheory.LFun GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels GlobalTheory.ThK
 
-attribute [-instance] CStarMatrix.instHMulOfFintypeOfMulOfAddCommMonoid
-
 namespace PositivityTheory.Mix.Adapt
 
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] {n n₁ d : ℕ} {H : Plane E n n₁}

@@ -1,5 +1,6 @@
 module
 
+import Formalism.SharpRestriction.Divisibility.GeneratorPowers.GermBPf
 public import Formalism.LocalToGlobal.ProjectiveLattices.ChartDirectionsIntegral
 public import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.SabComp
 public import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.ValCalc

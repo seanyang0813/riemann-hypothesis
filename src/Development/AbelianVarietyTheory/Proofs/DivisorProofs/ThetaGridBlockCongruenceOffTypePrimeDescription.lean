@@ -47,7 +47,6 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 open IsDedekindDomain NumberField Matrix MeasureTheory
 open scoped TensorProduct nonZeroDivisors ComplexOrder
 open GlobalTheory.FunObj GlobalTheory.ChiGrid GlobalTheory.SplitFlip GlobalTheory.SplitWeil GlobalTheory.StepData GlobalTheory.StdFrames Formalism.L2.Host Formalism.L2.DIV ValuativeRel
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace GlobalTheory.CompanionTheory.StepGroupOff
 
@@ -106,8 +105,6 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 open IsDedekindDomain NumberField Matrix MeasureTheory
 open scoped TensorProduct nonZeroDivisors ComplexOrder
 open GlobalTheory.FunObj GlobalTheory.ChiGrid GlobalTheory.SplitFlip GlobalTheory.SplitWeil GlobalTheory.StepData GlobalTheory.StdFrames Formalism.L2.Host Formalism.L2.DIV ValuativeRel
-
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 alias _root_.GlobalTheory.Adopt.thetaGridBlockCongruence_offTypePrime_description := _root_.IwahoriGroupOffset.GlobalTheory.CompanionTheory.StepGroupOff.mem_map_stepGroup_iff
 

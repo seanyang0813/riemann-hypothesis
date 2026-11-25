@@ -13,8 +13,6 @@ namespace PI.TermsAtPtFiniteW
 
 open NumberField Formalism.BasicNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat Formalism.L2.SG.TermDef Formalism.L2.SG.Saturated
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 def ndS (D : D7) : ℕ :=
   (Ideal.absNorm (Ideal.map (algebraMap (𝓞 D.host.F) (𝓞 D.host.E)) (differentIdeal ℤ (𝓞 D.host.F)))) ^ D.R.rS
 

@@ -195,15 +195,6 @@ namespace PositivityTheory.Rg.BcB.SpectralAccumulation.Lim5
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E]
 
-theorem sum_map_add_const (m : Multiset ℂ) (w : ℂ) :
-    (m.map (· + w)).sum = m.sum + (Multiset.card m : ℂ) * w := by
-  induction m using Multiset.induction_on with
-  | empty => simp
-  | cons a m ih =>
-    simp only [Multiset.map_cons, Multiset.sum_cons, Multiset.card_cons, ih]
-    push_cast
-    ring
-
 theorem norm_sum_le_of_le {M m : Multiset ℂ} {R : ℝ} (hle : M ≤ m) (hR : ∀ x ∈ m, ‖x‖ ≤ R) :
     ‖M.sum‖ ≤ Multiset.card M * R := by
   calc ‖M.sum‖ ≤ (M.map (fun x => ‖x‖)).sum := norm_multiset_sum_le M
@@ -222,7 +213,7 @@ theorem side_bound {n : ℕ} (hn : 0 < n) (m m₁ : (E →+* ℂ) → Multiset �
     have h := norm_sum_le_of_le (hle τ) (hR τ)
     rwa [Multiset.card_map, hcard τ] at h
   have h2 : ∑ τ, ((m₁ τ).map (· + w)).sum = ∑ τ, (m₁ τ).sum + ((Fintype.card (E →+* ℂ) * n : ℕ) : ℂ) * w := by
-    simp only [sum_map_add_const, hcard, Finset.sum_add_distrib, Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+    simp only [GlobalTheory.CompanionTheory.EGlue.LeafB.sum_map_add_const, hcard, Finset.sum_add_distrib, Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
     push_cast
     ring
   have h3 : ‖∑ τ, ((m₁ τ).map (· + w)).sum‖ ≤ Fintype.card (E →+* ℂ) * (n * R) := by

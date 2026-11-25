@@ -51,22 +51,9 @@ open scoped ContDiff ENNReal Matrix
 variable {E : Type} [Field E] [NumberField E] [IsCMField E]
 namespace GlobalTheory.Up
 
-open Classical in
-noncomputable def Wdiv {r : ℕ} (X : Data E r) (Xa : ArchInM X) (Fl : FlatM X Xa) (n : ℕ) (x : Frame X.Ψ r) : ℝ≥0∞ :=
-  if x ∈ X.dom then ENNReal.ofReal (Real.exp (-phla X Xa.Fp x)) *
-    ENNReal.ofReal (∑ k, ‖Xa.w k x‖ ^ 2) ^ (-(1 / 2 : ℝ)) *
-    ENNReal.ofReal (∑ k, ‖Fl.s k x‖ ^ 2) ^ (-((n : ℝ) - 1 / 2)) else 0
-
 section API
 
 variable {r : ℕ} {X : Data E r} (Xa : ArchInM X) (Fl : FlatM X Xa) (n : ℕ) {x : Frame X.Ψ r}
-
-theorem Wdiv_of_mem (hx : x ∈ X.dom) :
-    Wdiv X Xa Fl n x = ENNReal.ofReal (Real.exp (-phla X Xa.Fp x)) *
-      ENNReal.ofReal (∑ k, ‖Xa.w k x‖ ^ 2) ^ (-(1 / 2 : ℝ)) *
-      ENNReal.ofReal (∑ k, ‖Fl.s k x‖ ^ 2) ^ (-((n : ℝ) - 1 / 2)) := by
-  unfold Wdiv
-  rw [if_pos hx]
 
 theorem sum_normSq_pos {N : ℕ} {a : Fin N → ℂ} (h : ∃ k, a k ≠ 0) : 0 < ∑ k, ‖a k‖ ^ 2 := by
   obtain ⟨k, hk⟩ := h
@@ -75,17 +62,6 @@ theorem sum_normSq_pos {N : ℕ} {a : Fin N → ℂ} (h : ∃ k, a k ≠ 0) : 0 
 
 theorem sum_normSq_w_pos (hx : x ∈ X.dom) : 0 < ∑ k, ‖Xa.w k x‖ ^ 2 :=
   sum_normSq_pos (Xa.w_nz x hx)
-
-theorem Wdiv_eq_top (hn : 1 ≤ n) (hx : x ∈ X.dom) (hs : ∀ k, Fl.s k x = 0) :
-    Wdiv X Xa Fl n x = ⊤ := by
-  have hw := sum_normSq_w_pos Xa hx
-  have hn' : -((n : ℝ) - 1 / 2) < 0 := by
-    have : (1 : ℝ) ≤ n := by exact_mod_cast hn
-    linarith
-  have h0 : ∑ k, ‖Fl.s k x‖ ^ 2 = 0 := by simp [hs]
-  rw [Wdiv_of_mem Xa Fl n hx, h0, ENNReal.ofReal_zero, ENNReal.zero_rpow_of_neg hn',
-    ENNReal.ofReal_rpow_of_pos hw, ← ENNReal.ofReal_mul (Real.exp_pos _).le, ENNReal.mul_top]
-  exact (ENNReal.ofReal_pos.2 (mul_pos (Real.exp_pos _) (Real.rpow_pos_of_pos hw _))).ne'
 
 theorem phla_add_nsmul (hx : x ∈ X.dom) (la la' : Wt X.Ψ r) (k : ℕ) :
     phla X (la + k • la') x = phla X la x + k * phla X la' x := by

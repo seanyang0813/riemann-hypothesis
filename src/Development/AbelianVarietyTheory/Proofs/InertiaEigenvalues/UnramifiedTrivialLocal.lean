@@ -128,7 +128,7 @@ theorem unrTriv_of_finrank {l : ℕ} [Fact l.Prime] {P : LocPrime l} (AI : LocAi
   have hZ : finrank ↥LL.1 ↥(finiteCocycles (P.PD K) (1 : Representation ↥LL.1 ↥(GK K) ↥LL.1)) = 1 :=
     (finrank_Z1f_trivial P K LL).trans h1
   haveI : FiniteDimensional ↥LL.1 ↥(finiteCocycles (P.PD K) (1 : Representation ↥LL.1 ↥(GK K) ↥LL.1)) :=
-    Module.finite_of_finrank_eq_succ hZ
+    FiniteDimensional.of_finrank_pos (hZ ▸ Nat.one_pos)
   have hle := unramifiedCocycles_le_blochKatoFinite_trivial AI T K LL
   haveI := Submodule.finiteDimensional_of_le hle
   have hpos : 0 < finrank ↥LL.1 ↥(Z1ur (1 : Representation ↥LL.1 ↥(GK K) ↥LL.1) (IK K)) := by

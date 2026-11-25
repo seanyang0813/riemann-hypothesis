@@ -78,22 +78,6 @@ noncomputable section
 
 namespace GlobalTheory.CompanionTheory.Ar.Cusp.Univ.MemBall
 
-theorem exists_sqLen {m : Type} [Fintype m] (x : m → ℂ) :
-    ∃ r : ℝ, 0 ≤ r ∧ star x ⬝ᵥ x = (r : ℂ) ∧ (x ≠ 0 → 0 < r) := by
-  have h0 : 0 ≤ star x ⬝ᵥ x := dotProduct_star_self_nonneg x
-  have hz := Complex.nonneg_iff.1 h0
-  have heq : star x ⬝ᵥ x = (((star x ⬝ᵥ x).re : ℝ) : ℂ) := by
-    apply Complex.ext
-    · simp
-    · simpa using hz.2.symm
-  refine ⟨(star x ⬝ᵥ x).re, hz.1, heq, fun hx => ?_⟩
-  have hp : 0 < star x ⬝ᵥ x := dotProduct_star_self_pos_iff.2 hx
-  exact (Complex.pos_iff.1 hp).1
-
-theorem qf_one_sub {m n : Type} [Fintype m] [Fintype n] [DecidableEq n] (A : Matrix m n ℂ) (w : n → ℂ) :
-    star w ⬝ᵥ ((1 - Aᴴ * A) *ᵥ w) = star w ⬝ᵥ w - star (A *ᵥ w) ⬝ᵥ (A *ᵥ w) := by
-  rw [sub_mulVec, one_mulVec, dotProduct_sub, ← mulVec_mulVec, dotProduct_mulVec, vecMul_conjTranspose, star_star]
-
 theorem posDef_adjoint {m n : Type} [Fintype m] [Fintype n] [DecidableEq m] [DecidableEq n] (A : Matrix m n ℂ)
     (h : (1 - Aᴴ * A).PosDef) : (1 - A * Aᴴ).PosDef := by
   apply GlobalTheory.CompanionTheory.Ar.Cusp.Dict.Moeb.posDef_one_sub_swap <;> assumption
@@ -1600,8 +1584,6 @@ theorem exists_univFam : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] 
 
 end SheetDecomposition.Univ
 
-theorem SheetDecomposition.univExists : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (Ψ : Type) [Fintype Ψ] (j j' n g : ℕ) (Λ : Type) [AddCommGroup Λ] [Module (𝓞 E) Λ] (R₀ : RiemLat E g Λ) (σ : Ψ → (𝓞 E →+* ℂ)) (q : Ψ × Fin j × Fin j' ≃ Fin n), IsCMFam σ → R₀.HasSig σ j j' → ∃ F : UnivFam E Ψ j j' n g Λ, F.q = q ∧ F.σ = σ ∧ F.form = R₀.form :=
-  SheetDecomposition.Univ.exists_univFam
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto

@@ -382,8 +382,6 @@ theorem exists_sum_shift : ∀ (l : ℕ) [Fact l.Prime] (A : Type) [CommRing A]
 
 end GlobalTheory.TwoSidedShift
 
-theorem GlobalTheory.twoSided_shift_series : ∀ (l : ℕ) [Fact l.Prime] (A : Type) [CommRing A] [IsAdicComplete (Ideal.span {(l : A)}) A] (φ : A →+* A) (h : ℕ) (c : ℤ → A), (∀ n : ℤ, (l : A) ^ n.natAbs ∣ c n) → (∀ n : ℤ, φ^[h] (c n) = (l : A) * c (n + 1)) → ∃ w : A, φ^[h] w = (l : A) * w ∧ ∀ Θ : A →+* ℂ_[l], (∀ a, ‖Θ a‖ ≤ 1) → HasSum (fun n : ℤ => Θ (c n)) (Θ w) :=
-  GlobalTheory.TwoSidedShift.exists_sum_shift
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.TwoSidedShiftSeriesHasSum =====
@@ -451,7 +449,7 @@ theorem series_acris : ∀ (l : ℕ) [Fact l.Prime] (h : ℕ) (x : Fl l), 2 ≤ 
           congr 2
           omega
       _ = _ := by rw [← e2]; ring
-  obtain ⟨w, hw, hsum⟩ := _root_.GlobalTheory.twoSided_shift_series l (Acris l) (GlobalTheory.MemLoc.phiA l) h c hdvd shift
+  obtain ⟨w, hw, hsum⟩ := _root_.GlobalTheory.TwoSidedShift.exists_sum_shift l (Acris l) (GlobalTheory.MemLoc.phiA l) h c hdvd shift
   refine ⟨w, hw, fun Θ hΘ hΘt j => ?_⟩
   have hs := hsum (Θ.comp (GlobalTheory.MemLoc.phiA l ^ j)) (fun a => hΘ _)
   have hl : (l : ℂ_[l]) ≠ 0 := GlobalTheory.RingBasics.p_ne_zero

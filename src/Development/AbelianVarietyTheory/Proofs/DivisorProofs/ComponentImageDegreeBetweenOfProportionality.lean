@@ -535,7 +535,7 @@ theorem growthOn_le_compDeg : ∀ (E : Type) [Field E] [NumberField E] [IsCMFiel
     set ev := genPoint Z (cuspOn U Z G) with hev
     let S : ℕ → Submodule c.F (Om Z) := fun k =>
       if k = 0 then ⊥ else (cuspOn U Z ((a * k) • G')).map ((genVal Z).toLinearMap ∘ₗ LinearMap.mulLeft c.F (θ ^ k))
-    have h1 := _root_.GlobalTheory.ConeDeg.degree_growth_integral.2.2.1 c.F _ _ ev (dimFlag Dw) a ha S (by
+    have h1 := _root_.GlobalTheory.ConeDeg.degree_growth.2.2 c.F _ _ ev (dimFlag Dw) a ha S (by
       intro k t ht
       by_cases hk : k = 0
       · simp only [S, hk, if_true, Submodule.mem_bot] at ht
@@ -576,8 +576,8 @@ theorem growthOn_le_compDeg : ∀ (E : Type) [Field E] [NumberField E] [IsCMFiel
       ne_bot_of_le_ne_bot (mul_ne_zero haD0 h0) hlow
     have hneT : growth (dimFlag Dw) (fun k => hilb ev (a * k)) ≠ ⊤ :=
       ne_top_of_le_ne_top (ENNReal.mul_ne_top haDT hfin) h4
-    obtain ⟨δ, hδ⟩ := _root_.GlobalTheory.ConeDeg.degree_growth_integral.2.1 c.F _ _ ev (dimFlag Dw) a ha hne0 hneT
-    rw [_root_.GlobalTheory.ConeDeg.degree_growth_integral.1 c.F _ _ ev (dimFlag Dw) a ha δ hδ] at hlow
+    obtain ⟨δ, hδ⟩ := _root_.GlobalTheory.ConeDeg.degree_growth.2.1 c.F _ _ ev (dimFlag Dw) a ha hne0 hneT
+    rw [_root_.GlobalTheory.ConeDeg.degree_growth.1 c.F _ _ ev (dimFlag Dw) a ha δ hδ] at hlow
     rw [compDeg, ← hev, hδ.imageDeg_eq]
     first | exact (ENNReal.mul_le_mul_iff_right haD0 haDT).1 hlow
 

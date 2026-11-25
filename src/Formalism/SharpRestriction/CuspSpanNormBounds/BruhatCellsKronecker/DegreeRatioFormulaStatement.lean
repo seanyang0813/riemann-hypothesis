@@ -19,8 +19,6 @@ namespace Formalism.MainNotions.BridgeLemma
 
 open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.S NumberField IsDedekindDomain Finset
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem sza_finrank_host (D : D7) : Module.finrank ℚ D.host.E = 2 * D.R.f := by
   have h2 : Nat.card (D.host.E →+* ℂ) = Module.finrank ℚ D.host.E := by
     rw [Nat.card_eq_fintype_card]

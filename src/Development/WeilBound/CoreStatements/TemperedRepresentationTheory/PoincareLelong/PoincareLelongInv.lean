@@ -874,7 +874,7 @@ theorem normalCurveBranchOrder : NormalCurveBranchOrder.Statement :=
 
 theorem normalModelOpenMappingCurve (n : ℕ) (J : Ideal (MvPolynomial (Fin n) ℂ))
     (M : IndefiniteRowSideFullHecke.ComplexSets.NormalModel J) (U : Set (Fin 1 → ℂ)) (φ : (Fin 1 → ℂ) → Fin n ⊕ Fin M.m → ℂ)
-    (_hJ : J.IsPrime) (hdim : ringKrullDim (MvPolynomial (Fin n) ℂ ⧸ J) = (1 : ℕ))
+    (hdim : ringKrullDim (MvPolynomial (Fin n) ℂ ⧸ J) = (1 : ℕ))
     (hU : IsOpen U) (hφd : DifferentiableOn ℂ φ U) (hφi : Set.InjOn φ U)
     (hφZ : Set.MapsTo φ U (IndefiniteRowSideFullHecke.ComplexSets.zeroSetIn M.ideal)) :
     ∃ O : Set (Fin n ⊕ Fin M.m → ℂ), IsOpen O ∧ φ '' U = IndefiniteRowSideFullHecke.ComplexSets.zeroSetIn M.ideal ∩ O := by
@@ -1014,7 +1014,7 @@ theorem branchLiftCurve : BranchLiftCurve := by
       have := congrArg firstCoords hst
       exact this)
   refine ⟨Γ, hΓd, fun τ hτ => ⟨hΓZ τ hτ, rfl⟩, fun V hV hVo => ?_⟩
-  exact hO n J M V Γ hJ hdim hVo (hΓd.mono hV) (hΓinj.mono hV) fun τ hτ => hΓZ τ (hV hτ)
+  exact hO n J M V Γ hdim hVo (hΓd.mono hV) (hΓinj.mono hV) fun τ hτ => hΓZ τ (hV hτ)
 
 theorem primeBranchPlace : PrimeBranchPlace.Statement := by
   have hD := PrimeBranchDimOne.proof

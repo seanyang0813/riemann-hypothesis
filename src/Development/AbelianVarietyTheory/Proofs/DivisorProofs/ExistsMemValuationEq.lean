@@ -58,8 +58,6 @@ open ReciprocityTheory.ChartRestriction.G.PullbackSections.PfModelLatA (Dinv xi_
 open GlobalTheory.FunObj.Good (char_int mem_Dinv atPl_mul inc_mul_inc mem_intAE exists_pole isEquiv_Kw valued_alg psiAt_eq_one
   trace_inc_pair cpt_pair)
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 variable {D : D7}
 
 namespace CondAA

@@ -293,21 +293,21 @@ end Comp
 
 
 
-theorem full_lat : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.loc D.locA HW F) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; let E := ((F l).E K s LL h).tie; let C := Cm l; ∀ T : Lt K LL, IsCrys ((D.loc l).PD K) T.ρ → ∀ (i : Let K) (ζ : ↥LL.1), IsPrimitiveRoot ζ (l ^ s) → Full (Di (HW l) h T i) (Lat C h T i ζ) := by
-  intro D HW F Cm l _ K s LL h W E C T hT i ζ hζ
-  obtain ⟨h1, h2, -, -, hc⟩ := Points.points D HW l K s LL h
+theorem full_lat : ∀ (loc : LocTheory) (locA : ∀ (l : ℕ) [Fact l.Prime], LocAinf l (loc l)) (locT : ∀ (l : ℕ) [Fact l.Prime], Formalism.BasicNotions.LocTied l (loc l) (locA l)) (HW : HWOf loc) (F : FonOf loc locA HW) (Cm : CmpOf loc locA HW F) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; let E := ((F l).E K s LL h).tie; let C := Cm l; ∀ T : Lt K LL, IsCrys ((loc l).PD K) T.ρ → ∀ (i : Let K) (ζ : ↥LL.1), IsPrimitiveRoot ζ (l ^ s) → Full (Di (HW l) h T i) (Lat C h T i ζ) := by
+  intro loc locA locT HW F Cm l _ K s LL h W E C T hT i ζ hζ
+  obtain ⟨h1, h2, -, -, hc⟩ := Points.points loc HW l K s LL h
   obtain ⟨τ, hτ⟩ := h1 i ζ hζ
   obtain ⟨-, -, ι, hι⟩ := h2 i ζ τ hτ
-  obtain ⟨Ψ, -, hspan, hΨ⟩ := _root_.GlobalTheory.NL.PerS.image D HW F Cm l K s LL h T hT i ζ τ ι hι
-  obtain ⟨ev, hev, -, ht, -⟩ := EvdR.exists_ev_dR D l K LL s ι
-  have := GlobalTheory.Per.LetterDim.finite_Dcris ((D.loc l).PD K) T.ρ hT
+  obtain ⟨Ψ, -, hspan, hΨ⟩ := _root_.GlobalTheory.NL.PerS.image loc locA locT HW F Cm l K s LL h T hT i ζ τ ι hι
+  obtain ⟨ev, hev, -, ht, -⟩ := EvdR.exists_ev_dR loc locA locT l K LL s ι
+  have := GlobalTheory.Per.LetterDim.finite_Dcris ((loc l).PD K) T.ρ hT
   have : Module.Finite ↥LL.1 ↥(Di (HW l) h T i) :=
     Module.Finite.of_injective (Submodule.inclusion (inf_le_left : Di (HW l) h T i ≤ Dcris _ T.ρ))
       (Submodule.inclusion_injective _)
-  refine full_of_span ((D.loc l).PD K) T ι (Di (HW l) h T i)
-    ((GlobalTheory.Per.LetterDim.tied_letter_component_finrank l _ _ (D.locT l) K LL T.V T.ρ).1 hc hT _)
+  refine full_of_span ((loc l).PD K) T ι (Di (HW l) h T i)
+    ((GlobalTheory.Per.LetterDim.tied_letter_component_finrank l _ _ (locT l) K LL T.V T.ρ).1 hc hT _)
     (ex C h T i ζ) (fun x k => (C.C K s LL h).tie.levB_mem T i ζ x k)
-    (fun x => (C.C K s LL h).tie.levB_supp T i ζ x) (tS (D.loc l) s) ht ev hev Ψ (fun z hz => ?_) hΨ
+    (fun x => (C.C K s LL h).tie.levB_supp T i ζ x) (tS (loc l) s) ht ev hev Ψ (fun z hz => ?_) hΨ
   obtain ⟨m, b, x, -, hx⟩ := hspan z hz
   exact ⟨m, b, x, hx⟩
 

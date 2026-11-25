@@ -424,7 +424,7 @@ theorem Lam_diff : Differentiable ℂ fun z => abelian₂ μ ι m e ψ a b z 1 :
     rw [hR]
     refine Continuous.star (Continuous.mul (Continuous.mul ?_ ?_) ?_)
     · exact hι.matrix_det.zpow₀ e fun k => Or.inl (_root_.PositivityTheory.Rg.Sw.LVs.isUnit_det_of_inG' (hιG k)).ne_zero
-    · exact (hu1.comp hι).matrix_det.zpow₀ _ fun k => Or.inl (det_first_block_ne_zero_group (hιG k))
+    · exact (hu1.comp hι).matrix_det.zpow₀ _ fun k => Or.inl (PositivityTheory.Rg.Sw.LVs.det_first_cayley_block_ne_zero (hιG k))
     · exact (((hu2.comp hι).matrix_conjTranspose).matrix_mul (hu1.comp hι)).matrix_trace
   have hH : Continuous fun p : Kg × ℂ => Hf m e ψ a b p.2 (ι p.1) := by
     have h1 := continuous_Hf m e hψ hψc ha hb
@@ -539,7 +539,7 @@ theorem D0_eq_numSeg_mul_add {x : M2 n} (hx : InG x) :
   exact Complex.mul_conj _
 
 theorem normSq_det_first_block_pos {x : M2 n} (hx : InG x) : 0 < Complex.normSq (u1 x).det :=
-  Complex.normSq_pos.mpr (det_first_block_ne_zero_group hx)
+  Complex.normSq_pos.mpr (PositivityTheory.Rg.Sw.LVs.det_first_cayley_block_ne_zero hx)
 
 theorem det_product_mem_slitPlane {x : M2 n} (hx : InG x) : (u1 x).det * (ub1 x).det ∈ Complex.slitPlane := by
   rw [D0_eq_numSeg_mul_add hx]; exact Complex.ofReal_mem_slitPlane.mpr (normSq_det_first_block_pos hx)
@@ -554,7 +554,7 @@ theorem diff_fz {x : M2 n} (hx : InG x) (m : ℕ) (e : ℤ) (z : ℂ) : Differen
   have hub1 : DifferentiableAt ℂ (fun y : M2 n => (ub1 y).det) x :=
     diffAt_of_cdo (cdo_det (fun i j => PositivityTheory.Rg.Sw.HSt.LoweringDerivative.contDiffOn_inverse_first_block i j)) hU hxU
   unfold fz
-  refine ((hdet.zpow (Or.inl hxU)).mul (hu1.zpow (Or.inl (det_first_block_ne_zero_group hx)))).mul ?_
+  refine ((hdet.zpow (Or.inl hxU)).mul (hu1.zpow (Or.inl (PositivityTheory.Rg.Sw.LVs.det_first_cayley_block_ne_zero hx)))).mul ?_
   exact (hu1.mul hub1).cpow (differentiableAt_const _) (det_product_mem_slitPlane hx)
 
 set_option backward.isDefEq.respectTransparency false in
@@ -674,7 +674,7 @@ theorem det_ne_of_inG (x : M2 n) (hx : InG x) : x.det ≠ 0 := by
   exact (Matrix.isUnit_det_of_left_inverse h).ne_zero
 
 theorem det_first_cayley_block_ne_group (x : M2 n) (hx : InG x) : (u1 x).det ≠ 0 := by
-  apply PositivityTheory.Rg.Sw.HSt.LoweringDerivative.det_first_block_ne_zero_group <;> assumption
+  apply PositivityTheory.Rg.Sw.LVs.det_first_cayley_block_ne_zero <;> assumption
 
 end PositivityTheory.Rg.Sw.HSt.L3
 end -- clump:auto
@@ -1067,22 +1067,13 @@ theorem eventually_unit (y : M2 n) (hy : InG y) :
   rw [nbar_block, ← hev]
   exact isUnit_iff_ne_zero.2 (fun h => ht ⟨h, ht0⟩)
 
-private theorem inG_nU_herm' (s : Fin n → Fin n → ℝ) : InG (nU (herm s)) := by
-  have hh : (herm s)ᴴ = herm s := by
-    ext i j
-    simp only [herm, Matrix.conjTranspose_apply, Complex.star_def, map_add (f := _), map_div₀, map_mul,
-      Complex.conj_ofReal, Complex.conj_I, map_ofNat]
-    push_cast
-    ring
-  simp [InG, nU, JJ, Matrix.fromBlocks_conjTranspose, Matrix.fromBlocks_multiply, hh]
-
 theorem vanish_all (hmn : m < n) (e : ℤ) (y b : M2 n) (hy : InG y) (hb : InG b)
     (ψ : (Fin n → Fin n → ℝ) → ℂ) (hψ : IsSingTest ψ) :
     ∫ s, fz m e 0 (y * nU (herm s) * b) * ψ s = 0 := by
   let G : ℝ → (Fin n → Fin n → ℝ) → ℂ := fun t s => fz m e 0 (y * nbar t * nU (herm s) * b) * ψ s
   let X : ℝ × (Fin n → Fin n → ℝ) → M2 n := fun p => y * nbar p.1 * nU (herm p.2) * b
   have hIn : ∀ p, InG (X p) := fun p =>
-    _root_.PositivityTheory.Rg.Sw.LVs.HolB.inG_mul (_root_.PositivityTheory.Rg.Sw.LVs.HolB.inG_mul (_root_.PositivityTheory.Rg.Sw.LVs.HolB.inG_mul hy (inG_nbar p.1)) (inG_nU_herm' p.2)) hb
+    _root_.PositivityTheory.Rg.Sw.LVs.HolB.inG_mul (_root_.PositivityTheory.Rg.Sw.LVs.HolB.inG_mul (_root_.PositivityTheory.Rg.Sw.LVs.HolB.inG_mul hy (inG_nbar p.1)) (PositivityTheory.Rg.Sw.LVs.inG_nU_herm p.2)) hb
   have h1 : Continuous fun p : ℝ × (Fin n → Fin n → ℝ) => nbar (n := n) p.1 := by
     unfold nbar
     exact Continuous.matrix_fromBlocks continuous_const continuous_const

@@ -585,10 +585,6 @@ namespace CuspidalAutomorphicRep
 abbrev toModule (π : CuspidalAutomorphicRep K n) : AdelicGKModule K n π.carrier :=
   cuspSubmodule K n π.carrier π.stable_ρ π.stable_σ π.stable_τ
 
-theorem nonempty_adelicDecomposition (π : CuspidalAutomorphicRep K n)
-    (hadm : π.toModule.IsAdmissible) : Nonempty (AdelicDecomposition π.toModule) :=
-  AutomorphicForm.nonempty_adelicDecomposition π.toModule π.isIrreducible hadm
-
 end CuspidalAutomorphicRep
 
 end AutomorphicForm

@@ -92,8 +92,8 @@ theorem gam_Q_pow : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : F
   refine ⟨fun x hx => ?_, fun i ζ hζ => ?_⟩
   · rw [key]
     exact (W.N T).smul_mem v (W.N_Γ T W.gam _ hx)
-  have hfull := GlobalTheory.NL.FullLevel.full_lat D HW F Cm l K s LL h T hT i ζ hζ
-  have hlev := (GlobalTheory.NL.LevInj.expansion_basis D HW F Cm l K s LL h T hT i ζ ⟨s, hζ⟩ hfull).1
+  have hfull := GlobalTheory.NL.FullLevel.full_lat D.loc D.locA D.locT HW F Cm l K s LL h T hT i ζ hζ
+  have hlev := (GlobalTheory.NL.LevInj.expansion_basis D.loc D.locA D.locT HW F Cm l K s LL h T hT i ζ ⟨s, hζ⟩ hfull).1
   refine ⟨W.lev i ζ v, ?_, fun x hx hγ j => ?_⟩
   · have hg := W.gam_gen
     rw [(HW l).W_s] at hg
@@ -101,7 +101,7 @@ theorem gam_Q_pow : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : F
       (by rw [(D.loc l).PD_p]; exact hζ) (by rw [Nat.cast_one]; exact hg.ge) (pow_one ζ).symm W.Q
     have hΓ' : W.lev i ζ W.Q * W.lev i ζ U = PowerSeries.rescale u (W.lev i ζ W.Q) := by
       rw [← map_mul, ← hγQ]; exact hΓ
-    obtain ⟨w0, hw0, hQw⟩ := ((GlobalTheory.NL.lev_at_root_of_unity D HW l K s LL h i ζ ⟨s, hζ⟩).2.2.2.1 hζ).1
+    obtain ⟨w0, hw0, hQw⟩ := ((GlobalTheory.NL.lev_at_root_of_unity D.loc HW l K s LL h i ζ ⟨s, hζ⟩).2.2.2.1 hζ).1
     rw [hQw, map_mul, PowerSeries.rescale_X] at hΓ'
     have h1 : w0 * W.lev i ζ U = PowerSeries.C u * PowerSeries.rescale u w0 := by
       apply mul_left_cancel₀ (PowerSeries.X_ne_zero (R := ↥LL.1))

@@ -247,7 +247,8 @@ theorem thickMap_pr (e : ℕ) : thickMap V 𝔪 e G ≫ pr 𝔪 (e + 1) G = pr �
   (pullback.lift_fst _ _ _).trans (Category.comp_id _)
 
 
-set_option synthInstance.maxHeartbeats 200000 in
+-- TODO: Stopgap for https://github.com/leanprover-community/riemann-hypothesis/issues/1038: remove once Mathlib lowers its priority.
+attribute [-instance] CategoryTheory.Monoidal.fromInducedMonoidal in
 omit [IsDomain V] in
 theorem nonempty_formalTorus (hG : IsSemiAbelian G) (Q₀ : TQ (thickObj V 𝔪 0 G) X) :
     Nonempty (FormalTorus 𝔪 Q₀.i) := by

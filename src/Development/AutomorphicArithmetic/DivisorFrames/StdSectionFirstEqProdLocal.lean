@@ -50,8 +50,6 @@ open scoped TensorProduct GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorMode
 open GlobalTheory.FunObj GlobalTheory.StdFrames GlobalTheory.AdelicU GlobalTheory.LFun GlobalTheory.LFun.SplitTie
 open GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels (Base Spc Model Chars Rep Acts SInf At piW chrW)
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 private theorem det_mem' {R : Type} [CommRing R] (S : Subring R) {n : ℕ} (M : Matrix (Fin n) (Fin n) R)
     (h : ∀ i j, M i j ∈ S) : M.det ∈ S := by
   rw [Matrix.det_apply']

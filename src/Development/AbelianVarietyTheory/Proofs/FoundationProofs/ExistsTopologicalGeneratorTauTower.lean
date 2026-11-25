@@ -538,8 +538,6 @@ theorem prime_natCast_completedLaurentRing : Prime (p : O0 p) := by
     rw [natCast_dvd_iff_evalₐ_one, natCast_dvd_iff_evalₐ_one]
     exact mul_eq_zero.1 h
 
-theorem prime_natCast_completedLaurentRing_of_prime : ∀ (p : ℕ) [Fact p.Prime], Prime (p : O0 p) := fun p _ => prime_natCast_completedLaurentRing p
-
 end GlobalTheory.K5
 end -- clump:auto
 end -- clump:auto
@@ -555,18 +553,6 @@ open GlobalTheory.K5
 
 namespace GlobalTheory.K5.NotPow
 
-theorem exists_derivation_fix_q_kill_padicInt (p : ℕ) [Fact p.Prime] : ∃ D : Derivation ℤ (O0 p) (O0 p), D (qO p) = qO p ∧
-    ∀ r : ℤ_[p], D (algebraMap ℤ_[p] (O0 p) r) = 0 := _root_.GlobalTheory.K5.QDer.exists_qDer p
-
-theorem derExt (p : ℕ) [Fact p.Prime] (Ω : Type) [Field Ω] [Algebra (O0 p) Ω] (h : IsClo p Ω)
-    (D : Derivation ℤ (O0 p) (O0 p)) :
-    ∃ E : Derivation ℤ Ω Ω, ∀ x, E (algebraMap (O0 p) Ω x) = algebraMap (O0 p) Ω (D x) :=
-  _root_.GlobalTheory.K5.DerExt.derivation_extend p Ω h D
-
-theorem derAlg (p : ℕ) [Fact p.Prime] (Ω : Type) [Field Ω] [Algebra (O0 p) Ω] (h : IsClo p Ω)
-    (E : Derivation ℤ Ω Ω) (hE : ∀ r : ℤ_[p], E (algebraMap (O0 p) Ω (algebraMap ℤ_[p] (O0 p) r)) = 0) :
-    ∀ x : Ω, IsAlgZp p x → E x = 0 := _root_.GlobalTheory.K5.DerAlg.der_algZp p Ω h E hE
-
 theorem repr (p : ℕ) [Fact p.Prime] (Ω : Type) [Field Ω] [Algebra (O0 p) Ω] (h : IsClo p Ω) :
     ∀ b ∈ Subfield.closure (Set.range (algebraMap (O0 p) Ω) ∪ {x | IsAlgZp p x}),
     ∃ (n : ℕ) (a : Fin n → Ω) (f : Fin n → O0 p) (g : O0 p), (∀ i, IsAlgZp p (a i)) ∧
@@ -577,11 +563,6 @@ theorem repr (p : ℕ) [Fact p.Prime] (Ω : Type) [Field Ω] [Algebra (O0 p) Ω]
   obtain ⟨n, a, f, g₂, ha, hli, hg₂, he⟩ := _root_.GlobalTheory.K5.algSpan_reprInd p Ω h _ hy
   refine ⟨n, a, f, g₂ * g₁, ha, hli, mul_ne_zero hg₂ hg₁, ?_⟩
   rw [map_mul, mul_assoc, he]
-
-theorem primeP (p : ℕ) [Fact p.Prime] : Prime (p : O0 p) := _root_.GlobalTheory.K5.prime_natCast_completedLaurentRing_of_prime p
-
-theorem splitP (p : ℕ) [Fact p.Prime] : ∀ x : O0 p, x ≠ 0 →
-    ∃ (k : ℕ) (y : O0 p), x = (p : O0 p) ^ k * y ∧ ¬ (p : O0 p) ∣ y := _root_.GlobalTheory.K5.Basic.exists_eq_prime_pow_mul_not_dvd_completedLaurent p
 
 theorem not_eigen (p : ℕ) [Fact p.Prime] (D : Derivation ℤ (O0 p) (O0 p)) (f g : O0 p)
     (hf : f ≠ 0) (hg : g ≠ 0) : (p : O0 p) * (g * D f - f * D g) ≠ g * f := by
@@ -677,10 +658,6 @@ open GlobalTheory.K5 Polynomial IntermediateField
 noncomputable section
 
 namespace GlobalTheory.K5.TauGen
-
-theorem not_pow : ∀ (p : ℕ) [Fact p.Prime] (Ω : Type) [Field Ω] [Algebra (O0 p) Ω], IsClo p Ω →
-    ∀ b ∈ Subfield.closure (Set.range (algebraMap (O0 p) Ω) ∪ {x | IsAlgZp (p := p) x}),
-      b ^ p ≠ algebraMap (O0 p) Ω (qO p) := _root_.GlobalTheory.K5.NotPow.q_not_pow
 
 def geoF (p : ℕ) [Fact p.Prime] (Ω : Type) [Field Ω] [Algebra (O0 p) Ω] : Subfield Ω :=
   Subfield.closure (Set.range (algebraMap (O0 p) Ω) ∪ {x | IsAlgZp (p := p) x})

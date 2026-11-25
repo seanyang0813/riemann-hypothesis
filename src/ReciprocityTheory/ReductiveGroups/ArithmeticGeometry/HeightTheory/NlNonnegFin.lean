@@ -1560,24 +1560,6 @@ theorem disc_one (hd : d.AxH 𝒜) (h : d.S1) (hI2et : d.HeightIntegralEstimateT
           (Module.finrank ℚ K : ℝ) := div_le_div_of_nonneg_right hle hnK.le
     _ ≤ _ := hglob
 
-theorem disc (hd : d.AxH 𝒜) (h : d.S1) (hI2et : d.HeightIntegralEstimateTrivialPlace) (hI2be : d.HeightIntegralBoundEstimate) (ta' : ∀ c, A c)
-    (hta' : ∀ c, ta' c ∈ 𝒜 c d.wF ∧ ta' c ≠ 0) :
-    let lr := Real.log (d.N + 1 : ℕ) + 1 / 2
-    (∀ la c, (d.PlOver la c).Finite) ∧ (∀ la, (d.htOf hd h).Ila la ≠ ⊤) ∧
-    (Function.support (d.IL h hd.sel hd.a4.choose)).Finite ∧
-    2 * ((∑ᶠ la, d.IL h hd.sel hd.a4.choose la * logNorm la) / (Module.finrank ℚ K : ℝ)) ≤
-      d.del * Real.log d.del +
-        2 * ∑ k, meanK (fun sg => Real.log (d.supN sg d.wF (d.thp (hd.sel k)))) +
-        2 * d.D * d.aG h d.wF ta' * lr + 2 * d.Hgt h d.wF ta' ∧
-    (∀ la, 0 ≤ d.Nl h la) ∧ (Function.support (d.Nl h)).Finite ∧
-    ((∑ᶠ la, d.Nl h la * logNorm la) / (Module.finrank ℚ K : ℝ)) / d.i ≤
-      d.g0 * (d.Hgt h (d.n1 • d.wde) d.et / d.n1 + d.D * ((d.aG h (d.n1 • d.wde) d.et : ℝ) / d.n1) * lr) +
-        d.del * d.Pet := by
-  intro lr
-  obtain ⟨h1, h2, h3, h4⟩ := d.disc_one hd h hI2et hI2be ta' hta'
-  obtain ⟨h5, h6⟩ := d.nl_nonneg_fin hd h
-  exact ⟨h1, h2, h3, h4, h5, h6, d.disc_two hd h hI2et hI2be⟩
-
 end Data
 
 end ReciprocityTheory.ChartRestriction.G.T0

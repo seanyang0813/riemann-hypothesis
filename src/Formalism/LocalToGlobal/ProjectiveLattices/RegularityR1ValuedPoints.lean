@@ -74,23 +74,6 @@ variable (h : GenFrEx Xo c) (δ : ∀ Z : Comp Xo c, AddValuation (Om Z) (WithTo
   (cls : ∀ (T : CDVR) (ι : c.F →+* T.Fr), IntFr Xo c T ι → Prop) (PY : HeightOneSpectrum (𝓞 c.F) → Type)
   (lies : ∀ la (T : CDVR) (ι : c.F →+* T.Fr), IntFr Xo c T ι → PY la → Prop)
 
-theorem ord_nonneg_of [Nonempty (HeightOneSpectrum (𝓞 c.F))]
-    (hT : OrdTie h δ cls PY lies) (hTQ : OrdTieQ h δ) (hR1 : RegularityR1ValuedPoints Xo c C cls PY lies) (hR1Q : RegularityR1Quotient Xo c C)
-    {a : (E →+* ℂ) × ℕ → ℕ} {n : ℕ} {F : Rul Xo c} (hFs : F ∈ sec Xo c a n) (hFC : F ∈ C a n) (hF : IntAlg F)
-    {Z : Comp Xo c} {v : AddValuation (Om Z) (WithTop ℤ)} (hd : IsNormDiscrete v)
-    (hv : (∃ la, IsOver (K := c.F) v la) ∨ IsTrivOn c.F v) (hne : evC h Z F ≠ 0) :
-    0 ≤ ordC (δ Z v) v (wtZ a n) (valC h a n F Z) := by
-  have key : (0 : EReal) ≤ (((ordC (δ Z v) v (wtZ a n) (valC h a n F Z) : ℤ) : ℝ) : EReal) := by
-    rcases hv with ⟨la, ho⟩ | ht
-    · obtain ⟨y, hy⟩ := hT Z v la hd ho
-      rw [hy a n F hFs hne]
-      exact mul_nonneg (by exact_mod_cast ramIdx_nonneg ho) (hR1 a n F hFC hF la y)
-    · obtain ⟨q, hq⟩ := hTQ Z v hd ht
-      rw [hq a n F hFs hne]
-      obtain ⟨la⟩ := ‹Nonempty (HeightOneSpectrum (𝓞 c.F))›
-      exact hR1Q a n F hFC ⟨la, hF la⟩ q
-  exact_mod_cast key
-
 theorem mem_of_mem_span_int (S : Submodule c.F (Rul Xo c)) {s : Set (Rul Xo c)} (hs : s ⊆ S) {F : Rul Xo c}
     (hF : F ∈ Submodule.span (𝓞 c.F) s) : F ∈ S := by
   induction hF using Submodule.span_induction with

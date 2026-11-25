@@ -55,7 +55,6 @@ open GlobalTheory.BigOn GlobalTheory.BigOn.Exp Formalism.L2.Theta GlobalTheory.E
 open scoped TensorProduct
 set_option synthInstance.maxHeartbeats 400000
 set_option maxHeartbeats 1600000
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace GlobalTheory.SerRefPt
 

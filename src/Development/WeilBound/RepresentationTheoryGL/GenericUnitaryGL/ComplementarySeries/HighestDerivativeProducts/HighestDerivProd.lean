@@ -590,10 +590,6 @@ theorem continuous_mvec (n : ℕ) : Continuous (mvec (k := k) (n := n)) := by
     exact hval.matrix_elem _ _
   exact h1.matrix_mulVec h2
 
-theorem exists_compact_polyBall (n : ℕ) {C : Set (Fin n → k)} (hC : IsCompact C) :
-    ∃ S : kˣ, ∀ v ∈ C, Multiplicative.ofAdd v ∈ polyBall (k := k) n S := by
-  apply GlobalTheory.CompanionTheory.BZPhiPG.LocC.exists_polyBall_of_compact <;> assumption
-
 theorem support_abs (F : Mir k n → E) (C : Set (Mir k n))
     (hF : ∀ g, F g ≠ 0 → ∃ h ∈ LH k n, ∃ c ∈ C, g = h * c) (v : Fin n → k) (hv : F (uv n v) ≠ 0) :
     v ∈ mvec '' C := by
@@ -606,7 +602,7 @@ theorem support_abs (F : Mir k n → E) (C : Set (Mir k n))
 theorem restr_support (ρ : Representation ℂ (LH k n) E) (f : cIndSpace (LH k n) ρ) : ∃ S : kˣ, ∀ v : Fin n → k,
     restr ρ f v ≠ 0 → Multiplicative.ofAdd v ∈ polyBall (k := k) n S := by
   have hC := f.2
-  have hS := exists_compact_polyBall n (hC.choose_spec.1.image (continuous_mvec n))
+  have hS := GlobalTheory.CompanionTheory.BZPhiPG.LocO.exists_polyBall_of_isCompact n (hC.choose_spec.1.image (continuous_mvec n))
   exact ⟨hS.choose, fun v hv => hS.choose_spec v (support_abs _ _ hC.choose_spec.2 v hv)⟩
 
 open Classical in
@@ -1016,16 +1012,14 @@ theorem smooth_GL_zero {V : Type} [AddCommGroup V] [Module ℂ V] (a : Represent
   rw [this]
   exact isOpen_univ
 
-theorem smc_dpow (n : ℕ) (s : ℝ) : IsSmoothChar (dpow (k := k) n s) := (GlobalTheory.LocGL.isSmoothChar_absPow _).detChar
-
 theorem sm_tw {n : ℕ} {σ : GRep k n} (hσ : IsSmooth σ.ρ) (s : ℝ) : IsSmooth (σ.tw s).ρ :=
-  isSmooth_twist hσ (smc_dpow n s)
+  isSmooth_twist hσ (GlobalTheory.CompanionTheory.BZPsiPG.Norm.isSmoothChar_dpow n s)
 
 theorem sm_gres {n : ℕ} {σ : GRep k (n + 1)} (hσ : IsSmooth σ.ρ) : IsSmooth (gres σ).ρ :=
   isSmooth_comp hσ _ continuous_subtype_val
 
 theorem sm_mtw {n : ℕ} {τ : MRep k n} (hτ : IsSmooth τ.ρ) (s : ℝ) : IsSmooth (mtw τ s).ρ :=
-  isSmooth_twist hτ ((smc_dpow (n + 1) s).preimage continuous_subtype_val)
+  isSmooth_twist hτ ((GlobalTheory.CompanionTheory.BZPsiPG.Norm.isSmoothChar_dpow (n + 1) s).preimage continuous_subtype_val)
 
 section Final
 variable {t : ℕ} (τ : MRep k 0) (σ : GRep k (t + 1))
@@ -1412,21 +1406,7 @@ theorem blockIndex_true_castSucc (m j : ℕ) (b : Fin j) :
   first
     | rfl
 
-theorem glEmbMat_castSucc (n : ℕ) (A : Matrix (Fin n) (Fin n) k) (a b : Fin n) :
-    glEmbMat k n A (Fin.castSucc a) (Fin.castSucc b) = A a b := by
-  simp [GlobalTheory.BZMir.glEmbMat]
 
-theorem glEmbMat_last_castSucc (n : ℕ) (A : Matrix (Fin n) (Fin n) k) (b : Fin n) :
-    glEmbMat k n A (Fin.last n) (Fin.castSucc b) = 0 := by
-  simp [GlobalTheory.BZMir.glEmbMat]
-
-theorem glEmbMat_castSucc_last (n : ℕ) (A : Matrix (Fin n) (Fin n) k) (a : Fin n) :
-    glEmbMat k n A (Fin.castSucc a) (Fin.last n) = 0 := by
-  simp [GlobalTheory.BZMir.glEmbMat]
-
-theorem glEmbMat_last_last (n : ℕ) (A : Matrix (Fin n) (Fin n) k) :
-    glEmbMat k n A (Fin.last n) (Fin.last n) = 1 := by
-  simp [GlobalTheory.BZMir.glEmbMat]
 
 end SlopeTestRemainingChoices
 
@@ -1440,7 +1420,7 @@ theorem gpProj_levi : ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpac
     (try erw [GlobalTheory.SmGL.leviProj_apply])
     (try erw [GlobalTheory.SmGL.leviProj_apply])
     simp [GlobalTheory.BZMir.levi, GlobalTheory.BZMir.glEmb, GlobalTheory.BZMir.glEmbHom,
-        GlobalTheory.CompanionTheory.LeibGP.blockIndex_false, GlobalTheory.CompanionTheory.LeibGP.glEmbMat_castSucc, MonoidHom.codRestrict_apply, Units.coe_map, MonoidHom.coe_mk, OneHom.coe_mk]
+        GlobalTheory.CompanionTheory.LeibGP.blockIndex_false, GlobalTheory.CompanionTheory.BZPhiPG.HpgEmb.glEmbMat_cc, MonoidHom.codRestrict_apply, Units.coe_map, MonoidHom.coe_mk, OneHom.coe_mk]
   · apply Subtype.ext
     apply Units.ext
     ext a b
@@ -1450,8 +1430,8 @@ theorem gpProj_levi : ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpac
     induction a using Fin.lastCases <;> induction b using Fin.lastCases <;>
       simp [GlobalTheory.SmGL.leviProj_apply, GlobalTheory.BZMir.levi, GlobalTheory.BZMir.glEmb, GlobalTheory.BZMir.glEmbHom,
         GlobalTheory.CompanionTheory.LeibGP.blockIndex_true_castSucc, GlobalTheory.BZMir.Leib.blockIndex_true_last,
-        GlobalTheory.CompanionTheory.LeibGP.glEmbMat_castSucc, GlobalTheory.CompanionTheory.LeibGP.glEmbMat_last_castSucc,
-        GlobalTheory.CompanionTheory.LeibGP.glEmbMat_castSucc_last, GlobalTheory.CompanionTheory.LeibGP.glEmbMat_last_last,
+        GlobalTheory.CompanionTheory.BZPhiPG.HpgEmb.glEmbMat_cc, GlobalTheory.CompanionTheory.BZPhiPG.HpgEmb.glEmbMat_lc,
+        GlobalTheory.CompanionTheory.BZPhiPG.HpgEmb.glEmbMat_cl, GlobalTheory.CompanionTheory.BZPhiPG.HpgEmb.glEmbMat_ll,
         MonoidHom.codRestrict_apply, Units.coe_map, MonoidHom.coe_mk, OneHom.coe_mk]
 
 end GlobalTheory.CompanionTheory.LeibGP
@@ -1576,24 +1556,7 @@ theorem parab_mul_KO {α n : Type} {m : α → Type} [Fintype α] [LinearOrder �
   obtain ⟨-, -, -, -, -, -, -, -, h⟩ := GlobalTheory.SmGL.LeviInt.levi_integral_facts k α n m e
   exact h
 
-theorem det_levi (n : ℕ) (g : GL (Fin n) k) :
-    GeneralLinearGroup.det ((levi k n g : Mir k n) : GL (Fin (n + 1)) k) = GeneralLinearGroup.det g := by
-  ext
-  exact GlobalTheory.CompanionTheory.MirPsiPair.det_glEmbMat n _
 
-theorem det_unip (n : ℕ) (v : Multiplicative (Fin n → k)) : GeneralLinearGroup.det (unip k n v) = 1 := by
-  apply GlobalTheory.CompanionTheory.BZPsiPG.Norm.det_unip'
-
-theorem dpowM_levi (n : ℕ) (s : ℝ) (g : GL (Fin n) k) :
-    dpowM n s (levi k n g) = dpow n s g := by
-  show absPow k (s : ℂ) (GeneralLinearGroup.det ((levi k n g : Mir k n) : GL (Fin (n + 1)) k)) = absPow k (s : ℂ) _
-  rw [det_levi]
-
-theorem dpowM_of_mem (n : ℕ) (s : ℝ) (u : Mir k n) (hu : u ∈ MirUin k n) : dpowM n s u = 1 := by
-  obtain ⟨v, hv⟩ := (hu : (u : GL (Fin (n + 1)) k) ∈ MirU k n)
-  show absPow k (s : ℂ) (GeneralLinearGroup.det (u : GL (Fin (n + 1)) k)) = 1
-  have hv' : (u : GL (Fin (n + 1)) k) = unip k n v := hv.symm
-  rw [hv', det_unip, map_one]
 
 theorem scalar_id (m j : ℕ) (a b : kˣ) :
     absPow k ((-1 / 2 : ℝ) : ℂ) (a * b) * absPow k (((((j + 1 : ℕ) : ℝ) / 2 : ℝ)) : ℂ) a *
@@ -1680,7 +1643,7 @@ theorem hcomp (p : parab k (eMJ m j)) (w : Vt (j := j) ρ ⊗[ℂ] Zt τ m) :
       refine (extTensor_tmul _ _ _ a b).trans ?_
       show (((dpow m (((j + 1 : ℕ) : ℝ) / 2) g₁ : ℂˣ) : ℂ) • ρ.ρ g₁ a : Vt (j := j) ρ) ⊗ₜ[ℂ]
         (((dpowM j (-((m : ℕ) : ℝ) / 2) (levi k j g₂) : ℂˣ) : ℂ) • τ.ρ (levi k j g₂) b : Zt τ m) = _
-      rw [dpowM_levi]
+      rw [GlobalTheory.CompanionTheory.BZPsiPG.Norm.dpowM_levi']
     have h2 : (fun x => twoRep ρ.ρ (psiN τ).ρ x (leviProj k (eMJ m j) p x) (pair a (mkY τ b) x)) =
         pair (ρ.ρ g₁ a) (((dpow j (-1 / 2) g₂ : ℂˣ) : ℂ) • mkY τ (τ.ρ (levi k j g₂) b)) := by
       funext x
@@ -1730,7 +1693,7 @@ theorem sig_tmul (v : MirabolicParabolic k m j) (a : Vt (j := j) ρ) (b : Zt τ 
   rw [hv]
   show (((dpow m (((j + 1 : ℕ) : ℝ) / 2) 1 : ℂˣ) : ℂ) • ρ.ρ 1 a : Vt (j := j) ρ) ⊗ₜ[ℂ]
     (((dpowM j (-((m : ℕ) : ℝ) / 2) (gpProj k m j v).2 : ℂˣ) : ℂ) • τ.ρ (gpProj k m j v).2 b : Zt τ m) = _
-  rw [dpowM_of_mem _ _ _ hv2, map_one, map_one]
+  rw [GlobalTheory.CompanionTheory.BZPsiPG.Norm.dpowM_of_mem' _ _ _ hv2, map_one, map_one]
   simp
   rfl
 

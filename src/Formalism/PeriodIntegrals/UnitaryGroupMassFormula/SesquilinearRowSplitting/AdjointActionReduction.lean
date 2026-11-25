@@ -70,8 +70,6 @@ end Gen
 
 section D7
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem trace_reduction : TrStep := by
   intro D
   obtain ⟨x, y, hy, hxy⟩ := PI.CMT.main D.host.E D.sp.cm.cmUnram 1 (by simp)

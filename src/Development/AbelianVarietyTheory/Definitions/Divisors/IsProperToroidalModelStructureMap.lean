@@ -303,16 +303,6 @@ variable {Z : Model Xo c β} {k : Type} [Field k] {m d : ℕ} {ξ : Sp (ChartRin
 
 end IsToricChart
 
-def IsArcBase (O' : Type) [CommRing O'] [IsDomain O'] (ϖ : O') : Prop :=
-  (IsField O' ∧ ϖ = 1) ∨ (IsDiscreteValuationRing O' ∧ Irreducible ϖ ∧ IsAdicComplete (Ideal.span {ϖ}) O')
-
-def IsArcChart (Y : Model Xo c β) {O' : Type} [CommRing O'] [IsDomain O'] {b : O →+* O'} (a : ArcIn D l β O' b) (ϖ : O')
-    (χ : Sp (PowerSeries O') ⟶ Y.X) : Prop :=
-  χ ≫ Y.s = spMap (PowerSeries.C (R := O')) ≫ spMap b ∧
-  (∀ x : Sp (PowerSeries O'), χ x ∈ abLocus Y.t.G ↔ PowerSeries.X ∉ x.asIdeal) ∧
-  (∀ x : Sp (PowerSeries O'), PowerSeries.C ϖ * PowerSeries.X ∉ x.asIdeal → χ x ∈ Set.range Y.j) ∧
-  Y.HasArcData a (Ideal.span {PowerSeries.X}) (PowerSeries.C (R := O')) PowerSeries.X χ
-
 end Charts
 
 section Model
@@ -326,34 +316,15 @@ structure TorModel (Y : Model Xo c β) where
 
   b : Z.X ⟶ Y.X
 
-  b_s : b ≫ Y.s = Z.s
-
-  j_b : Z.j ≫ b = Y.j
-
   pull : SABMap Z.t Y.t b
-
-  pull_univ : ∀ (T : Scheme.{0}) (g₁ : T ⟶ Z.oF.t.G.left) (g₂ : T ⟶ Y.oF.t.G.left),
-    g₁ ≫ Z.m0.toSABMap.φ = g₂ ≫ Y.m0.toSABMap.φ → g₁ ≫ Z.oF.t.G.hom = g₂ ≫ Y.oF.t.G.hom →
-      g₁ ≫ Z.m.φ ≫ pull.φ = g₂ ≫ Y.m.φ
 
   smooth : SmoothOfRelativeDimension D.dim (genStr Z)
 
   snc : FinalTheorems.Snc (genBdIdeal Z)
 
-  toric : ∀ x ∈ genBd Z, HasToricChart Z x
-
-  lifts : ∀ (O' : Type) [CommRing O'] [IsDomain O'] [CharZero O'] (b' : O →+* O') (ϖ : O') (a : ArcIn D l β O' b')
-    (χ : Sp (PowerSeries O') ⟶ Y.X), IsArcBase O' ϖ → IsArcChart Y a ϖ χ → ∃ χ'' : Sp (PowerSeries O') ⟶ Z.X, χ'' ≫ b = χ
-
   BD : EffCartierData Z.X
 
-  BD_supp : ∀ x ∈ BD.idealSheaf.support, x ∉ abLocus Z.t.G
-
-  BD_pos : ∀ x ∈ genBd Z, genι Z x ∈ BD.idealSheaf.support
-
   m0 : ℕ
-
-  torModel_multiplicity_pos : 0 < m0
 
 theorem isProper_toroidalModel_structureMap (Y : Model Xo c β) : IsProper Y.s := by
   obtain ⟨N, i, hi, e⟩ := Y.proj

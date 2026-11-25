@@ -396,25 +396,94 @@ theorem relDet_std (hI : I.Ok) (hS : I.StdC l Z C) : Formalism.L2.Herm.Symmetric
   exact GlobalTheory.Mem.NormOneIdeal.relDet_eq_of_pinned (I.rec7 l Z) idl hp _ (hermS I l Z C hI hS).dt (hermS I l Z C hI hS).dt_ker
     (hermS I l Z C hI hS).dt_UO (hermS I l Z C hI hS).dt_rat L L' g x hg hx
 
-theorem exists_colsFullS : ∀ {B : GlobalTheory.Mem.Base} {X : PreX B.toPre} (I : TC B X), I.Ok → TC.Pins B X → ∀ (l : I.Laws) (Z : TC.Later B (I.cols l)), ∀ (C : ColsTiedSym (I.rec7 l Z)) (g : Formalism.L2.Herm.SymmetricGroupCompatibility (I.rec7 l Z) C.herm.base), I.StdC l Z C → Formalism.L2.Herm.VolumeCompatible (I.rec7 l Z) → ∃ Fu : ColsFullS C, HEq Fu.1.g g ∧ I.StdDt l Z Fu.1.base.dt := by
-  intro B X I hI _ l Z C g hS hV
+/-- Full data over given columns, once the compatibilities not recorded in `ColsHermS` are supplied. -/
+theorem exists_colsFullS_of_compat (hI : I.Ok) (hS : I.StdC l Z C)
+    (g : Formalism.L2.Herm.SymmetricGroupCompatibility (I.rec7 l Z) C.herm.base)
+    (ad : Formalism.L2.Herm.SymmetricAdelicCompatibility (I.rec7 l Z) C.herm.base C.herm.atT)
+    (cof : Formalism.L2.Herm.SymmetricCofactorCompatibility (I.rec7 l Z) C.herm.base C.herm.atT)
+    (stabMap : Formalism.L2.Herm.SymmetricStabilizerMapCompatibility (I.rec7 l Z) C.herm.base C.herm.atT)
+    (fvI : Formalism.L2.Herm.SymmetricResidueFieldLevels (I.rec7 l Z) C.herm.base C.herm.atT) :
+    ∃ Fu : ColsFullS C, HEq Fu.1.g g ∧ I.StdDt l Z Fu.1.base.dt := by
   let Fu : Formalism.L2.Herm.FullTiedS (I.rec7 l Z) :=
     { base := hermS I l Z C hI hS
       atT := C.herm.atT
-      vol := hV
       levelZeroCompatibility := C.herm.levelZeroCompatibility
       g := g
-      ad := C.herm.ad
-      cof := C.herm.cof
+      ad := ad
+      cof := cof
       piG := C.herm.piG
-      stabMap := C.herm.stabMap
-      fvI := C.herm.fvI
+      stabMap := stabMap
+      fvI := fvI
       relDet := relDet_std I l Z C hI hS
       std := C.herm.std
       baseL := C.herm.baseL }
   refine ⟨⟨Fu, rfl⟩, HEq.rfl, ?_⟩
   intro x a ha
   exact normOneFiniteAdeleDetClass_of_isDetLift B.host I.SQ x a ha
+
+/-- `ColsHermS` does not determine the adelic compatibility of its level-prime moves, so the
+level-prime data is chosen again: the new columns have the same base and the same forms.
+`hA` is `GlobalTheory.T.exists_hermitian_data_carT_of_std I hI hP l Z C.herm.base C.forms` and
+`hB` is `GlobalTheory.T.hermitianColumns_generators_baseLattices_functionals I hI hP l Z C.herm.base C.forms`. -/
+theorem exists_colsFullS : ∀ {B : GlobalTheory.Mem.Base} {X : PreX B.toPre} (I : TC B X), I.Ok → TC.Pins B X → ∀ (l : I.Laws) (Z : TC.Later B (I.cols l)), ∀ (C : ColsTiedSym (I.rec7 l Z)) (g : Formalism.L2.Herm.SymmetricGroupCompatibility (I.rec7 l Z) C.herm.base), I.StdC l Z C → (∀ u, I.StdLvC l Z u (C.forms u)) →
+    ∀ (_hA : (∀ u, I.StdF l Z u (C.forms u) ∧ I.StdLvC l Z u (C.forms u)) → CarH C.herm.base C.forms →
+        ∃ A, CarT C.herm.base C.forms A ∧ Formalism.L2.Herm.SymmetricAdelicCompatibility (I.rec7 l Z) C.herm.base A ∧
+          Formalism.L2.Herm.SymmetricStabilizerMapCompatibility (I.rec7 l Z) C.herm.base A)
+      (_hB : ∀ A : ∀ u, Formalism.L2.Herm.AtT (I.rec7 l Z) u (C.herm.base.vT u) (C.herm.base.Fv u),
+        (∀ u, I.StdF l Z u (C.forms u) ∧ I.StdLvC l Z u (C.forms u)) → CarH C.herm.base C.forms → CarT C.herm.base C.forms A →
+        (∀ u (w : HeightOneSpectrum (𝓞 (I.rec7 l Z).host.F)) (h : ((((I.rec7 l Z).mem u).A.T : ℕ) : 𝓞 (I.rec7 l Z).host.F) ∈ w.asIdeal) (a : intV (I.rec7 l Z).host.E w), (a : TensorProduct (I.rec7 l Z).host.F (I.rec7 l Z).host.E (w.adicCompletion (I.rec7 l Z).host.F)) = inclE (F := (I.rec7 l Z).host.F) (w.adicCompletion (I.rec7 l Z).host.F) ((A u).piU : (I.rec7 l Z).host.E) → ∀ m : (C.herm.base.lev0 u).fM w h, a • m = 0) →
+        Formalism.L2.Herm.SymmetricCofactorCompatibility (I.rec7 l Z) C.herm.base A ∧
+          Formalism.L2.Herm.SymmetricBaseCompatibility (I.rec7 l Z) C.herm.base A ∧
+          Nonempty (Formalism.L2.Herm.SymmetricResidueFieldLevels (I.rec7 l Z) C.herm.base A) ∧
+          ∃ X0 : Formalism.L2.Herm.SymmetricLevelZeroData (I.rec7 l Z) C.herm.base A, ∀ u, (X0 u).piG = X.piG),
+    ∃ C' : ColsTiedSym (I.rec7 l Z),
+      (⟨C'.herm.base, C'.forms⟩ : Σ H : Formalism.L2.Herm.HermColsCh (I.rec7 l Z), ∀ u, FormsTiedSym (I.rec7 l Z) u (H.Ch u) (H.chOf u)) = ⟨C.herm.base, C.forms⟩ ∧
+      I.StdC l Z C' ∧ (∀ u, I.StdLvC l Z u (C'.forms u)) ∧
+      ∃ Fu : ColsFullS C', HEq Fu.1.g g ∧ I.StdDt l Z Fu.1.base.dt := by
+  intro B X I hI hP l Z C g hS hL hA hB
+  have hF : ∀ u, I.StdF l Z u (C.forms u) ∧ I.StdLvC l Z u (C.forms u) := fun u => ⟨hS u, hL u⟩
+  have hH : CarH C.herm.base C.forms :=
+    { eV := C.eV
+      fv := fun u v a => by rw [C.res u]; exact (C.herm.atT u).res_F v a
+      car0 := C.car0
+      carC := C.carC
+      carM := C.carM
+      sp := C.sp
+      fr0 := C.fr0 }
+  obtain ⟨A, hT, hAd, hSt⟩ := hA hF hH
+  have hpi : ∀ u, (A u).piU = (C.herm.atT u).piU := fun u => (hT.piU u).symm.trans (C.piU u)
+  obtain ⟨hCof, hBase, ⟨hFv⟩, X0, hX0⟩ := hB A hF hH hT
+    (fun u w h a ha m => (C.herm.levelZeroCompatibility u).fM_pi w h a (by rw [ha, hpi u]) m)
+  let C' : ColsTiedSym (I.rec7 l Z) :=
+    { herm :=
+        { base := C.herm.base
+          atT := A
+          levelZeroCompatibility := X0
+          piG := fun u u' => by rw [hX0 u, hX0 u']
+          std := C.herm.std
+          baseL := hBase }
+      forms := C.forms
+      eV := C.eV
+      piU := hT.piU
+      res := hT.res
+      car0 := C.car0
+      carC := C.carC
+      carM := C.carM
+      carP := hT.carP
+      lattice₂ := hT.lattice₂
+      pr := hT.pr
+      prk := hT.prk
+      prC := hT.prC
+      z0 := hT.z0
+      ga := hT.ga
+      sp := C.sp
+      piG := fun u => by rw [hX0 u]; exact (hS u).gl.piG
+      fr0 := C.fr0
+      gl_const := C.gl_const
+      chi := C.chi
+      frame_level_zero_const := C.frame_level_zero_const
+      frP_const := C.frP_const }
+  exact ⟨C', rfl, hS, hL,exists_colsFullS_of_compat I l Z C' hI hS g hAd hCof hSt hFv⟩
 
 end Main
 

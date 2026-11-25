@@ -374,7 +374,7 @@ theorem crystalline_extension_integral_cocycle_all_places : ∀ (D : Formalism.B
     · exact hjT τ i hτ a h1
     · rw [hjs.2 τ a h1]
       exact ⟨by simp, by simp⟩
-  have h5 := (_root_.GlobalTheory.NL.Heights.heights_from_jumps D HW F Cm l K s LL h Tp M hh hTp hjTp).1
+  have h5 := (_root_.GlobalTheory.NL.Heights.heights_from_jumps D.loc D.locA D.locT HW F Cm l K s LL h Tp M hh hTp hjTp).1
   have h2 := (GlobalTheory.NL.WachLatticeTrivialModUniformizer.wachLattice_galois_trivial_mod_uniformizer D HW F Cm l K s LL h Tp hTp).2.2
   exact core _ T Tp ι π M (fun y hy => (hexact y).1 hy) hsat h5 h2 e hφe hγe x hx c hc
 

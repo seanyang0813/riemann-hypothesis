@@ -38,8 +38,6 @@ theorem cntCl_equiv {α : Type} (f g : α → α) (hgf : ∀ a, g (f a) = a) (hf
   unfold Cnt.cntCl
   rw [← himg, hinj.injOn.encard_image]
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 variable {D : D7}
 
 theorem XS_map {T : D.host.E} {γ : (VS D).V ≃ₗ[D.host.E] (VS D).V} (hγ : γ ∈ Formalism.HermitianLatticesTheory.isom (VS D).hT)
@@ -68,7 +66,5 @@ end PI.RepsIndep.Tr
 namespace PI.RepsIndep
 
 open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.S Formalism.MainNotions.UniformConstantsAndStatements
-
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 end PI.RepsIndep

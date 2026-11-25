@@ -70,20 +70,4 @@ theorem identG {g : M2 n} (hg : InG g) (X Y : Matrix (Fin n) (Fin n) ℂ) :
   rw [key, h3, h3', h1, h2]
   simp
 
-theorem det_CZD {g : M2 n} (hg : InG g) {Z : Matrix (Fin n) (Fin n) ℂ} (hZ : IsSiegel Z) :
-    IsUnit (g.toBlocks₂₁ * Z + g.toBlocks₂₂).det := by
-  rw [isUnit_iff_ne_zero]
-  intro hdet
-  obtain ⟨v, hv, hMv⟩ := Matrix.exists_mulVec_eq_zero_iff.mpr hdet
-  have hid := identG hg Z Z
-  have h0 : star v ⬝ᵥ ((Zᴴ - Z) *ᵥ v) = 0 := by
-    rw [← hid, sub_mulVec, ← mulVec_mulVec, ← mulVec_mulVec, hMv, mulVec_zero, dotProduct_sub,
-      dotProduct_zero, dotProduct_mulVec, ← star_mulVec, hMv]
-    simp
-  have h0' : star v ⬝ᵥ ((Z - Zᴴ) *ᵥ v) = 0 := by
-    rw [← neg_sub, neg_mulVec, dotProduct_neg, h0, neg_zero]
-  have hpos := Matrix.PosDef.dotProduct_mulVec_pos hZ hv
-  rw [smul_mulVec, dotProduct_smul, h0', smul_zero] at hpos
-  exact lt_irrefl _ hpos
-
 end PositivityTheory.Rg.Sw.Glob.GaussH

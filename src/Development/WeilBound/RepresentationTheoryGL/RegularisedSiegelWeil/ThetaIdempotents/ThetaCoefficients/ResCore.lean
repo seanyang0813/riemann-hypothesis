@@ -335,10 +335,6 @@ theorem toS_of (hI : IdemEx) : ToS := by
 
 end PositivityTheory.Rg.Rsw.L.LToS
 
-namespace PositivityTheory.Rg.Rsw.L
-
-end PositivityTheory.Rg.Rsw.L
-
 end
 end -- clump:auto
 end -- clump:auto
@@ -1850,9 +1846,6 @@ variable {D : D7} {n : ℕ}
 
 alias matG_mul := _root_.GlobalTheory.StdUnn.Gen.mat_mul
 
-theorem matG_ext {g h : G D n} (e : mat g = mat h) : g = h := by
-  apply Subtype.ext; apply Units.ext; exact e
-
 theorem matG_inv {g : G D n} {M : Mx D (n + n) (n + n)} (h : mat g * M = 1) : mat g⁻¹ = M := by
   have e : mat g⁻¹ * mat g = 1 := by
     rw [← matG_mul, inv_mul_cancel]; rfl
@@ -1894,7 +1887,7 @@ theorem geng : GenG := by
       simp [block_matrix_one]
     · intro g hg
       have e : g⁻¹ = g * (g * g) := by
-        apply matG_ext
+        apply GlobalTheory.StdUnn.LeftInvSect.mat_inj
         rw [matG_inv (M := blk4 0 (-1) 1 0), matG_mul, matG_mul, hg, submatrix_fromBlocks_mul, submatrix_fromBlocks_mul]
         · simp
         · rw [hg, submatrix_fromBlocks_mul]; simp [block_matrix_one]

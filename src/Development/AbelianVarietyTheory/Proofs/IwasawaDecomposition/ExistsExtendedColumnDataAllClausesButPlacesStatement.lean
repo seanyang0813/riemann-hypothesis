@@ -571,7 +571,7 @@ theorem stage {B' : Base} {f' : Fr B'.toPre} {T' : TwDat B'} {w' : ColW B' f' T'
       ∀ (i : Fin (w'.st Z').toD7.R.m) (t : TupU w'.I (usedOf w'.I T' Wt'))
         (ok : (Formalism.L2.Col.mtKGSD (Pr := B'.primes w'.px) B'.wts w'.I.Ch w'.I.sel t.1 ((i : ℕ) + 1)).Ok)
         (φ : (Formalism.L2.Col.mtKGSD (Pr := B'.primes w'.px) B'.wts w'.I.Ch w'.I.sel t.1 ((i : ℕ) + 1)).EqFun) (h : Bridge.Gf (Vc (w'.st Z').toD7 i)),
-        ∃ v', Bd.jL i t ((by with_unfolding_all exact ((Formalism.L2.Col.mtKGSD (Pr := B'.primes w'.px) B'.wts w'.I.Ch w'.I.sel t.1 ((i : ℕ) + 1)).res ok φ :))) h = c0L i v' ∧
+        ∃ v', Bd.jL i t ((Formalism.L2.Col.mtKGSD (Pr := B'.primes w'.px) B'.wts w'.I.Ch w'.I.sel t.1 ((i : ℕ) + 1)).res ok φ) h = c0L i v' ∧
           HEq (MvPolynomial.map (w'.st Z').toD7.what₂.embLL v'.1)
             (MvPolynomial.map (B'.embLL : B'.fields.K →+* ℂ) (φ.1 (LiftBrg.ptL (w'.st Z') w'.I (usedOf w'.I T' Wt') i t 1 1 h)).1) := by
   have hLev := hK.1
@@ -624,8 +624,11 @@ theorem ptL_enl {B B' : Base} {f : Fr B.toPre} {f' : Fr B'.toPre} {T : TwDat B} 
   have e' : h' = (h) := eq_of_heq ((e))
   rw [e']
   have hs := s2.trans (hv.trans s1.symm)
-  exact (by with_unfolding_all exact ((decoOf_heq (F := B.host.F) hs (((1 : GL (Fin (w.st Z).B.R.nV) (LiftBrg.EA (w.st Z)))⁻¹ * LiftBrg.castGL (LiftBrg.rkEq (w.st Z) ⟨i, hi0⟩).symm
-    (Formalism.UG.bc (swapAE (w.st Z).toD7) (h : GL (Fin (Vc (w.st Z).toD7 ⟨i, hi0⟩).rank) _)) * 1 * 1))) :))
+  let g0 : GL (Fin (w.st Z).B.R.nV) (LiftBrg.EA (w.st Z)) :=
+    (1 : GL (Fin (w.st Z).B.R.nV) (LiftBrg.EA (w.st Z)))⁻¹ * LiftBrg.castGL (LiftBrg.rkEq (w.st Z) ⟨i, hi0⟩).symm
+      (Formalism.UG.bc (swapAE (w.st Z).toD7) (h : GL (Fin (Vc (w.st Z).toD7 ⟨i, hi0⟩).rank) _)) * 1 * 1
+  dsimp only [ColW.st] at g0 ⊢
+  exact decoOf_heq (F := B.host.F) hs g0
 
 
 
@@ -661,25 +664,27 @@ theorem frames_enl {B B' : Base} {f : Fr B.toPre} {f' : Fr B'.toPre} {T : TwDat 
     ⟨(HEq.refl z.R.ΛY), (HEq.refl z.R.ΛV), (HEq.refl z.R.ΛW), (HEq.refl z.R.βY),
       (HEq.refl z.R.βW)⟩, (z.lev.is.βY), (hV), (z.lev.is.βW), fun Pg hPg => ?_, fun ψ hψ => ?_,
       fun θ hθ => ?_, fun βV hβ => ?_⟩
-  · have e : Pg = (z.R.Pg) := hPg.trans ((by with_unfolding_all exact (z.lev.Pg.symm :)))
+  · have e : Pg = z.R.Pg := hPg.trans z.lev.Pg.symm
     subst e
-    refine ⟨?_, HEq.refl z.R.Pg, (by with_unfolding_all exact ((heq_of_eq hall.symm) :)), fun eG hG => ?_⟩
+    refine ⟨?_, HEq.refl z.R.Pg, heq_of_eq hall.symm, fun eG hG => ?_⟩
     · intro hframes
       have hframesOld : Seed.Frm.FramesExistDiagonal (w.st Z).toD7 z.R.Pg := by
         unfold Seed.Frm.FramesExistDiagonal Seed.Frm.SDFrames Seed.Frm.NormalFrameConditionsDiagonal
           Seed.Frm.NormalClausesG Seed.Frm.XBasesG Mi.NormalFrames Mi.NormalFrame0 Mi.VertexAt at hframes ⊢
         set_option smartUnfolding false in
-          with_unfolding_all exact hframes
+          exact hframes
+
       have hnormal := z.pins.keep.frames hframesOld
       unfold Seed.Frm.NormalFrameConditionsDiagonal Seed.Frm.NormalClausesG Seed.Frm.XBasesG
         Mi.NormalFrames Mi.NormalFrame0 Mi.VertexAt at hnormal ⊢
       set_option smartUnfolding false in
-        with_unfolding_all exact hnormal
-    · exact (by with_unfolding_all exact ((heq_of_eq (isIdG_unique (w.st Z) (px := w.px) z.lev.Pg (eG := (by with_unfolding_all exact (eG :))) ((by with_unfolding_all exact (hG :))) z.idG)) :))
-  · exact (by with_unfolding_all exact ((heq_of_eq (isStdChar_unique (D := (w.st Z).toD7) (ψ := (by with_unfolding_all exact (ψ :))) ((by with_unfolding_all exact (hψ :))) z.pins.keep.std)) :))
-  · exact (by with_unfolding_all exact ((heq_of_eq (isInfFam_unique (D := (w.st Z).toD7) (θ := (by with_unfolding_all exact (θ :))) ((by with_unfolding_all exact (hθ :))) z.pins.char.base.models.inf)) :))
+        exact hnormal
+
+    · exact heq_of_eq (isIdG_unique (w.st Z) (px := w.px) z.lev.Pg (eG := eG) hG z.idG)
+  · exact heq_of_eq (isStdChar_unique (D := (w.st Z).toD7) (ψ := ψ) hψ z.pins.keep.std)
+  · exact heq_of_eq (isInfFam_unique (D := (w.st Z).toD7) (θ := θ) hθ z.pins.char.base.models.inf)
   · have e : ((βV) : type_of% z.R.βV) = z.R.βV := funext fun j => Eq.trans ((hβ j)) (z.lev.beta.1 j).symm
-    exact (by with_unfolding_all exact ((heq_of_eq e) :))
+    exact heq_of_eq e
 
 
 

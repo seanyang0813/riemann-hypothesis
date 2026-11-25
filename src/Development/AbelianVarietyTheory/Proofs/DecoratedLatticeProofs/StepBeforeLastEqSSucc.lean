@@ -88,8 +88,6 @@ def rd (J : QJ a t) (j : ℕ) (hj : j + 1 = B.R.m) :
       ((i : Fin J.r) → GL (XIx (Fin (I.rec7 l Z).R.k) (Fin (I.rec7 l Z).R.t) ((J.G i).s + 1) ⊕ Fin 0) (J.G i).k) :=
   MonoidHom.pi fun i => rdAt J j i (step_before_last_eq_s_succ J hj i)
 
-def plF (J : QJ a t) (p : GlobalTheory.FinPl.Pl (I.rec7 l Z)) : Prop := ∃ i, (J.G i).q.v = p
-
 end GlobalTheory.PenBridge
 end
 

@@ -35,16 +35,8 @@ theorem word_singleton (a : Fin n × Fin n) : word [a] = e a := by simp
 theorem E_mul_sub_mul (a b : Fin n × Fin n) :
     E a * E b - E b * E a =
       (if a.2 = b.1 then E (a.1, b.2) else 0) - (if b.2 = a.1 then E (b.1, a.2) else 0) := by
-  obtain ⟨i, j⟩ := a
-  obtain ⟨k, l⟩ := b
   simp only [E]
-  congr 1
-  · by_cases h : j = k
-    · subst h; simp [Matrix.single_mul_single_same]
-    · simp [h]
-  · by_cases h : l = i
-    · subst h; simp [Matrix.single_mul_single_same]
-    · simp [h]
+  split_ifs <;> simp_all
 
 theorem e_mul_sub_mul (a b : Fin n × Fin n) :
     e a * e b - e b * e a =
@@ -57,11 +49,8 @@ theorem e_mul_sub_mul (a b : Fin n × Fin n) :
   congr 1 <;> split_ifs <;> simp
 
 theorem eq_sum_E (X : gl n) : X = ∑ a : Fin n × Fin n, X a.1 a.2 • E a := by
-  ext i j
-  simp only [E, Matrix.sum_apply, Matrix.smul_apply, Matrix.single_apply, smul_eq_mul]
-  rw [Fintype.sum_prod_type]
-  rw [Finset.sum_eq_single i (fun b _ hb => by simp [hb]) (by simp), Finset.sum_eq_single j (fun b _ hb => by simp [hb]) (by simp)]
-  simp
+  simpa only [Fintype.sum_prod_type, E, Matrix.smul_single, smul_eq_mul, mul_one]
+    using Matrix.matrix_eq_sum_single X
 
 theorem ι_eq_sum_e (X : gl n) :
     UniversalEnvelopingAlgebra.ι ℂ X = ∑ a : Fin n × Fin n, X a.1 a.2 • e (n := n) a := by

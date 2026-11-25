@@ -47,8 +47,6 @@ open scoped TensorProduct InnerProductSpace ComplexOrder
 
 namespace GlobalTheory.Mem.R3.Rw
 
-attribute [local instance] Formalism.IndefR.principalLevelFrame.instCMHostI
-
 structure Hs : Type 1 where
   T : Type
   [nacg : NormedAddCommGroup T]

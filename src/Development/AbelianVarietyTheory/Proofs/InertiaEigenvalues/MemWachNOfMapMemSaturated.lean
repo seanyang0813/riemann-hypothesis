@@ -527,9 +527,9 @@ namespace GlobalTheory.NL.PhiFlat
 
 theorem main : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; ∀ T : Lt K LL, IsCrys ((D.loc l).PD K) T.ρ → ∀ z : Fin l → W.DD T, (∀ j, z j ∈ W.N T) → ∑ j : Fin l, (fun _ => ((1 : PowerSeries ↥(OL LL)) + PowerSeries.X) ^ (j : ℕ) : AA K LL) • W.φD T (z j) = 0 → ∀ j, z j = 0 := by
   intro D HW F l _ K s LL h W T hT z hz hsum
-  obtain ⟨bN⟩ := GlobalTheory.NL.N_basis D HW F l K s LL h T hT
+  obtain ⟨bN⟩ := GlobalTheory.NL.N_basis D.loc D.locA HW F l K s LL h T hT
   have hQ : IsUnit (algebraMap (AA K LL) W.EE W.Q) := by
-    have := ((GlobalTheory.NL.IoXQ.main D HW F l K s LL h).2.2.2.2.2.2 0).2
+    have := ((GlobalTheory.NL.IoXQ.main D.loc D.locA HW F l K s LL h).2.2.2.2.2.2 0).2
     rw [pow_zero, AlgHom.one_apply] at this
     exact this
   obtain ⟨χ, -, hφ, -⟩ := GlobalTheory.NL.CycRing.rings_cyclotomic D HW l K s LL h

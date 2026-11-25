@@ -10,8 +10,6 @@ namespace Formalism.MainNotions.BridgeLemma
 
 open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat Formalism.MainNotions.LatticeGluingRadicals NumberField Module IsDedekindDomain
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 def EqualFlagsScalar : Prop :=
   ∀ (K E : Type) [Field K] [Field E] [NumberField E] [StarRing E] [Algebra K E] (S : HSpace E) (r : ℕ) (T : E)
     (F F' : FlagG S r T), T ≠ 0 →

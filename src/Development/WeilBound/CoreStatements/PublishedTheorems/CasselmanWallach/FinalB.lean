@@ -1073,10 +1073,6 @@ namespace PositivityTheory.CW
 
 namespace NoncommutativeSwapSum
 
-lemma nc_swap {n : ℕ} {M : Type*} [AddCommMonoid M] (ε : Fin n → Bool) (f : Fin n × Fin n → M) :
-    ∑ p ∈ nc ε, f p.swap = ∑ p ∈ nc ε, f p := by
-  refine Finset.sum_nbij' Prod.swap Prod.swap ?_ ?_ ?_ ?_ ?_ <;> simp [nc, ne_comm]
-
 lemma sumS {n : ℕ} {V : Type} [AddCommGroup V] [Module ℂ V] (ε : Fin n → Bool)
     (E : Fin n → Fin n → Module.End ℂ V) (κ : ℂ)
     (hS : ∀ w, ∑ p ∈ nc ε, E p.1 p.2 (E p.2 p.1 w) = κ • w - casimirK ε E w) :
@@ -1102,7 +1098,7 @@ lemma key {n : ℕ} {V : Type} [AddCommGroup V] [Module ℂ V] (ε : Fin n → B
     noncomm_ring
   rw [Finset.sum_congr rfl h2, Finset.sum_add_distrib] at hc
   have h3 : ∑ p ∈ nc ε, E p.1 p.2 * Z ε E p.2 p.1 = ∑ p ∈ nc ε, E p.2 p.1 * Z ε E p.1 p.2 :=
-    nc_swap ε (fun p => E p.2 p.1 * Z ε E p.1 p.2)
+    PositivityTheory.CW.GrowthPolynomialOperator.sum_nc_swap ε (fun p => E p.2 p.1 * Z ε E p.1 p.2)
   rw [h3] at hc
   exact eq_neg_iff_add_eq_zero.mpr (by rw [add_comm]; exact hc)
 

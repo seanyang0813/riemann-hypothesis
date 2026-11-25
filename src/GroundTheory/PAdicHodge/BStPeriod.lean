@@ -118,27 +118,6 @@ theorem untilt_kummerEta (σ : Gal(PadicAlgCl p/K)) : PreTilt.untilt (kummerEta 
   rw [OneMemClass.coe_one]
   exact (mul_eq_left₀ natCast_p_ne_zero_cp).1 h.symm
 
-theorem gal_smul_logOnePlus (σ : Gal(PadicAlgCl p/K)) {z : 𝔹} (hz : z ∈ 𝔪) :
-    σ • logOnePlus 𝔪 z hz = logOnePlus 𝔪 (σ • z) (gal_smul_mem_maximalIdeal σ hz) := by
-  rw [gal_smul_bdR_def, logOnePlus, logOnePlus]
-  exact map_seriesEval (galBdRHom σ)
-    (Ideal.map_le_iff_le_comap.2 fun x hx => by
-      have h := gal_smul_mem_maximalIdeal σ hx
-      rw [gal_smul_bdR_def] at h
-      exact h) _ _ _
-
-theorem one_add_gal_smul_qBdR (σ : Gal(PadicAlgCl p/K)) :
-    1 + σ • qBdR (p := p) = (1 + qBdR) * (1 + muBdR p (kummerEta σ)) := by
-  have h1 : σ • (1 + qBdR (p := p)) = 1 + σ • qBdR := by rw [smul_add, smul_one]
-  rw [← h1, one_add_qBdR, muBdR_eq, add_sub_cancel, smul_mul', gal_smul_wittToBDeRhamPlus,
-    AInf.gal_smul_teichmuller, pFlat_mul_kummerEta, map_mul, map_mul, gal_smul_bdR_def (x := algebraMap _ _ _),
-    RingHom.map_rat_algebraMap, mul_assoc]
-
-theorem gal_smul_uBdR (σ : Gal(PadicAlgCl p/K)) :
-    σ • uBdR p = uBdR p + fontaineT (kummerEta σ) (untilt_kummerEta σ) := by
-  rw [uBdR, gal_smul_logOnePlus, fontaineT]
-  exact logOnePlus_mul qBdR_mem (muBdR_mem (untilt_kummerEta σ)) _ (one_add_gal_smul_qBdR σ)
-
 end Cp
 
 end GroundTheory.PAdicHodge

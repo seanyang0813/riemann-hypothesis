@@ -17,8 +17,6 @@ open NumberField Module Formalism.BasicNotions Formalism.MainNotions.S Formalism
 
 section D7
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem ddS_ne_zero (D : D7) : ddS D ≠ 0 := by
   unfold ddS
   rw [Ne, FractionalIdeal.coeIdeal_eq_zero]

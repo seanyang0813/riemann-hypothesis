@@ -1149,10 +1149,6 @@ namespace GlobalTheory.FamilyTieProof
 
 theorem std : ∀ (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (B : Base D cc δ), TaylorLogMetric.adm1 D → GL3Theta.InducedCMType D → TaylorLogMetric.IsCurveIdeal D cc → TaylorLogMetric.IsDiscriminantTwelfthRootOfIdealLattice D cc δ → B.kc.YFinite → ∀ N N' : ℕ, Even N → Even N' → StandardLatticesGL3.ThetaVectorUpToUnits D (TaylorLogMetric.tor0 D cc δ) (B.ω₀ / 2) (StandardLatticesGL3.stdL D N) (StandardLatticesGL3.stdL D N') (B.thZero N N') := _root_.GlobalTheory.BaseVacuum.thetaVectorUpToUnits_thZero_of_even
 
-theorem detn1 : ∀ (D : D7) (N : ℕ) (L : Submodule (𝓞 D.host.E) (Fin N → D.host.E)), StandardLatticesGL3.SD D L → TaylorLogMetric.N1 D (TaylorLogMetric.detId D (StandardLatticesGL3.stdL D N) L) := _root_.GlobalTheory.SelfDualDetNorm.detId_normOne
-
-theorem chin1 : ∀ (D : D7) (χ : TaylorLogMetric.IdE D → ℂ), TaylorLogMetric.IsChi D χ → ∀ 𝔞 : TaylorLogMetric.IdE D, TaylorLogMetric.N1 D 𝔞 → StandardLatticesGL3.Mod1All (χ 𝔞) := _root_.GlobalTheory.CharModOne.mod1All_of_isChi
-
 theorem genusOneVacuum_const_mul_modulusOne {D : D7} {T : TaylorLogMetric.Tor D} {t0 : ℂ} {N N' : ℕ} {L : Submodule (𝓞 D.host.E) (Fin N → D.host.E)}
     {L' : Submodule (𝓞 D.host.E) (Fin N' → D.host.E)} {G : TaylorLogMetric.VC D N N' → ℂ} {c : ℂ} (hc : StandardLatticesGL3.Mod1All c)
     (hG : StandardLatticesGL3.ThetaVectorUpToUnits D T t0 L L' G) : StandardLatticesGL3.ThetaVectorUpToUnits D T t0 L L' (fun z => c * G z) := by

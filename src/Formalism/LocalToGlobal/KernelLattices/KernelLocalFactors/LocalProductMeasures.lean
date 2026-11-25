@@ -1195,8 +1195,6 @@ theorem mh_val_lt {w : E} (hI : IntAt P w) (h0 : redP P w = 0) : P.valuation E w
   rw [h5]
   exact (P.valuation_lt_one_iff_mem r').mpr hr'
 
-theorem mh_val_mem {b : 𝓞 E} : P.valuation E (b : E) < 1 ↔ b ∈ P.asIdeal := P.valuation_lt_one_iff_mem b
-
 theorem mh_val_pow {b : 𝓞 E} (k : ℕ) : P.valuation E (b : E) ≤ WithZero.exp (-(k : ℤ)) ↔ b ∈ P.asIdeal ^ k := by
   rw [show (b : E) = algebraMap (𝓞 E) E b from rfl, HeightOneSpectrum.valuation_of_algebraMap,
     HeightOneSpectrum.intValuation_le_pow_iff_mem]

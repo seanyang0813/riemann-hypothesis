@@ -49,24 +49,6 @@ open UpperTheory.ConvolutionTheory UpperTheory.ConvolutionTheory.C PositivityThe
 open GlobalTheory.PRep GlobalTheory.SmGL Formalism.BasicNotions GlobalTheory.CuspRep
 open scoped TensorProduct Classical
 
-private def cj {G : Type} [Group G] (c : G) (U : Subgroup G) : Subgroup G where
-  carrier := {x | c⁻¹ * x * c ∈ U}
-  one_mem' := by simp [U.one_mem]
-  mul_mem' {a b} ha hb := by
-    have h := U.mul_mem ha hb
-    have e : c⁻¹ * (a * b) * c = c⁻¹ * a * c * (c⁻¹ * b * c) := by group
-    simpa only [Set.mem_setOf_eq, e] using h
-  inv_mem' {a} ha := by
-    have h := U.inv_mem ha
-    have e : c⁻¹ * a⁻¹ * c = (c⁻¹ * a * c)⁻¹ := by group
-    simpa only [Set.mem_setOf_eq, e] using h
-
-private theorem mem_cj {G : Type} [Group G] {c x : G} {U : Subgroup G} : x ∈ cj c U ↔ c⁻¹ * x * c ∈ U := Iff.rfl
-
-private theorem isOpen_cj {G : Type} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] (c : G) {U : Subgroup G}
-    (hU : IsOpen (U : Set G)) : IsOpen (cj c U : Set G) :=
-  hU.preimage (f := fun x => c⁻¹ * x * c) ((continuous_const.mul continuous_id).mul continuous_const)
-
 theorem UpperTheory.V.Z.InvariantSubmoduleMonicPolynomial.IwahoriBlocks.levLaws :
     ∀ {K : Type} [Field K] [NumberField K] (n : ℕ) (S : Finset (Pl K)), (∀ U, Lev U → CO (levOn (n := n) S U) ∧ levOn S U ≤ AdelicGLn.integralFiniteGL K n) ∧
       (∀ U U' : ∀ v : Pl K, Subgroup (Gw n v), Lev U → Lev U' → Lev (fun v => U v ⊓ U' v) ∧ levOn S (fun v => U v ⊓ U' v) = levOn S U ⊓ levOn S U') ∧
@@ -122,8 +104,14 @@ theorem UpperTheory.V.Z.InvariantSubmoduleMonicPolynomial.IwahoriBlocks.levLaws 
     exact ⟨infEmb K n x, hx, by simp [prodEquiv_infEmb]⟩
   · intro r w ι hinj hι hS U hU g
     obtain ⟨-, -, hout, -⟩ := (embEx n w hinj).2 ι hι
-    refine ⟨fun v => U v ⊓ cj (GM.cf v (ι g)) (U v), fun v => ?_, fun u hu => ?_⟩
-    · have ho := isOpen_cj (GM.cf v (ι g)) (hU v).1.2
+    refine ⟨fun v => U v ⊓ (U v).comap (MulAut.conj (GM.cf v (ι g))).symm.toMonoidHom,
+      fun v => ?_, fun u hu => ?_⟩
+    · have hc : Continuous fun x : Gw n v => (GM.cf v (ι g))⁻¹ * x * GM.cf v (ι g) :=
+        (continuous_const.mul continuous_id).mul continuous_const
+      have ho : IsOpen (((U v).comap (MulAut.conj (GM.cf v (ι g))).symm.toMonoidHom) :
+          Set (Gw n v)) := by
+        rw [Subgroup.coe_comap]
+        exact (hU v).1.2.preimage hc
       exact ⟨⟨(hU v).1.1.inter_right (Subgroup.isClosed_of_isOpen _ ho), (hU v).1.2.inter ho⟩,
         inf_le_left.trans (hU v).2⟩
     · refine (hmem _ _).2 fun v => ?_
@@ -134,7 +122,7 @@ theorem UpperTheory.V.Z.InvariantSubmoduleMonicPolynomial.IwahoriBlocks.levLaws 
       rw [hcf]
       by_cases hv : v ∈ S
       · rw [if_pos hv] at hu' ⊢
-        exact mem_cj.1 (Subgroup.mem_inf.1 hu').2
+        exact Subgroup.mem_comap.1 (Subgroup.mem_inf.1 hu').2
       · rw [if_neg hv] at hu' ⊢
         rw [hout g v (hS ▸ hv)]
         simpa using hu'

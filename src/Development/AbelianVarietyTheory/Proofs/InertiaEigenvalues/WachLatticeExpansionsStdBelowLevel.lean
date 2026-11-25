@@ -211,9 +211,9 @@ end Series
 
 
 
-theorem lat_low : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.loc D.locA HW F) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; let E := ((F l).E K s LL h).tie; let C := Cm l; ∀ T : Lt K LL, IsCrys ((D.loc l).PD K) T.ρ → ∀ (i : Let K) (ζ : ↥LL.1), ζ ^ (l ^ (s - 1)) = 1 → Std (Di (HW l) h T i) (Lat C h T i ζ) := by
-  intro D HW F Cm l hl K s LL h W E C T hT
-  have hp : ((D.loc l).PD K).p = l := (D.loc l).PD_p K
+theorem lat_low : ∀ (loc : LocTheory) (locA : ∀ (l : ℕ) [Fact l.Prime], LocAinf l (loc l)) (locT : ∀ (l : ℕ) [Fact l.Prime], Formalism.BasicNotions.LocTied l (loc l) (locA l)) (HW : HWOf loc) (F : FonOf loc locA HW) (Cm : CmpOf loc locA HW F) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; let E := ((F l).E K s LL h).tie; let C := Cm l; ∀ T : Lt K LL, IsCrys ((loc l).PD K) T.ρ → ∀ (i : Let K) (ζ : ↥LL.1), ζ ^ (l ^ (s - 1)) = 1 → Std (Di (HW l) h T i) (Lat C h T i ζ) := by
+  intro loc locA locT HW F Cm l hl K s LL h W E C T hT
+  have hp : ((loc l).PD K).p = l := (loc l).PD_p K
   have main : ∀ (j : ℕ) (i : Let K) (ζ : ↥LL.1), ζ ^ (l ^ j) = 1 → ζ ^ (l ^ (s - 1)) = 1 →
       Std (Di (HW l) h T i) (Lat C h T i ζ) := by
     intro j
@@ -221,7 +221,7 @@ theorem lat_low : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : Fon
     | zero =>
       intro i ζ h1 _
       obtain rfl : ζ = 1 := by simpa using h1
-      exact _root_.GlobalTheory.NL.AtZero.lat_one_std D HW F Cm l K s LL h T hT i
+      exact _root_.GlobalTheory.NL.AtZero.lat_one_std loc locA locT HW F Cm l K s LL h T hT i
     | succ j ih =>
       intro i ζ h1 h2
       have hprim : ∃ j : ℕ, IsPrimitiveRoot ζ (l ^ j) := by
@@ -230,8 +230,8 @@ theorem lat_low : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : Fon
       have ih' := ih (i - 1) (ζ ^ l) (by rw [← pow_mul, ← pow_succ', h1])
         (by rw [← pow_mul, mul_comm, pow_mul, h2, one_pow])
       have hQ : IsUnit (W.lev i ζ W.Q) :=
-        ((_root_.GlobalTheory.NL.lev_at_root_of_unity D HW l K s LL h i ζ hprim).2.2.1 h2).2
-      have hΦ := (_root_.GlobalTheory.NL.PhiD.phi_letters D HW l K s LL h T hT).1 i
+        ((_root_.GlobalTheory.NL.lev_at_root_of_unity loc HW l K s LL h i ζ hprim).2.2.1 h2).2
+      have hΦ := (_root_.GlobalTheory.NL.PhiD.phi_letters loc locA locT HW l K s LL h T hT).1 i
       have hc : (l : ↥LL.1) ≠ 0 := Nat.cast_ne_zero.2 hl.out.ne_zero
       refine std_step (W.N T) (W.φD T) W.Q (MonoidHomClass.toMonoidHom (W.lev i ζ)) hQ
         ((C.C K s LL h).tie.levB T i ζ) ((C.C K s LL h).tie.levB T (i - 1) (ζ ^ l))

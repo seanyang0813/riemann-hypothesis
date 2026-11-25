@@ -146,26 +146,6 @@ theorem star_integral (y : 𝓞 K) : ∃ y' : 𝓞 K, (y' : K) = star (y : K) :=
     exact (RingOfIntegers.isIntegral_coe y).map ((starRingEnd K).toIntAlgHom)
   exact ⟨⟨star (y : K), h⟩, rfl⟩
 
-theorem star_pow_mem {𝔡 : Ideal (𝓞 K)} (h𝔡s : ∀ x ∈ 𝔡, ∃ y ∈ 𝔡, (y : K) = star (x : K)) (k : ℕ) :
-    ∀ x ∈ 𝔡 ^ k, ∃ y ∈ 𝔡 ^ k, (y : K) = star (x : K) := by
-  induction k with
-  | zero =>
-    intro x _
-    obtain ⟨y, hy⟩ := star_integral x
-    exact ⟨y, by simp, hy⟩
-  | succ k ih =>
-    intro x hx
-    rw [pow_succ] at hx
-    refine Submodule.mul_induction_on hx ?_ ?_
-    · intro a ha b hb
-      obtain ⟨a', ha', ea⟩ := ih a ha
-      obtain ⟨b', hb', eb⟩ := h𝔡s b hb
-      refine ⟨a' * b', ?_, ?_⟩
-      · rw [pow_succ]; exact Submodule.mul_mem_mul ha' hb'
-      · simp [ea, eb, star_mul']
-    · rintro a b ⟨a', ha', ea⟩ ⟨b', hb', eb⟩
-      exact ⟨a' + b', Submodule.add_mem _ ha' hb', by simp [ea, eb]⟩
-
 theorem star_mem_one {x : K} (hx : x ∈ (1 : FractionalIdeal (𝓞 K)⁰ K)) :
     star x ∈ (1 : FractionalIdeal (𝓞 K)⁰ K) := by
   rw [FractionalIdeal.mem_one_iff] at *

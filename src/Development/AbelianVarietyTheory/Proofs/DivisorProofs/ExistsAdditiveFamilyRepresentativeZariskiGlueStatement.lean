@@ -140,7 +140,7 @@ theorem zariski_glue : ∀ (S : Scheme.{0}) (A : Over S) [GrpObj A], IsAbelianSc
   have hrep' : ∀ i, ∃ (B : Over S) (b : B ⟶ Over.mk (V i).ι) (P : LB (A ⊗ B).left),
       Rep A b P ∧ GlobalTheory.DualCon.Good (g i) b.left := hrep
   choose Bi bi Pi hRi hGi using hrep'
-  obtain ⟨B, P, j, hR, -, -, -⟩ := GlobalTheory.T.glue_openCharts_additiveFamilies_representing S A hA Ix Bi Pi
+  obtain ⟨B, P, j, hR, -, -, -⟩ := _root_.GlobalTheory.PicGlue.glue S A hA Ix Bi Pi
     (fun i => isChart_of_rep (V i) (bi i) (hRi i)) (by
       intro K _ _ s N hN
       obtain ⟨i, hi⟩ := hcov (s (default : Sp K))
@@ -179,8 +179,6 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.S
 open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
-theorem _root_.GlobalTheory.T.exists_additiveFamily_representative_zariski_glue : ∀ (S : Scheme.{0}) (A : Over S) [GrpObj A], IsAbelianScheme A → ∀ (Ix : Type) (V : Ix → S.Opens) (g : Ix → ℕ), (∀ s : S, ∃ i, s ∈ V i) → (∀ i, HasRep A (g i) (Over.mk (V i).ι)) → ∃ (B : Over S) (P : LB (A ⊗ B).left), Rep A (toUnit B) P ∧ ∀ i, GlobalTheory.DualCon.Good (g i) (pullback.snd B.hom (V i).ι) := by
-  first | exact @GlobalTheory.DualCon.ZarGlue.zariski_glue
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsAdditiveFamilyRepresentativeZariskiGlueStatement =====

@@ -124,18 +124,6 @@ theorem brauerInvZ_galCupClass_decompHomS [IsAlgClosure K Ω] (hS : S.Finite) [N
 
 local notation "ℚ̄" => AlgebraicClosure ℚ
 
-theorem placeInv_galCupClass_decompHomS {K : FiniteSubfield} {S : Set (HeightOneSpectrum (𝓞 K.1))}
-    (hS : S.Finite) [NeZero n] (h : Odd n ∨ IsTotallyComplex K.1)
-    (χ : ContinuousMonoidHom (galUnramifiedOutside K.1 ℚ̄ S) (Multiplicative (ZMod n)))
-    (w : HeightOneSpectrum (𝓞 K.1)) (ι : ℚ̄ →ₐ[K.1] AlgebraicClosure (w.adicCompletion K.1))
-    (a : (w.adicCompletion K.1)ˣ) :
-    placeInv (K := K) (.inr w)
-        (galCupClass (w.adicCompletion K.1) (AlgebraicClosure (w.adicCompletion K.1))
-          (contCharComp (charQZ χ) (decompHomS (w.adicCompletion K.1) S ι)
-            (continuous_decompHomS (Kv := w.adicCompletion K.1) S ι)) a) =
-      zmodToQZ n (Multiplicative.toAdd (charEquiv ℚ̄ hS h χ (SIdeleClassGroup.mk S (finiteEmbedding w a)))) :=
-  brauerInvZ_galCupClass_decompHomS hS h χ w ι a
-
 end Cup
 
 section Frobenius

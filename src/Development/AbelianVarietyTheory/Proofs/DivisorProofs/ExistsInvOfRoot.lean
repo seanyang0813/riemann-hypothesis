@@ -48,8 +48,6 @@ open GlobalTheory.BigOn GlobalTheory.BigOn.Exp Formalism.L2.Theta GlobalTheory.E
 open scoped TensorProduct
 
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 namespace GlobalTheory.BigOn.Exp
 
 abbrev smallInt (D : D7) : Subring ℂ := ((Formalism.L2.Host.embLL0 D).comp (algebraMap (𝓞 ↥D.LL0) ↥D.LL0)).range

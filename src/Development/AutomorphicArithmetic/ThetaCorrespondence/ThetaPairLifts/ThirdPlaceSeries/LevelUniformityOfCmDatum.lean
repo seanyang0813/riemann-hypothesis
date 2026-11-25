@@ -221,7 +221,7 @@ theorem compAt_baseCharacter_mul_unramified_eq_typeCharacter_alt : GlobalTheory.
         push_cast
         rw [map_sub, map_natCast]
       rw [e, map_sub, map_natCast, ZMod.natCast_zmod_val, hxv, sub_self]
-    have h61 := GlobalTheory.T.levelCharacters_typePlaces_eq_local_components hGAR D cf Rw low Pq S hL eig θ Bs hV τ hτ j kv x a ha0 hmem
+    have h61 := _root_.GlobalTheory.TwInputs.tau_eq_locK hGAR D cf Rw low Pq S hL eig θ Bs hV τ hτ j kv x a ha0 hmem
     have hunit : IsUnitAt s.w (atFin s.w k) := by
       have e := _root_.Formalism.UG.P.levelaf_valued_algebraMap s.w (k : D.host.E)
       show Valued.v (algebraMap D.host.E (s.w.adicCompletion D.host.E) (k : D.host.E)) = 1

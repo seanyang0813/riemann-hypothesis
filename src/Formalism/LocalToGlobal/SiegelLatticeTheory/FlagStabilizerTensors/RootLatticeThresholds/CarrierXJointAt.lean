@@ -1080,21 +1080,7 @@ theorem jointTensorAt_ITcMo (X : Formalism.L2.SG.HidaSetting.HidaSetting D) {θ 
     (fun j => Formalism.FourierDecayAlt.Top.topOf (parE e u u' de de' j) (l + 1) (towersOf X C u u' e j) (nuE X C u' e i0' j)
       (m0E X C u u' e j) (Θ j) (TP j)) A₀ Mo sc i0 i0' νq hN hG hpin hsc hFX hBase hEmb hBuilt
 
-theorem TT_nonneg (I : CarrierIn X u u') (v : Fin (sOf I).f) : 0 ≤ (Formalism.FourierDecayAlt.D.parOf (sOf I) v).TT := by
-  show 0 ≤ (((D.mem u).A.T : ℕ) : ℝ) * (((D.mem u').A.T : ℕ) : ℝ)
-  positivity
-
 def modelsOf (I : CarrierIn X u u') : ModelsFor (sOf I) where
-  L := fun v => (Formalism.FourierDecayAlt.P.level_exists_alt (Formalism.FourierDecayAlt.D.parOf (sOf I) v)
-    (Formalism.FourierDecayAlt.MA.DQ (Formalism.FourierDecayAlt.D.parOf (sOf I) v)) (Formalism.FourierDecayAlt.P.analytic_laws _ _ (TT_nonneg I v))).choose
-  j := fun _ _ => 0
-  lam := fun _ _ => 0
-  c := Formalism.L2.SG.Pf.CarrierT.cutStd
-  Cm := fun _ => 0
-  σ := fun _ => 0
-  Lw := fun _ _ => 0
-  Ll := fun _ _ _ => 0
-  Ll' := fun _ _ _ => 0
 
 
 open scoped Matrix in

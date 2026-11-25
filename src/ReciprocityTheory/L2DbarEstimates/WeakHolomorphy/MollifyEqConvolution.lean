@@ -7,6 +7,7 @@ public import ReciprocityTheory.L2DbarEstimates.WeakHolomorphy.HoloContDiffState
 public import Mathlib.Analysis.Convolution
 public import Mathlib.Analysis.Calculus.ContDiff.Convolution
 import Mathlib.Algebra.Order.Star.Real
+import ReciprocityTheory.L2DbarEstimates.WeakHolomorphy.RegBall
 import Mathlib.RingTheory.SimpleRing.Principal
 import Mathlib.Order.CompletePartialOrder
 
@@ -30,45 +31,6 @@ theorem moll_eq_zero_of_lt {n : ℕ} {t : ℝ} (ht : 0 < t) {z : V n} (hz : t / 
       rw [lt_div_iff₀ ht]; linarith
     nlinarith
   simp only [moll, mollProf, bumpProf, Real.smoothTransition.zero_of_nonpos h1, mul_zero]
-
-private theorem integral_circleMap_smul_eq_two_pi_mul {n : ℕ} {a : ℝ} {h : V n → ℂ} {x z : V n}
-    (hh : DifferentiableOn ℂ h (ball x a)) (hz : ‖z‖ < a) :
-    ∫ θ in (0 : ℝ)..2 * Real.pi, h (x + circleMap 0 1 θ • z) = 2 * Real.pi * h x := by
-  have hd : DifferentiableOn ℂ (fun l : ℂ => h (x + l • z)) (closedBall (0 : ℂ) 1) := by
-    intro l hl
-    have hl1 : ‖l‖ ≤ 1 := by simpa using hl
-    have hmem : x + l • z ∈ ball x a := by
-      rw [mem_ball, dist_eq_norm, add_sub_cancel_left, norm_smul]
-      calc ‖l‖ * ‖z‖ ≤ 1 * ‖z‖ := mul_le_mul_of_nonneg_right hl1 (norm_nonneg z)
-        _ < a := by rw [one_mul]; exact hz
-    have h1 : DifferentiableAt ℂ h (x + l • z) := hh.differentiableAt (isOpen_ball.mem_nhds hmem)
-    have h2 : DifferentiableAt ℂ (fun l : ℂ => x + l • z) l :=
-      (differentiableAt_id.smul_const z).const_add x
-    exact (h1.comp l h2).differentiableWithinAt
-  have hdc : DiffContOnCl ℂ (fun l : ℂ => h (x + l • z)) (ball (0 : ℂ) 1) := by
-    apply DifferentiableOn.diffContOnCl
-    rw [closure_ball (0 : ℂ) one_ne_zero]
-    exact hd
-  have hC := hdc.circleIntegral_sub_inv_smul (mem_ball_self one_pos)
-  have e0 : h (x + (0 : ℂ) • z) = h x := by rw [zero_smul, add_zero]
-  have key : Complex.I * ∫ θ in (0 : ℝ)..2 * Real.pi, h (x + circleMap 0 1 θ • z)
-      = 2 * Real.pi * Complex.I * h x := by
-    calc Complex.I * ∫ θ in (0 : ℝ)..2 * Real.pi, h (x + circleMap 0 1 θ • z)
-        = ∫ θ in (0 : ℝ)..2 * Real.pi, deriv (circleMap 0 1) θ •
-            ((circleMap 0 1 θ - 0)⁻¹ • h (x + circleMap 0 1 θ • z)) := by
-          rw [← intervalIntegral.integral_const_mul]
-          refine intervalIntegral.integral_congr fun θ _ => ?_
-          have hne : circleMap 0 1 θ ≠ 0 := circleMap_ne_center one_ne_zero
-          simp only [deriv_circleMap, sub_zero, smul_eq_mul]
-          first
-          | (rw [mul_comm (circleMap 0 1 θ) Complex.I, mul_assoc, mul_inv_cancel_left₀ hne])
-      _ = ∮ l in C(0, 1), (l - 0)⁻¹ • h (x + l • z) := rfl
-      _ = (2 * Real.pi * Complex.I : ℂ) • h (x + (0 : ℂ) • z) := hC
-      _ = 2 * Real.pi * Complex.I * h x := by rw [e0, smul_eq_mul]
-  have hI : Complex.I ≠ 0 := Complex.I_ne_zero
-  apply mul_left_cancel₀ hI
-  rw [key]
-  ring
 
 private theorem integral_comp_smul_of_norm_eq_one {n : ℕ} (c : ℂ) (hc : ‖c‖ = 1) (f : V n → ℂ) :
     ∫ z, f (c • z) = ∫ z, f z := by
@@ -158,7 +120,7 @@ private theorem integral_moll_mul_eq_of_differentiableOn_ball {n : ℕ} {a : ℝ
     intro z
     rw [integral_const_mul]
     by_cases hz : ‖z‖ ≤ a / 2
-    · rw [← intervalIntegral.integral_of_le Real.two_pi_pos.le, integral_circleMap_smul_eq_two_pi_mul hh (by linarith)]
+    · rw [← intervalIntegral.integral_of_le Real.two_pi_pos.le, ReciprocityTheory.L2DbarEstimates.C.integral_circleMap_smul_eq_two_pi_mul hh (by linarith)]
     · push_neg at hz
       rw [_root_.ReciprocityTheory.L2DbarEstimates.C.moll_eq_zero_of_lt ha hz]
       simp

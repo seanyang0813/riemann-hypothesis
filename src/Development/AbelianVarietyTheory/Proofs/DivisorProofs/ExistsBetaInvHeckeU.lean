@@ -603,7 +603,7 @@ open GlobalTheory.HeckeUOps
 theorem levelLe_one_two {K : Type} [Field K] [NumberField K] {χ : HChar K} {v : HeightOneSpectrum (𝓞 K)} (h : χ.LevelLe v 1) : χ.LevelLe v 2 :=
   fun x hx hle => h x hx (hle.trans (WithZero.exp_le_exp.2 (by norm_num)))
 
-theorem exists_betaInv_heckeU {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} {μ₀ : T} (_hL : L.Is μ₀) (G : GridData L sc)
+theorem exists_betaInv_heckeU {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} (G : GridData L sc)
     (i j : Fin D.R.m) : ∃ χ : HeckeU D (botBig D i j), ∀ x, χ.f x = (betaH G i j)⁻¹.1 (finIdl D x) := by
   classical
   have k1 : 1 ≤ D.R.m - (i : ℕ) := by omega

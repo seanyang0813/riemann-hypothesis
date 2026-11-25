@@ -1006,27 +1006,6 @@ end GlobalTheory.CMTrace
 
 namespace GlobalTheory.CMTrace
 
-theorem adele_trace : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E), IsCMExt F E σ → (∀ x : AF F, Algebra.trace (AF F) (AE F E) (algebraMap (AF F) (AE F E) x) = 2 * x) ∧ ∀ c : AE F E, algebraMap (AF F) (AE F E) (Algebra.trace (AF F) (AE F E) c) = c + cA σ c := by
-  intro F E _ _ _ _ _ σ h
-  haveI : FiniteDimensional F E := Module.finite_of_finrank_eq_succ h.2.2.1
-  haveI : Nontrivial (AF F) := (AdeleRing.algebraMap_injective (𝓞 F) F).nontrivial
-  refine ⟨fun x => ?_, fun c => ?_⟩
-  · rw [Algebra.trace_algebraMap, Module.finrank_baseChange, h.2.2.1, nsmul_eq_mul, Nat.cast_ofNat]
-  · have htm : ∀ (a : AF F) (e : E), Algebra.trace (AF F) (AE F E) (a ⊗ₜ[F] e) =
-        a * algebraMap F (AF F) (Algebra.trace F E e) := by
-      intro a e
-      have h1 : a ⊗ₜ[F] e = a • ((1 : AF F) ⊗ₜ[F] e) := by
-        rw [TensorProduct.smul_tmul', smul_eq_mul, mul_one]
-      rw [h1, map_smul, Algebra.trace_apply, Algebra.trace_apply, ← Algebra.baseChange_lmul,
-        LinearMap.trace_baseChange, smul_eq_mul]
-    induction c using TensorProduct.induction_on with
-    | zero => simp
-    | add x y hx hy => rw [map_add (f := _), map_add (f := _), hx, hy, map_add (f := _)]; abel
-    | tmul a e =>
-      rw [htm, Algebra.TensorProduct.algebraMap_apply, cA, Algebra.TensorProduct.map_tmul, AlgHom.id_apply,
-        ← TensorProduct.tmul_add, ← trace_eq h, mul_comm, ← Algebra.smul_def, Algebra.algebraMap_self,
-        RingHom.id_apply, TensorProduct.smul_tmul, ← Algebra.algebraMap_eq_smul_one]
-
 end GlobalTheory.CMTrace
 end -- clump:auto
 end -- clump:auto

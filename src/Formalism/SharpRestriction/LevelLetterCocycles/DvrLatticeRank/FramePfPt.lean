@@ -20,11 +20,6 @@ open PowerSeries
 
 variable {LL : Type} [Field LL]
 
-theorem framepf_exp_pow_sub_one (E : PowerSeries LL) (h0 : constantCoeff E = 1)
-    (hd : PowerSeries.derivative E = E) (p : ℕ) :
-    ∃ w : PowerSeries LL, E ^ p - 1 = X * w ∧ constantCoeff w = (p : LL) := by
-  apply Formalism.MainNotions.N.Pv.LocalLengthBound.exp_pow_sub_one <;> assumption
-
 end Zero
 
 section Local

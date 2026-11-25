@@ -239,8 +239,6 @@ theorem lift_gen (hA : IntegralAdjointUnimodular) (hI : IsotropicIntegralRetract
 
 end Gen
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem lift_of_steps (hA : IntegralAdjointUnimodular) (hI : IsotropicIntegralRetraction) (hF : UnitriangularFrameIntegral) (D : D7) : UnitriangularFrameLift D := by
   rintro T Λ F F' ⟨hlat, huni, -, hconv⟩ _ hconv' he _
   exact lift_gen hA hI hF D.sp.cm.cmUnram Λ (gS D) F F' hlat huni hconv hconv' he

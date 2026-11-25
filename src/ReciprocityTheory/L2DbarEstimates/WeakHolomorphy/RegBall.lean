@@ -144,7 +144,7 @@ theorem moll_conv_symm (n : ℕ) (s t : ℝ) (x y : V n) :
         rw [mul_comm]
         congr 2 <;> abel
 
-private theorem integral_circleMap_smul_eq_two_pi_mul {n : ℕ} {a : ℝ} {h : V n → ℂ} {x z : V n}
+theorem integral_circleMap_smul_eq_two_pi_mul {n : ℕ} {a : ℝ} {h : V n → ℂ} {x z : V n}
     (hh : DifferentiableOn ℂ h (ball x a)) (hz : ‖z‖ < a) :
     ∫ θ in (0 : ℝ)..2 * Real.pi, h (x + circleMap 0 1 θ • z) = 2 * Real.pi * h x := by
   have hd : DifferentiableOn ℂ (fun l : ℂ => h (x + l • z)) (closedBall (0 : ℂ) 1) := by

@@ -53,7 +53,6 @@ open GlobalTheory.Member (FinCong IotaOK)
 open GlobalTheory.LevelCusp (IsMatch)
 open GlobalTheory.Dict (castFr)
 open scoped TensorProduct Matrix
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace GlobalTheory.GeoLevel
 

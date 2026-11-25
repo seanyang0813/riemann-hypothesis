@@ -81,8 +81,6 @@ def k₀Lift {k C : Type} [Field k] [CharP k l] [PerfectRing k l] [CommRing C] (
 
 def Res.iso (r : Res l K) : Iso l K (Wc.K₀ l r.k) where
   D M j := Wc.D l (B.schFn M.p) r.ρ j
-  φ M j := Wc.phiD l (B.schFn M.p) r.ρ j
-  pull u hu j := Wc.pullD l r.ρ (B.schMap u hu) j
 
 def ResEx : Prop := ∀ (l : ℕ) [Fact l.Prime] (K : IntermediateField ℚ_[l] (PadicAlgCl l)) [FiniteDimensional ℚ_[l] K],
   Nonempty (Res l K)

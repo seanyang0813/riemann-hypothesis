@@ -147,8 +147,6 @@ open IsDedekindDomain NumberField Formalism.BasicNotions Formalism.BasicNotions.
 open GlobalTheory.Hk3 (SphOp hyp)
 open GlobalTheory.StdFrame (StdPsi)
 
-attribute [local instance] Formalism.IndefR.principalLevelFrame.instCMHostI
-
 variable {D : D7} {V : HSp D} {n : ℕ}
 
 def IsSphVec (Q : principalLevelFrame.RowPsi V n) (π : Formalism.L2.NG.FinTyp D.host.E n) (P : HeightOneSpectrum (𝓞 D.host.E))
@@ -384,8 +382,6 @@ section RealHecke
 
 open IsDedekindDomain NumberField Formalism.BasicNotions Formalism.MainNotions Formalism.BasicNotions.TH Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.MainNotions.StandardLattice Formalism.MainNotions.S Formalism.L2.Theta Formalism.L2.DIV Formalism.L2.Indef Formalism.L2.Rows Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Lev Formalism.IndefR.Cx
   Formalism.IndefR.RecTie GlobalTheory.Mem.R3
-
-attribute [local instance] Formalism.IndefR.principalLevelFrame.instCMHostI
 
 variable {D : D7} {G : Type} [Group G] [Fintype G] {Pl0 I0 T : Type}
   {A3 : FamIn3 D.what₂.LL G Pl0 I0 (List ℕ) T D.R.m} {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL]

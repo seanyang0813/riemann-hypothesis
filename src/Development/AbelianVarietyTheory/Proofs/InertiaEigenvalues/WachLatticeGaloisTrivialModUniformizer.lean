@@ -113,17 +113,17 @@ theorem sub_mem_X_of_val : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc)
         (D.loc l).v LL (algebraMap ↥(OL LL) ↥LL.1 (W.χΓ g : ↥(OL LL)) - 1) →
       ∀ x ∈ W.N T, ∃ y ∈ W.N T, W.γD T g x - x = W.X • y := by
   intro D HW F Cm l _ K s LL h W T hT g hg x hx
-  obtain ⟨nb⟩ := GlobalTheory.NL.N_basis D HW F l K s LL h T hT
+  obtain ⟨nb⟩ := GlobalTheory.NL.N_basis D.loc D.locA HW F l K s LL h T hT
   let x' : ↥(W.N T) := ⟨x, hx⟩
   let g' : ↥(W.N T) := ⟨_, W.N_Γ T g x hx⟩
   refine exists_smul_of_dvd_repr (W.N T) nb W.X (g' - x') fun j => ?_
-  refine (_root_.GlobalTheory.NL.WDiv.weierstrass_dense D HW l K s LL h).2.1 1 _ fun i ζ hζ => ?_
-  have hS := _root_.GlobalTheory.NL.LatLow.lat_low D HW F Cm l K s LL h T hT i ζ hζ
+  refine (_root_.GlobalTheory.NL.WDiv.weierstrass_dense D.loc HW l K s LL h).2.1 1 _ fun i ζ hζ => ?_
+  have hS := _root_.GlobalTheory.NL.LatLow.lat_low D.loc D.locA D.locT HW F Cm l K s LL h T hT i ζ hζ
   have hprim : ∃ j : ℕ, IsPrimitiveRoot ζ (l ^ j) := by
     obtain ⟨j, -, hord⟩ :=
       (Nat.dvd_prime_pow (Fact.out : l.Prime)).1 (orderOf_dvd_of_pow_eq_one hζ)
     exact ⟨j, hord ▸ IsPrimitiveRoot.orderOf ζ⟩
-  have hI := (_root_.GlobalTheory.NL.LevInj.expansion_basis D HW F Cm l K s LL h T hT i ζ hprim (full_of_std hS)).2 _ nb
+  have hI := (_root_.GlobalTheory.NL.LevInj.expansion_basis D.loc D.locA D.locT HW F Cm l K s LL h T hT i ζ hprim (full_of_std hS)).2 _ nb
   refine (hI.2.2 (g' - x') 1).1 ?_ j
   refine shift_mem hS (ex (Cm l) h T i ζ x') _ ?_
     (algebraMap ↥(OL LL) ↥LL.1 (W.χΓ g : ↥(OL LL))) fun k => ?_

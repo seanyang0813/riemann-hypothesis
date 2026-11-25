@@ -2,52 +2,6 @@ module
 
 public import GroundTheory.HeightsAndTheta.Heights.KleimanAmpleness.Objects
 public import GroundTheory.HeightsAndTheta.Heights.KleimanAmpleness.CoordIdealIsMultiProjPrime
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Bernstein
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Henselian
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.RegularLocalRing.Defs
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Topology.Sheaves.Init
 
 @[expose] public section
 
@@ -58,57 +12,6 @@ namespace GroundTheory.Heights₂.Heights.Kleiman.TranslateEq
 open MvPolynomial
 
 noncomputable section
-
-section Graded
-
-variable (S : Type) [CommRing S] (N : ℕ)
-
-theorem mem_polyPiece_of_isHomogeneous {f : Poly S N} {e : ℕ} (hf : f.IsHomogeneous e) :
-    f ∈ IndefiniteRowSideFullHecke.Kleiman.polyPiece S N e := by
-  rw [IndefiniteRowSideFullHecke.Kleiman.polyPiece, mem_weightedHomogeneousSubmodule]
-  exact isWeightedHomogeneous_int_of_isHomogeneous hf
-
-theorem eq_zero_or_isHomogeneous_of_mem_polyPiece {f : Poly S N} {d : ℤ}
-    (hf : f ∈ IndefiniteRowSideFullHecke.Kleiman.polyPiece S N d) :
-    f = 0 ∨ ∃ e : ℕ, (e : ℤ) = d ∧ f.IsHomogeneous e := by
-  classical
-  rw [IndefiniteRowSideFullHecke.Kleiman.polyPiece, mem_weightedHomogeneousSubmodule] at hf
-  have hw : ∀ s : Fin (N + 1) →₀ ℕ,
-      Finsupp.weight (fun _ : Fin (N + 1) => (1 : ℤ)) s = ((Finsupp.weight (1 : Fin (N + 1) → ℕ) s : ℕ) : ℤ) := by
-    intro s
-    simp [Finsupp.weight_apply, Finsupp.sum]
-  by_cases h0 : f = 0
-  · exact Or.inl h0
-  · right
-    obtain ⟨s, hs⟩ := MvPolynomial.ne_zero_iff.mp h0
-    refine ⟨Finsupp.weight (1 : Fin (N + 1) → ℕ) s, ?_, ?_⟩
-    · rw [← hw]; exact hf hs
-    · intro t ht
-      have h1 := hf ht
-      have h2 := hf hs
-      rw [hw] at h1 h2
-      exact_mod_cast h1.trans h2.symm
-
-variable (M : Type) [AddCommGroup M] [Module (Poly S N) M] [Module S M] [IsScalarTower S (Poly S N) M]
-
-def gradedEquiv : IndefiniteRowSideFullHecke.Kleiman.GradedMod S N M ≃ Kleiman.GradedPMod S N M where
-  toFun G :=
-    { piece := G.piece
-      isInternal := G.internal
-      smul_mem := fun d c p m hp hm => by
-        rw [add_comm]
-        exact G.smul_mem d c p (mem_polyPiece_of_isHomogeneous S N hp) m hm }
-  invFun G :=
-    { piece := G.piece
-      internal := G.isInternal
-      smul_mem := fun d c f hf m hm => by
-        rcases eq_zero_or_isHomogeneous_of_mem_polyPiece S N hf with rfl | ⟨e, rfl, he⟩
-        · rw [zero_smul]; exact zero_mem _
-        · rw [add_comm]; exact G.smul_mem e c f m he hm }
-  left_inv _ := rfl
-  right_inv _ := rfl
-
-end Graded
 
 section Charts
 

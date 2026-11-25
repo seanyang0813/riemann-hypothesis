@@ -64,7 +64,6 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 open GlobalTheory.ChainFr GlobalTheory.IndefiniteRowSideFullHecke.RaisingLoweringOperators GlobalTheory.WeilParts
 open GlobalTheory.OneMapRef.RealMove (adele_ext det_compAt exists_idele_at finPart_cA hasInfExp_twist)
 open scoped TensorProduct Kronecker ComplexOrder
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace GlobalTheory.CompactFockAction
 

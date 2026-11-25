@@ -57,9 +57,6 @@ open PositivityTheory.Rg.BcB.F.MT (MatchLin)
 
 section SlopeTestRemainingChoices
 
-theorem mb_finsum_mul {α : Type*} (c : ℂ) (g : α → ℂ) : ∑ᶠ i, c * g i = c * ∑ᶠ i, g i := by
-  exact (mul_finsum g c).symm
-
 variable {E : Type} [Field E] [NumberField E] [IsCMField E]
 
 theorem mb_match_smul {n a b : ℕ} {w : Pl E} {μ : (w.adicCompletion E)ˣ →* ℂˣ} {f : UL n w → ℂ}

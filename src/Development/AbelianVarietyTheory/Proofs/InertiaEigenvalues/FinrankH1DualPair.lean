@@ -1326,7 +1326,7 @@ namespace GlobalTheory.EulerCharH1
 theorem two_le_card (l : ℕ) [Fact l.Prime] (LL : Type) [Field LL] [Algebra ℚ_[l] LL]
     [TopologicalSpace LL] (O : Type) [CommRing O] [Algebra O LL]
     (hO : GoodO (Qp := ℚ_[l]) LL O) : 2 ≤ Nat.card (O ⧸ Ideal.span {((l : ℕ) : O)}) := by
-  obtain ⟨hint, -, hfin, -⟩ := _root_.GlobalTheory.GoodCoeff.good_coeff_integers l LL O hO
+  obtain ⟨hint, -, hfin, -⟩ := _root_.GlobalTheory.PowerImageOpen.main l LL O hO
   have hf : Finite (O ⧸ Ideal.span {((l : ℕ) : O)}) := by
     simpa using hfin 1
   have : Nontrivial (O ⧸ Ideal.span {((l : ℕ) : O)}) :=

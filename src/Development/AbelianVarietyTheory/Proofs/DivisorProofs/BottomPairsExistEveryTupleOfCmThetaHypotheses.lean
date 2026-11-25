@@ -85,7 +85,7 @@ theorem exists_heckeU_nuInv (hL : L.Is μ₀) (G : GridData L sc) (t : T) (i j :
 
 theorem exists_heckeU_alpha (hL : L.Is μ₀) (G : GridData L sc) (t : T) (i j : Fin D.R.m) :
     ∃ χ : HeckeU D (botSmall D i j), ∀ x, χ.f x = (alphaH L t i j).1 (finIdl D x) := by
-  obtain ⟨χ₀, h₀⟩ := GlobalTheory.FunObj.SqNum.exists_heckeU_alphaH hL G i j
+  obtain ⟨χ₀, h₀⟩ := GlobalTheory.FunObj.SqNum.exists_heckeU_alphaH hL i j
   obtain ⟨ξ, hξ, -⟩ := GlobalTheory.XiSplit.exists_heckeU_xi hL t
   refine ⟨GlobalTheory.AlphaSplit.mulU _ χ₀ ξ (by simp), fun x => ?_⟩
   rw [GlobalTheory.AlphaSplit.mulU_f, h₀, hξ, alphaH_eq hL t]
@@ -106,7 +106,7 @@ theorem botExT_holds (hI : ∀ D, GlobalTheory.NormSum.Inp D) : BotExT := by
   intro δ t0 Q P t i j
   obtain ⟨hq, hq'⟩ := BotT.pde_ne_q hR
   obtain ⟨χν, hν, hw⟩ := BotT.exists_heckeU_nuInv hL G t i j
-  obtain ⟨χβ, hβ⟩ := GlobalTheory.FunObj.SqNum.exists_betaInv_heckeU hL G i j
+  obtain ⟨χβ, hβ⟩ := GlobalTheory.FunObj.SqNum.exists_betaInv_heckeU G i j
   obtain ⟨χα, hα⟩ := BotT.exists_heckeU_alpha hL G t i j
   obtain ⟨P₁, h1, h2, h3, h4, h5⟩ := _root_.GlobalTheory.FunObj.StdDatum.exists_bottom_big_modT (hI D) hL hq hq' G t P.crv P.pt0 i j χβ hβ χν hν hw
   obtain ⟨P₂, h1', h2', h3', h4', h5'⟩ := _root_.GlobalTheory.BotPairSmallTw.smallPair_exists_tw (hI D) hL hq hq' G t P.crv P.pt0 i j χα hα χν hν hw

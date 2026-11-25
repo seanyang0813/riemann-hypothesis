@@ -11,8 +11,6 @@ noncomputable section
 
 namespace PI.UnitaryGroupMassFormula.CntFormula.R6
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem gram_comb {K V ι κ : Type} [Field K] [StarRing K] [AddCommGroup V] [Module K V] [Fintype ι]
     (h : V →ₗ⋆[K] V →ₗ[K] K) (v : ι → V) (A : Matrix ι κ K) (x : κ → V)
     (hx : ∀ j, x j = ∑ i, A i j • v i) : gram h x = A.conjTranspose * gram h v * A := by

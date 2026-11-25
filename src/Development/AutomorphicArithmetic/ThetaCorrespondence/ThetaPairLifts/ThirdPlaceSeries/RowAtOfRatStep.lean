@@ -49,7 +49,6 @@ open scoped TensorProduct
 
 
 namespace GlobalTheory.BigOn.Exp
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 section Sets
 variable {D : D7} {ρ : Setup D.ntw} (hρ : ρ.Good) {i : D.ntw.Tw} {j : Fin D.R.m} {b : Bool} (rd : Rd ρ D.nexp i j b)
 end Sets

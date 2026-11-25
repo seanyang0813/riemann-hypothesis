@@ -22,56 +22,205 @@ public import ReciprocityTheory.ReductiveGroups.DiscreteSeries.DiscreteSeriesExi
 public import ReciprocityTheory.ReductiveGroups.DiscreteSeries.DiscreteSeriesExistence.EquivSigLamOfIsDS
 public import ReciprocityTheory.ReductiveGroups.DiscreteSeries.DiscreteSeriesExistence.EqZeroOfDatumEmbeddingEqZero
 public import ReciprocityTheory.ReductiveGroups.DiscreteSeries.FormalDegree.FdCons
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.Linter.HaveILetI
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Topology.Sheaves.Init
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Linter.Style
-import Mathlib.Tactic.TypeStar
 import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.PieriRules.TensRepB
 import Formalism.RealPlaceAnalysis.RealPlaceTaylor.IsCompactInvariantOrthogonalInf
 import ReciprocityTheory.ReductiveGroups.DiscreteSeries.DiscreteSeriesExistence.PuniqSmoothAddSmul
 import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.Exists
 import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.PieriRules.CartanKType
-import Std.Tactic.BVDecide.Normalize.Prop
+import ReciprocityTheory.ReductiveGroups.DiscreteSeries.DiscreteSeriesExistence.DatumIrr
+import ReciprocityTheory.ReductiveGroups.DiscreteSeries.DiscreteSeriesExistence.IsDSSigLam
+import ReciprocityTheory.ReductiveGroups.DiscreteSeries.DiscreteSeriesExistence.RregRep
+import ReciprocityTheory.ReductiveGroups.DiscreteSeries.DiscreteSeriesExistence.SigLamEquivData
+import ReciprocityTheory.ReductiveGroups.DiscreteSeries.BochnerInequality.LayerBasic
+import ReciprocityTheory.ReductiveGroups.DiscreteSeries.TensorRepresentations.CcARatioZero
+import ReciprocityTheory.ReductiveGroups.DiscreteSeries.TensorRepresentations.Decomp
+import ReciprocityTheory.ReductiveGroups.DiscreteSeries.TensorRepresentations.PoleMatch
+import ReciprocityTheory.ReductiveGroups.DiscreteSeries.TensorRepresentations.ProjectionCommutesDerivedAction
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: ReciprocityTheory.ReductiveGroups.DiscreteSeries.TensorRepresentations.ConsumerC, ReciprocityTheory.ReductiveGroups.DiscreteSeries.ExceptionalGroupG2.TensorProductsG2.ConsumerD, ReciprocityTheory.ReductiveGroups.DiscreteSeries.ExceptionalGroupG2.TensorProductsG2.Consumer, ReciprocityTheory.ReductiveGroups.DiscreteSeries.ExceptionalGroupG2.TensorProductsG2.FormalDegreeConstantDiscrete
+
+section
+@[expose] public section
+
+noncomputable section
+
+open Finset Matrix
+
+namespace ReciprocityTheory.ChartRestriction.DS
+
+variable {n : ℕ}
+
+theorem cns_kfin_smul {ε : Fin n → Bool} {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+    {σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)} {x : H} (a : ℂ) (hx : PI.UpqRep.IsKFin ε σ x) :
+    PI.UpqRep.IsKFin ε σ (a • x) := by
+  obtain ⟨S, hf, hxS, hst⟩ := hx
+  exact ⟨S, hf, S.smul_mem a hxS, hst⟩
+
+section NC
+
+variable {ε : Fin n → Bool} {lam : Fin n → ℝ} {T : S7.KType ε (lowK ε lam)}
+  {Ψ : Matrix (Fin n) (Fin n) ℂ → (T.V →L[ℂ] T.V)} {v₀ : T.V}
+
+theorem cns_kfin_rep (hgap : StdGap ε lam) (hP : IsPsiFor ε lam T Ψ) (hv₀ : v₀ ≠ 0) {x : Hlam ε Ψ v₀}
+    (hx : PI.UpqRep.IsKFin ε (sigLam ε Ψ v₀) x) :
+    ∃ y ∈ genSub (smE ε (rreg ε)) (datumV ε Ψ v₀), ((y : smD ε (rreg ε)) : L2 ε) = (x : L2 ε) := by
+  obtain ⟨S, hSf, hxS, hSK⟩ := hx
+  exact sigLam_kfin hgap hP hv₀ S hSf hSK hxS
+
+theorem cns_transport (dual : Bool) (hgap : StdGap ε lam) (hP : IsPsiFor ε lam T Ψ) (hv₀ : v₀ ≠ 0)
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] {σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)}
+    (U : Hlam ε Ψ v₀ ≃ₗᵢ[ℂ] H) (hU : ∀ g ∈ UJset ε, ∀ x : Hlam ε Ψ v₀, U (sigLam ε Ψ v₀ g x) = σ g (U x))
+    (a b : Fin n → Hlam ε Ψ v₀) {g : Matrix (Fin n) (Fin n) ℂ} (hg : g ∈ UJset ε) :
+    ∑ c, inner ℂ (U (b c)) (tensGrp dual σ g (fun d => U (a d)) c) =
+      ∑ c, inner ℂ (b c : L2 ε) (tensGrp dual (rreg ε) g (fun d => (a d : L2 ε)) c) := by
+  refine Finset.sum_congr rfl fun c _ => ?_
+  simp only [tensGrp, inner_sum, inner_smul_right]
+  refine Finset.sum_congr rfl fun d _ => ?_
+  rw [← hU g hg, LinearIsometryEquiv.inner_map_map, Submodule.coe_inner, sigLam_coe hgap hP hv₀ hg]
+
+theorem cns_emb (dual : Bool) (hok : cns_Ok ε lam T Ψ) {lam' : Fin n → ℝ} {T' : S7.KType ε (lowK ε lam')}
+    {Ψ' : Matrix (Fin n) (Fin n) ℂ → (T'.V →L[ℂ] T'.V)} (hok' : cns_Ok ε lam' T' Ψ') (s : Fin n)
+    (hs : lam' = shiftF dual lam s) :
+    (∀ η ∈ tensSub (genSub (smE ε (rreg ε)) (datumV ε Ψ T.w)), ∀ f ∈ tensSub (genSub (smE ε (rreg ε)) (datumV ε Ψ T.w)),
+      eeF dual (smE ε (rreg ε)) f = poleF dual lam s • f →
+      ∃ x ∈ genSub (smE ε (rreg ε)) (datumV ε Ψ' T'.w), ∃ z ∈ genSub (smE ε (rreg ε)) (datumV ε Ψ' T'.w),
+        ∀ g ∈ UJset ε, ∑ c, inner ℂ ((η c : smD ε (rreg ε)) : L2 ε)
+          (tensGrp dual (rreg ε) g (fun d => ((f d : smD ε (rreg ε)) : L2 ε)) c) =
+            inner ℂ ((z : smD ε (rreg ε)) : L2 ε) (rreg ε g ((x : smD ε (rreg ε)) : L2 ε))) ∧
+    ∀ z ∈ genSub (smE ε (rreg ε)) (datumV ε Ψ' T'.w), ∀ x ∈ genSub (smE ε (rreg ε)) (datumV ε Ψ' T'.w),
+      ∃ η ∈ tensSub (genSub (smE ε (rreg ε)) (datumV ε Ψ T.w)), ∃ f ∈ tensSub (genSub (smE ε (rreg ε)) (datumV ε Ψ T.w)),
+        ∀ g ∈ UJset ε, inner ℂ ((z : smD ε (rreg ε)) : L2 ε) (rreg ε g ((x : smD ε (rreg ε)) : L2 ε)) =
+          ∑ c, inner ℂ ((η c : smD ε (rreg ε)) : L2 ε)
+            (tensGrp dual (rreg ε) g (fun d => ((f d : smD ε (rreg ε)) : L2 ε)) c) := by
+  obtain ⟨⟨h, hh, hth⟩, hgap, hP, hv, hpos, hW, hG⟩ := hok
+  obtain ⟨⟨h', hh', hth'⟩, hgap', hP', hv', hpos', hW', hG'⟩ := hok'
+  have hσ := rreg_isURepOn ε
+  have hD : IsDerivedOn ε (rreg ε) (smD ε (rreg ε)) (smE ε (rreg ε)) := isDerivedOn_smE hσ
+  have := Hlam_nontrivial hgap hP hv
+  have := Hlam_nontrivial hgap' hP' hv'
+  obtain ⟨w, hw⟩ := exists_ne (0 : Hlam ε Ψ T.w)
+  obtain ⟨w', hw'⟩ := exists_ne (0 : Hlam ε Ψ' T'.w)
+  obtain ⟨⟨ι, hι, -, hιs⟩, -⟩ := cc_gk dual hgap hP hv hgap' hP' hv' hh hth hh' hth' hpos hpos' hW hW' hG hG'
+    s hs hw hw'
+  obtain ⟨hto, hof⟩ := coef_of_emb dual hσ hD hgap (datumV_isKIrrHW hP hv) (datumV_casimir hP T.w)
+    (datumV_kStable hP T.w) hgap' (datumV_isKIrrHW hP' hv') (datumV_casimir hP' T'.w) (datumV_kStable hP' T'.w) hι
+  refine ⟨fun η hη f hf hfe => ?_, fun z hz x hx => ?_⟩
+  · obtain ⟨x, hx, rfl⟩ := hιs f hf hfe
+    obtain ⟨z, hz, hzg⟩ := hto η hη x hx
+    exact ⟨x, hx, z, hz, hzg⟩
+  · obtain ⟨η, hη, hηg⟩ := hof z hz x hx
+    exact ⟨η, hη, ι x, hι.1 x hx, hηg⟩
+
+theorem cns_decomp (dual : Bool) (hlam : S7.IsHCParam lam) (hok : cns_Ok ε lam T Ψ)
+    {f : Fin n → smD ε (rreg ε)} (hf : f ∈ tensSub (genSub (smE ε (rreg ε)) (datumV ε Ψ T.w))) :
+    ∃ (κ : Type) (_ : Fintype κ) (sI : κ → Fin n) (F : κ → Fin n → smD ε (rreg ε)),
+      (∀ i, S7.IsHCParam (shiftF dual lam (sI i)) ∧ F i ∈ tensSub (genSub (smE ε (rreg ε)) (datumV ε Ψ T.w)) ∧
+        eeF dual (smE ε (rreg ε)) (F i) = poleF dual lam (sI i) • F i) ∧ f = ∑ i, F i := by
+  classical
+  obtain ⟨-, hgap, hP, hv, hpos, hW, hG⟩ := hok
+  have hσ := rreg_isURepOn ε
+  have hD : IsDerivedOn ε (rreg ε) (smD ε (rreg ε)) (smE ε (rreg ε)) := isDerivedOn_smE hσ
+  have hsm : ∀ v : smD ε (rreg ε), IsSmoothVecU ε (rreg ε) (v : _) := fun v => (mem_smD_iff ε (rreg ε) _).1 v.2
+  have hV := datumV_isKIrrHW hP hv
+  have hc := datumV_casimir hP T.w
+  have hVK := datumV_kStable hP T.w
+  obtain ⟨B, hdec, -⟩ := ee_decomp dual hσ hD hgap hV hc hVK hW
+  obtain ⟨fb, hfb, hfe⟩ := hdec f hf
+  have hpole := (pole_match dual hσ hD hsm hgap hV hc hVK hW hG).1
+  have hex : ∀ i : {b // b ∈ B.filter (fun b => fb b ≠ 0)}, ∃ s, ((i.1 : ℝ) : ℂ) = poleF dual lam s := fun i =>
+    hpole _ _ (hfb i.1).1 (Finset.mem_filter.1 i.2).2 (hfb i.1).2
+  choose sI hsI using hex
+  refine ⟨{b // b ∈ B.filter (fun b => fb b ≠ 0)}, Finset.Subtype.fintype _, sI, fun i => fb i.1,
+    fun i => ⟨?_, (hfb i.1).1, by rw [← hsI i]; exact (hfb i.1).2⟩, ?_⟩
+  · by_contra hns
+    refine (Finset.mem_filter.1 i.2).2 ?_
+    exact cc_gk_singular dual hσ hD hsm hgap hV hc hVK hW hG (sI i) (cns_sing dual hlam hns) _ (hfb i.1).1
+      (by rw [← hsI i]; exact (hfb i.1).2)
+  · rw [hfe, ← Finset.sum_filter_ne_zero]
+    exact (Finset.sum_coe_sort (B.filter fun b => fb b ≠ 0) fb).symm
+
+end NC
+
+theorem cns_nc_data (dual : Bool) {ε : Fin n → Bool} (hq : 1 ≤ S7.q0 ε) {μ : Fin n → ℝ} {H : Type}
+    [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] {σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)}
+    (hμ : S7.IsHCParam μ) (hd : Formalism.MainNotions.S.IsDS ε μ σ) {h : ℝ} (hG : GapAtLeast ε μ h)
+    (hth : thrStar ε + 1 < h) :
+    ∃ (lamS : Fin n → Fin n → ℝ) (Ts : ∀ s, S7.KType ε (lowK ε (lamS s)))
+      (Ψs : ∀ s, Matrix (Fin n) (Fin n) ℂ → ((Ts s).V →L[ℂ] (Ts s).V)),
+      (∀ s, S7.IsHCParam (shiftF dual μ s) → lamS s = shiftF dual μ s) ∧
+      (∀ s, Formalism.MainNotions.S.IsDS ε (lamS s) (sigLam ε (Ψs s) (Ts s).w)) ∧
+      (∀ s s', S7.IsHCParam (shiftF dual μ s) → S7.IsHCParam (shiftF dual μ s') → s ≠ s' →
+        ¬ ∃ U : Hlam ε (Ψs s) (Ts s).w ≃ₗᵢ[ℂ] Hlam ε (Ψs s') (Ts s').w, ∀ g ∈ UJset ε, ∀ x,
+          U (sigLam ε (Ψs s) (Ts s).w g x) = sigLam ε (Ψs s') (Ts s').w g (U x)) ∧
+      (∀ a b : Fin n → H, (∀ c, PI.UpqRep.IsKFin ε σ (a c)) → (∀ c, PI.UpqRep.IsKFin ε σ (b c)) →
+        ∃ (κ : Type) (_ : Fintype κ) (sI : κ → Fin n) (vI wI : ∀ i, Hlam ε (Ψs (sI i)) (Ts (sI i)).w),
+          (∀ i, S7.IsHCParam (shiftF dual μ (sI i)) ∧
+            PI.UpqRep.IsKFin ε (sigLam ε (Ψs (sI i)) (Ts (sI i)).w) (vI i) ∧
+            PI.UpqRep.IsKFin ε (sigLam ε (Ψs (sI i)) (Ts (sI i)).w) (wI i)) ∧
+          ∀ g ∈ UJset ε, ∑ c, inner ℂ (b c) (tensGrp dual σ g a c) =
+            ∑ i, inner ℂ (wI i) (sigLam ε (Ψs (sI i)) (Ts (sI i)).w g (vI i))) ∧
+      ∀ s, S7.IsHCParam (shiftF dual μ s) → ∀ v w : Hlam ε (Ψs s) (Ts s).w,
+        PI.UpqRep.IsKFin ε (sigLam ε (Ψs s) (Ts s).w) v → PI.UpqRep.IsKFin ε (sigLam ε (Ψs s) (Ts s).w) w →
+        ∃ a b : Fin n → H, (∀ c, PI.UpqRep.IsKFin ε σ (a c)) ∧ (∀ c, PI.UpqRep.IsKFin ε σ (b c)) ∧
+          ∀ g ∈ UJset ε, inner ℂ w (sigLam ε (Ψs s) (Ts s).w g v) = ∑ c, inner ℂ (b c) (tensGrp dual σ g a c) := by
+  obtain ⟨T, Ψ, hok⟩ := cns_data' hq hμ hG (by linarith)
+  obtain ⟨U, hU⟩ := equiv_sigLam_of_isDS hd hok.2.1 hok.2.2.1 hok.2.2.2.1
+  have hU' : ∀ g ∈ UJset ε, ∀ y : H, U.symm (σ g y) = sigLam ε Ψ T.w g (U.symm y) := by
+    intro g hg y
+    apply U.injective
+    rw [hU g hg, LinearIsometryEquiv.apply_symm_apply, LinearIsometryEquiv.apply_symm_apply]
+  have hdat : ∀ s, ∃ (lam' : Fin n → ℝ) (T' : S7.KType ε (lowK ε lam'))
+      (Ψ' : Matrix (Fin n) (Fin n) ℂ → (T'.V →L[ℂ] T'.V)), cns_Ok ε lam' T' Ψ' ∧
+        (S7.IsHCParam (shiftF dual μ s) → lam' = shiftF dual μ s) := by
+    intro s
+    by_cases hs : S7.IsHCParam (shiftF dual μ s)
+    · obtain ⟨T', Ψ', hok'⟩ := cns_data' hq hs (cns_shift_gap dual hG s) (by linarith)
+      exact ⟨_, T', Ψ', hok', fun _ => rfl⟩
+    · exact ⟨μ, T, Ψ, hok, fun h => absurd h hs⟩
+  choose lamS Ts Ψs hoks hsh using hdat
+  refine ⟨lamS, Ts, Ψs, hsh, fun s => isDS_sigLam (hoks s).2.1 (hoks s).2.2.1 (hoks s).2.2.2.1, ?_, ?_, ?_⟩
+  · rintro s s' hs hs' hne ⟨V, hV⟩
+    have e := sigLam_inj (hoks s).2.1 (hoks s).2.2.1 (hoks s).2.2.2.1 (hoks s').2.1 (hoks s').2.2.1
+      (hoks s').2.2.2.1 V hV
+    rw [hsh s hs, hsh s' hs'] at e
+    exact hne (cns_shift_inj dual μ e)
+  · intro a b ha hb
+    have hgen : ∀ (a : Fin n → H), (∀ c, PI.UpqRep.IsKFin ε σ (a c)) →
+        ∃ f ∈ tensSub (genSub (smE ε (rreg ε)) (datumV ε Ψ T.w)),
+          ∀ c, ((f c : smD ε (rreg ε)) : L2 ε) = ((U.symm (a c) : Hlam ε Ψ T.w) : L2 ε) := by
+      intro a ha
+      choose f hf hfe using fun c => cns_kfin_rep hok.2.1 hok.2.2.1 hok.2.2.2.1 (cns_kfin_map U.symm hU' (ha c))
+      exact ⟨f, tset_mem.2 hf, hfe⟩
+    obtain ⟨f, hf, hfe⟩ := hgen a ha
+    obtain ⟨η, hη, hηe⟩ := hgen b hb
+    obtain ⟨κ, hκ, sI, F, hF, hfF⟩ := cns_decomp dual hμ hok hf
+    choose x hx z hz hxz using fun i => (cns_emb dual hok (hoks (sI i)) (sI i) (hsh (sI i) (hF i).1)).1 η hη (F i)
+      (hF i).2.1 (hF i).2.2
+    refine ⟨κ, hκ, sI, fun i => ⟨_, cns_gen_mem_Hlam (hx i)⟩, fun i => ⟨_, cns_gen_mem_Hlam (hz i)⟩,
+      fun i => ⟨(hF i).1, cns_kfin (hoks _).2.1 (hoks _).2.2.1 (hoks _).2.2.2.1 (hx i) _ rfl,
+        cns_kfin (hoks _).2.1 (hoks _).2.2.1 (hoks _).2.2.2.1 (hz i) _ rfl⟩, fun g hg => ?_⟩
+    have ht := cns_transport dual hok.2.1 hok.2.2.1 hok.2.2.2.1 U hU (fun c => U.symm (a c)) (fun c => U.symm (b c)) hg
+    simp only [LinearIsometryEquiv.apply_symm_apply, ← hfe, ← hηe] at ht
+    rw [ht, hfF, cns_tens_sum]
+    refine Finset.sum_congr rfl fun i _ => ?_
+    rw [hxz i g hg, Submodule.coe_inner, sigLam_coe (hoks _).2.1 (hoks _).2.2.1 (hoks _).2.2.2.1 hg]
+  · intro s hs v w hv hw
+    obtain ⟨x, hx, hxe⟩ := cns_kfin_rep (hoks s).2.1 (hoks s).2.2.1 (hoks s).2.2.2.1 hv
+    obtain ⟨z, hz, hze⟩ := cns_kfin_rep (hoks s).2.1 (hoks s).2.2.1 (hoks s).2.2.2.1 hw
+    obtain ⟨η, hη, f, hf, hηf⟩ := (cns_emb dual hok (hoks s) s (hsh s hs)).2 z hz x hx
+    rw [tset_mem] at hη hf
+    refine ⟨fun c => U ⟨_, cns_gen_mem_Hlam (hf c)⟩, fun c => U ⟨_, cns_gen_mem_Hlam (hη c)⟩,
+      fun c => cns_kfin_map U hU (cns_kfin hok.2.1 hok.2.2.1 hok.2.2.2.1 (hf c) _ rfl),
+      fun c => cns_kfin_map U hU (cns_kfin hok.2.1 hok.2.2.1 hok.2.2.2.1 (hη c) _ rfl), fun g hg => ?_⟩
+    rw [cns_transport dual hok.2.1 hok.2.2.1 hok.2.2.2.1 U hU (fun c => ⟨_, cns_gen_mem_Hlam (hf c)⟩)
+      (fun c => ⟨_, cns_gen_mem_Hlam (hη c)⟩) hg, ← hηf g hg, Submodule.coe_inner,
+      sigLam_coe (hoks s).2.1 (hoks s).2.2.1 (hoks s).2.2.2.1 hg, hxe, hze]
+
+end ReciprocityTheory.ChartRestriction.DS
+end
+end
+end
 
 -- ===== clump member: ReciprocityTheory.ReductiveGroups.DiscreteSeries.TensorRepresentations.ConsumerC =====
 -- clump-header: {"m": "ReciprocityTheory.ReductiveGroups.DiscreteSeries.TensorRepresentations.ConsumerC", "h": "module\n\npublic import Formalism.SharpRestriction.CuspSpanNormBounds.RelevantZeroGramTerms\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.PieriRules.KTypeIntDomStatement\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.PieriRules.TensRepA\npublic import Formalism.RealPlaceAnalysis.QuotientSettingHolds\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.TypeStar\nimport Mathlib.Topology.Sheaves.Init\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.DiscreteSeriesExistence.Bridge\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.ContinuousRepresentations.RelOpCurve\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.ContinuousRepresentations.URepCompRed\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.PieriRules.CountNotTwoOfFinrankLeOne\nimport ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.PieriRules.TensRepB\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.Unique\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.ContinuousRepresentations.DerivExistsAllPosStatement\nimport Formalism.RealPlaceAnalysis.RealPlaceTaylor.IsCompactInvariantOrthogonalInf\n\n"}

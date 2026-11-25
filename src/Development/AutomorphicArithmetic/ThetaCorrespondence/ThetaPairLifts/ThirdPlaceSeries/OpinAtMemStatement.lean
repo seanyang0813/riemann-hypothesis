@@ -109,7 +109,7 @@ end GlobalTheory.HeightCounting.Up.OPinAt
 open GlobalTheory.HeightCounting.Up.OPinAt in
 theorem GlobalTheory.HeightCounting.Up.oPin_at_mem : ∀ hL : _root_.UpperTheory.Zero.LLC.RecTExists, _root_.GlobalTheory.HeightCounting.Up.MemberAtLayerPoint hL fun _ _ _ _ w Z _ _ t nch n c => _root_.GlobalTheory.CoefDuty.OPinAlt c.a := by
   intro hL
-  refine EvG.imp GlobalTheory.T.twistedPlace_innerProduct_classSum_rows fun K _ _ _ _ hK => large₂.imp hK fun B f T _ H kp w Z Wt p0 t nch n xd c hne _ hcp => ?_
+  refine EvG.imp _root_.GlobalTheory.FormInner.sumTw_rows fun K _ _ _ _ hK => large₂.imp hK fun B f T _ H kp w Z Wt p0 t nch n xd c hne _ hcp => ?_
   obtain ⟨m⟩ := hne
   have hs := H kp w hcp Z Wt t.hX t.r.z p0 t.r.Y t.r.intersectionNumber_baseChange t.exAt t.inGeo t.grp t.grpAt
   obtain ⟨tup, Q, hin⟩ := _root_.GlobalTheory.HeightCounting.Up.OPinAt.mtInput_at_alt c.a

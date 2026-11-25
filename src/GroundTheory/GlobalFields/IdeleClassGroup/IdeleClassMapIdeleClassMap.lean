@@ -36,11 +36,6 @@ def ideleClassMap {F E : FiniteSubfield} (h : F ≤ E) :
   letI := algebraOfLE h
   GroundTheory.Global.ideleClassMap F.1 E.1
 
-theorem ideleClassMap_mk {F E : FiniteSubfield} (h : F ≤ E) (x : IdeleGroup F.1) :
-    ideleClassMap h (IdeleClassGroup.mk F.1 x) =
-      IdeleClassGroup.mk E.1 (@ideleEmbedding F.1 E.1 _ _ _ _ (algebraOfLE h) x) :=
-  rfl
-
 theorem ideleClassMap_injective {F E : FiniteSubfield} (h : F ≤ E) :
     Function.Injective (ideleClassMap h) :=
   letI := algebraOfLE h

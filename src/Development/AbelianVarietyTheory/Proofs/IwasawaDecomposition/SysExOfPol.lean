@@ -64,26 +64,16 @@ def polOf (Z : Model Xo c β) (m : ℕ) (BD : EffCartierData Z.X) : LB Z.X :=
   GlobalTheory.CechPic.tens (lbPow (GlobalTheory.FlagMod.detOm Z) m) (GlobalTheory.CechPic.dual BD.lb)
 
 def selfTor (Z : Model Xo c β) (h₁ : SmoothOfRelativeDimension D.dim (genStr Z)) (h₂ : FinalTheorems.Snc (genBdIdeal Z))
-    (h₃ : ∀ x ∈ genBd Z, HasToricChart Z x) (BD : EffCartierData Z.X)
-    (h₄ : ∀ x ∈ BD.idealSheaf.support, x ∉ abLocus Z.t.G) (h₅ : ∀ x ∈ genBd Z, genι Z x ∈ BD.idealSheaf.support)
-    (m : ℕ) (hm : 0 < m) : TorModel Z where
+    (_h₃ : ∀ x ∈ genBd Z, HasToricChart Z x) (BD : EffCartierData Z.X)
+    (_h₄ : ∀ x ∈ BD.idealSheaf.support, x ∉ abLocus Z.t.G) (_h₅ : ∀ x ∈ genBd Z, genι Z x ∈ BD.idealSheaf.support)
+    (m : ℕ) (_hm : 0 < m) : TorModel Z where
   Z := Z
   b := 𝟙 _
-  b_s := Category.id_comp _
-  j_b := Category.comp_id _
   pull := ObjComp.sabMapId Z.t
-  pull_univ T g₁ g₂ h₁ h₂ := by
-    obtain rfl : g₁ = g₂ := Z.m0.cart.1.hom_ext h₁ h₂
-    exact congrArg (g₁ ≫ ·) (Category.comp_id _)
   smooth := h₁
   snc := h₂
-  toric := h₃
-  lifts _ _ _ _ _ _ _ χ _ _ := ⟨χ, Category.comp_id _⟩
   BD := BD
-  BD_supp := h₄
-  BD_pos := h₅
   m0 := m
-  torModel_multiplicity_pos := hm
 
 end Defs
 

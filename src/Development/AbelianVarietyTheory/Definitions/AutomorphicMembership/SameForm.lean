@@ -72,20 +72,10 @@ structure DefTrue (W : RowsRest B (I.cols l)) (e : ∀ a : (I.cols l).Tup, MtCx 
 
 structure StandIn {C : Cols B} (W : RowsRest B C) : Prop where
   drows : W.Drows = 0
-  d0 : W.D0 = 0
   dall : W.Dall = 0
-  delp : W.delp = 0
-  ft : IsEmpty W.FT
-  mult : ∀ a j, j ≠ B.R.m → Subsingleton (W.Mult a j)
-  io : ∀ a j, W.io a j = 0
-  mj : ∀ j, Subsingleton (W.Mj j)
   mt : ∀ a j, Subsingleton (W.Mt a j)
-  eMt : ∀ a j, W.eMt a j = LinearMap.id
-  bu : ∀ u φ F, W.Bu u φ F = 0
-  ij : ∀ a j w, W.Ij a j w = 0 ∧ W.jw a j w = 0
   eta : ∀ j w, W.etaJ j w = 0
   sha : GlobalTheory.MemN.ShaOK B.toPre W.shaLen
-  kap : ∀ V S N G, DV.KapDef (assemble B C W V S N G)
 
 structure RowsDef : Type 1 where
   W : RowsRest B (I.cols l)

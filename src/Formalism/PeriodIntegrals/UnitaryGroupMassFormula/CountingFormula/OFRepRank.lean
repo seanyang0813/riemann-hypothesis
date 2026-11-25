@@ -11,8 +11,6 @@ namespace PI.UnitaryGroupMassFormula.CntFormula
 open NumberField Formalism.MainNotions.S Formalism.MainNotions.S.Lat Formalism.MainNotions.S.LocalSplitGroups Formalism.L2.SG.CntLocal
 open Classical
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem rank_gram : RankG := by
   intro D T T' Z hG
   classical

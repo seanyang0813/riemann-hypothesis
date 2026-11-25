@@ -55,7 +55,6 @@ open ReciprocityTheory.ChartRestriction.G.Geo.Tor (Datum Level Moduli Coeff)
 open GlobalTheory.FormTies
 open scoped TensorProduct Matrix
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 -- Prefer the same-scalar module instance for the submodules underlying recB.Cusp.
 attribute [local instance 2000] Submodule.module
 

@@ -16,6 +16,8 @@ open scoped ComplexConjugate
 
 namespace ReciprocityTheory.ChartRestriction.DS.Mult1.InvCC
 
+open Formalism.FourierDecayAlt.P.B2x3
+
 open Formalism.QuantumDeterminants Formalism.FourierDecayAlt.B Formalism.FourierDecayAlt.B2
 
 section Alg

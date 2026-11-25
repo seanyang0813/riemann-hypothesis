@@ -13,8 +13,6 @@ namespace PI.NRL
 
 open NumberField Formalism.BasicNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem diffIdeal_ne_bot (D : D7) :
     Ideal.map (algebraMap (𝓞 D.host.F) (𝓞 D.host.E)) (differentIdeal ℤ (𝓞 D.host.F)) ≠ ⊥ := by
   have h0 : differentIdeal ℤ (𝓞 D.host.F) ≠ ⊥ := by

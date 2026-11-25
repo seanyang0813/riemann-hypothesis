@@ -53,62 +53,28 @@ noncomputable section SlopeTestRemainingChoices
 
 variable {E : Type} [Field E] [NumberField E]
 
-private abbrev dt (g : GL (Fin 2) (A E)) : (A E)ˣ := GroundTheory.Automorphic.AdelicGLn.det E 2 g
-
-private theorem dt_dM (t : (A E)ˣ) : dt (dM t) = t := by
-  refine Units.ext ?_
-  show (dM t).val.det = (t : A E)
-  simp [dM, Matrix.det_fin_two]
-
-private theorem dt_gl (h : G1 E) : dt (gl h) = 1 :=
-  Units.ext h.det_coe
-
-private theorem continuous_dt : Continuous (dt : GL (Fin 2) (A E) → (A E)ˣ) :=
-  GroundTheory.Automorphic.AdelicGLn.continuous_det E 2
-
-private alias continuous_dM' := _root_.UpperTheory.ConvolutionTheory.R2.continuous_dM
+private abbrev dt (g : GL (Fin 2) (A E)) : (A E)ˣ := Matrix.GeneralLinearGroup.det g
 
 private def pr (g : GL (Fin 2) (A E)) : G1 E :=
   ⟨(g * (dM (dt g))⁻¹).val, by
     have h : dt (g * (dM (dt g))⁻¹) = 1 := by
-      rw [dt, map_mul, map_inv]
-      show dt g * (dt (dM (dt g)))⁻¹ = 1
-      rw [dt_dM, mul_inv_cancel]
+      rw [dt, map_mul, map_inv, det_dM, mul_inv_cancel]
     exact congrArg Units.val h⟩
 
 private theorem gl_pr (g : GL (Fin 2) (A E)) : gl (pr g) = g * (dM (dt g))⁻¹ := Units.ext rfl
 
-private theorem dt_mul (x y : GL (Fin 2) (A E)) : dt (x * y) = dt x * dt y := map_mul _ x y
-
 private theorem pr_gl_mul (h : G1 E) (g : GL (Fin 2) (A E)) : pr (gl h * g) = h * pr g := by
   apply M.gl_inj
   have hm : gl (h * pr g) = gl h * gl (pr g) := map_mul _ h (pr g)
-  rw [hm, gl_pr, gl_pr, dt_mul, dt_gl, one_mul, mul_assoc]
+  rw [hm, gl_pr, gl_pr, dt, map_mul _ (gl h) g, det_gl, one_mul, mul_assoc]
 
 private theorem gl_pr_mul (g : GL (Fin 2) (A E)) : gl (pr g) * dM (dt g) = g := by
   rw [gl_pr, inv_mul_cancel_right]
 
 private theorem continuous_pr : Continuous (pr : GL (Fin 2) (A E) → G1 E) := by
   refine Continuous.subtype_mk ?_ _
-  exact Units.continuous_val.comp (continuous_id.mul (continuous_dM'.comp continuous_dt).inv)
-
-private theorem dt_diag (γ : GL (Fin 2) E) :
-    dt (GroundTheory.Automorphic.AdelicGLn.diagonal E 2 γ) = IdeleGroup.diagonal E (Matrix.GeneralLinearGroup.det γ) := by
-  refine Units.ext ?_
-  rw [GroundTheory.Automorphic.AdelicGLn.coe_det, IdeleGroup.coe_diagonal]
-  exact (RingHom.map_det (algebraMap E (A E)) (γ : Matrix (Fin 2) (Fin 2) E)).symm
-
-private theorem dM_diag (e : Eˣ) : dM (IdeleGroup.diagonal E e) ∈ GroundTheory.Automorphic.AdelicGLn.rationalGL E 2 := by
-  refine ⟨⟨!![1, 0; 0, (e : E)], !![1, 0; 0, ((e⁻¹ : Eˣ) : E)],
-    by ext i j; fin_cases i <;> fin_cases j <;> simp, by ext i j; fin_cases i <;> fin_cases j <;> simp⟩, ?_⟩
-  refine Units.ext ?_
-  ext i j
-  rw [show ∀ g : GL (Fin 2) E, ((GroundTheory.Automorphic.AdelicGLn.diagonal E 2 g : GL (Fin 2) (A E)) : Matrix (Fin 2) (Fin 2) (A E)) i j = algebraMap E (A E) (g i j) from fun g => rfl]
-  fin_cases i <;> fin_cases j
-  · simp [dM]
-  · simp [dM]
-  · simp [dM]
-  · simp [dM, IdeleGroup.coe_diagonal]
+  exact Units.continuous_val.comp
+    (continuous_id.mul (continuous_dM.comp Matrix.GeneralLinearGroup.continuous_det).inv)
 
 private theorem exists_V : ∃ V : Set (GL (Fin 2) (A E)), IsOpen V ∧ (1 : GL (Fin 2) (A E)) ∈ V ∧
     ∀ e : Eˣ, dM (IdeleGroup.diagonal E e) ∈ V → dM (IdeleGroup.diagonal E e) = 1 := by
@@ -118,7 +84,8 @@ private theorem exists_V : ∃ V : Set (GL (Fin 2) (A E)), IsOpen V ∧ (1 : GL 
   refine ⟨V, hV, ?_, fun e he => ?_⟩
   · have : (1 : GroundTheory.Automorphic.AdelicGLn.rationalGL E 2) ∈ Subtype.val ⁻¹' V := by rw [hVe]; rfl
     exact this
-  · have hin : (⟨_, dM_diag e⟩ : GroundTheory.Automorphic.AdelicGLn.rationalGL E 2) ∈ Subtype.val ⁻¹' V := he
+  · have hin : (⟨_, exists_ratGL_dM e⟩ :
+        GroundTheory.Automorphic.AdelicGLn.rationalGL E 2) ∈ Subtype.val ⁻¹' V := he
     rw [hVe] at hin
     exact congrArg Subtype.val (Set.mem_singleton_iff.1 hin)
 
@@ -139,14 +106,13 @@ private theorem exists_sep : ∃ W K₀ : Set (A E)ˣ, IsOpen W ∧ (1 : (A E)ˣ
     ∀ x ∈ W, ∀ y ∈ W, ∀ e : Eˣ, IdeleGroup.diagonal E e = x * y⁻¹ → e = 1 := by
   obtain ⟨V, hV, h1, hs⟩ := exists_V (E := E)
   have hU : dM ⁻¹' V ∈ 𝓝 (1 : (A E)ˣ) :=
-    (hV.preimage continuous_dM').mem_nhds (by show dM 1 ∈ V; rw [M.dM_one]; exact h1)
+    (hV.preimage continuous_dM).mem_nhds (by show dM 1 ∈ V; rw [M.dM_one]; exact h1)
   obtain ⟨W, K₀, hW, h1W, hK, hWK, hWW⟩ := exists_U hU
   refine ⟨W, K₀, hW, h1W, hK, hWK, fun x hx y hy e he => ?_⟩
   have hm : dM (IdeleGroup.diagonal E e) ∈ V := by rw [he]; exact hWW x hx y hy
   have h2 := hs e hm
   have h3 : IdeleGroup.diagonal E e = 1 := by
-    rw [← dt_dM (IdeleGroup.diagonal E e), h2]
-    exact map_one (GroundTheory.Automorphic.AdelicGLn.det E 2)
+    rw [← det_dM (IdeleGroup.diagonal E e), h2, map_one]
   have h4 := congrArg (Units.val) h3
   rw [IdeleGroup.coe_diagonal] at h4
   refine Units.ext (AdeleRing.algebraMap_injective (𝓞 E) E ?_)
@@ -157,7 +123,7 @@ private abbrev NG (E : Type) [Field E] [NumberField E] : Type := GroundTheory.Au
 private theorem gl_mem (h : G1 E) : gl h ∈ GroundTheory.Automorphic.Reduction.normOneGL (K := E) (n := 2) := by
   rw [GroundTheory.Automorphic.Reduction.mem_normOneGL]
   show ((IdeleGroup.ideleModule E (dt (gl h)) : {r : ℝ // 0 < r}) : ℝ) = 1
-  rw [dt_gl, map_one]
+  rw [dt, det_gl, map_one]
   rfl
 
 private def glN (h : G1 E) : NG E := ⟨gl h, gl_mem h⟩
@@ -167,12 +133,13 @@ private def prN (g : NG E) : G1 E := pr g.1
 private def dN (g : NG E) : (A E)ˣ := dt g.1
 
 private theorem continuous_prN : Continuous (prN : NG E → G1 E) := continuous_pr.comp continuous_subtype_val
-private theorem continuous_dN : Continuous (dN : NG E → (A E)ˣ) := continuous_dt.comp continuous_subtype_val
+private theorem continuous_dN : Continuous (dN : NG E → (A E)ˣ) :=
+  Matrix.GeneralLinearGroup.continuous_det.comp continuous_subtype_val
 
 private theorem prN_glN_mul (h : G1 E) (g : NG E) : prN (glN h * g) = h * prN g := pr_gl_mul h g.1
 private theorem dN_glN_mul (h : G1 E) (g : NG E) : dN (glN h * g) = dN g := by
   show dt (gl h * g.1) = dt g.1
-  rw [dt_mul, dt_gl, one_mul]
+  rw [dt, map_mul _ (gl h) g.1, det_gl, one_mul]
 
 private def pm (W : Set (A E)ˣ) : Measure (G1 E) :=
   ((Measure.haar : Measure (NG E)).restrict (dN ⁻¹' W)).map prN
@@ -182,7 +149,7 @@ private theorem pm_apply {W : Set (A E)ˣ} {B : Set (G1 E)} (hB : MeasurableSet 
   rw [pm, Measure.map_apply continuous_prN.measurable hB]
   exact Measure.restrict_apply (continuous_prN.measurable hB)
 
-private theorem pm_left {W : Set (A E)ˣ} (hW : IsOpen W) : (pm W).IsMulLeftInvariant := by
+private theorem pm_left {W : Set (A E)ˣ} : (pm W).IsMulLeftInvariant := by
   refine ⟨fun h => Measure.ext fun B hB => ?_⟩
   rw [Measure.map_apply (measurable_const_mul h) hB, pm_apply hB, pm_apply (measurable_const_mul h hB)]
   have e : (glN h * ·) ⁻¹' (prN ⁻¹' B ∩ dN ⁻¹' W) = prN ⁻¹' ((h * ·) ⁻¹' B) ∩ dN ⁻¹' W := by
@@ -196,7 +163,7 @@ private theorem pm_fin {W K₀ : Set (A E)ˣ} (hK : IsCompact K₀) (hWK : W ⊆
   refine ⟨fun K hKc => ?_⟩
   rw [pm_apply hKc.measurableSet]
   have hQ : IsCompact ((gl '' K) * (dM '' K₀) : Set (GL (Fin 2) (A E))) :=
-    (hKc.image M.continuous_gl).mul (hK.image continuous_dM')
+    (hKc.image M.continuous_gl).mul (hK.image continuous_dM)
   have hC : IsCompact (Subtype.val ⁻¹' ((gl '' K) * (dM '' K₀)) : Set (NG E)) :=
     GroundTheory.Automorphic.Reduction.isClosed_normOneGL.isClosedEmbedding_subtypeVal.isCompact_preimage hQ
   refine (measure_mono ?_).trans_lt hC.measure_lt_top
@@ -208,27 +175,21 @@ private theorem pm_ne {W : Set (A E)ˣ} (hW : IsOpen W) (h1 : (1 : (A E)ˣ) ∈ 
   have e := pm_apply (W := W) (B := Set.univ) MeasurableSet.univ
   rw [h0, Set.preimage_univ, Set.univ_inter] at e
   have hpos := (hW.preimage continuous_dN).measure_pos (Measure.haar : Measure (NG E))
-    ⟨1, by show dt (1 : GL (Fin 2) (A E)) ∈ W; rw [show dt (1 : GL (Fin 2) (A E)) = 1 from map_one (GroundTheory.Automorphic.AdelicGLn.det E 2)]; exact h1⟩
+    ⟨1, by show dt (1 : GL (Fin 2) (A E)) ∈ W; rw [dt, map_one]; exact h1⟩
   rw [← e] at hpos
   simp at hpos
-
-private theorem glN_ratS (s₀ : Matrix.SpecialLinearGroup (Fin 2) E) (γ₀ : GL (Fin 2) E) (hs : s₀.1 = γ₀.val) :
-    gl (ratS E s₀) = GroundTheory.Automorphic.AdelicGLn.diagonal E 2 γ₀ := by
-  refine Units.ext ?_
-  show (s₀.1).map (algebraMap E (A E)) = (algebraMap E (A E)).mapMatrix γ₀.val
-  rw [hs]
-  rfl
 
 private theorem null_of_disj {W : Set (A E)ˣ} (N : MeasE E) (c : NNReal) (hc : pm W = c • N.μ)
     (η : GroundTheory.Automorphic.Reduction.rationalGLOne (K := E) (n := 2)) (hη : η ≠ 1)
     (hsep : ∀ x ∈ W, ∀ y ∈ W, ∀ e : Eˣ, IdeleGroup.diagonal E e = x * y⁻¹ → e = 1) :
     (Measure.haar : Measure (NG E)) (η • (prN ⁻¹' N.D ∩ dN ⁻¹' W) ∩ (prN ⁻¹' N.D ∩ dN ⁻¹' W)) = 0 := by
   obtain ⟨γ₀, hγ₀⟩ := η.2
-  have hηv : ((η : NG E) : GL (Fin 2) (A E)) = GroundTheory.Automorphic.AdelicGLn.diagonal E 2 γ₀ := hγ₀.symm
+  have hηv : ((η : NG E) : GL (Fin 2) (A E)) = ratGL E 2 γ₀ := hγ₀.symm
   by_cases he : Matrix.GeneralLinearGroup.det γ₀ = 1
   · have hd : γ₀.val.det = 1 := congrArg Units.val he
     let s₀ : Matrix.SpecialLinearGroup (Fin 2) E := ⟨γ₀.val, hd⟩
-    have hgl : gl (ratS E s₀) = GroundTheory.Automorphic.AdelicGLn.diagonal E 2 γ₀ := glN_ratS s₀ γ₀ rfl
+    have hgl : gl (ratS E s₀) = ratGL E 2 γ₀ :=
+      (gl_ratS s₀).trans (congrArg (ratGL E 2) (Units.ext rfl))
     let sG : Gam E := ⟨ratS E s₀, s₀, rfl⟩
     have hsN : glN (sG : G1 E) = (η : NG E) := Subtype.ext (hgl.trans hηv.symm)
     have hs1 : sG ≠ 1 := by
@@ -255,9 +216,8 @@ private theorem null_of_disj {W : Set (A E)ˣ} (N : MeasE E) (c : NNReal) (hc : 
       rintro x ⟨⟨a, ⟨-, ha2⟩, rfl⟩, -, hx2⟩
       apply he
       refine hsep _ hx2 _ ha2 _ ?_
-      show IdeleGroup.diagonal E _ = dt (((η : NG E) * a).1) * (dt a.1)⁻¹
-      have : dt (((η : NG E) * a).1) = dt (η : NG E).1 * dt a.1 := dt_mul _ _
-      rw [this, mul_inv_cancel_right, hηv, dt_diag]
+      show IdeleGroup.diagonal E _ = dt ((η : NG E).1 * a.1) * (dt a.1)⁻¹
+      rw [dt, map_mul _ (η : NG E).1 a.1, mul_inv_cancel_right, hηv, det_ratGL]
     rw [this]
     simp
 
@@ -268,7 +228,7 @@ theorem UpperTheory.ConvolutionTheory.RankTwoDescent.volE :
   intro E _ _ N
   obtain ⟨W, K₀, hW, h1, hK, hWK, hsep⟩ := exists_sep (E := E)
   haveI := N.haar
-  haveI := pm_left hW
+  haveI := pm_left (W := W)
   haveI := pm_fin hK hWK
   obtain ⟨c, hc⟩ : ∃ c : NNReal, pm W = c • N.μ := ⟨_, Measure.isMulLeftInvariant_eq_smul _ _⟩
   have hc0 : c ≠ 0 := by

@@ -12,8 +12,6 @@ export Formalism.MainNotions.S.UnitaryVolumeMass (DefiniteComplementRank Lem1 Le
 
 open Formalism.BasicNotions Formalism.MainNotions.S.Lat NumberField Module
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 abbrev LatS (D : D7) : Type := Submodule (𝓞 D.host.E) (hS D).V
 
 abbrev FlS (D : D7) (T : ℕ) : Type := LFlag (hS D) D.R.rS ((T : ℕ) : D.host.E)

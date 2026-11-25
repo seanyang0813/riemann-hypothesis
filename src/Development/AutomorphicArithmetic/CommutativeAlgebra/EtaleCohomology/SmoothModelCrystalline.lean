@@ -12,7 +12,6 @@ public import Development.WeilBound.CoreStatements.PadicHodgeComparison.EtaleCoh
 public import Development.WeilBound.CoreStatements.PadicHodgeComparison.EtaleCohomologyComparison.PerfectoidPullbacks.FrobeniusWittActions.TeichmullerCongruence
 public import Development.WeilBound.CoreStatements.PadicHodgeComparison.EtaleCohomologyComparison.PerfectoidPullbacks.FrobeniusWittActions.FrobeniusNormBounds.ResiduePadicIntegersToIntegers
 public import Development.WeilBound.CoreStatements.PadicHodgeComparison.EtaleCohomologyComparison.PerfectoidPullbacks.FrobeniusFactorisation.PhiAIter
-public import Development.WeilBound.CoreStatements.PadicHodgeComparison.EtaleCohomologyComparison.PerfectoidPullbacks.FrobeniusWittActions.FrobeniusNormBounds.MapFrobW
 public import Development.WeilBound.CoreStatements.PadicHodgeComparison.EtaleCohomologyComparison.PerfectoidPullbacks.FrobeniusWittActions.FrobeniusNormBounds.NormLLtOne
 public import Development.WeilBound.CoreStatements.PadicHodgeComparison.EtaleCohomologyComparison.PerfectoidPullbacks.FrobeniusWittActions.MuNu
 public import Development.AutomorphicArithmetic.CommutativeAlgebra.EtaleCohomology.Final
@@ -347,7 +346,7 @@ theorem PinP.pin_lev (r : Res l K) {N : ℕ} (hT : Pb.Mid.TeichmullerCongruence 
 theorem PinP.pin_fixed (r : Res l K) [FiniteDimensional ℚ_[l] K] (f : ℕ) (hf : 0 < f) :
     ∃ N : ℕ, f ∣ N ∧ Pb.Mid.TeichmullerCongruence r N ∧ ∃ F : Pb.Fac r N, ∀ M : Model l K, M.Sm → ∀ j, Pin F M j := by
   obtain ⟨N, hfN, hT⟩ := PinP.teich_dvd r f hf
-  obtain ⟨F, hF⟩ := Pb.fac_ex r hT (fun M n j x => _root_.CrystallineSemistableComparison.Pb.Mid.frobenius_mu_nu_iterate r N hT M n j x) (Pb.G3.w_phi r) (fun g w => Pb.G3.w_fix r g w)
+  obtain ⟨F, hF⟩ := Pb.fac_ex r hT (fun M n j x => _root_.CrystallineSemistableComparison.Pb.Mid.frobenius_mu_nu_iterate r N hT M n j x) (fun g w => Pb.G3.w_fix r g w)
   exact ⟨N, hfN, hT, F, fun M hM j => PinP.pin_of r hT F M j fun y n => PinP.pin_lev r hT F hF M hM j y n⟩
 
 theorem pinEx : PinEx := fun _ _ _ _ r f hf => PinP.pin_fixed r f hf
@@ -1388,7 +1387,7 @@ namespace UpperTheory.Ru.crystallineComparison
 
 theorem finAll : UpperTheory.Gal.crystallineComparison.Br.FinAll := finAll_of fun l _ K _ r f hf => cIn l K r f hf
 
-theorem smoothModel_crystalline : CrystallineSemistableComparison.SmoothModelCrystalline := (CrystallineSemistableComparison.cstSmooth_of_side fun l _ K _ => UpperTheory.Gal.KunnethLefschetz.Top.etSide_sm_holds l K).1
+theorem smoothModel_crystalline : CrystallineSemistableComparison.SmoothModelCrystalline := CrystallineSemistableComparison.cstSmooth_of_side fun l _ K _ => UpperTheory.Gal.KunnethLefschetz.Top.etSide_sm_holds l K
 
 theorem phiStep : UpperTheory.Gal.Int.Geo.PhiStep := phiStep_of (UpperTheory.Gal.Int.Geo.geoSide_of finAll smoothModel_crystalline)
 

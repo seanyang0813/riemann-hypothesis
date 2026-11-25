@@ -163,7 +163,7 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 theorem UpperTheory.Zero.LLC.extDepth :
     UpperTheory.Zero.LLC.ExtDepth := by
   intro E Ω _ _ _ _ _ A w h a ha r rc hr hext x hgood hdz
-  rw [GlobalTheory.T.isTameWeilDeligne_iff_wild_charpoly]
+  rw [_root_.GlobalTheory.LlcTame.isTameWD_iff_charPol]
   intro σ hσ
   obtain ⟨⟨hdim, s, hsup, hcusp, hchar⟩, -⟩ := UpperTheory.Zero.LLC.extDim E Ω A w h a ha r rc hr hext x
   obtain ⟨s0, hsup0, hgc⟩ := hgood
@@ -180,7 +180,7 @@ theorem UpperTheory.Zero.LLC.extDepth :
   have htame : ∀ y ∈ s0, (r y).charPol σ = (X - 1) ^ y.fst := by
     intro y hy
     have hy' := hr.depth y (hcusp y hy) (hgc y hy) (hdzy y hy)
-    rw [GlobalTheory.T.isTameWeilDeligne_iff_wild_charpoly] at hy'
+    rw [_root_.GlobalTheory.LlcTame.isTameWD_iff_charPol] at hy'
     rw [hy' σ hσ, hr.dim y (hcusp y hy)]
   rw [hchar σ, Multiset.map_congr rfl htame, GlobalTheory.LlcDepth.prod_map_pow (X - 1) Sigma.fst s0,
     HasSupport.sum_fst hsup, Fintype.card_fin, hdim]

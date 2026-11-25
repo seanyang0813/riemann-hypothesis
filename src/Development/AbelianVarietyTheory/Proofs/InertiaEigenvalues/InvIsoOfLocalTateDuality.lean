@@ -321,9 +321,6 @@ variable {p : ℕ} {O : Type} [CommRing O] [IsDomain O] [IsDiscreteValuationRing
     [TopologicalSpace O] [TopologicalSpace (FractionRing O)]
     [IsTopologicalAddGroup (FractionRing O)] [ContinuousSMul O (FractionRing O)]
 
-theorem frac_isFGTop (hO : PadicCoeff p O) (hF : FracTop O) (n : ℕ) :
-    IsFGTop O ((1 : Submodule O (FractionRing O)).comap (LinearMap.lsmul O _ ((p : O) ^ n))) := _root_.GlobalTheory.isFGTop_comap_lsmul_one hO hF n
-
 theorem frac_cover (hO : PadicCoeff p O) (y : FractionRing O) :
     ∃ n, y ∈ (1 : Submodule O (FractionRing O)).comap (LinearMap.lsmul O _ ((p : O) ^ n)) := _root_.GlobalTheory.padicCoeff_exists_pow_smul_mem_one hO y
 

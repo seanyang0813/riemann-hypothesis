@@ -10,8 +10,6 @@ namespace Formalism.MainNotions.BridgeLemma₂
 
 open NumberField Module Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat Formalism.MainNotions.S.Cnt
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 def ForPrimeFlagLattice (D : D7) (u : D.what₂.Word)
     (Q : (F0 : FlagG (VS D) D.R.rS ((Tu D u : ℕ) : D.host.E)) → LatV D → Prop) : Prop :=
   (Tu D u).Prime → 3 ≤ Tu D u → SplitsCompletely (E := D.host.E) (Tu D u) →

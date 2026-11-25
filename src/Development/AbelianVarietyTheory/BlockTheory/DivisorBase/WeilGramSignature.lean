@@ -151,18 +151,8 @@ def IsCompPhase (u : GA D (Wc D i) → ℂ) (U : (R.HW i σ).H ≃ₗᵢ[ℂ] (R
   (∀ h, ‖u h‖ = 1) ∧ (∀ γ ∈ GQ (Wc D i), ∀ h, u (γ * h) = u h) ∧ (∀ g ∈ GinfC (Wc D i), ∀ h, u (h * g) = u h) ∧
     (∀ k ∈ levW R i, ∀ h, u (h * k) = u h) ∧ ∀ y v h, (R.HW i σ).e (U y) v h = u h * (R.HW i σ).e y v h
 
-structure IsCentralShift (z : G) (ζ : GA D (Wc D i)) : Prop where
-  z_cent : z ∈ Subgroup.center G
-  cent : ζ ∈ Subgroup.center (GA D (Wc D i))
-  fin : ζ ∈ GfC (Wc D i)
-  supp : ∃ e : AE D, IsIdemSum e R.Pg ∧ SuppAt e (Wc D i) ζ
-  lift : Lev.IsLevelLift (Wc D i) (R.βW i) (R.datWp i R.triv) (R.eG z) ζ
-  transl : ∀ y v h, (R.HW i σ).e (R.gW i σ z y) v h = (R.HW i σ).e y v (h * ζ)
+structure IsCentralShift (z : G) (_ζ : GA D (Wc D i)) : Prop where
   unitary : ∀ y y', ⟪R.gW i σ z y, R.gW i σ z y'⟫_ℂ = ⟪y, y'⟫_ℂ
-  comm_fin : ∀ g y, R.gW i σ z (R.gW i σ g y) = R.gW i σ g (R.gW i σ z y)
-  comm_hecke : ∀ α ∈ GfC (Wc D i), ∀ S : Finset (GA D (Wc D i)), Bridge.IsDC (levW R i) α S → ∀ y y',
-    (R.HW i σ).e y' = heckeOn (R.MW i σ) S ((R.HW i σ).e y) →
-      (R.HW i σ).e (R.gW i σ z y') = heckeOn (R.MW i σ) S ((R.HW i σ).e (R.gW i σ z y))
 
 def IsRatLift (ph : ℂ) (x : A.fam.amb.FL i A.μ0) (y : Fin (R.nW i) → D.what₂.LL) : Prop :=
   (R.FW i).j (sg0 D A) y = ph • R.thG i A.μ0 (R.jV i A.μ0 x)

@@ -135,32 +135,6 @@ def Dbl.prod (Y : Var F) : Dbl Y where
     exact (Scheme.Hom.comp_apply _ _ _).symm.trans
       (congrArg (fun u : Sp K ⟶ _ => u (IsLocalRing.closedPoint K)) e)⟩
 
-theorem Dbl.prod_dim (Y : Var F) : topologicalKrullDim (Dbl.prod Y).Z = (Y.dim + Y.dim : ℕ) := by
-  have h1 := smoothOfRelativeDimension_isStableUnderBaseChange.{0} Y.dim
-  have : SmoothOfRelativeDimension Y.dim (pullback.fst Y.str Y.str) :=
-    MorphismProperty.of_isPullback (P := @SmoothOfRelativeDimension Y.dim)
-      (IsPullback.of_hasPullback Y.str Y.str).flip Y.smooth
-  have : SmoothOfRelativeDimension (Y.dim + Y.dim) (pullback.fst Y.str Y.str ≫ Y.str) := inferInstance
-  have := SmoothOfRelativeDimension.smooth Y.dim (pullback.fst Y.str Y.str)
-  have : GeometricallyConnected (pullback.fst Y.str Y.str ≫ Y.str) := GeometricallyConnected.comp _ _
-  obtain ⟨V, e, hd, -⟩ := Var.exists_iso (pullback.fst Y.str Y.str ≫ Y.str) (Y.dim + Y.dim) (Dbl.prod Y).proj
-  rw [← hd, ← V.topologicalKrullDim_eq]
-  exact IsHomeomorph.topologicalKrullDim_eq _ e.hom.homeomorph.isHomeomorph
-
-theorem Dbl.prod_small (Y : Var F) (h : Y.dim ≤ 1) : (Dbl.prod Y).Small := by
-  unfold Dbl.Small
-  rw [Dbl.prod_dim]
-  exact_mod_cast (by omega : Y.dim + Y.dim ≤ Y.dim + 1)
-
-theorem Dbl.prod_ne (Y : Var F) (h : 0 < Y.dim) : (Dbl.prod Y).p₁ ≠ (Dbl.prod Y).p₂ := fun e => by
-  have e' : pullback.fst Y.str Y.str = pullback.snd Y.str Y.str := e
-  let i : pullback Y.str Y.str ≅ Y.X := ⟨pullback.fst _ _, pullback.diagonal Y.str,
-    by apply pullback.hom_ext <;> simp [← e'], pullback.diagonal_fst _⟩
-  have h2 := (IsHomeomorph.topologicalKrullDim_eq _ (Scheme.homeoOfIso i).isHomeomorph).trans Y.topologicalKrullDim_eq
-  have h3 := (Dbl.prod_dim Y).symm.trans h2
-  have : Y.dim + Y.dim = Y.dim := by exact_mod_cast h3
-  omega
-
 end Square
 
 def GenPair (Y : Var F) {K : Type} [Field K] (ψ₁ ψ₂ : Y.Fn →+* K) : Prop :=

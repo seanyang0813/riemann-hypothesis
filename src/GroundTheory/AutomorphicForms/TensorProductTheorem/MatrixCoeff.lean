@@ -51,14 +51,7 @@ theorem mem_span_orbit {ρ : Representation ℂ G V} [ρ.IsIrreducible] {v : V} 
 theorem eq_zero_of_forall_apply {ρ : Representation ℂ G V} [ρ.IsIrreducible] {v : V} (hv : v ≠ 0)
     {l : Module.Dual ℂ V} (h : ∀ g, l (ρ g v) = 0) : l = 0 := by
   ext x
-  have hx := mem_span_orbit (ρ := ρ) hv x
-  induction hx using Submodule.span_induction with
-  | mem x hx =>
-    obtain ⟨g, rfl⟩ := hx
-    exact h g
-  | zero => simp
-  | add x y _ _ hx hy => simp [hx, hy]
-  | smul c x _ hx => simp [hx]
+  exact LinearMap.eqOn_span (Set.forall_mem_range.2 h) (mem_span_orbit hv x)
 
 theorem eq_zero_of_forall_apply_act {ρ : Representation ℂ G V} [ρ.IsIrreducible]
     {l : Module.Dual ℂ V} (hl : l ≠ 0) {x : V} (h : ∀ g, l (ρ g x) = 0) : x = 0 := by
@@ -78,10 +71,8 @@ theorem orbitMap_single (ρ : Representation ℂ G V) (v : V) (g : G) (a : ℂ) 
 
 theorem orbitMap_mapDomain (ρ : Representation ℂ G V) (v : V) (h : G) (c : G →₀ ℂ) :
     orbitMap ρ v (Finsupp.mapDomain (h * ·) c) = ρ h (orbitMap ρ v c) := by
-  induction c using Finsupp.induction_linear with
-  | zero => simp [orbitMap]
-  | add c d hc hd => rw [Finsupp.mapDomain_add, map_add (f := _), hc, hd, map_add (f := _), map_add (f := _)]
-  | single g a => simp [Finsupp.mapDomain_single, orbitMap_single, map_mul]
+  simp only [orbitMap, Finsupp.linearCombination_mapDomain,
+    Finsupp.apply_linearCombination, Function.comp_def, map_mul, mul_apply_eq_comp]
 
 theorem range_orbitMap (ρ : Representation ℂ G V) (v : V) :
     LinearMap.range (orbitMap ρ v) = Submodule.span ℂ (range fun g => ρ g v) := by

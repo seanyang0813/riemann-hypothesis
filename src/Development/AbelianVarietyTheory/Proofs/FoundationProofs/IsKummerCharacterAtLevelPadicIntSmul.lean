@@ -56,17 +56,6 @@ open scoped MatrixGroups TensorProduct
 
 namespace GlobalTheory.KZ.H3
 
-theorem exp_val_mod (m v : ℕ) (hm : 0 < m) :
-    Complex.exp (2 * Real.pi * Complex.I * ((v % m : ℕ) : ℂ) / (m : ℂ)) =
-      Complex.exp (2 * Real.pi * Complex.I * (v : ℂ) / (m : ℂ)) := by
-  have hm' : (m : ℂ) ≠ 0 := by exact_mod_cast hm.ne'
-  conv_rhs => rw [← Nat.mod_add_div v m]
-  push_cast
-  have : 2 * Real.pi * Complex.I * ((v % m : ℕ) + (m : ℂ) * (v / m : ℕ)) / (m : ℂ) =
-      2 * Real.pi * Complex.I * ((v % m : ℕ) : ℂ) / (m : ℂ) + ((v / m : ℕ) : ℂ) * (2 * Real.pi * Complex.I) := by
-    field_simp
-  rw [this, Complex.exp_add, Complex.exp_nat_mul_two_pi_mul_I, mul_one]
-
 theorem kum_smul (Ω : Type) [Field Ω] [Algebra ℚ Ω] (ε : Ω →+* ℂ) (X : Tower Ω ε) (l : ℕ) [Fact l.Prime] (n : ℕ)
     (c : ℤ_[l]) (x : X.Khat l) (χ : SL(2, ℤ) → ZMod (l ^ n)) (h : Kum X l n x χ) :
     Kum X l n (c • x) (fun δ => PadicInt.toZModPow n c * χ δ) := by

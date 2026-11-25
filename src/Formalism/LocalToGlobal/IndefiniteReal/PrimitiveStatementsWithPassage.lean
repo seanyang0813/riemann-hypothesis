@@ -305,32 +305,17 @@ theorem eig_transport (σ : K →+* ℂ) {E : Type} [AddCommGroup E] [Module ℂ
 
 namespace CxData
 
-variable {Bs : DefBase K} {A : DefAmb Bs} (X : CxData A) {fc : DefSub A → DefFace Bs} (cr : Crd A fc) (b : Bool)
-  (cf : ConvFace Bs)
+variable {Bs : DefBase K} {A : DefAmb Bs} (X : CxData A)
 
-structure HeckeRowsC where
+structure HeckeRowsC {fc : DefSub A → DefFace Bs} (_cr : Crd A fc) (_b : Bool) (cf : ConvFace Bs) where
 
   hC : cf.Hk → Module.End ℂ X.EE
 
-  maps : ∀ T, ∀ e ∈ X.EEl b, hC T e ∈ X.EEl b
-
-  rat : ∀ T, IsRat Bs.v0.embedding (relMat (X.iC cr b Bs.μ0) (hC T ∘ₗ X.iC cr b Bs.μ0))
-
-  eig : ∀ c, X.EEp c ⊓ X.EEl b =
-    (⨅ T, LinearMap.ker (hC T - Bs.v0.embedding (cf.ev c T) • LinearMap.id)) ⊓ X.EEl b
-
-structure HeckeWC where
+structure HeckeWC (_b : Bool) (cf : ConvFace Bs) where
 
   hC : ∀ j, cf.Hk → Module.End ℂ (X.W j)
 
-  maps : ∀ j T y, hC j T (X.w0C b j y) ∈ LinearMap.range (X.w0C b j)
-
-  rat : ∀ j T, IsRat Bs.v0.embedding (relMat (X.w0C b j) (hC j T ∘ₗ X.w0C b j))
-
-  eig : ∀ j c, X.Wp j c ⊓ LinearMap.range (X.w0C b j) =
-    (⨅ T, LinearMap.ker (hC j T - Bs.v0.embedding (cf.ev c T) • LinearMap.id)) ⊓ LinearMap.range (X.w0C b j)
-
-variable {X cr b cf}
+variable {X} {fc : DefSub A → DefFace Bs} {cr : Crd A fc} {b : Bool} {cf : ConvFace Bs}
 
 def HeckeRowsC.hEK (H : X.HeckeRowsC cr b cf) (T : cf.Hk) :
     Module.End K (Fin ((lv (fc X.zs) b).dQ Bs.μ0) → K) :=
@@ -339,62 +324,13 @@ def HeckeRowsC.hEK (H : X.HeckeRowsC cr b cf) (T : cf.Hk) :
 def HeckeWC.hWK (H : X.HeckeWC b cf) (j : Bs.J) (T : cf.Hk) : Module.End K (Fin (X.dW b j) → K) :=
   Matrix.toLin' (kMat Bs.v0.embedding (relMat (X.w0C b j) (H.hC j T ∘ₗ X.w0C b j)))
 
-theorem HeckeRowsC.maps' (h2 : X.H2 cr b) (H : X.HeckeRowsC cr b cf) (T : cf.Hk) (y) :
-    H.hC T (X.iC cr b Bs.μ0 y) ∈ LinearMap.range (X.iC cr b Bs.μ0) := by
-  rw [h2.2.2]
-  apply H.maps
-  rw [← h2.2.2]
-  exact LinearMap.mem_range_self _ y
-
-theorem HeckeRowsC.key (h2 : X.H2 cr b) (H : X.HeckeRowsC cr b cf) (T : cf.Hk)
-    (x : Fin ((lv (fc X.zs) b).dQ Bs.μ0) → K) :
-    X.iC cr b Bs.μ0 (cpt Bs.v0.embedding (H.hEK T x)) = H.hC T (X.iC cr b Bs.μ0 (cpt Bs.v0.embedding x)) := by
-  simpa [HeckeRowsC.hEK, Matrix.toLin'_apply] using
-    relMat_op_key Bs.v0.embedding (X.iC cr b Bs.μ0) (H.hC T) (H.maps' h2 T) (H.rat T) x
-
-theorem HeckeWC.key (H : X.HeckeWC b cf) (j : Bs.J) (T : cf.Hk) (x : Fin (X.dW b j) → K) :
-    X.w0C b j (cpt Bs.v0.embedding (H.hWK j T x)) = H.hC j T (X.w0C b j (cpt Bs.v0.embedding x)) := by
-  simpa [HeckeWC.hWK, Matrix.toLin'_apply] using
-    relMat_op_key Bs.v0.embedding (X.w0C b j) (H.hC j T) (H.maps j T) (H.rat j T) x
-
-theorem HeckeRowsC.eigE (h2 : X.H2 cr b) (H : X.HeckeRowsC cr b cf) (c : Bs.Ix) :
-    X.Ep cr b c = ⨅ T, LinearMap.ker (H.hEK T - cf.ev c T • LinearMap.id) := by
-  have h := eig_transport Bs.v0.embedding (X.iC cr b Bs.μ0) h2.1 H.hC (H.maps' h2) H.rat (X.EEp c) (cf.ev c)
-    (by rw [h2.2.2]; exact H.eig c)
-  exact h
-
-theorem HeckeWC.eigW (hk : X.KForm b) (he : X.EWnorm b) (hn : 0 < X.nP b) (H : X.HeckeWC b cf) (j : Bs.J)
-    (c : Bs.Ix) :
-    X.WpK b j c = ⨅ T, LinearMap.ker (H.hWK j T - cf.ev c T • LinearMap.id) := by
-  have hinjW : Function.Injective (X.wC b j Bs.v0) := by
-    rw [← LinearMap.ker_eq_bot, LinearMap.ker_eq_bot']
-    intro c' hc
-    simp only [wC, lin, Fintype.linearCombination_apply] at hc
-    funext i
-    exact Fintype.linearIndependent_iff.mp (hk j Bs.v0).1 c' hc i
-  have hinjE : Function.Injective (X.eW b j) := by
-    rw [← LinearMap.ker_eq_bot, LinearMap.ker_eq_bot']
-    intro x hx
-    have h := he j x x
-    rw [hx, inner_zero_left] at h
-    have h' : ((X.nP b : ℝ) : ℂ) ≠ 0 := by exact_mod_cast hn.ne'
-    have h'' : ⟪x, x⟫_ℂ = 0 := (mul_eq_zero.mp h.symm).resolve_left h'
-    exact inner_self_eq_zero.mp h''
-  have hinj : Function.Injective (X.w0C b j) := by
-    first
-    | exact hinjE.comp hinjW
-  exact eig_transport Bs.v0.embedding (X.w0C b j) hinj (H.hC j) (H.maps j) (H.rat j) (X.Wp j c) (cf.ev c)
-    (H.eig j c)
-
-def heckeRows_of (h2 : X.H2 cr b) (H : X.HeckeRowsC cr b cf) : HeckeRows cf (X.data cr b) where
+def heckeRows_of (_h2 : X.H2 cr b) (H : X.HeckeRowsC cr b cf) : HeckeRows cf (X.data cr b) where
   hE := H.hEK
-  eigE := H.eigE h2
 
-def heckeAll_of (h2 : X.H2 cr b) (hk : X.KForm b) (he : X.EWnorm b) (hn : 0 < X.nP b) (H : X.HeckeRowsC cr b cf)
+def heckeAll_of (h2 : X.H2 cr b) (_hk : X.KForm b) (_he : X.EWnorm b) (_hn : 0 < X.nP b) (H : X.HeckeRowsC cr b cf)
     (HW : X.HeckeWC b cf) : HeckeAll cf (X.data cr b) where
   toHeckeRows := heckeRows_of h2 H
   hW := HW.hWK
-  eigW := HW.eigW hk he hn
 
 theorem heckeB_of (h2 : X.H2 cr false) (hk : X.KForm false) (he : X.EWnorm false) (hp : X.H4pos)
     (H : X.HeckeRowsC cr false cf) (HW : X.HeckeWC false cf) : Nonempty (HeckeAll cf (X.data cr false)) := ⟨heckeAll_of h2 hk he (hp.2.2 false) H HW⟩
