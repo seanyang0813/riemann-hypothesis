@@ -1,4 +1,4 @@
-name: PR 2074 runner capacity probe
+name: PR 2074 full cached build
 
 on:
   push:
@@ -6,43 +6,136 @@ on:
 
 permissions: {}
 
+env:
+  RH_BASE: 27b55787485ac2a5b5b3ed2dffc697e0ae6a2f59
+  RH_CANDIDATE: 1bbf7dc51b1f9d23547d2b8c7723e2c61c4b127a
+  LEAN_ABORT_ON_PANIC: '1'
+  LEAN_NUM_THREADS: '1'
+
 jobs:
-  capacity:
+  build:
     runs-on: ubuntu-24.04
-    timeout-minutes: 8
+    timeout-minutes: 180
     steps:
-      - name: Measure runner capacity
+      - name: Prepare disposable build filesystem
         shell: bash
         run: |
           set -euo pipefail
-          df -B1 --output=source,fstype,size,used,avail,target "$RUNNER_TEMP" / /dev/shm
-          free -b
-          printf 'Processors: %s\n' "$(nproc)"
-          printf 'Mapping limit: %s\n' "$(cat /proc/sys/vm/max_map_count)"
-          if [[ -c /dev/fuse ]]; then printf 'FUSE device exists\n'; fi
-          sudo -n true
-          for directory in /usr/local/lib/android /usr/share/dotnet /opt/hostedtoolcache /usr/local/share/boost; do
-            if [[ -d "$directory" ]]; then du -sb "$directory"; fi
-          done
-      - name: Test transparent compression in temporary storage
-        shell: bash
-        run: |
-          set -euo pipefail
-          if ! command -v mkfs.btrfs >/dev/null; then
-            sudo apt-get install -y -qq btrfs-progs || {
-              sudo apt-get update -qq
-              sudo apt-get install -y -qq btrfs-progs
-            }
+          slot="$RUNNER_TEMP/lean-build-data"
+          mkdir -p "$slot/mnt"
+          gib=$((1024 ** 3))
+          available=$(df -B1 --output=avail "$slot" | tail -n 1)
+          if ((available < 45 * gib)); then
+            printf 'Runner backing filesystem has %s free bytes. The planned cache needs at least 45 GiB of backing space.\n' "$available" >&2
+            exit 2
           fi
-          probe=$(mktemp -d "$RUNNER_TEMP/lean-cache-probe.XXXXXX")
-          mkdir "$probe/mnt"
-          trap 'if mountpoint -q "$probe/mnt"; then sudo umount "$probe/mnt"; fi' EXIT
-          truncate -s 512M "$probe/cache.btrfs"
-          mkfs.btrfs -q "$probe/cache.btrfs"
-          sudo mount -o loop,compress-force=zstd:8 "$probe/cache.btrfs" "$probe/mnt"
-          sudo chown "$(id -u):$(id -g)" "$probe/mnt"
-          head -c 67108864 /dev/zero | tr '\0' x > "$probe/mnt/restore-probe"
-          sync -f "$probe/mnt/restore-probe"
-          stat -c 'logical=%s bytes allocated=%b blocks of %B bytes' "$probe/mnt/restore-probe"
-          sudo btrfs filesystem usage -b "$probe/mnt"
-          printf 'Btrfs mounted and wrote data with compression\n'
+          if ! command -v mkfs.btrfs >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq btrfs-progs
+          fi
+          available=$(df -B1 --output=avail "$slot" | tail -n 1)
+          volume=$((available - 6 * gib))
+          if ((volume > 64 * gib)); then volume=$((64 * gib)); fi
+          fallocate -l "$volume" "$slot/cache.btrfs"
+          mkfs.btrfs -q "$slot/cache.btrfs"
+          sudo mount -o loop,compress-force=zstd:3 "$slot/cache.btrfs" "$slot/mnt"
+          sudo chown "$(id -u):$(id -g)" "$slot/mnt"
+          sudo sysctl -w vm.max_map_count=1048576
+          printf 'RH_WORK=%s\n' "$slot/mnt" >> "$GITHUB_ENV"
+          df -h "$slot" "$slot/mnt"
+          free -h
+
+      - name: Checkout exact base and install pinned Lean
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir "$RH_WORK/project" "$RH_WORK/toolchain"
+          git -C "$RH_WORK/project" init -q
+          git -C "$RH_WORK/project" remote add origin https://github.com/seanyang0813/riemann-hypothesis.git
+          git -C "$RH_WORK/project" config remote.origin.promisor true
+          git -C "$RH_WORK/project" config remote.origin.partialclonefilter blob:none
+          git -C "$RH_WORK/project" fetch --depth=1 --filter=blob:none origin "$RH_BASE" "$RH_CANDIDATE"
+          git -C "$RH_WORK/project" checkout --detach "$RH_BASE"
+          test "$(git -C "$RH_WORK/project" rev-parse HEAD)" = "$RH_BASE"
+          test "$(cat "$RH_WORK/project/lean-toolchain")" = 'leanprover/lean4:v4.37.0-rc1'
+          archive="$RH_WORK/lean-4.37.0-rc1-linux.tar.zst"
+          curl --fail --silent --show-error --location --retry 3 \
+            https://github.com/leanprover/lean4/releases/download/v4.37.0-rc1/lean-4.37.0-rc1-linux.tar.zst -o "$archive"
+          printf '2e1bbb832870bb81b7131cb70b13aec2cc7ed9f22e2bdbb236b86076ae20382d  %s\n' "$archive" | sha256sum --check
+          tar --zstd -xf "$archive" -C "$RH_WORK/toolchain" --strip-components=1
+          unlink "$archive"
+          "$RH_WORK/toolchain/bin/lean" --version | tee "$RH_WORK/lean-version.txt"
+          grep -F 'commit 0b77e12952ad39077d80d8bd6b66d601f225c321' "$RH_WORK/lean-version.txt"
+          printf '%s\n' "$RH_WORK/toolchain/bin" >> "$GITHUB_PATH"
+          printf 'LEAN_SYSROOT=%s\n' "$RH_WORK/toolchain" >> "$GITHUB_ENV"
+
+      - name: Restore and verify the stock baseline cache
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RH_WORK/project"
+          /usr/bin/time -v lake exe cache get 2>&1 | tee "$RH_WORK/cache-restore.log"
+          lake build --no-build
+          printf 'Baseline cache verified at %s\n' "$(git rev-parse HEAD)"
+          df -h "$RH_WORK"
+          sudo btrfs filesystem usage -b "$RH_WORK"
+
+      - name: Build the complete candidate with Lake
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RH_WORK/project"
+          git checkout --detach "$RH_CANDIDATE"
+          test "$(git rev-parse HEAD)" = "$RH_CANDIDATE"
+          git diff --check "$RH_BASE" "$RH_CANDIDATE"
+          git diff --exit-code "$RH_BASE" "$RH_CANDIDATE" -- \
+            src/Main.lean src/Statements.lean src/Challenge.lean comparator.json export-targets.txt comparator \
+            lean-toolchain lakefile.toml lake-manifest.json
+          /usr/bin/time -v lake build 2>&1 | tee "$RH_WORK/candidate-build.log"
+          test "$(git rev-parse HEAD)" = "$RH_CANDIDATE"
+          lake build --no-build
+          printf 'Full Lake build succeeded at %s\n' "$RH_CANDIDATE"
+
+      - name: Inspect the five compiled Main declarations
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RH_WORK/project"
+          cat > "$RH_WORK/MainAudit.lean" <<'LEAN'
+          module
+          import Main
+          #check @riemannHypothesis
+          #check @riemannZeta_eq_zero_re
+          #check @LFunction_ne_zero_of_half_lt_re
+          #check @LFunction_eq_zero_re
+          #check @LFunction_eq_zero_re_of_isPrimitive
+          #print axioms riemannHypothesis
+          #print axioms riemannZeta_eq_zero_re
+          #print axioms LFunction_ne_zero_of_half_lt_re
+          #print axioms LFunction_eq_zero_re
+          #print axioms LFunction_eq_zero_re_of_isPrimitive
+          LEAN
+          lake env lean -j 1 --tstack=400000 "$RH_WORK/MainAudit.lean" | tee "$RH_WORK/main-axioms.log"
+          python3 - "$RH_WORK/main-axioms.log" <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+
+          text = Path(sys.argv[1]).read_text()
+          names = {"riemannHypothesis", "riemannZeta_eq_zero_re", "LFunction_ne_zero_of_half_lt_re",
+                   "LFunction_eq_zero_re", "LFunction_eq_zero_re_of_isPrimitive"}
+          permitted = {"propext", "Quot.sound", "Classical.choice"}
+          rows = re.findall(r"'([^']+)' depends on axioms: \[([^\]]*)\]", text)
+          assert len(rows) == len(names) and {name for name, _ in rows} == names, text
+          for name, axioms in rows:
+              actual = {axiom.strip() for axiom in axioms.split(",") if axiom.strip()}
+              assert actual <= permitted, (name, actual - permitted)
+          print("All five compiled Main declarations satisfy the permitted axiom policy")
+          PY
+
+      - name: Unmount the temporary filesystem
+        if: always()
+        shell: bash
+        run: |
+          mount="$RUNNER_TEMP/lean-build-data/mnt"
+          if mountpoint -q "$mount"; then sudo umount "$mount"; fi
