@@ -161,16 +161,20 @@ jobs:
           mkdir -p "$RH_WORK/comparator"
           original_lean_path=$(lake env printenv LEAN_PATH)
           filtered_path=$(python3 - "$RH_WORK" "$LEAN_SYSROOT" "$original_lean_path" <<'PY'
-          from pathlib import Path
           import os
           import sys
+          from pathlib import Path
 
           work, sysroot = map(Path, sys.argv[1:3])
-          roots = [Path(p) for p in sys.argv[3].split(os.pathsep) if p]
-          roots.append(sysroot / "lib/lean")
+          project = (work / "project/.lake/build/lib/lean").resolve(strict=True)
+          standard = (sysroot / "lib/lean").resolve(strict=True)
+          entries = [Path(p) for p in sys.argv[3].split(os.pathsep) if p] + [standard]
+          # Lake exposes package paths even for packages that produced no Lean artifacts.
+          roots = list(dict.fromkeys(p.resolve(strict=True) for p in entries if p.is_dir()))
+          assert project in roots and standard in roots, roots
+          assert all((project / (name + ".olean")).is_file() for name in ("Main", "Challenge"))
           exported = []
           for idx, root in enumerate(roots):
-              root = root.resolve(strict=True)
               outer = work / "olean-only" / str(idx)
               outer.mkdir(parents=True)
               exported.append(outer)
@@ -181,6 +185,7 @@ jobs:
                       if name.endswith((".olean", ".olean.server", ".olean.private")):
                           target.mkdir(parents=True, exist_ok=True)
                           (target / name).symlink_to(source / name)
+          print(f"Mirrored {len(roots)} populated build roots in Lake order", file=sys.stderr)
           print(os.pathsep.join(map(str, exported)))
           PY
           )
