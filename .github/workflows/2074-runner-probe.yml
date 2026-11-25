@@ -1,0 +1,48 @@
+name: PR 2074 runner capacity probe
+
+on:
+  push:
+    branches: [proof-ci/2074-runner-probe]
+
+permissions: {}
+
+jobs:
+  capacity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Measure runner capacity
+        shell: bash
+        run: |
+          set -euo pipefail
+          df -B1 --output=source,fstype,size,used,avail,target "$RUNNER_TEMP" / /dev/shm
+          free -b
+          printf 'Processors: %s\n' "$(nproc)"
+          printf 'Mapping limit: %s\n' "$(cat /proc/sys/vm/max_map_count)"
+          if [[ -c /dev/fuse ]]; then printf 'FUSE device exists\n'; fi
+          sudo -n true
+          for directory in /usr/local/lib/android /usr/share/dotnet /opt/hostedtoolcache /usr/local/share/boost; do
+            if [[ -d "$directory" ]]; then du -sb "$directory"; fi
+          done
+      - name: Test transparent compression in temporary storage
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! command -v mkfs.btrfs >/dev/null; then
+            sudo apt-get install -y -qq btrfs-progs || {
+              sudo apt-get update -qq
+              sudo apt-get install -y -qq btrfs-progs
+            }
+          fi
+          probe=$(mktemp -d "$RUNNER_TEMP/lean-cache-probe.XXXXXX")
+          mkdir "$probe/mnt"
+          trap 'if mountpoint -q "$probe/mnt"; then sudo umount "$probe/mnt"; fi' EXIT
+          truncate -s 512M "$probe/cache.btrfs"
+          mkfs.btrfs -q "$probe/cache.btrfs"
+          sudo mount -o loop,compress-force=zstd:8 "$probe/cache.btrfs" "$probe/mnt"
+          sudo chown "$(id -u):$(id -g)" "$probe/mnt"
+          head -c 67108864 /dev/zero | tr '\0' x > "$probe/mnt/restore-probe"
+          sync -f "$probe/mnt/restore-probe"
+          stat -c 'logical=%s bytes allocated=%b blocks of %B bytes' "$probe/mnt/restore-probe"
+          sudo btrfs filesystem usage -b "$probe/mnt"
+          printf 'Btrfs mounted and wrote data with compression\n'
