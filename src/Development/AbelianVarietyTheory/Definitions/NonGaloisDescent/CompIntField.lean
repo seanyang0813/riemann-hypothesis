@@ -52,8 +52,6 @@ open Classical
 
 namespace GlobalTheory.TowerCov
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 variable {D : D7}
 
 def IsLevN (E : ExpSet D) (N : ℕ) : Prop :=

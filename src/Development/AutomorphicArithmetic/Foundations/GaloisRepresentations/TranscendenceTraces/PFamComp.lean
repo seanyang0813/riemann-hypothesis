@@ -100,10 +100,6 @@ private def comp0 {R₁ R₂ R₃ : Type} [CommRing R₁] [CommRing R₂] [CommR
     have h2 := a.nat (toC t) x
     exact h1.trans (congrArg (b.app (sqB r p A)) h2)
 
-private lemma zsmul_finsum_mem {ι M : Type*} [AddCommGroup M] (d : ℤ) {s : Set ι} (f : ι → M) (hs : s.Finite) :
-    d • ∑ᶠ i ∈ s, f i = ∑ᶠ i ∈ s, d • f i :=
-  (zsmulAddGroupHom d).map_finsum_mem f hs
-
 end UpperTheory.Gal.TranscendenceTraces.FamilyComposition
 
 open UpperTheory.Gal.TranscendenceTraces.FamilyComposition in
@@ -126,7 +122,7 @@ theorem UpperTheory.Gal.TranscendenceTraces.famComp_of :
     refine finsum_mem_congr rfl fun (y : gp Ω ⟶ pullback p A.u) _ => ?_
     have e : (Sec.res y b1 : Sec (tw q i) (gp Ω)) = ∑ᶠ z ∈ fib (cr r p A) y, w' Ω (z ≫ A.v) • Sec.res z a := s1 Ω y
     refine (congrArg (fun m => w Ω (y ≫ pullback.fst p A.u) • m) e).trans ?_
-    refine (zsmul_finsum_mem _ _ (hF (cr r p A) Ω y)).trans ?_
+    refine (smul_finsum_mem (hF (cr r p A) Ω y)).trans ?_
     refine finsum_mem_congr rfl fun z hz => ?_
     have hy : (z ≫ A.v) ≫ r = y ≫ pullback.fst p A.u := by
       have hz' : z ≫ cr r p A = y := hz

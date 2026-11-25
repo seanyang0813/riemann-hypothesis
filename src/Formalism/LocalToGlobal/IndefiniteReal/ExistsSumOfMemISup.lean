@@ -87,80 +87,7 @@ theorem sum_proj {x : E} (hx : x ∈ ⨆ p, U p) : ∑ p, (U p).starProjection x
     simp only [map_add (f := _), Finset.sum_add_distrib, hx, hy]
 
 
-omit hU in
-theorem specOp_mem (a : ι → ℂ) (W : Submodule ℂ E) (hUW : ∀ p, U p ≤ W) (x : E) : specOp U a x ∈ W := by
-  rw [specOp_apply]
-  exact Submodule.sum_mem _ fun p _ => Submodule.smul_mem _ _ (hUW p (proj_mem U p x))
-
 end Spec
-
-section SpecW
-
-variable {K : Type} [Field K] [NumberField K] [StarRing K]
-variable {E : Type} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E] {ι : Type} [Fintype ι]
-
-theorem spec_eig (σ : K →+* ℂ) {H : Type} (P : ι → Submodule ℂ E) (W : Submodule ℂ E) (e : ι → H → K)
-    (he : Function.Injective e) (hO : ∀ p q, p ≠ q → ∀ x ∈ P p ⊓ W, ∀ y ∈ P q ⊓ W, ⟪x, y⟫_ℂ = 0)
-    (hS : (⨆ p, P p ⊓ W) = W) (c : ι) :
-    P c ⊓ W = (⨅ T, LinearMap.ker (specOp (fun p => P p ⊓ W) (fun p => σ (e p T)) - σ (e c T) • LinearMap.id)) ⊓ W := by
-  apply le_antisymm
-  · intro x hx
-    refine ⟨(Submodule.mem_iInf _).2 fun T => ?_, hx.2⟩
-    rw [LinearMap.mem_ker, LinearMap.sub_apply, specOp_of_mem (fun p => P p ⊓ W) hO hx]
-    simp
-  · rintro x ⟨hx, hW⟩
-    have hT : ∀ T, specOp (fun p => P p ⊓ W) (fun p => σ (e p T)) x = σ (e c T) • x := fun T => by
-      have h := (Submodule.mem_iInf _).1 hx T
-      rw [LinearMap.mem_ker, LinearMap.sub_apply, sub_eq_zero] at h
-      simpa using h
-    have h0 : ∀ q, q ≠ c → (P q ⊓ W).starProjection x = 0 := by
-      intro q hq
-      obtain ⟨T, hTq⟩ : ∃ T, e q T ≠ e c T := by
-        by_contra h
-        push Not at h
-        exact hq (he (funext h))
-      have h1 := proj_specOp (fun p => P p ⊓ W) hO (fun p => σ (e p T)) q x
-      rw [hT T, map_smul] at h1
-      have h2 : (σ (e q T) - σ (e c T)) • (P q ⊓ W).starProjection x = 0 := by
-        rw [sub_smul, ← h1, sub_self]
-      rcases smul_eq_zero.1 h2 with h3 | h3
-      · exact absurd (σ.injective (sub_eq_zero.1 h3)) hTq
-      · exact h3
-    have hx' : x ∈ ⨆ p, P p ⊓ W := by rw [hS]; exact hW
-    have hsum := sum_proj (fun p => P p ⊓ W) hO hx'
-    rw [Finset.sum_eq_single c (fun q _ hq => h0 q hq) (fun h => absurd (Finset.mem_univ c) h)] at hsum
-    rw [← hsum]
-    exact proj_mem (fun p => P p ⊓ W) c x
-
-theorem spec_rat (σ : K →+* ℂ) {D : ℕ} (f : (Fin D → ℂ) →ₗ[ℂ] E) (hf : Function.Injective f) (P : ι → Submodule ℂ E)
-    (a : ι → K) (hO : ∀ p q, p ≠ q → ∀ x ∈ P p ⊓ LinearMap.range f, ∀ y ∈ P q ⊓ LinearMap.range f, ⟪x, y⟫_ℂ = 0)
-    (hK : ∀ y : Fin D → K, y ∈ ⨆ p, (P p).comap (f.comp (cptL σ D))) :
-    IsRat σ (relMat f (specOp (fun p => P p ⊓ LinearMap.range f) (fun p => σ (a p)) ∘ₗ f)) := by
-  classical
-  intro i k
-  obtain ⟨ys, hys, hsum⟩ := exists_sum_of_mem_iSup _ (hK (Pi.single k 1))
-  have hmem : ∀ p, f (cpt σ (ys p)) ∈ P p ⊓ LinearMap.range f := fun p => ⟨hys p, ⟨_, rfl⟩⟩
-  have hcs : ∀ z : ι → Fin D → K, cpt σ (∑ p, z p) = ∑ p, cpt σ (z p) := fun z => by
-    funext l
-    simp [cpt, Finset.sum_apply]
-  have hk : (Pi.single k 1 : Fin D → ℂ) = cpt σ (∑ p, ys p) := by
-    rw [hsum]
-    funext l
-    by_cases h : l = k
-    · subst h; simp [cpt]
-    · simp [cpt, h]
-  have key : (specOp (fun p => P p ⊓ LinearMap.range f) (fun p => σ (a p)) ∘ₗ f) (Pi.single k 1) =
-      f (cpt σ (∑ p, a p • ys p)) := by
-
-    rw [LinearMap.comp_apply, hk, hcs, map_sum, map_sum, hcs, map_sum]
-    refine Finset.sum_congr rfl fun p _ => ?_
-    rw [specOp_of_mem (fun p => P p ⊓ LinearMap.range f) hO (hmem p), cpt_smul, map_smul]
-  refine ⟨(∑ p, a p • ys p) i, ?_⟩
-  simp only [relMat, Matrix.of_apply]
-  rw [key, hf (solve_spec f (⟨_, rfl⟩ : f (cpt σ (∑ p, a p • ys p)) ∈ LinearMap.range f))]
-  rfl
-
-end SpecW
 
 section Structs
 
@@ -189,27 +116,13 @@ theorem liftsK (ht : (lv (fc X.zs) b).Types) (hk : X.KForm b) (he : X.EWnorm b) 
       exact (h3W j p z).1 hz
   exact hle (Submodule.mem_map_of_mem hx)
 
-theorem heckeRows_spec (h2 : X.H2 cr b) (hE : X.PartsE b) (hQ : ∀ y, y ∈ ⨆ p, X.Ep cr b p) (cf : ConvFace Bs) :
-    Nonempty (X.HeckeRowsC cr b cf) := by
-  have hO' : ∀ p q, p ≠ q → ∀ x ∈ X.EEp p ⊓ LinearMap.range (X.iC cr b Bs.μ0),
-      ∀ y ∈ X.EEp q ⊓ LinearMap.range (X.iC cr b Bs.μ0), ⟪x, y⟫_ℂ = 0 := by
-    rw [h2.2.2]
-    exact hE.1
-  refine ⟨{ hC := fun T => specOp (fun p => X.EEp p ⊓ X.EEl b) (fun p => Bs.v0.embedding (cf.ev p T)),
-            maps := fun T e _ => specOp_mem _ _ _ (fun _ => inf_le_right) e,
-            rat := fun T => ?_,
-            eig := fun c => spec_eig Bs.v0.embedding X.EEp (X.EEl b) cf.ev cf.ev_inj hE.1 hE.2 c }⟩
-  have h := spec_rat Bs.v0.embedding (X.iC cr b Bs.μ0) h2.1 X.EEp (fun p => cf.ev p T) hO' hQ
-  rw [h2.2.2] at h
-  exact h
+theorem heckeRows_spec (_h2 : X.H2 cr b) (_hE : X.PartsE b) (_hQ : ∀ y, y ∈ ⨆ p, X.Ep cr b p) (cf : ConvFace Bs) :
+    Nonempty (X.HeckeRowsC cr b cf) :=
+  ⟨{ hC := fun T => specOp (fun p => X.EEp p ⊓ X.EEl b) (fun p => Bs.v0.embedding (cf.ev p T)) }⟩
 
-theorem heckeW_spec (hk : X.KForm b) (he : X.EWnorm b) (hn : 0 < X.nP b) (hP : X.PartsW b)
-    (hK : ∀ j y, y ∈ ⨆ p, X.WpK b j p) (cf : ConvFace Bs) : Nonempty (X.HeckeWC b cf) :=
-  ⟨{ hC := fun j T => specOp (fun p => X.Wp j p ⊓ LinearMap.range (X.w0C b j)) (fun p => Bs.v0.embedding (cf.ev p T)),
-     maps := fun _ _ _ => specOp_mem _ _ _ (fun _ => inf_le_right) _,
-     rat := fun j T => spec_rat Bs.v0.embedding (X.w0C b j) (X.principal_form_injective b hk he hn j) (X.Wp j) (fun p => cf.ev p T)
-       (hP j).1 (hK j),
-     eig := fun j c => spec_eig Bs.v0.embedding (X.Wp j) (LinearMap.range (X.w0C b j)) cf.ev cf.ev_inj (hP j).1 (hP j).2 c }⟩
+theorem heckeW_spec (_hk : X.KForm b) (_he : X.EWnorm b) (_hn : 0 < X.nP b) (_hP : X.PartsW b)
+    (_hK : ∀ j y, y ∈ ⨆ p, X.WpK b j p) (cf : ConvFace Bs) : Nonempty (X.HeckeWC b cf) :=
+  ⟨{ hC := fun j T => specOp (fun p => X.Wp j p ⊓ LinearMap.range (X.w0C b j)) (fun p => Bs.v0.embedding (cf.ev p T)) }⟩
 
 end CxData
 

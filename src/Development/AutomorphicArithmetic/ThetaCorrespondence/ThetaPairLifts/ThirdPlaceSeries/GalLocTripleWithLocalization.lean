@@ -1346,9 +1346,9 @@ theorem galLoc_triple_with_localization_alt (hP : _root_.GlobalTheory.HeightCoun
     (nf : GlobalTheory.TwInputs.NoFormsOff (withLoc L)) (exT : NExpTied (withLoc L)) (cm : GlobalTheory.TwInputs.CommAll (withLoc L))
     (fa : GlobalTheory.TwInputs.FullAll (withLoc L)) :
     _root_.GlobalTheory.Triple.IsGaloisTriple (withLoc L) := by
-  obtain ⟨Rw', hR, Bs', -⟩ := GlobalTheory.T.twist_second_step_kept_with_localisations D cf Rw low Pq S hl eig θ Bs L ψ hψ
+  obtain ⟨Rw', hR, Bs', -⟩ := _root_.GlobalTheory.TwInputs.SideBLoc.exists_sideB_withLoc D cf Rw low Pq S hl eig θ Bs L ψ hψ
   have hg := _root_.GlobalTheory.GalAway.galoisReps_of_cgTrue_alt_alt hL hP.what₂.fin hP.what₂.gal _ T cg
-  have hm := GlobalTheory.T.stableGoodForms_meet_generic_type hP.greenC _ exT grp
+  have hm := _root_.GlobalTheory.TwInputs.meetsAll_of_ties hP.greenC _ exT grp
   have hs := GlobalTheory.T.good_part_eigensystem_is_triple_eigensystem _ _ _ _ _ _ _ _ _ Bs' nf hm cm fa
   exact _root_.GlobalTheory.T.side_eigen_export_alt hP.what₂.cheb hP.what₂.art _ _ _ _ _ _ _ _ _ Bs' Sb hSb ks chiT grp chr val roots hstar (eT Rw' hR) eO
     (rp Rw' hR) (rt Rw' hR) hg hs

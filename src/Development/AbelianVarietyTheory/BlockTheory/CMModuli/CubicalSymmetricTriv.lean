@@ -132,10 +132,6 @@ structure IsCubTriv {L : RigLB G} (c : CubicalStr G L) (i : H ⟶ G) [IsMonHom i
     ∀ t t' t'' : T ⟶ H,
       thirdDiff (trivV σ z J) t t' t'' = cubV c z J (t ≫ i) (t' ≫ i) (t'' ≫ i)
 
-def IsEven (L : CubSym G) (i : H ⟶ G) [IsMonHom i] (σ : LB.Gen (L.L.L.pull i.left)) : Prop :=
-  ∀ (T : Over S) (z : T.left) (J : (T.left ⟶ G.left) → L.L.L.ι), Good L.L.L z J →
-    ∀ t : T ⟶ H, trivV σ z J t⁻¹ = symV L.sym z J (t ≫ i) * trivV σ z J t
-
 variable {B : Over S} [GrpObj B] [IsCommMonObj B]
 
 end Triv
@@ -172,52 +168,6 @@ end Torus
 section Examples
 
 variable {S : Scheme.{0}} (G : Over S) [GrpObj G] [IsCommMonObj G]
-
-def trivLB (Y : Scheme.{0}) : LB Y := ⟨PUnit, fun _ => ⊤, fun _ _ => 1⟩
-
-def trivGen {Y Z : Scheme.{0}} {K : Type} [Fintype K] (φ : K → (Z ⟶ Y)) (ε : K → ℤ) :
-    LB.Gen (LB.LinComb (trivLB Y) φ ε) := ⟨fun _ => 1⟩
-
-theorem trivGen_isGen {Y Z : Scheme.{0}} {K : Type} [Fintype K] (φ : K → (Z ⟶ Y)) (ε : K → ℤ) :
-    (trivGen φ ε).IsGen := fun _ _ =>
-  (map_one _).trans ((congrArg₂ (· * ·) (Finset.prod_eq_one fun _ _ =>
-    (congrArg (· ^ _) ((congrArg _ (map_one _)).trans (map_one _))).trans (one_zpow _))
-    (map_one _)).trans (_root_.mul_one _)).symm
-
-theorem val_trivGen {Y Z W : Scheme.{0}} {K : Type} [Fintype K] (φ : K → (Z ⟶ Y)) (ε : K → ℤ)
-    (r : W ⟶ Z) (z : W) (J) : val (trivGen φ ε) r z J = 1 := map_one _
-
-def trivRig : RigLB G where
-  L := trivLB _
-  rig := trivGen _ _
-  isLB := ⟨by simp [trivLB], fun _ => map_one _, fun _ _ _ =>
-    ((congrArg₂ (· * ·) (map_one _) (map_one _)).trans (_root_.mul_one _)).trans (map_one _).symm⟩
-  rigGen := trivGen_isGen _ _
-
-def trivCubSym : CubSym G where
-  L := trivRig G
-  cub :=
-    { t := trivGen _ _
-      isGen := trivGen_isGen _ _
-      face := fun _ => corr_of_val (trivRig G).isLB fun _ _ hJ =>
-        (val_pull hJ _ _ _).trans ((val_trivGen _ _ _ _ _).trans (val_one _).symm)
-      cubeSymmetric_swap_first := corr_of_val (trivRig G).isLB fun _ _ hJ =>
-        (val_trivGen _ _ _ _ _).trans ((val_pull hJ _ _ _).trans (val_trivGen _ _ _ _ _)).symm
-      cubeSymmetric_swap_last := corr_of_val (trivRig G).isLB fun _ _ hJ =>
-        (val_trivGen _ _ _ _ _).trans ((val_pull hJ _ _ _).trans (val_trivGen _ _ _ _ _)).symm
-      cocycle := corr_of_val (trivRig G).isLB fun _ _ hJ =>
-        ((val_mul hJ _ _ _).trans (congrArg₂ (· * ·) ((val_pull hJ _ _ _).trans (val_trivGen _ _ _ _ _))
-          ((val_pull hJ _ _ _).trans (val_trivGen _ _ _ _ _)))).trans
-        ((val_mul hJ _ _ _).trans (congrArg₂ (· * ·) ((val_pull hJ _ _ _).trans (val_trivGen _ _ _ _ _))
-          ((val_pull hJ _ _ _).trans (val_trivGen _ _ _ _ _)))).symm }
-  sym := trivGen _ _
-  sym_gen := trivGen_isGen _ _
-  sym_rig := corr_of_val (trivRig G).isLB fun _ _ hJ =>
-    (val_pull hJ _ _ _).trans ((val_trivGen _ _ _ _ _).trans (val_one _).symm)
-  sym_cub := fun T z J _ x y w => by
-    have a : ∀ x : T ⟶ G, symV (L := (trivRig G).L) (trivGen _ _) z J x = 1 := fun _ => val_trivGen _ _ _ _ _
-    simp only [thirdDiff, a, inv_one, _root_.mul_one, _root_.one_mul]
-    exact (val_trivGen _ _ _ _ _).trans (val_trivGen _ _ _ _ _).symm
 
 end Examples
 

@@ -157,42 +157,6 @@ noncomputable section
 namespace GlobalTheory.Poinc.Sep.TwistTranslate
 
 
-attribute [local instance] GlobalTheory.TorusExt.gtGroup in
-theorem twistSum_translate : ∀ (g n : ℕ) (F : SFam g n (zetaAway n)) (W : Matrix (Fin 8) (Fin 8) ℤ) (Z : Scheme.{0}) (i : F.X ⟶ Z) (X₁ : Setup F W i) (z₁ : X₁.M.Z) (act : Matrix (Fin 8) (Fin 8) ℤ → (X₁.ρ.P.A ⟶ X₁.ρ.P.A)), ∀ (V : Type) [CommRing V] [IsDomain V] [IsLocalRing V] (ev : X₁.M.Z.presheaf.stalk z₁ →+* V) (X : Type) [AddCommGroup X] (m : ℕ) (t : Fin m → V) (δ : Fin m → LinearMap.BilinForm ℤ X) (𝔪 : UMem X₁ z₁ act V ev X t δ) (x₀ : X₁.S.Gam) (C : Type) (lab : C → X₁.S.Gam), (∀ c, lab c ∈ X₁.S.HH X₁.M z₁) → ∀ T : (Fin 8 → X) → C → V, 𝔪.Terms x₀ lab T → ∀ (c : C), ∀ τ ∈ X₁.S.TT X₁.M z₁, ∀ χ : Multiplicative 𝔪.D.toPre.X →* (FractionRing V)ˣ, χ ^ (X₁.S.r * X₁.S.N) = 1 → (∀ g₀ : GtPtF 𝔪.D.toPre (FractionRing V), IsTor χ g₀ → ∃ (p : QkPt 𝔪.D.toPre (FractionRing V) (X₁.S.r * X₁.S.N)) (x : TFK (R := V) (FractionRing V) ⟶ 𝔪.A.A), p.y = 0 ∧ p.g = g₀ ∧ QkToAkU 𝔪.U.toUnifPre (FractionRing V) (X₁.S.r * X₁.S.N) p x ∧ x.left ≫ 𝔪.φ = spMap 𝔪.yK ≫ (X₁.ρ.pt τ).left) → ∃ e : ℕ, SumF (maximalIdeal V) (FractionRing V) (fun mu : Fin 8 → X => ((χ (Multiplicative.ofAdd (𝔪.e₈ mu)) : (FractionRing V)ˣ) : FractionRing V) * (algebraMap V (FractionRing V) (T mu c) * 𝔪.yK ⟨X₁.S.th x₀, X₁.S.th_mem x₀⟩)) (𝔪.yK (algebraMap X₁.o₁ X₁.S.R (X₁.S.ζ ^ e)) * 𝔪.yK ⟨X₁.S.th (lab c + τ), X₁.S.th_mem (lab c + τ)⟩) := by
-  intro g n F W Z i X₁ z₁ act V _ _ _ ev X _ m t δ 𝔪 x₀ C lab _ T hT c τ _ χ hχ hyp
-  obtain ⟨x, fr, th, w₀, s, g', w, hx, hfr, hth, hw₀, hs, hc, hTc⟩ := hT
-  obtain ⟨ρA, hρA, htors⟩ := _root_.GlobalTheory.Poinc.IntTerm.exists_rig_torsFrame_of_match g n F W Z i X₁ z₁ act V ev X m t δ 𝔪 x fr hx hfr
-  have hg₀ : IsTor χ (GlobalTheory.TorusExt.torusPt 𝔪.D.toPre (FractionRing V) (Additive.ofMul χ)) :=
-    (isTor_iff _ _).2 (GlobalTheory.TorusExt.isTorusPtF_torusPt χ)
-  obtain ⟨p, xτ, hpy, hpg, hq, hxτ⟩ := hyp _ hg₀
-  have hadd := (GlobalTheory.TorusExt.isAdd_iff_eq (g' c) (GlobalTheory.TorusExt.torusPt 𝔪.D.toPre (FractionRing V) (Additive.ofMul χ)) _).2 rfl
-  have hb := (GlobalTheory.UT.ThetaAverage.val_translate hg₀ hadd).1
-  obtain ⟨w'', hw''g, hw''v⟩ : ∃ w'' : Frm 𝔪.D.toPre (FractionRing V) 1 (g' c + GlobalTheory.TorusExt.torusPt 𝔪.D.toPre (FractionRing V) (Additive.ofMul χ)).b,
-      w''.IsGen ∧ ∀ z J, val w'' (𝟙 _) z J = val (w c) (𝟙 _) z J := by
-    revert hb
-    generalize (g' c + GlobalTheory.TorusExt.torusPt 𝔪.D.toPre (FractionRing V) (Additive.ofMul χ)).b = b
-    rintro rfl
-    exact ⟨w c, (hc c).2.1, fun _ _ => rfl⟩
-  obtain ⟨e₂, he₂, hov⟩ := _root_.GlobalTheory.Poinc.Tors.Translate.over_translate g n F W Z i X₁ z₁ act V ev X m t δ 𝔪 w₀ hw₀ ρA hρA (x (lab c)) (fr (lab c)) (htors _)
-    (g' c) (w c) (hc c).1 (hc c).2.1 (hc c).2.2 χ hχ _ hg₀ p xτ hpy hpg hq _ hadd w'' (fun z J _ => hw''v z J)
-    (x (lab c + τ)) (_root_.GlobalTheory.Poinc.PtAdd.x_add g n F W Z i X₁ z₁ act V ev X m t δ 𝔪 x hx (lab c) τ xτ hxτ)
-  obtain ⟨u, hu, hval⟩ := _root_.GlobalTheory.Poinc.TorsRatio.valAt_torsFrame_ratio V 𝔪.A ρA hρA _ (Nat.mul_pos X₁.S.r_pos (by have := X₁.S.N_ge; omega)) _ _ _
-    (htors (lab c + τ)) he₂ th _ (hth (lab c + τ))
-  have hsum := hov 1 le_rfl w'' (fun z J _ => (pow_one _).symm) hw''g th s _ hs hval
-  obtain ⟨e, he⟩ := GlobalTheory.T.rootOfUnity_fractionField_member_eq_zeta_pow g n F W Z i X₁ z₁ act V ev X m t δ 𝔪 u hu
-  refine ⟨e, ?_⟩
-  rw [← he]
-  have hco : ∀ χ', coef s (g' c + GlobalTheory.TorusExt.torusPt 𝔪.D.toPre (FractionRing V) (Additive.ofMul χ)) w'' χ' =
-      ((χ (Multiplicative.ofAdd χ') : (FractionRing V)ˣ) : FractionRing V) * coef s (g' c) (w c) χ' := fun χ' => by
-    rw [GlobalTheory.UT.ThetaAverage.coef_translate hg₀ hadd (hc c).2.1 (c := 1) (fun z J _ => by rw [hw''v, map_one, _root_.one_mul]) s χ',
-      _root_.one_mul]
-  have hA := admissibleBase_of_completeNormalLocalCharZero 𝔪.cn
-  have key := ((GlobalTheory.AdicSum.sumF_calculus V _ hA (FractionRing V) _
-    (coef s (g' c + GlobalTheory.TorusExt.torusPt 𝔪.D.toPre (FractionRing V) (Additive.ofMul χ)) w'') 0 _ 0).2.2 (Fin 8 → X) 𝔪.e₈
-    𝔪.e₈.injective (fun j hj => absurd ⟨𝔪.e₈.symm j, 𝔪.e₈.apply_symm_apply j⟩ hj)).2 hsum
-  convert key using 2 with mu
-  simp only [Function.comp_apply, hco, hTc]
-
 end GlobalTheory.Poinc.Sep.TwistTranslate
 end -- clump:auto
 end -- clump:auto
@@ -496,83 +460,11 @@ noncomputable section
 namespace GlobalTheory.Poinc.Sep.TransAff
 open GlobalTheory.UT.CoefBasic GlobalTheory.UT.TorsionValue GlobalTheory.Poinc.Sep.TermsExt GlobalTheory.Poinc.Tors
 
-theorem ratio_pow {V : Type} [CommRing V] [IsDomain V] {A : PolAV (Sp (FractionRing V))}
-    {ρA : LB.Gen (A.L.pull (eSec A.A))} {N : ℕ} {x : TFK (R := V) (FractionRing V) ⟶ A.A} {e e' : FrAt x}
-    (H : IsTorsFrame A ρA N x e) (H' : IsTorsFrame A ρA N x e') {l : FractionRing V}
-    (hl : ∀ z J, Good A.L z J → (val e' (𝟙 _) z J).val =
-      @id ((TFK (R := V) (FractionRing V)).left.presheaf.stalk z) (cstH (R := V) z l) * (val e (𝟙 _) z J).val) :
-    l ^ (N ^ 2) = 1 := by
-  obtain ⟨-, he, α, hα, nα, cα⟩ := H
-  obtain ⟨-, he', α', hα', nα', cα'⟩ := H'
-  have hp : Function.Surjective A.A.hom.appTop.hom := (GlobalTheory.globalFns_holds _ _ A.isAb).2
-  have hαα : ∀ (Z : Scheme.{0}) (r : Z ⟶ A.A.left) (z : Z) J, Good A.L z J → val α r z J = val α' r z J :=
-    gen_unique A.isLB A.A.hom (eSec A.A) (Over.w η[A.A]) hp hα hα' (fun w I hI => by
-      have a := val_corr hI nα (𝟙 _)
-      have b := val_corr hI nα' (𝟙 _)
-      rw [val_pull hI, Category.id_comp] at a b
-      exact a.trans b.symm)
-  obtain ⟨z⟩ : Nonempty (TFK (R := V) (FractionRing V)).left := exists_pt (R := V) (F := FractionRing V)
-  obtain ⟨J, hJ⟩ := exists_good' A.isLB z
-  have q : val e (𝟙 _) z J ^ ((N : ℤ) ^ 2) = val e' (𝟙 _) z J ^ ((N : ℤ) ^ 2) := by
-    have a := val_corr hJ cα (𝟙 _)
-    have b := val_corr hJ cα' (𝟙 _)
-    have p₁ : val (powFrame A.A A.L x e ((N : ℤ) ^ 2)) (𝟙 _) z J = val e (𝟙 _) z J ^ ((N : ℤ) ^ 2) := map_zpow _ _ _
-    have p₂ : val (powFrame A.A A.L x e' ((N : ℤ) ^ 2)) (𝟙 _) z J = val e' (𝟙 _) z J ^ ((N : ℤ) ^ 2) := map_zpow _ _ _
-    rw [val_mul hJ, val_pull hJ] at a b
-    rw [← p₁, ← p₂, a, b, hαα _ _ z J hJ]
-  have q' := congrArg Units.val q
-  rw [show ((N : ℤ) ^ 2) = ((N ^ 2 : ℕ) : ℤ) by push_cast; ring, zpow_natCast, zpow_natCast, Units.val_pow_eq_pow_val,
-    Units.val_pow_eq_pow_val, hl z J hJ, mul_pow] at q'
-  have hu : IsUnit ((val e (𝟙 _) z J).val ^ (N ^ 2)) := (Units.isUnit _).pow _
-  refine cstH_inj (R := V) z ((map_pow _ _ _).trans (Eq.trans ?_ (map_one _).symm))
-  exact hu.mul_left_inj.1 (q'.symm.trans (_root_.one_mul _).symm)
-
 variable {g n : ℕ} {F : SFam g n (zetaAway n)} {W : Matrix (Fin 8) (Fin 8) ℤ} {Z : Scheme.{0}} {i : F.X ⟶ Z}
   {X₁ : Setup F W i} {z₁ : X₁.M.Z} {act : Matrix (Fin 8) (Fin 8) ℤ → (X₁.ρ.P.A ⟶ X₁.ρ.P.A)}
   {V : Type} [CommRing V] [IsDomain V] [IsLocalRing V] {ev : X₁.M.Z.presheaf.stalk z₁ →+* V}
   {X : Type} [AddCommGroup X] {m : ℕ} {t : Fin m → V} {δ : Fin m → LinearMap.BilinForm ℤ X}
 
-
-attribute [local instance] GlobalTheory.TorusExt.gtGroup in
-theorem shift (𝔪 : UMem X₁ z₁ act V ev X t δ) {x : X₁.S.Gam → (TFK (R := V) (FractionRing V) ⟶ 𝔪.A.A)}
-    {fr : ∀ a, FrAt (x a)} (hx : ∀ a, (x a).left ≫ 𝔪.φ = spMap 𝔪.yK ≫ (X₁.ρ.pt a).left)
-    {ρA : LB.Gen (𝔪.A.L.pull (eSec 𝔪.A.A))} (hρA : ρA.IsGen)
-    (htors : ∀ a, IsTorsFrame 𝔪.A ρA (X₁.S.r * X₁.S.N) (x a) (fr a)) {w₀ : W0 𝔪.U.toUnifPre} (hw₀ : w₀.IsGen)
-    {a τ : X₁.S.Gam} {χ : Multiplicative 𝔪.D.toPre.X →* (FractionRing V)ˣ} (hχ : TorChar 𝔪 τ χ)
-    {g₁ : GtPtF 𝔪.D.toPre (FractionRing V)} {w₁ : Frm 𝔪.D.toPre (FractionRing V) 1 g₁.b}
-    (hc : (∃ o, GtPtF.IsNsmul (X₁.S.r * X₁.S.N) g₁ o ∧ o.IsZero) ∧ w₁.IsGen ∧ 𝔪.Over' w₀ g₁ w₁ (x a) (fr a)) :
-    ∃ (u : FractionRing V) (g₂ : GtPtF 𝔪.D.toPre (FractionRing V)) (w₂ : Frm 𝔪.D.toPre (FractionRing V) 1 g₂.b),
-      u ^ ((X₁.S.r * X₁.S.N) ^ 2) = 1 ∧
-      ((∃ o, GtPtF.IsNsmul (X₁.S.r * X₁.S.N) g₂ o ∧ o.IsZero) ∧ w₂.IsGen ∧ 𝔪.Over' w₀ g₂ w₂ (x (a + τ)) (fr (a + τ))) ∧
-      g₂.b = g₁.b ∧ (∀ z J, Good 𝔪.D.toPre.P.L z J → (val w₂ (𝟙 _) z J).val = cstH z u⁻¹ * (val w₁ (𝟙 _) z J).val) ∧
-      ∀ (s : Fam 𝔪.D.toPre (FractionRing V) 1) (β : 𝔪.D.toPre.X), coef s g₂ w₂ β =
-        u⁻¹ * ((χ (Multiplicative.ofAdd β) : (FractionRing V)ˣ) : FractionRing V) * coef s g₁ w₁ β := by
-  obtain ⟨hχ, hyp⟩ := hχ
-  have hg₀ : IsTor χ (GlobalTheory.TorusExt.torusPt 𝔪.D.toPre (FractionRing V) (Additive.ofMul χ)) :=
-    (isTor_iff _ _).2 (GlobalTheory.TorusExt.isTorusPtF_torusPt χ)
-  obtain ⟨p, xτ, hpy, hpg, hq, hxτ⟩ := hyp _ hg₀
-  have hadd := (GlobalTheory.TorusExt.isAdd_iff_eq g₁ (GlobalTheory.TorusExt.torusPt 𝔪.D.toPre (FractionRing V) (Additive.ofMul χ)) _).2 rfl
-  have hb := (GlobalTheory.UT.ThetaAverage.val_translate hg₀ hadd).1
-  obtain ⟨w'', hw''g, hw''v⟩ : ∃ w'' : Frm 𝔪.D.toPre (FractionRing V) 1
-      (g₁ + GlobalTheory.TorusExt.torusPt 𝔪.D.toPre (FractionRing V) (Additive.ofMul χ)).b,
-      w''.IsGen ∧ ∀ z J, val w'' (𝟙 _) z J = val w₁ (𝟙 _) z J := by
-    revert hb
-    generalize (g₁ + GlobalTheory.TorusExt.torusPt 𝔪.D.toPre (FractionRing V) (Additive.ofMul χ)).b = b
-    rintro rfl
-    exact ⟨w₁, hc.2.1, fun _ _ => rfl⟩
-  obtain ⟨e₂, he₂, hov⟩ := _root_.GlobalTheory.Poinc.Tors.Translate.over_translate g n F W Z i X₁ z₁ act V ev X m t δ 𝔪 w₀ hw₀ ρA hρA (x a) (fr a) (htors _)
-    g₁ w₁ hc.1 hc.2.1 hc.2.2 χ hχ _ hg₀ p xτ hpy hpg hq _ hadd w'' (fun z J _ => hw''v z J)
-    (x (a + τ)) (_root_.GlobalTheory.Poinc.PtAdd.x_add g n F W Z i X₁ z₁ act V ev X m t δ 𝔪 x hx a τ xτ hxτ)
-  obtain ⟨u, hu, huv⟩ := exists_frAt_ratio he₂.2.1 (htors (a + τ)).2.1
-  obtain ⟨w₃, hw₃, hw₃v⟩ := exists_frm_scale w'' hw''g (inv_ne_zero hu)
-  have hv : ∀ z J, Good 𝔪.D.toPre.P.L z J → (val w₃ (𝟙 _) z J).val = cstH z u⁻¹ * (val w₁ (𝟙 _) z J).val :=
-    fun z J hJ => by rw [hw₃v z J hJ, hw''v, cst_eq]
-  refine ⟨u, _, w₃, ratio_pow he₂ (htors _) huv, ⟨⟨0, (GlobalTheory.TorusExt.isNsmul_iff_eq _ _ _).2 ?_,
-    (GlobalTheory.TorusExt.isZero_iff_eq _).2 rfl⟩, hw₃, over_scale 𝔪 hw''g hu huv hw₃v hov⟩, hb, hv,
-    GlobalTheory.UT.ThetaAverage.coef_translate hg₀ hadd hc.2.1 hv⟩
-  obtain ⟨o, ho, ho'⟩ := hc.1
-  rw [smul_add, ← (GlobalTheory.TorusExt.isNsmul_iff_eq _ _ _).1 ho, (GlobalTheory.TorusExt.isZero_iff_eq _).1 ho', ← map_nsmul,
-    ← ofMul_pow, hχ, ofMul_one, map_zero, add_zero]
 
 end GlobalTheory.Poinc.Sep.TransAff
 end -- clump:auto

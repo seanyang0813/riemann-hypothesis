@@ -13,8 +13,6 @@ namespace Formalism.L2.SG.Pf.NcVal
 open Formalism.BasicNotions Formalism.L2.SG.HidaSetting Formalism.L2.SG.LocVol Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes NumberField IsDedekindDomain
 open scoped TensorProduct
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 def AnnX {D : D7} (X : HidaSetting D) (ψ : AddChar (AF X.B.I.F) ℂ) : Prop :=
   IsCharAF X.B.I.F ψ → IsStdChar ψ → ∀ (v : PlX X) (y : Fv X.B.I.F v ⊗[X.B.I.F] X.B.I.E),
     (∀ x ∈ OEv (E := X.B.I.E) v,
@@ -67,19 +65,18 @@ theorem oev_smul' {c : Fv F v} (hc : c ∈ v.adicCompletionIntegers F) {x : Fv F
 theorem one_mem : (1 : Fv F v ⊗[F] E) ∈ OEv (E := E) v := by
   simpa using inclR_mem' (F := F) (E := E) v (1 : 𝓞 E)
 
-theorem int_mem (r : 𝓞 F) : algebraMap F (Fv F v) (r : F) ∈ v.adicCompletionIntegers F := by
-  exact v.coe_mem_adicCompletionIntegers r
-
-omit [NumberField E] in
-theorem inclR_alg (a : F) : inclR (F := F) (Fv F v) (algebraMap F E a) =
-    algebraMap (Fv F v) (Fv F v ⊗[F] E) (algebraMap F (Fv F v) a) := by
-  show (Algebra.TensorProduct.includeRight : E →ₐ[F] Fv F v ⊗[F] E) (algebraMap F E a) = _
-  rw [AlgHom.commutes, IsScalarTower.algebraMap_apply F (Fv F v) (Fv F v ⊗[F] E)]
-
 theorem alg_mem {c : Fv F v} (hc : c ∈ v.adicCompletionIntegers F) :
     algebraMap (Fv F v) (Fv F v ⊗[F] E) c ∈ OEv (E := E) v := by
   rw [Algebra.algebraMap_eq_smul_one]
-  exact oev_smul' (F := F) (E := E) v hc (one_mem (F := F) (E := E) v)
+  exact oev_smul' v hc (one_mem v)
+
+theorem inclR_alg (a : F) : inclR (F := F) (Fv F v) (algebraMap F E a) =
+    algebraMap (Fv F v) (Fv F v ⊗[F] E) (algebraMap F (Fv F v) a) := by
+  change (Algebra.TensorProduct.includeRight : E →ₐ[F] Fv F v ⊗[F] E) (algebraMap F E a) = _
+  rw [AlgHom.commutes, ← IsScalarTower.algebraMap_apply F (Fv F v) (Fv F v ⊗[F] E)]
+
+theorem int_mem (r : 𝓞 F) : algebraMap F (Fv F v) (r : F) ∈ v.adicCompletionIntegers F := by
+  exact v.coe_mem_adicCompletionIntegers r
 
 theorem mul_mem {x y : Fv F v ⊗[F] E} (hx : x ∈ OEv (E := E) v) (hy : y ∈ OEv (E := E) v) :
     x * y ∈ OEv (E := E) v := by

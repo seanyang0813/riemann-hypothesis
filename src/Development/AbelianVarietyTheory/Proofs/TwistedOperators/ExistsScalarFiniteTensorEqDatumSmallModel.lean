@@ -69,7 +69,6 @@ open GlobalTheory.FunObj GlobalTheory.ChiGrid GlobalTheory.SplitFlip GlobalTheor
 open GlobalTheory.IndefiniteRowSideFullHecke.UnitaryConjugation (spV spW spW₁ spV₁ Num IsTripleOf IsDatumA IsDatumB skewGram mulG colV adjV₁)
 open GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels (Base Spc Model Chars Rep IsTriple Acts SInf At latAtV realAd evI)
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.FlipMatch
 open GlobalTheory.SmallDat
 open GlobalTheory.BigDat (atW atW_atPl_self atW_atPl_ne atPl_one_mul map_atW_smul symplO_cA_smul symplO_zero_right' isHalf_smul_self

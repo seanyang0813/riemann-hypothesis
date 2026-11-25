@@ -816,16 +816,6 @@ namespace GlobalTheory.CompanionTheory.EisTestFun
 
 variable {k : Type} [Field k] [NumberField k]
 
-theorem infiniteModule_ofFinite (b : (FiniteAdeleRing (𝓞 k) k)ˣ) :
-    infiniteModule (ofFinite b) = 1 := by
-  have h : ((ofFinite b : IdeleGroup k) : AdeleRing (𝓞 k) k).1 = (1 : AdeleRing (𝓞 k) k).1 := rfl
-  unfold infiniteModule
-  refine Finset.prod_eq_one fun w _ => ?_
-  rw [h, adele_fst_one_apply, norm_one, one_pow]
-
-theorem ideleModule_ofFinite (b : (FiniteAdeleRing (𝓞 k) k)ˣ) :
-    (ideleModule k (ofFinite b) : ℝ) = finiteModule (ofFinite b) := by
-  rw [ideleModule_apply, infiniteModule_ofFinite, one_mul]
 
 theorem line_lc_cs {g : (Unit → FiniteAdeleRing (𝓞 k) k) → ℂ}
     (hg : g ∈ GJMatrix.finiteSchwartzBruhatPi k) :
@@ -871,7 +861,7 @@ theorem zFinPos : ZFinPos := by
     have hc : ((1 : HeckeCharacter K).toIdele (ofFinite b) : ℂ) = 1 := by
       rw [HeckeCharacter.toIdele_apply]
       rfl
-    rw [hc, mul_one, ideleModule_ofFinite]
+    rw [hc, mul_one, GlobalTheory.CompanionTheory.EisTF.ideleModule_ofFinite_eq]
     simp only [F, G, finiteZetaBound]
     split_ifs with hb
     · obtain ⟨r, hr, hgr⟩ := hnn (b : FiniteAdeleRing (𝓞 K) K)
@@ -1098,14 +1088,6 @@ namespace GlobalTheory.CompanionTheory.RgEisSupp
 
 open PositivityTheory.RgEis PositivityTheory.RgEis.TF
 
-theorem inM_of_dvd {k : Type} [Field k] [NumberField k] {M N : ℕ} (h : M ∣ N)
-    {x : FiniteAdeleRing (𝓞 k) k} (hx : InM N x) : InM M x := by
-  obtain ⟨c, rfl⟩ := h
-  obtain ⟨y, hy, rfl⟩ := hx
-  refine ⟨(c : FiniteAdeleRing (𝓞 k) k) * y, (OH k).mul_mem (natCast_mem _ c) hy, ?_⟩
-  push_cast
-  ring
-
 theorem col_apply {k : Type} [Field k] [NumberField k] {ι : Type} [Fintype ι] [DecidableEq ι]
     (i₀ : ι) (κ : GL ι 𝔸[k]) (r : ι) :
     TF.col i₀ κ r = ((κ⁻¹ : GL ι 𝔸[k]) : Matrix ι ι 𝔸[k]) r i₀ := by
@@ -1175,7 +1157,7 @@ theorem supp : ColLaw → InMTop → Supp := by
       exact isClosed_le continuous_const c1
   have hanti : ∀ n, C (n + 1) ⊆ C n := by
     intro n κ hκ
-    refine ⟨fun j hj => inM_of_dvd (Nat.mul_dvd_mul_right (Nat.factorial_dvd_factorial (Nat.le_succ n)) M₀) (hκ.1 j hj), fun w => ?_⟩
+    refine ⟨fun j hj => GlobalTheory.CompanionTheory.RgEisFin.inM_dvd (Nat.mul_dvd_mul_right (Nat.factorial_dvd_factorial (Nat.le_succ n)) M₀) (hκ.1 j hj), fun w => ?_⟩
     refine le_trans ?_ (hκ.2 w)
     have : (1 : ℝ) / (((n + 1 : ℕ) : ℝ) + 1) ≤ 1 / ((n : ℝ) + 1) := by
       apply one_div_le_one_div_of_le (by positivity)
@@ -1192,7 +1174,7 @@ theorem supp : ColLaw → InMTop → Supp := by
     have hall : ∀ n, κ ∈ C n := fun n => (Set.mem_iInter.1 hκ n).1
     have hκO : κ ∉ O := (Set.mem_iInter.1 hκ 0).2
     have hfin : ∀ j, j ≠ i₀ → (TF.col i₀ κ.1 j).2 = 0 := fun j hj =>
-      hzero _ fun M hM => inM_of_dvd
+      hzero _ fun M hM => GlobalTheory.CompanionTheory.RgEisFin.inM_dvd
         ((Nat.dvd_factorial (Nat.pos_of_ne_zero hM) le_rfl).mul_right M₀) ((hall M).1 j hj)
     have hone : ∀ w, 1 ≤ ‖(TF.col i₀ κ.1 i₀).1 w‖ ^ 2 := by
       intro w

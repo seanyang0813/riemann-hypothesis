@@ -85,9 +85,6 @@ theorem lin_lf (φ : PX m n →ₗ[ℂ] PX m n) (b : Bool) (N M : Matrix (Fin m)
   rw [Finset.sum_mul]
   exact Finset.sum_congr rfl fun x _ => C_mul'.symm
 
-theorem mstar_mul (A B : Matrix (Fin m) (Fin m) ℂ) : (A * B).map star = A.map star * B.map star := by
-  ext i j; simp [Matrix.mul_apply]
-
 theorem am_mul (b : Bool) (A B : Matrix (Fin m) (Fin m) ℂ) : am b (A * B) = am b A * am b B := by
   cases b <;> simp [am]
 

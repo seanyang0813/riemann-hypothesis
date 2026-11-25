@@ -789,9 +789,6 @@ namespace GlobalTheory.CompanionTheory.QredFlat
 
 variable {W : Type} [CommRing W]
 
-theorem mem_lp {l : ℕ} {M : Type 1} [AddCommGroup M] [Module W M] {n : ℕ} {x : M} :
-    x ∈ lpow (W := W) l M n ↔ ∃ y : M, ((l : W) ^ n) • y = x := Iff.rfl
-
 theorem B_ker (D : Cx.{1} W) (n : ℕ) (v : D.X n) (hv : v ∈ D.B n) : D.d n v = 0 := by
   cases n with
   | zero =>
@@ -808,7 +805,7 @@ theorem exact_quo (D : Cx.{1} W) (l m : ℕ) (hF : FlatL l m D)
   have key : ∀ n c, c ≤ m → ∀ x : D.X n, D.d n x ∈ lpow (W := W) l (D.X (n + 1)) c →
       D.d n (((l : W) ^ (m - c)) • x) = 0 := by
     intro n c hc x hx
-    obtain ⟨y, hy⟩ := mem_lp.1 hx
+    obtain ⟨y, hy⟩ := GlobalTheory.CompanionTheory.TowFlat.mem_lpow.1 hx
     rw [map_smul, ← hy, smul_smul, ← pow_add, Nat.sub_add_cancel hc]
     exact (hF (n + 1)).1 y
   intro n
@@ -816,18 +813,18 @@ theorem exact_quo (D : Cx.{1} W) (l m : ℕ) (hF : FlatL l m D)
   | zero =>
     intro c hc x hx
     have h0 : ((l : W) ^ (m - c)) • x = 0 := hE 0 _ (key 0 c hc x hx)
-    obtain ⟨u, hu⟩ := mem_lp.1 ((hF 0).2 c (m - c) (by omega) x h0)
+    obtain ⟨u, hu⟩ := GlobalTheory.CompanionTheory.TowFlat.mem_lpow.1 ((hF 0).2 c (m - c) (by omega) x h0)
     exact ⟨u, 0, Submodule.zero_mem _, by rw [add_zero, hu]⟩
   | succ n ih =>
     intro c hc x hx
     obtain ⟨w, hw⟩ := hE (n + 1) _ (key (n + 1) c hc x hx)
     have hw' : D.d n w = ((l : W) ^ (m - c)) • x := hw
-    obtain ⟨u, v, hv, e⟩ := ih (m - c) (Nat.sub_le _ _) w (by rw [hw']; exact mem_lp.2 ⟨x, rfl⟩)
+    obtain ⟨u, v, hv, e⟩ := ih (m - c) (Nat.sub_le _ _) w (by rw [hw']; exact GlobalTheory.CompanionTheory.TowFlat.mem_lpow.2 ⟨x, rfl⟩)
     have hd : D.d n w = ((l : W) ^ (m - c)) • D.d n u := by
       rw [e, map_add (f := _), B_ker D n v hv, add_zero, map_smul]
     have h1 : ((l : W) ^ (m - c)) • (x - D.d n u) = 0 := by
       rw [smul_sub, ← hw', hd, sub_self]
-    obtain ⟨t, ht⟩ := mem_lp.1 ((hF (n + 1)).2 c (m - c) (by omega) _ h1)
+    obtain ⟨t, ht⟩ := GlobalTheory.CompanionTheory.TowFlat.mem_lpow.1 ((hF (n + 1)).2 c (m - c) (by omega) _ h1)
     exact ⟨t, D.d n u, ⟨u, rfl⟩, by rw [ht]; abel⟩
 
 def Sh (L : Cx.{1} W) : ℕ → Type 1
@@ -896,7 +893,7 @@ theorem flat_sh {L : Cx.{1} W} {l m : ℕ} (hL : FlatL l m L) (n : ℕ) :
       ∀ a b, a + b = m → ∀ y : Sh L n, ((l : W) ^ b) • y = 0 → ∃ t : Sh L n, ((l : W) ^ a) • t = y := by
   cases n with
   | zero => exact ⟨fun _ => rfl, fun _ _ _ y _ => ⟨0, rfl⟩⟩
-  | succ n => exact ⟨(hL n).1, fun a b h y hy => mem_lp.1 ((hL n).2 a b h y hy)⟩
+  | succ n => exact ⟨(hL n).1, fun a b h y hy => GlobalTheory.CompanionTheory.TowFlat.mem_lpow.1 ((hL n).2 a b h y hy)⟩
 
 theorem flat_cone {K L : Cx.{1} W} (f : Cx.Hom K L (RingHom.id W)) {l m : ℕ} (hK : FlatL l m K)
     (hL : FlatL l m L) : FlatL l m (cone f) := by
@@ -904,9 +901,9 @@ theorem flat_cone {K L : Cx.{1} W} (f : Cx.Hom K L (RingHom.id W)) {l m : ℕ} (
   refine ⟨fun x => Prod.ext ((hK i).1 x.1) ((flat_sh hL i).1 x.2), fun a b h x hx => ?_⟩
   have h1 : ((l : W) ^ b) • x.1 = 0 := congrArg Prod.fst hx
   have h2 : ((l : W) ^ b) • x.2 = 0 := congrArg Prod.snd hx
-  obtain ⟨s, hs⟩ := mem_lp.1 ((hK i).2 a b h _ h1)
+  obtain ⟨s, hs⟩ := GlobalTheory.CompanionTheory.TowFlat.mem_lpow.1 ((hK i).2 a b h _ h1)
   obtain ⟨t, ht⟩ := (flat_sh hL i).2 a b h _ h2
-  exact mem_lp.2 ⟨(s, t), Prod.ext hs ht⟩
+  exact GlobalTheory.CompanionTheory.TowFlat.mem_lpow.2 ⟨(s, t), Prod.ext hs ht⟩
 
 theorem cone_exact {K L : Cx.{1} W} (f : Cx.Hom K L (RingHom.id W))
     (hb : ∀ j, Function.Bijective (f.mapH j)) (n : ℕ) (x : (cone f).X n) (hx : (cone f).d n x = 0) :
@@ -969,10 +966,10 @@ theorem redg_zero (L : Cx.{1} W) {b m : ℕ} (h : b ≤ m) (i : ℕ) (w : (quo l
   obtain ⟨y, rfl⟩ := prj_surj (l := l) L m i w
   constructor
   · intro hw
-    obtain ⟨t, rfl⟩ := mem_lp.1 ((prj_zero L b i y).1 hw)
-    exact mem_lp.2 ⟨(prj l L m).f i t, (map_smul _ _ _).symm⟩
+    obtain ⟨t, rfl⟩ := GlobalTheory.CompanionTheory.TowFlat.mem_lpow.1 ((prj_zero L b i y).1 hw)
+    exact GlobalTheory.CompanionTheory.TowFlat.mem_lpow.2 ⟨(prj l L m).f i t, (map_smul _ _ _).symm⟩
   · intro hw
-    obtain ⟨s, hs⟩ := mem_lp.1 hw
+    obtain ⟨s, hs⟩ := GlobalTheory.CompanionTheory.TowFlat.mem_lpow.1 hw
     obtain ⟨t, rfl⟩ := prj_surj (l := l) L m i s
     rw [← hs, map_smul, redg_prj, ← map_smul]
     exact (prj_zero L b i _).2 ⟨t, rfl⟩
@@ -985,11 +982,11 @@ theorem flat_quo {L : Cx.{1} W} {m : ℕ} (hL : FlatL l (m + 1) L) : FlatL l m (
     exact (prj_zero L m i _).2 ⟨y, rfl⟩
   · obtain ⟨y, rfl⟩ := prj_surj (l := l) L m i x
     rw [← map_smul] at hx
-    obtain ⟨t, ht⟩ := mem_lp.1 ((prj_zero L m i _).1 hx)
+    obtain ⟨t, ht⟩ := GlobalTheory.CompanionTheory.TowFlat.mem_lpow.1 ((prj_zero L m i _).1 hx)
     have h1 : ((l : W) ^ b) • (y - ((l : W) ^ a) • t) = 0 := by
       rw [smul_sub, ← ht, smul_smul, ← pow_add, add_comm b a, h, sub_self]
-    obtain ⟨s, hs⟩ := mem_lp.1 ((hL i).2 (a + 1) b (by omega) _ h1)
-    refine mem_lp.2 ⟨(prj l L m).f i (t + (l : W) • s), ?_⟩
+    obtain ⟨s, hs⟩ := GlobalTheory.CompanionTheory.TowFlat.mem_lpow.1 ((hL i).2 (a + 1) b (by omega) _ h1)
+    refine GlobalTheory.CompanionTheory.TowFlat.mem_lpow.2 ⟨(prj l L m).f i (t + (l : W) • s), ?_⟩
     rw [← map_smul]
     congr 1
     rw [smul_add, smul_smul, ← pow_succ, hs]
@@ -1010,7 +1007,7 @@ theorem redg_B (L : Cx.{1} W) {b m : ℕ} (h : b ≤ m) (j : ℕ) (w : (quo l L 
     ∃ t : Sh (quo l L m) j, ∃ s : (quo l L m).X j, ((l : W) ^ b) • s = w - sdL (quo l L m) j t := by
   cases j with
   | zero =>
-    obtain ⟨s, hs⟩ := mem_lp.1 ((redg_zero L h 0 w).1 hw)
+    obtain ⟨s, hs⟩ := GlobalTheory.CompanionTheory.TowFlat.mem_lpow.1 ((redg_zero L h 0 w).1 hw)
     exact ⟨PUnit.unit, s, by rw [hs]; exact (sub_zero w).symm⟩
   | succ j =>
     obtain ⟨g, hg⟩ := hw
@@ -1018,7 +1015,7 @@ theorem redg_B (L : Cx.{1} W) {b m : ℕ} (h : b ≤ m) (j : ℕ) (w : (quo l L 
     have hg' : (quo l L b).d j ((redg l L h).f j g') = (redg l L h).f (j + 1) w := hg
     have h0 : (redg l L h).f (j + 1) (w - (quo l L m).d j g') = 0 := by
       rw [map_sub, ← (redg l L h).comm, hg', sub_self]
-    obtain ⟨s, hs⟩ := mem_lp.1 ((redg_zero L h (j + 1) _).1 h0)
+    obtain ⟨s, hs⟩ := GlobalTheory.CompanionTheory.TowFlat.mem_lpow.1 ((redg_zero L h (j + 1) _).1 h0)
     exact ⟨g', s, hs⟩
 
 theorem redg_shD (L : Cx.{1} W) {b m : ℕ} (h : b ≤ m) (j : ℕ) (t : Sh (quo l L m) j) :
@@ -1049,9 +1046,9 @@ theorem qred_bij : ∀ (W : Type) [CommRing W] (l : ℕ) (K L : Cx.{1} W) (m : �
       (Submodule.Quotient.mk_eq_zero (((quo l L b).B j).submoduleOf ((quo l L b).Z j))).1 hu
     rw [← hx] at hB
     obtain ⟨t, s, hts⟩ := redg_B L h j (f.f j x) hB
-    obtain ⟨p, hp⟩ := mem_lp.1 hdx
+    obtain ⟨p, hp⟩ := GlobalTheory.CompanionTheory.TowFlat.mem_lpow.1 hdx
     have hdc : (cone f).d j (x, t) ∈ lpow (W := W) l ((cone f).X (j + 1)) b :=
-      mem_lp.2 ⟨(p, s), Prod.ext hp hts⟩
+      GlobalTheory.CompanionTheory.TowFlat.mem_lpow.2 ⟨(p, s), Prod.ext hp hts⟩
     obtain ⟨u1, v, hv, e⟩ := E j b h (x, t) hdc
     have e1 : x = ((l : W) ^ b) • u1.1 + v.1 := congrArg Prod.fst e
     refine (Submodule.Quotient.mk_eq_zero (((quo l K b).B j).submoduleOf ((quo l K b).Z j))).2 ?_
@@ -1066,10 +1063,10 @@ theorem qred_bij : ∀ (W : Type) [CommRing W] (l : ℕ) (K L : Cx.{1} W) (m : �
     have hz : (quo l L b).d j z.1 = 0 := z.2
     have hdw : (quo l L m).d j w ∈ lpow (W := W) l ((quo l L m).X (j + 1)) b :=
       (redg_zero L h _ _).1 (by rw [← (redg l L h).comm, hw]; exact hz)
-    obtain ⟨p, hp⟩ := mem_lp.1 hdw
+    obtain ⟨p, hp⟩ := GlobalTheory.CompanionTheory.TowFlat.mem_lpow.1 hdw
     have hdc : (cone f).d (j + 1) ((0, w) : K.X (j + 1) × Sh (quo l L m) (j + 1)) ∈
         lpow (W := W) l ((cone f).X (j + 1 + 1)) b := by
-      refine mem_lp.2 ⟨(0, -p), Prod.ext ?_ ?_⟩
+      refine GlobalTheory.CompanionTheory.TowFlat.mem_lpow.2 ⟨(0, -p), Prod.ext ?_ ?_⟩
       · change ((l : W) ^ b) • (0 : K.X (j + 1 + 1)) = K.d (j + 1) 0
         rw [smul_zero, map_zero]
       · change ((l : W) ^ b) • (-p) = (f.f (j + 1) 0) - (quo l L m).d j w

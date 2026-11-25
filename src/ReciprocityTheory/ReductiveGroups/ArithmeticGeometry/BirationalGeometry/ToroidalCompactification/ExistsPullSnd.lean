@@ -228,33 +228,4 @@ theorem genOf_pow (hs : L.IsSymmetric) (y : T ⟶ A) (n : ℕ) : GenOf L.L fun _
     abel!
 
 
-theorem exists_norm (φ : A ⟶ A) [IsMonHom φ] {a b : ℕ} {a' b' : ℤ} (ha : a' = a) (hb : b' = b)
-    (g : GenOf L.L fun _ _ h => h (𝟙 A.left) ^ a * (h φ.left ^ b)⁻¹) :
-    ∃ α : LB.Gen (LB.LinComb L.L (K := Fin 2) ![𝟙 A.left, φ.left] ![a', -b']), α.IsGen ∧ ∀ w I, Good L.L w I →
-      val α (𝟙 _ ≫ eSec A) w I = val (L := L.L) (φ := fun _ : PUnit => eSec A) (ε := fun _ => 1) L.rig (𝟙 _) w I ^ (a' - b') := by
-  have pe : ∀ {T : Over S} (y : T ⟶ A) U [CommGroup U] h, _ := fun y => prod_end φ ha hb y
-  obtain ⟨u, hu⟩ := g.gen L.isLB (φ := ![𝟙 A.left, φ.left]) (ε := ![a', -b']) fun U _ h => by
-    simpa only [Over.id_left, Category.id_comp] using pe (𝟙 A) U h
-  let R : LB.Gen (LB.LinComb L.L (fun _ : PUnit => A.hom ≫ eSec A) fun _ => a' - b') :=
-    LB.pullGen L.L _ _ (rigPow A L.L L.rig (a' - b')) A.hom
-  have hR : (rigPow A L.L L.rig (a' - b')).IsGen := isGen_of_gm _ fun w j j' h h' => (map_zpow _ _ _).trans
-    ((congrArg (· ^ (a' - b')) (gen_trans (L := L.L) (φ := fun _ : PUnit => eSec A) (ε := fun _ => 1) L.rigGen (𝟙 _) w h h')).trans
-      ((mul_zpow _ _ _).trans (congrArg₂ (· * ·) (by rw [trF, trF, Fintype.prod_unique, Fintype.prod_unique, zpow_one])
-        (map_zpow _ _ _).symm)))
-  obtain ⟨t, ht, v⟩ := exists_gen L.isLB (φ' := ![𝟙 A.left, φ.left]) (ε' := ![a', -b']) (fun U _ h => by
-      refine (prod_sum₂ (K := Fin 2 ⊕ Fin 2) (K' := PUnit) (U := U) _ (prod_sum₂ (K := Fin 2) (K' := Fin 2) (U := U) _ rfl
-        (prod_neg _ _ (pe (1 : A ⟶ A) U h))) (Fintype.prod_unique _)).trans ?_
-      rw [MonObj.one_comp, _root_.mul_assoc]
-      refine mul_eq_left.2 (inv_mul_eq_one.2 ?_)
-      show _ = h (1 : A ⟶ A).left ^ (a' - b')
-      rw [ha, hb, zpow_sub, zpow_natCast, zpow_natCast])
-    (LB.mulGen L.L _ _ _ _ (LB.mulGen L.L _ _ _ _ u (LB.invGen L.L _ _ (LB.pullGen L.L _ _ u (1 : A ⟶ A).left))) R)
-    (mulGen_isGen _ _ _ _ _ _ _ (mulGen_isGen _ _ _ _ _ _ _ hu (invGen_isGen _ _ _ _ (pullGen_isGen _ _ _ _ hu _)))
-      (pullGen_isGen _ _ _ _ hR _))
-  refine ⟨t, ht, fun w I hI => ?_⟩
-  have e₀ : (𝟙 _ ≫ eSec A) ≫ A.hom = 𝟙 S := by rw [Category.id_comp]; exact Over.w (η[A])
-  have e₁ : (𝟙 _ ≫ eSec A) ≫ (1 : A ⟶ A).left = 𝟙 _ ≫ eSec A := (Category.assoc _ _ _).symm.trans (congrArg (· ≫ eSec A) e₀)
-  rw [v _ _ w I hI, val_mul hI, val_mul hI, val_inv, val_pull hI, e₁, mul_inv_cancel, _root_.one_mul, val_pull hI, e₀]
-  exact map_zpow _ _ _
-
 end ReciprocityTheory.ChartRestriction.G.Geo.Tor

@@ -50,10 +50,5 @@ theorem rmulE_coe (b bi : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ
 
 variable {D : D7} {X : HidaSetting D} {θ : ℝ}
 
-theorem uMat_mul' {n : ℕ} {ε : Fin n → Bool} (a b : Formalism.REAL.UJ ε) : uMat (a * b) = uMat a * uMat b := rfl
-
-theorem uMat_inv_mul' {n : ℕ} {ε : Fin n → Bool} (a : Formalism.REAL.UJ ε) : uMat a⁻¹ * uMat a = 1 := by
-  rw [← uMat_mul', inv_mul_cancel]; rfl
-
 
 end Formalism.L2.SG.RealObj.EnergyIntLoc

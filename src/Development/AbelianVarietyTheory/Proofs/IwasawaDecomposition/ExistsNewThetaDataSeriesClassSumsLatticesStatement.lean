@@ -1014,7 +1014,7 @@ theorem exists_setup_ch (Rl : RealDat3 D A3 Ks) (cG : G0 Rl.Pg D.R.r ≃* G0g D.
     ((e i b).injective.comp (IsFractionRing.injective (D.ntw.O i) (FractionRing (D.ntw.O i)))).comp (D.ntw.O_inj i)
   let de : D.ntw.Tw → Bool → Twist D Circle := fun i b =>
     twistOf rc (f i b) (ch i) (D.ntw.pD i) (Formalism.MainNotions.BlochKatoReduction.Gen.psiAt b (D.ntw.delta i))
-  have hde : ∀ i b, (de i b).Good := fun i b => GlobalTheory.T.artin_twisting_character_delta_good D rc hrc i (ch i) (hch1 i) (f i b) (hfi i b) b
+  have hde : ∀ i b, (de i b).Good := fun i b => _root_.GlobalTheory.DeltaGood.twistOf_delta_good D rc hrc i (ch i) (hch1 i) (f i b) (hfi i b) b
   have hpl : ∀ i b, PlacesOK Rl.Pg (de i b).Q := fun i _ =>
     GlobalTheory.T.typePlaces_twistPlaces_goodPosition D Γ Pl0 I0 T A3 Ks Rl A3.A.μ0 hC.lev hspl hq i (ch i) (hch1 i)
   have hB := fun i j b => GlobalTheory.T.liftBaseData_isGood_twist D Γ Pl0 I0 T A3 Ks Rl F3 hC j (F j) (hF j) (de i b) (hde i b) (hpl i b)

@@ -850,14 +850,10 @@ theorem two_mul_finrank_isotropic_le {E : Type} [Field E] [NumberField E] [StarR
   have := Submodule.finrank_mono h4
   omega
 
-theorem bddAbove_isotropic_dims {E : Type} [Field E] [NumberField E] [StarRing E] (B : HSpace E) :
-    BddAbove {k | ∃ W : Submodule E B.V, Module.finrank E W = k ∧ ∀ x ∈ W, ∀ y ∈ W, B.hT x y = 0} :=
-  ⟨B.rank, by rintro _ ⟨W, rfl, hW⟩; have := two_mul_finrank_isotropic_le B W hW; omega⟩
-
 theorem two_mul_wittIdx_le_rank {E : Type} [Field E] [NumberField E] [StarRing E] (B : HSpace E) :
     2 * Formalism.MainNotions.SchurIrreducible.wittIdx B ≤ B.rank := by
   obtain ⟨W, h, hW⟩ := Nat.sSup_mem (s := {k | ∃ W : Submodule E B.V, Module.finrank E W = k ∧
-    ∀ x ∈ W, ∀ y ∈ W, B.hT x y = 0}) ⟨_, ⊥, rfl, by simp⟩ (bddAbove_isotropic_dims B)
+    ∀ x ∈ W, ∀ y ∈ W, B.hT x y = 0}) ⟨_, ⊥, rfl, by simp⟩ (GlobalTheory.SiegelFormula.Model.bddAbove_witt B)
   rw [Formalism.MainNotions.SchurIrreducible.wittIdx, ← h]
   exact two_mul_finrank_isotropic_le B W hW
 
@@ -889,9 +885,6 @@ theorem absThetaInt_lt_top_of_eq_zero {D : D7} (V : HSp D) (ν : Measure (GA D V
 
 end GlobalTheory.CompanionTheory.SiegelAssembly
 
-namespace GlobalTheory.CompanionTheory.SiegelAssembly
-
-end GlobalTheory.CompanionTheory.SiegelAssembly
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto

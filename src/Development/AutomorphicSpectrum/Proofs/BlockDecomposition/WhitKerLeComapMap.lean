@@ -88,21 +88,6 @@ theorem whit2_mk (ψ : AddChar k Circle) (d : Fin 2 → ℕ) (J : Representation
     (g : GL (Fin (d 0)) k) (v : X) :
     whit2 ψ d J g (Submodule.Quotient.mk v) = Submodule.Quotient.mk (J (firstEmb d g) v) := rfl
 
-theorem whitKer_le_comap_map (ψ : AddChar k Circle) (d : Fin 2 → ℕ) {J : Representation ℂ (Levi k fun a => Fin (d a)) X}
-    {J' : Representation ℂ (Levi k fun a => Fin (d a)) Y} (f : J.IntertwiningMap J') :
-    whitKer ψ d J ≤ (whitKer ψ d J').comap f.toLinearMap := by
-  refine Submodule.span_le.2 ?_
-  rintro w ⟨u, v, rfl⟩
-  refine Submodule.subset_span ⟨u, f v, ?_⟩
-  simp [f.isIntertwining]
-
-def whitMap (ψ : AddChar k Circle) (d : Fin 2 → ℕ) {J : Representation ℂ (Levi k fun a => Fin (d a)) X}
-    {J' : Representation ℂ (Levi k fun a => Fin (d a)) Y} (f : J.IntertwiningMap J') :
-    (whit2 ψ d J).IntertwiningMap (whit2 ψ d J') :=
-  .mk ((whitKer ψ d J).mapQ (whitKer ψ d J') f.toLinearMap (whitKer_le_comap_map ψ d f)) (fun g => by
-    ext v
-    simp [whit2_mk, f.isIntertwining])
-
 end
 
 end GlobalTheory.CompanionTheory.BZNuPair

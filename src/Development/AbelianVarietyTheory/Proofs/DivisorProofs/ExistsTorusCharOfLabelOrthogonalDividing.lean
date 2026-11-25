@@ -143,7 +143,7 @@ theorem torus_label_over : ∀ (I : Type) (X₁ : GlobalTheory.GSep.GSet) (z₁ 
 
 theorem labels_hom : ∀ (I : Type) (X₁ : GlobalTheory.GSep.GSet) (z₁ : X₁.M.Z) (act : I → (X₁.ρ.P.A ⟶ X₁.ρ.P.A)), ∀ (V : Type) [CommRing V] [IsDomain V] [IsLocalRing V] (ev : X₁.M.Z.presheaf.stalk z₁ →+* V) (X : Type) [AddCommGroup X] (t : X → V) (δ : I → X → X) (𝔪 : GlobalTheory.GSep.GMem X₁ z₁ act V ev X t δ), ∃ yy : X₁.S.Gam →+ 𝔪.D.toPre.X ⧸ (nsmulAddMonoidHom (X₁.S.r * X₁.S.N) : 𝔪.D.toPre.X →+ 𝔪.D.toPre.X).range, Function.Surjective yy ∧ ∀ a mu, 𝔪.YY a mu ↔ yy a = QuotientAddGroup.mk (𝔪.e₈ mu) := by
   intro I X₁ z₁ act V _ _ _ ev X _ t δ 𝔪
-  obtain ⟨h1, h2, h3, h4⟩ := GlobalTheory.T.thetaLabels_surjective_hom_lattice_mod_level I X₁ z₁ act V ev X t δ 𝔪
+  obtain ⟨h1, h2, h3, h4⟩ := _root_.GlobalTheory.GSep.Labels.yy_hom I X₁ z₁ act V ev X t δ 𝔪
   choose mu hmu using h1
   have key : ∀ a nu, 𝔪.YY a nu ↔
       (QuotientAddGroup.mk (𝔪.e₈ (mu a)) : 𝔪.D.toPre.X ⧸ (nsmulAddMonoidHom (X₁.S.r * X₁.S.N) : 𝔪.D.toPre.X →+ 𝔪.D.toPre.X).range) =
@@ -189,7 +189,7 @@ theorem exists_torus_char : ∀ (I : Type) (X₁ : GlobalTheory.GSep.GSet) (z₁
   obtain ⟨x₀, hx₀⟩ := X₁.div z₁
   have hker : τ ∈ X₁.S.perp yy.ker := fun h hh => by
     have h0 : 𝔪.YY h 0 := (hyy h 0).2 (by rw [(AddMonoidHom.mem_ker).1 hh, map_zero]; rfl)
-    exact hτ h ((GlobalTheory.T.mem_dividingLabels_iff_class_zero I X₁ z₁ act x₀ hx₀ V ev X t δ 𝔪 h).2 h0)
+    exact hτ h ((_root_.GlobalTheory.GSep.mem_HH_iff_yy_zero I X₁ z₁ act x₀ hx₀ V ev X t δ 𝔪 h).2 h0)
   obtain ⟨mf, hmf⟩ := exists_form X₁.S yy yyonto τ hker
   have hζ : IsPrimitiveRoot (X₁.S.ζ ^ (X₁.S.r * X₁.S.N)) (X₁.S.r * X₁.S.N) := X₁.S.prim.pow (pow_pos hkpos 2) (pow_two _)
   let ω : (FractionRing V)ˣ := Units.map (𝔪.yK.comp (algebraMap X₁.o₁ X₁.S.R)).toMonoidHom (hζ.isUnit hkpos.ne').unit

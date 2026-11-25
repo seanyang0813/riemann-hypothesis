@@ -413,8 +413,6 @@ theorem aut_HTop_holds {F E : Type} [Field F] [NumberField F] [Field E] [NumberF
 
 section AtRecord
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 end AtRecord
 
 end Aut

@@ -1123,16 +1123,6 @@ theorem ratF_injective : Function.Injective (ratF E n) := by
   have := congrArg (fun x : GL (Fin n) (Af E) => x.val i j) e
   exact (algebraMap E (Af E)).injective this
 
-theorem pFin_ratGL (g : GL (Fin n) E) : GeneralLinearGroup.map (pFin E) (ratGL E n g) = ratF E n g := by
-  apply Units.ext
-  ext i j
-  rfl
-
-theorem cV_ratGL (v : InfinitePlace E) (g : GL (Fin n) E) :
-    GeneralLinearGroup.map (cV v) (ratGL E n g) = GeneralLinearGroup.map v.embedding g := by
-  apply Units.ext
-  ext i j
-  exact pInf_algebraMap (g.val i j) v
 
 theorem mem_twCent_iff {u : GL (Fin n) E} (hu : IsTransl u) (g d : GL (Fin n) E) :
     g ∈ PositivityTheory.Rg.Tf.Loc.twCent (thetaE E n) d ↔ g * (d * u⁻¹) = d * u⁻¹ * thE E n g := by
@@ -1177,16 +1167,16 @@ theorem centEq : CentEq := by
     have hc' := Prod.ext_iff.1 hc
     refine ⟨(ratGL E a g₁, ratGL E b g₂), ?_, ?_⟩
     · exact ⟨⟨g₁, (mem_twCent_iff_ratF h₁ g₁ d₁).2 hc'.1, rfl⟩, ⟨g₂, (mem_twCent_iff_ratF h₂ g₂ d₂).2 hc'.2, rfl⟩⟩
-    · exact Prod.ext (pFin_ratGL g₁) (pFin_ratGL g₂)
+    · exact Prod.ext (GlobalTheory.CompanionTheory.AdelEqProof.map_pFin_ratGL g₁) (GlobalTheory.CompanionTheory.AdelEqProof.map_pFin_ratGL g₂)
   · rintro ⟨⟨γ₁, γ₂⟩, ⟨⟨g₁, hg₁, rfl⟩, ⟨g₂, hg₂, rfl⟩⟩, rfl⟩
     have e : (comps (ratGL E a g₁, ratGL E b g₂)).2 = (ratF E a g₁, ratF E b g₂) :=
-      Prod.ext (pFin_ratGL g₁) (pFin_ratGL g₂)
+      Prod.ext (GlobalTheory.CompanionTheory.AdelEqProof.map_pFin_ratGL g₁) (GlobalTheory.CompanionTheory.AdelEqProof.map_pFin_ratGL g₂)
     rw [e]
     exact ⟨⟨(g₁, g₂), rfl⟩, Prod.ext ((mem_twCent_iff_ratF h₁ g₁ d₁).1 hg₁) ((mem_twCent_iff_ratF h₂ g₂ d₂).1 hg₂)⟩
   · rintro ⟨γ₁, γ₂⟩ ⟨⟨g₁, hg₁, rfl⟩, ⟨g₂, hg₂, rfl⟩⟩
     refine ⟨fun h => ?_, fun v => ?_⟩
     · have e : (comps (ratGL E a g₁, ratGL E b g₂)).2 = (ratF E a g₁, ratF E b g₂) :=
-        Prod.ext (pFin_ratGL g₁) (pFin_ratGL g₂)
+        Prod.ext (GlobalTheory.CompanionTheory.AdelEqProof.map_pFin_ratGL g₁) (GlobalTheory.CompanionTheory.AdelEqProof.map_pFin_ratGL g₂)
       rw [e] at h
       have e₁ : g₁ = 1 := ratF_injective ((congrArg Prod.fst h).trans (map_one _).symm)
       have e₂ : g₂ = 1 := ratF_injective ((congrArg Prod.snd h).trans (map_one _).symm)
@@ -1194,10 +1184,10 @@ theorem centEq : CentEq := by
       exact Prod.ext (map_one _) (map_one _)
     · constructor
       · show GeneralLinearGroup.map (cV v) (ratGL E a g₁) ∈ _
-        rw [cV_ratGL]
+        rw [GlobalTheory.CompanionTheory.AdelEqProof.map_cV_ratGL]
         exact map_mem_twCent v hg₁
       · show GeneralLinearGroup.map (cV v) (ratGL E b g₂) ∈ _
-        rw [cV_ratGL]
+        rw [GlobalTheory.CompanionTheory.AdelEqProof.map_cV_ratGL]
         exact map_mem_twCent v hg₂
 
 end GlobalTheory.CompanionTheory.TwistCent

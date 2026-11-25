@@ -1,23 +1,8 @@
 module
 
 public import Mathlib.Analysis.CStarAlgebra.Classes
-public import Mathlib.Analysis.Calculus.Deriv.Basic
-public import Mathlib.Analysis.InnerProductSpace.Basic
-public import Mathlib.Analysis.LocallyConvex.AbsConvexOpen
 public import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
 public import Mathlib.LinearAlgebra.Matrix.Trace
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
 public import Mathlib.Analysis.Calculus.Deriv.Add
 public import Mathlib.Analysis.Calculus.Deriv.Mul
 
@@ -25,22 +10,23 @@ public import Mathlib.Analysis.Calculus.Deriv.Mul
 
 namespace Bl.b110
 
-theorem goal1 :
-  ∀ {n : Type} [inst : Fintype.{0} n] [inst_1 : DecidableEq.{1} n] (A : Real → Matrix.{0, 0, 0} n n Complex)
-  (A' : Matrix.{0, 0, 0} n n Complex),
-  Eq.{1} (A 0) 1 →
-    (∀ (i j : n), HasDerivAt.{0, 0} (fun (t : Real) ↦ A t i j) (A' i j) 0) →
-      HasDerivAt.{0, 0} (fun (t : Real) ↦ Matrix.det.{0, 0} (A t)) (Matrix.trace.{0, 0} A') 0 := by
-  intro n _ _ A A' h0 hd
-  have hfun : (fun t : ℝ => Matrix.det (A t)) =
+theorem goal1 {n : Type} [Fintype n] [DecidableEq n] :
+(A : ℝ → Matrix n n ℂ) →
+(A' : Matrix n n ℂ) →
+(A 0) = 1 →
+(∀ (i j : n),
+  HasDerivAt (fun (t : ℝ) ↦ A t i j) (A' i j) 0) →
+  HasDerivAt (fun (t : ℝ) ↦ (A t).det) A'.trace 0 := by
+  intro A A' h0 hd
+  have hfun : (fun t : ℝ => (A t).det) =
       fun t => ∑ σ : Equiv.Perm n, ((Equiv.Perm.sign σ : ℤ) : ℂ) * ∏ i, A t (σ i) i := by
-    funext t
-    exact Matrix.det_apply' _
+        funext t
+        exact Matrix.det_apply' _
   rw [hfun]
   have hprod : ∀ σ : Equiv.Perm n, HasDerivAt (fun t : ℝ => ∏ i, A t (σ i) i)
       (∑ i, (∏ j ∈ Finset.univ.erase i, A 0 (σ j) j) • A' (σ i) i) 0 := by
     intro σ
-    exact HasDerivAt.fun_finsetProd (u := Finset.univ) (f := fun i t => A t (σ i) i)
+    exact HasDerivAt.fun_finsetProd (f := fun i t => A t (σ i) i)
       (fun i _ => hd (σ i) i)
   have hsum := HasDerivAt.fun_sum (u := Finset.univ)
     (fun σ _ => (hprod σ).const_mul (((Equiv.Perm.sign σ : ℤ) : ℂ)))

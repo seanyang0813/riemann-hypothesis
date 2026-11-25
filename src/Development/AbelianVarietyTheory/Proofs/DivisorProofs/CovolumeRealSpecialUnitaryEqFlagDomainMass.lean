@@ -292,9 +292,6 @@ namespace GlobalTheory.SUCovol
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {r : ℕ}
 
-theorem countable_numberField : Countable E :=
-  (Module.finBasis ℚ E).equivFun.injective.countable
-
 def idF (Ψ : Finset (E →+* ℂ)) (r : ℕ) : Frame Ψ r := fun _ => (1 : Matrix (Fin r) (Fin r) ℂ)
 
 def invB {Ψ : Finset (E →+* ℂ)} (b : Frame Ψ r) : Frame Ψ r :=

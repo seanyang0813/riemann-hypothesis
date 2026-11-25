@@ -21,7 +21,7 @@ public import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.Model
 public import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsAdelicCoreTransportEnlargedCoefficientBase
 public import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsEquivLift
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.GoodScalarOfIsAdelicScalar
-public import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.MovedFiniteDatumFourierExpansionChainless
+public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsCcIsEquivAtSerOfOneMapRowOfFive
 public import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ReadingEqZero
 public import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.TieInOfFwTie
 public import Development.AbelianVarietyTheory.PublishedTheorems.TwistedTraceFormula.AdmissibleDiscreteSeriesOfHasParam
@@ -1610,8 +1610,8 @@ theorem ties_enl : ∀ {B B' : Base} {f : Fr B.toPre} {f' : Fr B'.toPre} {T : Tw
     intro i'
     let i : Fin (w.st Z).toD7.R.m := Fin.cast hm.symm i'
     have hi : (i : ℕ) = i' := rfl
-    have h0 := GlobalTheory.OneMapTies.oneMapRow0_of_ties_base_clauses GlobalTheory.ChartFree.chartIndep _ _ _ _ _ z.core z.R.toRealDat _
-      z.geo.κ z.geo.v₀ hpz.lev hz.base.grp hpz.fam hpz.models hpz.thP (GlobalTheory.OneMapRefObj.tieIn_of_fwTie z.geo.fw) hio z.geo.O i
+    have h0 := GlobalTheory.OneMapTies.oneMapRow0_of_ties_ofFive GlobalTheory.ChartFree.chartIndep _ _ _ _ _ z.core z.R.toRealDat _
+      z.geo.κ z.geo.v₀ ⟨hpz.lev, hz.base.grp, hpz.fam, hpz.models, hpz.thP⟩ (GlobalTheory.OneMapRefObj.tieIn_of_fwTie z.geo.fw) hio z.geo.O i
       (z.geo.pins i)
     have h1 := z.geo.phase i hLU h0
     have hc0 := cpt w w' Z Z' hX hX' Wt Wt' z hE hpx core' alg' halg hc Xg tr R' cG' hPins hRS κ' hκ i i' hi

@@ -1,5 +1,6 @@
 module
 
+import Formalism.SharpRestriction.Divisibility.GeneratorPowers.GermBPf
 public import Formalism.LocalToGlobal.ProjectiveLattices.IsLevMove
 public import Formalism.SharpRestriction.Divisibility.GeneratorPowers.ThExprUniqOfChartIndep2
 public import Formalism.SharpRestriction.Divisibility.GeneratorPowers.GermBPrim
@@ -298,7 +299,7 @@ end Val
 
 section Chart
 
-open GlobalTheory.FrameAdjSeries
+open Formalism.MainNotions.ModuliIntegralCharts.H1.GermB GlobalTheory.FrameAdjSeries
 
 variable {S : Type} [CommRing S] {x0 : Sp S ⟶ X} {x0' : Sp S ⟶ X'}
 

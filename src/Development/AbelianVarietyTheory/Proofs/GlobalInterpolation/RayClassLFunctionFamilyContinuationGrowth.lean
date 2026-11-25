@@ -140,10 +140,6 @@ end General
 
 variable (𝓕 : LFam) (χ : AddChar 𝓕.G ℂ)
 
-theorem res_eq : 𝓕.res χ = ∑ g, χ g * (𝓕.κ : ℂ) := by
-  rw [← Finset.sum_mul, AddChar.sum_eq_ite, LFam.res, AddChar.one_eq_zero]
-  split_ifs <;> simp [mul_comm]
-
 theorem norm_rem_le (x : ℝ) (hx : 1 ≤ x) :
     ‖(∑ n ∈ Finset.Icc 1 ⌊x⌋₊, 𝓕.aChi χ n) - 𝓕.res χ * x‖ ≤ 10 * 𝓕.B * Real.sqrt x := by
   apply GlobalTheory.Hk.LFam.norm_sum_aChi_sub_le <;> assumption

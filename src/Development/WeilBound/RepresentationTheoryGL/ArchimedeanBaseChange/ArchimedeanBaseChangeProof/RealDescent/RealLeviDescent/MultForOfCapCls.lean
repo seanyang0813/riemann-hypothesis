@@ -623,11 +623,6 @@ theorem sum_Mx {lev : Fin n → ℕ} (hm : Monotone lev) (s t : Bool) {a b c d :
       rw [if_pos hc, if_pos hc, if_pos hlt]
     · rw [if_neg hc, if_neg hc]
 
-theorem ind3 (P Q R : Prop) [Decidable P] [Decidable Q] [Decidable R] :
-    (if P ∧ Q ∧ R then (1 : ℂ) else 0) =
-      (if P then 1 else 0) * (if Q then 1 else 0) * (if R then 1 else 0) := by
-  by_cases hP : P <;> by_cases hQ : Q <;> by_cases hR : R <;> simp [hP, hQ, hR]
-
 theorem ite_zero_eq (P : Prop) [Decidable P] (X : ℂ) : (if P then X else 0) = (if P then 1 else 0) * X := by
   by_cases hP : P <;> simp [hP]
 
@@ -642,7 +637,7 @@ theorem key_id (s t u : Bool) (a b c d x y : Fin n) (k : Lt n) :
     GlobalTheory.CompanionTheory.LevChainRel.ite_zero_eq (b = c), GlobalTheory.CompanionTheory.LevChainRel.ite_zero_eq (d = a)]
   unfold GlobalTheory.CompanionTheory.LevChainRel.adG
   rw [hx1, hx2]
-  simp only [GlobalTheory.CompanionTheory.LevChainRel.ind3]
+  simp only [GlobalTheory.CompanionTheory.RgCOBlock.LetterGl.ite3]
   ring
 
 theorem mx_id {lev : Fin n → ℕ} (hm : Monotone lev) (s t : Bool) {a b c d : Fin n} (hab : lev a = lev b)
@@ -1035,9 +1030,6 @@ variable {n : ℕ} {V : Type} [AddCommGroup V] [Module ℂ V]
 theorem annL_app (l : Lt n) (x : Cq n V) (B : Finset (Lt n)) :
     annL l x B = if l ∈ B then 0 else sgL l B • x (insert l B) := rfl
 
-theorem creL_app (l : Lt n) (x : Cq n V) (B : Finset (Lt n)) :
-    creL l x B = if l ∈ B then sgL l B • x (B.erase l) else 0 := rfl
-
 theorem sgL_erase (l : Lt n) (B : Finset (Lt n)) : sgL l (B.erase l) = sgL l B := by
   unfold sgL
   congr 2
@@ -1056,7 +1048,7 @@ theorem sgL_sq (l : Lt n) (B : Finset (Lt n)) : sgL l B * sgL l B = 1 := by
 
 theorem creL_annL (l : Lt n) (x : Cq n V) (B : Finset (Lt n)) :
     creL l (annL l x) B = if l ∈ B then x B else 0 := by
-  rw [creL_app]
+  rw [GlobalTheory.CompanionTheory.LvChain.creL_apply]
   split_ifs with hB
   · rw [annL_app, if_neg (by simp), Finset.insert_erase hB, sgL_erase, smul_smul, sgL_sq, one_smul]
   · rfl
@@ -1105,7 +1097,7 @@ theorem creL_annL_top_same {lev : Fin n → ℕ} {l : Lt n} (x : V) (h : l ∈ o
 theorem creL_annL_top_ne {lev : Fin n → ℕ} {l m : Lt n} (x : V) (hm : m ∈ omU lev) (hne : m ≠ l) :
     creL m (annL l (Pi.single (omU lev) x : Cq n V)) = 0 := by
   ext B
-  rw [creL_app]
+  rw [GlobalTheory.CompanionTheory.LvChain.creL_apply]
   split_ifs with hB
   · rw [annL_app]
     split_ifs with hl
@@ -1343,11 +1335,6 @@ section Chains
 
 variable {V : Type} [AddCommGroup V] [Module ℂ V]
 
-theorem first_add_second_levi_family (lev : Fin n → ℕ) (E1 E2 : Fin n → Fin n → Module.End ℂ V) (p q : Fin n) :
-    firstLeviFamily lev E1 E2 p q + secondLeviFamily lev E1 E2 p q = evLc lev E1 E2 (FreeAlgebra.ι ℂ (false, p, q)) := by
-  simp only [firstLeviFamily, secondLeviFamily]
-  module
-
 theorem first_sub_second_levi_family (lev : Fin n → ℕ) (E1 E2 : Fin n → Fin n → Module.End ℂ V) (p q : Fin n) :
     firstLeviFamily lev E1 E2 p q - secondLeviFamily lev E1 E2 p q = evLc lev E1 E2 (FreeAlgebra.ι ℂ (true, p, q)) := by
   simp only [firstLeviFamily, secondLeviFamily]
@@ -1440,7 +1427,7 @@ theorem multiplicity_assembly_holds : MultiplicityAssembly := by
     · cases s
       · have e : evLv lev FrobeniusMapsXPow FiniteCocycleOfIntegral (FreeAlgebra.ι ℂ (false, p1, p2)) = FrobeniusMapsXPow p1 p2 + FiniteCocycleOfIntegral p1 p2 := by
           simp [evLv, h, kA]
-        rw [e, ← first_add_second_levi_family]
+        rw [e, ← GlobalTheory.CompanionTheory.SemiClass.leviFamilyOne_add_leviFamilyTwo]
         exact (i1 p1 p2).add (i2 p1 p2)
       · have e : evLv lev FrobeniusMapsXPow FiniteCocycleOfIntegral (FreeAlgebra.ι ℂ (true, p1, p2)) = FrobeniusMapsXPow p1 p2 - FiniteCocycleOfIntegral p1 p2 := by
           simp [evLv, h, pA]

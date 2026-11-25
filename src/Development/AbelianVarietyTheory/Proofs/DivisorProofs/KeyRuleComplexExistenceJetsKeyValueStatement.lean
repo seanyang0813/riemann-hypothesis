@@ -205,9 +205,6 @@ section Classical
 
 variable {g : ℕ}
 
-theorem dot_empty [IsEmpty (Fin g)] (u v : Fin g → ℂ) : u ⬝ᵥ v = 0 := by
-  simp [dotProduct]
-
 theorem thetaChar_empty [IsEmpty (Fin g)] (τ : Matrix (Fin g) (Fin g) ℂ) (a b z : Fin g → ℂ) :
     thetaChar τ a b z = 1 := by
   unfold thetaChar

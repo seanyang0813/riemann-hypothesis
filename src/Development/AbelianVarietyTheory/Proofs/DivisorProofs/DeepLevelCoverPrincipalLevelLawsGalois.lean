@@ -47,8 +47,6 @@ open NumberField Formalism.BasicNotions Formalism.L2.Pj ReciprocityTheory.ChartR
 
 namespace GlobalTheory.DeepLaws
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem isGalois_of_aut (K L : IntermediateField ℚ ℂ) [FiniteDimensional ℚ L] (j : K →+* L)
     (hj : ∀ a : K, ((j a : L) : ℂ) = a)
     (hs : ∀ s : ℂ ≃+* ℂ, (∀ a ∈ K, s a = a) → ∀ a ∈ L, s a ∈ L) :

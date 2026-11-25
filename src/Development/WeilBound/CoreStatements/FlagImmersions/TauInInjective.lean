@@ -772,12 +772,6 @@ theorem map_aeval' {S T : Type} [CommRing S] [CommRing T] (j : S →+* T) (u : (
   | add p q hp hq => simp only [map_add (f := _), hp, hq]
   | mul_X p i hp => simp only [map_mul, hp, aeval_X]
 
-theorem evC_eq (z : (Σ k, ι k) → ℂ) (g : MRing ι) : evC z g = aeval z g := by
-  induction g using MvPolynomial.induction_on with
-  | C a => simp [evC]
-  | add p q hp hq => simp only [evC, map_add (f := _)] at *; rw [hp, hq]
-  | mul_X p i hp => simp only [evC, map_mul, map_X, eval_X, aeval_X] at *; rw [hp]
-
 variable {Ω : Type} [Field Ω]
 
 theorem cone_eq (y : (Σ k, ι k) → Ω) (g : MRing ι) : mConeMap y g =
@@ -828,7 +822,7 @@ theorem PositivityTheory.Xgn.exists_point_over_nonvanishing : ∀ (K : Type) [Fi
   have hco : ∀ f : MRing ι, ((aeval wA f : A) : Ω) = aeval w f := fun f =>
     map_aeval' (A.val : A →+* Ω) wA f
   have hev : ∀ f : MRing ι, evC (fun p => ψ (wA p)) f = ψ (aeval wA f) := fun f => by
-    rw [evC_eq]
+    rw [GlobalTheory.CompanionTheory.Ar.Flat.OverUnique.evC_eq_aeval]
     exact (map_aeval' (ψ : A →+* ℂ) wA f).symm
   refine ⟨fun p => ψ (wA p), ⟨⟨fun k => ⟨c k, ?_⟩, fun f hf => ?_⟩, fun a e f h hf hh H => ?_⟩, ?_⟩
   · have : wA ⟨k, c k⟩ = 1 := Subtype.ext (inv_mul_cancel₀ (hc k))

@@ -49,8 +49,6 @@ open scoped TensorProduct
 
 
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 namespace GlobalTheory.BaseCmp
 
 section Data

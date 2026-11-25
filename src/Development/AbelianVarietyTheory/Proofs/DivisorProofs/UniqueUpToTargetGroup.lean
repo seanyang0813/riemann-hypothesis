@@ -183,8 +183,6 @@ theorem sub_mem_natSMul_span (A : FractionalIdeal (nonZeroDivisors (𝓞 E)) E) 
 
 end Transfer
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem IsTransp.uniq {D : D7} {L : SizeData₂ D} {hT : GatTies D} {Gi : Formalism.MainNotions.G.Inst D L} {Gl : Formalism.MainNotions.G.LatInst D}
     {Kc : Formalism.MainNotions.G.Consts} {Y : DivX D} {cX : ExtraC} {ex : Extra D L hT Gi Gl Kc Y cX} {Csz : ℝ} (p : PtAt ex Csz)
     (_hp : More p) (r : TwoRuns p.T p.P.Gp) (h : RunsOk (fw2 p) r) (_ho : OwnPin r) (i : Fin D.R.m)

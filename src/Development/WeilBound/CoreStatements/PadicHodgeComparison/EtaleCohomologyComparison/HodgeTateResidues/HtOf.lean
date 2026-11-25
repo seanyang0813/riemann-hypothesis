@@ -1540,9 +1540,6 @@ namespace CrystallineSemistableComparison.HT
 
 variable {l : ℕ} [Fact l.Prime] {K : IntermediateField ℚ_[l] (PadicAlgCl l)}
 
-theorem toV_ex (M : Model l K) (n : ℕ) (v : M.V n) : ∃ ζ : ℤ_[l], ζ ≠ 0 ∧ ∃ x : M.T n, (ζ : ℚ_[l]) • v = M.toV n x :=
-  Inj.exists_int_mul (T := GlobalTheory.EtC.Hl l M.spc n 0) v
-
 theorem sum_coord' {K B V V' V'' : Type _} [Field K] [CommRing B] [AddCommGroup V] [Module K V] [AddCommGroup V'] [Module K V']
     [AddCommGroup V''] [Module K V''] (o : K →+* B) {m m' : ℕ} (b : Module.Basis (Fin m) K V) (b' : Module.Basis (Fin m') K V')
     (μ : V →ₗ[K] V' →ₗ[K] V'') (φ : Module.Dual K V'') (x : V) (y : V') :
@@ -1659,7 +1656,7 @@ theorem key1 (P : HTPre l K) {M : Model l K} (hM : M.Sm) {i j d : ℕ} (v : M.V 
       ∑ p : (Finset.HasAntidiagonal.antidiagonal d : Finset (ℕ × ℕ)), ∑ s, ∑ s', P.h M p.1.1 i v ((hb P hM i p.1.1).coord s) *
         (P.h M p.1.2 j (M.toV _ y) ((hb P hM j p.1.2).coord s') *
         kC K (φ (cupH M.q (Finset.HasAntidiagonal.mem_antidiagonal.1 p.2) rfl (hb P hM i p.1.1 s) (hb P hM j p.1.2 s')))) := by
-  obtain ⟨ζ, hζ, x, hx⟩ := toV_ex M i v
+  obtain ⟨ζ, hζ, x, hx⟩ := CrystallineSemistableComparison.Inj.toV_exists M i v
   obtain ⟨w, hw, hw'⟩ := hf x
   have e := P.cup M hM x y w hw (hb P hM i) (hb P hM j) d φ
   rw [hw', ← hx, P.lin, f.map_smul, smul_eq_mul, (qC l).map_mul] at e

@@ -84,7 +84,6 @@ structure RowsB (D : D7) : Prop where
   thetaOne : ThetaOne D
 
 structure RowsC (D : D7) : Prop where
-  c4b : JointOccurrenceCondition D
   rho : GlobalDatumResidualRepCondition D
   dz : GlobalDatumDepthZeroCondition D
   parUp : ∀ i, ParUpRec D.nd D.naut i

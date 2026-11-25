@@ -18,8 +18,6 @@ namespace PI.UnitaryGroupMassFormula.CntFormula.RowsMassW.RowMPf
 
 open PI.UnitaryGroupMassFormula.CntFormula.RowsMassW
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem perpS_eq_orth (D : D7) (U : Submodule D.host.E (VS D).V) : perpS (VS D) U = orth (VS D) U := by
   ext v
   rw [PI.UnitaryGroupMassFormula.BetaModX.Iota.mem_orth'']

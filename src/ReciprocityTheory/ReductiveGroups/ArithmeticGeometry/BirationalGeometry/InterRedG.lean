@@ -42,13 +42,6 @@ theorem isMultiHomog_secOf (i : ∀ k, ι k) (b : K → ℕ) : IsMultiHomog (sec
   simp only [blockDeg_single]
   simp
 
-theorem secOf_not_mem {P : Ideal (MRing ι)} (hP : P.IsPrime) {i : ∀ k, ι k}
-    (hi : ∀ k, (X ⟨k, i k⟩ : MRing ι) ∉ P) (b : K → ℕ) : secOf i b ∉ P := by
-  rw [secOf]
-  intro h
-  obtain ⟨k, -, hk⟩ := (Ideal.IsPrime.prod_mem_iff (hp := hP)).1 h
-  exact hi k (hP.mem_of_pow_mem _ hk)
-
 end Alg
 
 end ReciprocityTheory.ChartRestriction.G.Geo

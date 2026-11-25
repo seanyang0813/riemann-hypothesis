@@ -246,27 +246,12 @@ theorem minor_map (f : R →+* S) (A : Matrix (Fin N) (Fin N) R) (I J : Finset (
   · rw [RingHom.map_det]; rfl
   · rw [map_zero]
 
-theorem minor_one_self (I : Finset (Fin N)) : minorIJ (1 : Matrix (Fin N) (Fin N) R) I I = 1 := by
-  unfold minorIJ
-  rw [dite_eq_left rfl, Matrix.submatrix_one _ (I.orderEmbOfFin rfl).injective, Matrix.det_one]
-
-theorem detFac_one' (j : ℕ) (i : Fin N) : detFac j i (1 : Matrix (Fin N) (Fin N) R) = 1 := by
-  simp [detFac, minor_one_self]
-
 theorem stepCols_ne_empty (j : ℕ) (i : Fin N) : stepCols N j i ≠ ∅ := by
   have hi := i.2
   apply Finset.Nonempty.ne_empty
   by_cases h : (i : ℕ) + 1 ≤ j
   · exact ⟨⟨N - j, by omega⟩, by simp [stepCols, h]; omega⟩
   · exact ⟨⟨0, by omega⟩, by simp [stepCols, h]; omega⟩
-
-theorem detFac_ne_zero' {E : Type} [Field E] {j : ℕ} (hj : j ≤ N) (i : Fin N) {T : Matrix (Fin N) (Fin N) E}
-    (hT : IsBlockDiag j T) (hd : T.det ≠ 0) : detFac j i T ≠ 0 := by
-  have h := ((_root_.GlobalTheory.CompanionTheory.Ar.PB.MinorCalc.minors_main E N j i hj).2.2.2 T T⁻¹ hT (hT.inv (isUnit_iff_ne_zero.2 hd))).2
-  rw [Matrix.mul_nonsing_inv _ (isUnit_iff_ne_zero.2 hd), detFac_one'] at h
-  intro h0
-  rw [h0, zero_mul] at h
-  exact one_ne_zero h
 
 theorem det_map_ne {A B : Type} [Field A] [Field B] (f : A →+* B) {T : Matrix (Fin N) (Fin N) A} (hd : T.det ≠ 0) :
     (T.map f).det ≠ 0 := by

@@ -429,15 +429,6 @@ namespace PositivityTheory.RgFd
 
 open ReciprocityTheory.ChartRestriction.DS ReciprocityTheory.ChartRestriction.DS.S7
 
-theorem sigLam_coe' (hS : HlamStable) {n : ℕ} {ε : Fin n → Bool} {lam : Fin n → ℝ} {T : KType ε (lowK ε lam)}
-    {Ψ : Matrix (Fin n) (Fin n) ℂ → (T.V →L[ℂ] T.V)} (hP : IsPsiFor ε lam T Ψ) {g : Matrix (Fin n) (Fin n) ℂ}
-    (hg : g ∈ UJset ε) (x : Hlam ε Ψ T.w) :
-    ((sigLam ε Ψ T.w g x : Hlam ε Ψ T.w) : L2 ε) = rreg ε g x := by
-  have hx : rreg ε g x ∈ Hlam ε Ψ T.w := hS n ε lam T Ψ hP g hg x x.2
-  show (((Hlam ε Ψ T.w).orthogonalProjectionOnto (rreg ε g (x : L2 ε)) : Hlam ε Ψ T.w) : L2 ε) = _
-  exact congrArg Subtype.val
-    (Submodule.orthogonalProjectionOnto_mem_subspace_eq_self (⟨_, hx⟩ : Hlam ε Ψ T.w))
-
 theorem isKTypeOf_range {n : ℕ} {ε : Fin n → Bool} {lam : Fin n → ℝ} {T : KType ε (lowK ε lam)}
     {Ψ : Matrix (Fin n) (Fin n) ℂ → (T.V →L[ℂ] T.V)} (φ : T.V →ₗ[ℂ] Hlam ε Ψ T.w) (hφ : Function.Injective φ)
     (hint : ∀ (k : KG ε) (v : T.V), φ (T.op k v) = sigLam ε Ψ T.w (toMK k) (φ v)) :
@@ -473,12 +464,12 @@ theorem kmapZero_of (hS : HlamStable) : KmapZero := by
   have hjint : ∀ (k : KG ε) (v : T.V), j' (T.op k v) = sigLam ε Ψ T.w (toMK k) (j' v) := by
     intro k v
     refine Subtype.ext ?_
-    rw [sigLam_coe' hS hP (show toMK k ∈ UJset ε from k.1.2)]
+    rw [PositivityTheory.RgFd.sigLam_coe_of hS hP (show toMK k ∈ UJset ε from k.1.2)]
     exact (rightRegular_datumEmbedding hP T.w v k).symm
   have hBint : ∀ (k : KG ε) (v : T.V), B' (T.op k v) = sigLam ε Ψ T.w (toMK k) (B' v) := by
     intro k v
     refine Subtype.ext ?_
-    rw [sigLam_coe' hS hP (show toMK k ∈ UJset ε from k.1.2)]
+    rw [PositivityTheory.RgFd.sigLam_coe_of hS hP (show toMK k ∈ UJset ε from k.1.2)]
     exact hB k v
   have hEq := CompanionTheory.D.LK.low_K_type_multiplicity_one n ε lam (Hlam ε Ψ T.w) (sigLam ε Ψ T.w)
     ((mir_isHCParam_iff lam).2 hl) hDS _ _ (isKTypeOf_range B' hB'inj hBint) (isKTypeOf_range j' hj'inj hjint)

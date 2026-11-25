@@ -3,54 +3,6 @@ module
 import GroundTheory.HeightsAndTheta.Heights.VerticalDivisors.PNormFormEval
 public import GroundTheory.HeightsAndTheta.Heights.VerticalDivisors.StatementsChowNorm
 public import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.Algebra.AffineMonoid.UniqueSums
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Bernstein
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Henselian
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.RegularLocalRing.Defs
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Tactic.TypeStar
-import Mathlib.Topology.Sheaves.Init
 public import Mathlib.Algebra.MvPolynomial.Nilpotent
 
 @[expose] public section
@@ -70,40 +22,6 @@ namespace NormFormIrreducible
 section Basis
 
 variable {R A : Type*} [CommRing R] [CommRing A] [Algebra R A] {n : ℕ}
-
-def polyTensorAlgEquiv (R A : Type*) [CommRing R] [CommRing A] [Algebra R A] (n : ℕ) :
-    (MvPolynomial (Fin n) R ⊗[R] A) ≃ₐ[R] MvPolynomial (Fin n) A :=
-  (Algebra.TensorProduct.comm R (MvPolynomial (Fin n) R) A).trans
-    ((algebraTensorAlgEquiv R A).restrictScalars R)
-
-theorem polyTensorAlgEquiv_tmul (p : MvPolynomial (Fin n) R) (a : A) :
-    polyTensorAlgEquiv R A n (p ⊗ₜ a) = a • MvPolynomial.map (algebraMap R A) p := by
-  simp [polyTensorAlgEquiv]
-
-def polyTensorEquiv (R A : Type*) [CommRing R] [CommRing A] [Algebra R A] (n : ℕ) :
-    (MvPolynomial (Fin n) R ⊗[R] A) ≃ₗ[MvPolynomial (Fin n) R] MvPolynomial (Fin n) A where
-  toFun := polyTensorAlgEquiv R A n
-  invFun := (polyTensorAlgEquiv R A n).symm
-  map_add' := map_add _
-  left_inv := (polyTensorAlgEquiv R A n).symm_apply_apply
-  right_inv := (polyTensorAlgEquiv R A n).apply_symm_apply
-  map_smul' q t := by
-    induction t using TensorProduct.induction_on with
-    | zero => simp
-    | tmul p a =>
-      rw [smul_tmul', smul_eq_mul, polyTensorAlgEquiv_tmul, polyTensorAlgEquiv_tmul, RingHom.id_apply,
-        Algebra.smul_def q, MvPolynomial.algebraMap_def, map_mul, mul_smul_comm]
-    | add s t hs ht =>
-      rw [smul_add, map_add (f := _), map_add (f := _), hs, ht, smul_add]
-
-def polyBasis {ι : Type*} (b : Module.Basis ι R A) (n : ℕ) :
-    Module.Basis ι (MvPolynomial (Fin n) R) (MvPolynomial (Fin n) A) :=
-  (Algebra.TensorProduct.basis (MvPolynomial (Fin n) R) b).map (polyTensorEquiv R A n)
-
-theorem polyBasis_apply {ι : Type*} (b : Module.Basis ι R A) (n : ℕ) (i : ι) :
-    polyBasis b n i = C (b i) := by
-  simp [polyBasis, polyTensorEquiv, Algebra.TensorProduct.basis_apply, polyTensorAlgEquiv_tmul,
-    smul_eq_C_mul]
 
 end Basis
 

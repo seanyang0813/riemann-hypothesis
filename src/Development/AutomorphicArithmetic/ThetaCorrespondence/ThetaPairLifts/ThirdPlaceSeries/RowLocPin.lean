@@ -47,7 +47,6 @@ noncomputable section
 open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.L2.Theta Formalism.MainNotions.StandardLattice Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.MainNotions.S IsDedekindDomain NumberField
 open scoped TensorProduct
 namespace Formalism.IndefR.principalLevelFrame
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 variable {D : D7}
 def RowLocPinAlt {V : HSp D} {Sp : D.what₂.Tau → SPar}
     (θ : D.what₂.Tau → (Ainf D.host.F ⊗[D.host.F] D.host.E →+* ℂ)) (PY : RowPsi V D.R.r)

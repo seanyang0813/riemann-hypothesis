@@ -1393,12 +1393,9 @@ theorem exists_nbc_auSide_true_of_empty (hE : IsEmpty D.nd.Loc) :
     { cls := fun _ _ _ π => clsA π
       surj := fun _ _ _ X => ⟨X.rep, AUq.cls_rep X⟩
       iso := fun _ _ _ π π' => clsA_eq_iff π π'
-      mult := fun _ _ _ π => _root_.GlobalTheory.MultIso.mult_eq_of_iso _ _ _ _ (rep_iso π)
       sph := fun _ _ _ π w v _ hv => _root_.GlobalTheory.AutQuot.f_sph_alt D π w v hv
       sat := fun _ _ _ π v w hv Dv hα => f_sat D π v w hv Dv hα
       clsWt := fun _ _ _ a => clsW a
-      surjWt := fun _ _ _ Y => ⟨Y.rep, WtQ.cls_rep Y⟩
-      isoWt := fun _ _ _ a b => clsW_eq_iff a b
       wt := fun _ _ _ π a hd => f_wt D π a hd
       infW := fun _ _ _ a τ lam hl => f_infW D a τ lam hl
       locUnr := fun _ _ _ π s hs => _root_.GlobalTheory.AutQuot.unr_locOf_of_sphAt hL D T π s hs

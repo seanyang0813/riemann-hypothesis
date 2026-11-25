@@ -201,12 +201,6 @@ theorem lin_shift (τ : ℍ) (x v : ℤ × ℤ) (r : ℕ) :
   simp only [Prod.fst_add, Prod.snd_add, Prod.smul_fst, Prod.smul_snd, smul_eq_mul]
   push_cast; ring
 
-theorem lin_shift2 (τ : ℍ) (x v : ℤ × ℤ) (r' r : ℕ) :
-    (((x + (r' : ℤ) • v + (r : ℤ) • v).1 : ℤ) : ℂ) * (τ : ℂ) + (((x + (r' : ℤ) • v + (r : ℤ) • v).2 : ℤ) : ℂ)
-      = ((x.1 : ℂ) * τ + x.2) + (r' : ℂ) * ((v.1 : ℂ) * τ + v.2) + (r : ℂ) * ((v.1 : ℂ) * τ + v.2) := by
-  simp only [Prod.fst_add, Prod.snd_add, Prod.smul_fst, Prod.smul_snd, smul_eq_mul]
-  push_cast; ring
-
 theorem difdif_bound (j L : ℕ) (v : ℤ × ℤ) (τ : ℍ) (hj : 1 ≤ j) (hL : 0 < L) (C : ℝ)
     (hC : ∀ z a b : ℂ, z ≠ 0 → 4 * ‖a‖ ≤ ‖z‖ → 4 * ‖b‖ ≤ ‖z‖ →
       ‖(z ^ j)⁻¹ - ((z + a) ^ j)⁻¹ - ((z + b) ^ j)⁻¹ + ((z + a + b) ^ j)⁻¹‖ ≤ C * ‖a‖ * ‖b‖ / ‖z‖ ^ (j + 2))

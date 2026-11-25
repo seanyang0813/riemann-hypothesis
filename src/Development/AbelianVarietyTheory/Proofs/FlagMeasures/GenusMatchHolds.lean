@@ -262,7 +262,7 @@ variable {O K : Type} [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Fie
 
 omit [IsFractionRing O K] in
 theorem covBy_of_cyclic {A B : Submodule O (Fin n → K)} (hle : A ≤ B) (hne : A ≠ B) (d : Fin n → K)
-    (hx : ∀ x ∈ B, ∃ a : O, x - a • d ∈ A) (hd : d ∈ B)
+    (hx : ∀ x ∈ B, ∃ a : O, x - a • d ∈ A)
     (hm : ∀ a ∈ IsLocalRing.maximalIdeal O, a • d ∈ A) : A ⋖ B := by
   refine ⟨lt_of_le_of_ne hle hne, fun C hAC hCB => ?_⟩
   obtain ⟨x, hxC, hxA⟩ := SetLike.exists_of_lt hAC
@@ -533,7 +533,7 @@ theorem cmp₁_covBy {T f : ℕ} {L : Submodule (𝓞 E) (Fin n → E)} (hT : T.
   obtain ⟨-, d, hd, hcyc⟩ := _root_.GlobalTheory.St.G.tLat_local_index F E cm n J hJ hdet T f L hT hs hf hL v hv
   have hmax := ((SplitPrime.split_place F E cm T hT hs).2 v hv).2.1
   have hd' := (mem_cmp₁ hdiag _ _).2 ⟨d, hd, rfl⟩
-  refine covBy_of_cyclic ?_ ?_ _ ?_ hd' ?_
+  refine covBy_of_cyclic ?_ ?_ (fun b => p₁ sp (d b)) ?_ ?_
   · exact Submodule.span_mono (Set.image_mono fun x hx => Submodule.subset_span (hL.2.1 x hx))
   · intro hAB
     obtain ⟨x, hx, hxL⟩ := hL.2.2.2.2 v hv

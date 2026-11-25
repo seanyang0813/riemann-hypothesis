@@ -294,13 +294,6 @@ theorem ker_model (B₁ B₂ : InvAlg K) (hs : (B₁.P * B₂.P).Separable) {n :
     rw [ψ.injective ha]
     exact Prod.ext (zero_mul _) (mul_zero _)
 
-theorem herm_fst (B₁ B₂ : InvAlg K) (x : (B₁.prod B₂).A) (a b : B₁.A) :
-    (B₁.prod B₂).herm x ((a, 0) : B₁.A × B₂.A) ((b, 0) : B₁.A × B₂.A) = B₁.herm x.1 a b := by
-  unfold InvAlg.herm
-  change Algebra.trace K.E (B₁.A × B₂.A) ((x.1 * a * B₁.σ b, x.2 * 0 * B₂.σ 0)) = _
-  rw [Algebra.trace_prod_apply]
-  simp
-
 theorem aeval_map_matrix {R S : Type} [CommRing R] [CommRing S] (f : R →+* S) {n : ℕ}
     (M : Matrix (Fin n) (Fin n) R) (p : R[X]) : aeval (M.map f) (p.map f) = (aeval M p).map f := by
   induction p using Polynomial.induction_on' with
@@ -403,7 +396,7 @@ theorem main : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E →
       (Matrix.of fun i j => B₁.herm (x : (B₁.prod B₂).A).1 (f i) (f j))ᵀ := by
     ext i j
     simp only [Matrix.of_apply, Matrix.transpose_apply]
-    rw [← herm_fst]
+    rw [← GlobalTheory.KapLat.prod_herm_fst]
     refine Eq.trans ?_ (hm.2.2 _ _)
     unfold GlobalTheory.InertUnitOrb.stdH
     refine Finset.sum_congr rfl fun k _ => ?_

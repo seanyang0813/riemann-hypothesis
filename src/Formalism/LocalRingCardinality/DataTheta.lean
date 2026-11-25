@@ -476,8 +476,6 @@ namespace Formalism.BasicNotions
 
 open MeasureTheory
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 namespace TH
 
 abbrev HSp (D : D7) : Type 1 := HSpace D.host.E

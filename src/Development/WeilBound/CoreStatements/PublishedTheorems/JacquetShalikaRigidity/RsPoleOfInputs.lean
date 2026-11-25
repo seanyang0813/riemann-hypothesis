@@ -1596,14 +1596,14 @@ theorem main (hU1 : U1) (hP1 : P1) (E : Type) [Field E] [NumberField E] [_root_.
     have hf' : Pre ψ m (colT ψ (m + 1) f) := (hP1 E k ψ hψ (m + 1) (by omega) hm f hf).1
     have hφ' : Good ψ m (colT ψ (m + 1) φ) := by
       refine { cont := ?_, left := ?_, law := ?_, van := ?_ }
-      · exact _root_.GlobalTheory.T.continuous_unipotentColumnWhittakerTransform E k ψ hψ m φ hφ
+      · exact _root_.GlobalTheory.CuspGeneric.continuous_colT_good E k ψ hψ m φ hφ
       · exact _root_.GlobalTheory.T.unipotentColumnWhittakerTransform_mirabolic_invariant E k ψ hψ m φ hm hφ
       · intro j hj y g
         rcases Nat.lt_or_ge (m + 1) j with h | h
         · exact _root_.GlobalTheory.T.columnWhittakerTransform_keeps_later_law E k ψ m φ hφ j h y g
         · obtain rfl : j = m + 1 := by omega
-          exact _root_.GlobalTheory.T.unipotentColumnWhittakerTransform_column_law E k ψ hψ m φ hφ y g
-      · exact _root_.GlobalTheory.T.quotientAverage_unipotentBlock_columnTransform_eq_zero E k ψ hψ m φ hm hφ
+          exact _root_.GlobalTheory.CuspGeneric.colT_blkU_mul E k ψ hψ m φ hφ y g
+      · exact _root_.GlobalTheory.CuspGeneric.avg_colT_blk_eq_zero E k ψ hψ m φ hm hφ
     obtain ⟨hi, he⟩ := h _ _ hf' hφ' ((hL2 f hf).trans_lt h1) ((hL2 φ (pre_of_good hφ)).trans_lt h2)
     exact ⟨hi, (hip f φ hf hφ h1 h2).trans he⟩
 

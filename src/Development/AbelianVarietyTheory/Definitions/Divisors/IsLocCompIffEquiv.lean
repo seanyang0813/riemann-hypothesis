@@ -49,9 +49,6 @@ open scoped Classical TensorProduct
 
 namespace GlobalTheory.BCT
 
-def SoleTerm {ι : Type} (C : ι → ℂ) (p q : ι → Prop) : Prop :=
-  ∃ i, C i ≠ 0 ∧ p i ∧ ∀ i', C i' ≠ 0 → q i' → i' = i
-
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {n : ℕ}
 
 theorem isLocComp_iff_equiv {ρc : CuspSub E n} {w : Pl E} {σ : SmIrr (GLw n w)} (h : ρc.IsLocComp w σ)

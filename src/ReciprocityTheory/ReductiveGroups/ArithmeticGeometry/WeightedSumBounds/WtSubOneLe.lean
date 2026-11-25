@@ -108,24 +108,6 @@ theorem isCurve_pcurve (G : LogFGL v d) {p : ℕ} (hp : p ≠ 0) {γ : Fin d →
       (isCurve_sumF G _ fun b => isCurve_expC (pow_ne_zero _ hp)
         (isCurve_rescale (hx n (by omega) b) (hγ b)))
 
-theorem lgCurve_pcurve (G : LogFGL v d) {p : ℕ} (hp : p ≠ 0) {γ : Fin d → Fin d → PowerSeries C}
-    (hγ : ∀ a, IsCurve v (γ a)) (x : ℕ → Fin d → C) :
-    ∀ n, (∀ s < n, ∀ b, IsIntV v (x s b)) → ∀ a, G.lgCurve (pcurve G p γ x n) a =
-      ∑ s ∈ Finset.range n, ∑ b, PowerSeries.expand (p ^ s) (pow_ne_zero _ hp)
-        (PowerSeries.rescale (x s b) (G.lgCurve (γ b) a))
-  | 0, _, a => by simp [pcurve, lgCurve_zero]
-  | n + 1, hx, a => by
-      have hx' : ∀ s < n, ∀ b, IsIntV v (x s b) := fun s hs b => hx s (by omega) b
-      have hc : ∀ b, IsCurve v (expC (p ^ n) (rescaleCurve (x n b) (γ b))) := fun b =>
-        isCurve_expC (pow_ne_zero _ hp) (isCurve_rescale (hx n (by omega) b) (hγ b))
-      rw [pcurve, lgCurve_add G (fun b => (isCurve_pcurve G hp hγ x n hx' b).1)
-        (fun b => (isCurve_sumF G _ hc b).1), lgCurve_pcurve G hp hγ x n hx' a,
-        lgCurve_sumF G _ hc, Finset.sum_range_succ]
-      congr 1
-      refine Finset.sum_congr rfl fun b _ => ?_
-      rw [lgCurve_expC G (pow_ne_zero _ hp) (fun c => (isCurve_rescale (hx n (by omega) b) (hγ b) c).1),
-        lgCurve_rescale G _ (fun c => (hγ b c).1)]
-
 end
 
 end ReciprocityTheory.ChartRestriction.G.Sh.PTb

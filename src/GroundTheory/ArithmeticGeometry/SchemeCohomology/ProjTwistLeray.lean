@@ -238,13 +238,6 @@ attribute [local instance] MvPolynomial.gradedAlgebra
 
 variable {A : Type u} [CommRing A] {n : ℕ}
 
-theorem nonempty_cechH_equiv_H (k : ℤ) (p : ℕ)
-    [HasExt.{w'} (Sheaf (Opens.grothendieckTopology (projectiveSpace A n).toTopCat)
-      AddCommGrpCat.{u})] :
-    Nonempty (cechH (twistAb (A := A) (n := n) k) (cover (A := A) (n := n)) p ≃+
-      Sheaf.H.{w'} (modulesAb (twistingSheaf (grading A n) k)) p) :=
-  nonempty_cechH_equiv_H_twist (fun j => MvPolynomial.X j) (fun j => X_mem j) iSup_stdOpen k p
-
 end ProjSpace
 
 end

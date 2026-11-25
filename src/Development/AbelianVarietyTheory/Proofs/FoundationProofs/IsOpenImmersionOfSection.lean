@@ -4,7 +4,12 @@ public import Development.AbelianVarietyTheory.Definitions.Foundations.IsProbabi
 public import Formalism.LocalToGlobal.ProjectiveLattices.CompHt
 public import Development.AbelianVarietyTheory.Proofs.AbelianSchemeLawProofs.AbelianSchemeLawsUnconditional
 public import Development.AbelianVarietyTheory.Proofs.FoundationProofs.ExistsNumberFieldPoint
-import Formalism.LocalToGlobal.ProjectiveLattices.LocFrLoc
+import Development.AbelianVarietyTheory.Definitions.Divisors.IsLocalRingTrivSqZeroExt
+import Formalism.LocalToGlobal.ProjectiveLattices.GenSpecV
+import Formalism.LocalToGlobal.ProjectiveLattices.GenSpecLocFrM
+import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.BCRing
+import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.PullbackSections.LieBridgeB
+import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.PullbackSections.LieBridgeC
 import Mathlib.Algebra.Order.Floor.Extended
 import Mathlib.Algebra.Order.Floor.Semifield
 import Mathlib.Algebra.Order.Interval.Basic
@@ -114,7 +119,7 @@ theorem main : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Recip
     rw [Scheme.Hom.comp_apply]
     exact Scheme.fromSpecResidueField_apply _ _
   have := _root_.GlobalTheory.isOpenImmersion_of_section_of_etale strK g₀ (hg₀.trans hid)
-  obtain ⟨y₀, hy₀⟩ := exists_frPt_local (c := c) GlobalTheory.abelianSchemeLaws_all.2.secTwist _ (prX_over hg₀)
+  obtain ⟨y₀, hy₀⟩ := GlobalTheory.FlagTan.exists_frPt (c := c) _ (prX_over hg₀)
   refine ⟨y₀, fun s => ?_, fun S _ _ y hy => ?_⟩
   · rw [ptF_eq hg₀ hy₀, hpt]
     exact CompSplitPfB.cspB_genPt_mem Z

@@ -77,11 +77,6 @@ private theorem isIntegral_iff_spectralNorm_le_one' {p : ℕ} [Fact p.Prime] {K 
     rw [← hg, Polynomial.aeval_map_algebraMap, Polynomial.aeval_def] at h0
     exact h0
 
-private theorem spectralNorm_mul_zpadic {p : ℕ} [Fact p.Prime] {K : Type} [Field K] [Algebra ℚ_[p] K]
-    [Algebra.IsAlgebraic ℚ_[p] K] (x y : K) :
-    spectralNorm ℚ_[p] K (x * y) = spectralNorm ℚ_[p] K x * spectralNorm ℚ_[p] K y := by
-  simpa only [spectralMulAlgNorm_def] using map_mul (spectralMulAlgNorm ℚ_[p] K) x y
-
 private theorem isUnit_iff_spectralNorm_eq_one {p : ℕ} [Fact p.Prime] {K : Type} [Field K] [Algebra ℚ_[p] K]
     [Algebra.IsAlgebraic ℚ_[p] K] [Algebra ℤ_[p] K] [IsScalarTower ℤ_[p] ℚ_[p] K]
     (b : integralClosure ℤ_[p] K) : IsUnit b ↔ spectralNorm ℚ_[p] K (b : K) = 1 := by
@@ -90,8 +85,8 @@ private theorem isUnit_iff_spectralNorm_eq_one {p : ℕ} [Fact p.Prime] {K : Typ
     have h1 : ((u : integralClosure ℤ_[p] K) : K) * ((u⁻¹ : (integralClosure ℤ_[p] K)ˣ) : K) = 1 := by
       have := congrArg (fun z : integralClosure ℤ_[p] K => (z : K)) u.mul_inv
       simpa only [Subalgebra.coe_mul, Subalgebra.coe_one] using this
-    have h2 := congrArg (spectralNorm ℚ_[p] K) h1
-    rw [spectralNorm_mul_zpadic, spectralNorm_one] at h2
+    have h2 := congrArg (spectralMulAlgNorm ℚ_[p] K) h1
+    rw [map_mul, map_one, spectralMulAlgNorm_def, spectralMulAlgNorm_def] at h2
     have ha := (isIntegral_iff_spectralNorm_le_one' _).mp (u : integralClosure ℤ_[p] K).2
     have hb := (isIntegral_iff_spectralNorm_le_one' _).mp ((u⁻¹ : (integralClosure ℤ_[p] K)ˣ) : integralClosure ℤ_[p] K).2
     have ha0 := spectralNorm_nonneg (K := ℚ_[p]) ((u : integralClosure ℤ_[p] K) : K)
@@ -105,8 +100,8 @@ private theorem isUnit_iff_spectralNorm_eq_one {p : ℕ} [Fact p.Prime] {K : Typ
       exact zero_ne_one h
     have hinv : IsIntegral ℤ_[p] (b : K)⁻¹ := by
       rw [isIntegral_iff_spectralNorm_le_one']
-      have h2 := spectralNorm_mul_zpadic (p := p) (b : K) (b : K)⁻¹
-      rw [mul_inv_cancel₀ hb0, spectralNorm_one, h, one_mul] at h2
+      have h2 := map_mul (spectralMulAlgNorm ℚ_[p] K) (b : K) (b : K)⁻¹
+      simp only [spectralMulAlgNorm_def, mul_inv_cancel₀ hb0, spectralNorm_one, h, one_mul] at h2
       exact h2.symm.le
     exact isUnit_iff_exists_inv.mpr ⟨⟨(b : K)⁻¹, hinv⟩, Subtype.ext (mul_inv_cancel₀ hb0)⟩
 
@@ -239,17 +234,13 @@ theorem integers_completeDVR : ∀ (l : ℕ) [Fact l.Prime], ∀ LL : FinExt l,
   have hdvr : IsDiscreteValuationRing (integralClosure ℤ_[l] ↥LL.1) :=
     ((IsDiscreteValuationRing.TFAE _ hnf).out 1 3).mpr hded
   have hfin : Module.Finite ℤ_[l] (integralClosure ℤ_[l] ↥LL.1) := inferInstance
-  have htf : Module.IsTorsionFree ℤ_[l] (integralClosure ℤ_[l] ↥LL.1) := by
-    refine ⟨fun r hr x y hxy => ?_⟩
-    have hr0 : r ≠ 0 := hr.ne_zero
-    have hne : algebraMap ℤ_[l] ↥LL.1 r ≠ 0 := by
-      rw [IsScalarTower.algebraMap_apply ℤ_[l] ℚ_[l] ↥LL.1]
-      exact (map_ne_zero _).mpr ((map_ne_zero_iff _ (IsFractionRing.injective ℤ_[l] ℚ_[l])).mpr hr0)
-    have h : ((r • x : integralClosure ℤ_[l] ↥LL.1) : ↥LL.1) =
-        ((r • y : integralClosure ℤ_[l] ↥LL.1) : ↥LL.1) := congrArg Subtype.val hxy
-    change r • (x : ↥LL.1) = r • (y : ↥LL.1) at h
-    rw [Algebra.smul_def, Algebra.smul_def] at h
-    exact Subtype.ext (mul_left_cancel₀ hne h)
+  have : Module.IsTorsionFree ℤ_[l] ↥LL.1 :=
+    Module.IsTorsionFree.comap (algebraMap ℤ_[l] ℚ_[l])
+      (fun _ hr => IsRegular.of_ne_zero
+        ((map_ne_zero_iff _ (IsFractionRing.injective ℤ_[l] ℚ_[l])).mpr hr.ne_zero))
+      fun _ _ => IsScalarTower.algebraMap_smul ℚ_[l] _ _
+  have htf : Module.IsTorsionFree ℤ_[l] (integralClosure ℤ_[l] ↥LL.1) :=
+    IsIntegralClosure.isTorsionFree ℤ_[l] ↥LL.1
   have hfree : Module.Free ℤ_[l] (integralClosure ℤ_[l] ↥LL.1) :=
     Module.free_of_finite_type_torsion_free'
   exact ⟨hdvr, isAdicComplete_maximalIdeal_of_free_finite_zpadic hp0 hpu, hp0, hpu, hfree, hfin,

@@ -1116,9 +1116,6 @@ theorem conj_conj (H : Host R) (x : H.E) : H.conj (H.conj x) = x := by
   show starRingEnd ℂ (H.φ₀ (H.conj x)) = _
   rw [h2, Complex.conj_conj]
 
-theorem conj_int (H : Host R) (x : 𝓞 H.E) : ∃ y : 𝓞 H.E, (y : H.E) = H.conj (x : H.E) :=
-  ⟨⟨H.conj (x : H.E), (x.isIntegral_coe).map (H.conj.toAlgHom.restrictScalars ℤ)⟩, rfl⟩
-
 end Places
 
 variable {D : Formalism.BasicNotions.D7} {N : NData D.R D.host D.what₂} {X : NTw D.R D.host D.what₂ D.LL0 N}

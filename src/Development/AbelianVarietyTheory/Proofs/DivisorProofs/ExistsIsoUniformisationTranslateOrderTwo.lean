@@ -713,7 +713,8 @@ theorem surjective_appTop {D : DegData R I} {A : PolAV (Spec (CommRingCat.of (Fr
     (surj_comp (RigidIsoCube.surjective_snd_of_generic hG (jK R) G A.isAb hg _) s₁)⟩
 
 
-set_option synthInstance.maxHeartbeats 200000 in
+-- TODO: Stopgap for https://github.com/leanprover-community/riemann-hypothesis/issues/1038: remove once Mathlib lowers its priority.
+attribute [-instance] CategoryTheory.Monoidal.fromInducedMonoidal in
 theorem exists_iso_translate [IsLocalRing R] (hR : AdmBase R I) (hG : IsSemiAbelian G) {D D' : DegData R I}
     {A A' : PolAV (Spec (CommRingCat.of (FractionRing R)))} (U : UnifPre I D A G) (U' : UnifPre I D' A' G)
     (a : 𝟙_ (Over (Spec (CommRingCat.of R))) ⟶ G) (ha : a ^ 2 = 1) (b : 𝟙_ (Over (Spec (CommRingCat.of R))) ⟶ D.toPre.P.A)
@@ -813,7 +814,7 @@ theorem exists_iso_translate [IsLocalRing R] (hR : AdmBase R I) (hG : IsSemiAbel
   have := D'.toPre.P.isAb.proper
   have := D.toPre.P.isAb.proper
   have e : Ψ.hom = padd D.toPre.P.A β.hom (toUnit D'.toPre.P.A ≫ b) :=
-    hom_eq_of_thickenings_of_isProper R I (IsAdicComplete.le_jacobson_bot I) _ _ Ψ.hom Φ.hom
+    hom_eq_of_thickenings_of_isProper R I ((IsAdicComplete.le_jacobson I).trans_eq Ideal.jacobson_bot.symm) _ _ Ψ.hom Φ.hom
       fun e => (H e).1.trans (hβe e)
   rw [← e]
   exact ⟨w, hwg⟩

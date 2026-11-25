@@ -126,19 +126,6 @@ theorem H_subsingleton (F : C ⥤ ModuleCat.{0} R) (h : ∀ T, Subsingleton (F.o
   subst e
   rfl
 
-theorem sqM_rep (a b : IdF A) (T : C) (x : sqM a b T) :
-    ∃ (y : A.obj T) (hy : y ∈ a.S T), x = sqMk a b y hy := by
-  obtain ⟨x, hx⟩ := x
-  obtain ⟨y, hy, rfl⟩ := (Ideal.mem_map_iff_of_surjective _ Ideal.Quotient.mk_surjective).1 hx
-  exact ⟨y, hy, rfl⟩
-
-theorem sq_self_subsingleton (a : IdF A) (T : C) : Subsingleton ((sq a a).obj T) := by
-  refine ⟨fun x y => ?_⟩
-  obtain ⟨x', hx, rfl⟩ := sqM_rep a a T x
-  obtain ⟨y', hy, rfl⟩ := sqM_rep a a T y
-  refine Subtype.ext ?_
-  change Ideal.Quotient.mk _ x' = Ideal.Quotient.mk _ y'
-  rw [Ideal.Quotient.eq_zero_iff_mem.2 hx, Ideal.Quotient.eq_zero_iff_mem.2 hy]
 
 variable {a b c : IdF A}
 
@@ -155,7 +142,7 @@ theorem finite_dev [IsNoetherianRing R] (a : ℕ → IdF A) (hanti : ∀ k l, k 
   | zero =>
     intro r h
     obtain rfl : r = s := by omega
-    have := H_subsingleton _ (sq_self_subsingleton (a r)) n
+    have := H_subsingleton _ (GlobalTheory.CompanionTheory.KFin.sq_self_subsingleton (a r)) n
     exact Module.Finite.of_finite
   | succ d ih =>
     intro r h

@@ -530,36 +530,6 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace GlobalTheory.TwV.Xc.MuLL
 
-theorem hchar_eq_prod_val {L : Type} [Field L] [NumberField L] (χ : Formalism.L2.Host.HChar L)
-    (T : Finset (HeightOneSpectrum (𝓞 L))) (b : Neutral.B1.Ideles L) (hb : Formalism.L2.Host.IsFinIdele b)
-    (h1 : ∀ P, P ∉ T → (b : AdeleRing (𝓞 L) L).2 P = 1) (hu : ∀ P ∈ T, χ.UnrAt P) :
-    ∃ n : HeightOneSpectrum (𝓞 L) → ℤ, χ.1 b = ∏ P ∈ T, χ.val P ^ n P :=
-  _root_.GlobalTheory.HeckeFinVal.eq_prod_val_zpow χ T b hb h1 hu
-
-theorem transfer_eq_zero {F E F' E' : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
-    [Field F'] [NumberField F'] [Field E'] [NumberField E'] [Algebra F' E']
-    (iE : E' ≃+* E) (iA : AfE F' E' ≃+* AfE F E) (hrat : ∀ x : E', iA (x ⊗ₜ[F'] 1) = iE x ⊗ₜ[F] 1)
-    (hint : ∀ y, iA y ∈ RInt F E ↔ y ∈ RInt F' E')
-    (ι : AfE F' E' ≃+* FiniteAdeleRing (𝓞 E') E') (hι : GlobalTheory.TwU.IsAdIso ι)
-    (z : AfE F E) (ℓ D : ℕ) (hℓ : 0 < ℓ) (hD : 0 < D)
-    (hz : ∀ n : ℕ, (((D : E) / (ℓ : E) ^ n) ⊗ₜ[F] (1 : FiniteAdeleRing (𝓞 F) F)) * z ∈ RInt F E)
-    (P : HeightOneSpectrum (𝓞 E')) (hP : ((ℓ : ℕ) : 𝓞 E') ∈ P.asIdeal) :
-    ι (iA.symm z) P = 0 :=
-  _root_.GlobalTheory.TwV.Xc.adIso_comp_zero_of_div iE iA hrat hint ι hι z ℓ D hℓ hD hz P hP
-
-theorem exists_h90_oneOff_preimage_at_splitPlace {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
-    (σ : E →ₐ[F] E) (w : HeightOneSpectrum (𝓞 F))
-    (spl : E ⊗[F] w.adicCompletion F ≃+* w.adicCompletion F × w.adicCompletion F)
-    (hsig : ∀ x, spl (sigR σ (w.adicCompletion F) x) = swapR (w.adicCompletion F) (spl x))
-    (π : (AfE F E)ˣ) (hπ : π ∈ U1 σ) (hoff : OneOff w π) :
-    ∃ x : (AfE F E)ˣ, h90 σ x = π ∧ OneOff w x :=
-  _root_.GlobalTheory.TwV.Xc.Unif.exists_h90_eq_oneOff_of_normOne_at_split_place σ w spl hsig π hπ hoff
-
-theorem exists_nat_mem_coprime {E : Type} [Field E] [NumberField E] (p : ℕ) (hp : p.Prime)
-    (P : HeightOneSpectrum (𝓞 E)) (hP : ((p : ℕ) : 𝓞 E) ∉ P.asIdeal) :
-    ∃ ℓ : ℕ, 0 < ℓ ∧ ((ℓ : ℕ) : 𝓞 E) ∈ P.asIdeal ∧ Nat.Coprime ℓ p :=
-  _root_.GlobalTheory.natCast_mem_heightOneSpectrum_coprime p hp P hP
-
 end GlobalTheory.TwV.Xc.MuLL
 
 namespace GlobalTheory.TwV.Xc.MuLL

@@ -71,9 +71,6 @@ namespace KStar.IdealValuations
 
 variable (l : ℕ) [Fact l.Prime]
 
-def IsResTrivial (g : Gal(PadicAlgCl l/ℚ_[l])) : Prop :=
-  ∀ x : PadicAlgCl l, ‖x‖ ≤ 1 → ‖g x - x‖ < 1
-
 
 variable {l} in
 noncomputable def complField {E : Type*} [Field E] (j : E →+* PadicAlgCl l) :

@@ -458,15 +458,6 @@ theorem reK_add_imK (e : M2 n) : reK e + Complex.I • imK e = e := by
   rw [h]
   module
 
-theorem reK_conj (e : M2 n) : (reK e)ᴴ = -reK e := by
-  simp only [reK, Matrix.conjTranspose_smul, Matrix.conjTranspose_sub, Matrix.conjTranspose_conjTranspose]
-  have : star (1 / 2 : ℂ) = 1 / 2 := by simp
-  rw [this]; module
-
-theorem imK_conj (e : M2 n) : (imK e)ᴴ = -imK e := by
-  simp only [imK, Matrix.conjTranspose_smul, Matrix.conjTranspose_add, Matrix.conjTranspose_conjTranspose]
-  have : star (-Complex.I / 2) = -(-Complex.I / 2) := by simp [Complex.conj_I]; ring
-  rw [this]; module
 
 theorem fderiv_xZx_skew (Z x E : M2 n) (hE : Eᴴ = -E) (i j : Fin n ⊕ Fin n) :
     fderiv ℝ (fun y : M2 n => (y * Z * yᴴ) i j) x (E * x) = (E * (x * Z * xᴴ) - (x * Z * xᴴ) * E) i j := by
@@ -475,7 +466,7 @@ theorem fderiv_xZx_skew (Z x E : M2 n) (hE : Eᴴ = -E) (i j : Fin n ⊕ Fin n) 
 
 theorem dK_xZx (Z x e : M2 n) (i j : Fin n ⊕ Fin n) :
     dK (fun y : M2 n => (y * Z * yᴴ) i j) x e = (e * (x * Z * xᴴ) - (x * Z * xᴴ) * e) i j := by
-  rw [dK, fderiv_xZx_skew Z x _ (reK_conj e), fderiv_xZx_skew Z x _ (imK_conj e)]
+  rw [dK, fderiv_xZx_skew Z x _ (PositivityTheory.Rg.Sw.LVs.II.reK_skew e), fderiv_xZx_skew Z x _ (PositivityTheory.Rg.Sw.LVs.II.imK_skew e)]
   conv_rhs => rw [← reK_add_imK e]
   simp only [Matrix.add_mul, Matrix.mul_add, Matrix.smul_mul, Matrix.mul_smul, Matrix.sub_apply, Matrix.add_apply,
     Matrix.smul_apply, smul_eq_mul]

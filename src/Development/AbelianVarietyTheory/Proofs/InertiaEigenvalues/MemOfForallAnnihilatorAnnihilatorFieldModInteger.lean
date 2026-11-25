@@ -163,7 +163,7 @@ theorem mem_of_forall_annihilator_annihilator :
           ∀ c, (∀ d, (∀ s ∈ S, β d s = 0) → β d c = 0) → c ∈ S := by
   intro l _ LL _ _ _ O _ _ hO M N _ _ _ _ _ β S hker c hc
   classical
-  obtain ⟨-, hRc, -, hAd⟩ := _root_.GlobalTheory.GoodCoeff.good_coeff_integers l LL O hO
+  obtain ⟨-, hRc, -, hAd⟩ := _root_.GlobalTheory.PowerImageOpen.main l LL O hO
   obtain ⟨⟨hD, hDVR, hFr⟩, -, -, hTR, hOpen⟩ := hO
   haveI := hD; haveI := hDVR; haveI := hFr; haveI := hTR
   have hinj : Function.Injective (algebraMap O LL) := IsFractionRing.injective O LL

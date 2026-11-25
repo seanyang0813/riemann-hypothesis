@@ -21,7 +21,7 @@ variable {k r : ℕ} {Wp Wq : Type} [NormedAddCommGroup Wp] [InnerProductSpace �
   [InnerProductSpace ℂ Wq]
 
 lemma contDiffOn_gq (D : RealPlaceData k r Wp Wq) : ContDiffOn ℝ ∞ (fun q => gq D q) (QDom k r D.z D.z') := by
-  refine Formalism.FourierDecayAlt.P.Ux10.cdm_iff.2 fun i j => ?_
+  refine Formalism.FourierDecayAlt.P.Ux1.cdm_iff.2 fun i j => ?_
   simp only [gq, bigCell]
   split_ifs with h1 h2 h3 h4 h5
   · exact ((ContinuousLinearMap.proj (R := ℝ) (φ := fun _ : Fin r => ℂ) (⟨j.val, h1⟩ : Fin r)).comp

@@ -324,7 +324,7 @@ namespace GlobalTheory.TwoSidedMoments
 open GlobalTheory.AmpMoments
 
 theorem size_bound_inv {b v g x Cg Cu CT : ℝ} {r : ℕ} (hb : Real.exp 1 < b) (hv : 1 ≤ v) (hvb : 2 * v ≤ b)
-    (hg : 1 ≤ g) (hgb : g ≤ b ^ (2 * Cg)) (hCg : 8 ≤ Cg) (hx0 : 0 ≤ x)
+    (hg : 1 ≤ g) (hgb : g ≤ b ^ (2 * Cg)) (hCg : 8 ≤ Cg)
     (hx : x ≤ max (Real.pi / v / g) (Real.pi / v / g)⁻¹ ^ r) :
     x * (b ^ max 2 Cu) ^ (2 * r) ≤ b ^ ((2 * Cg + 2 + |CT| + 10 * max 2 Cu) * (2 * r + 2 : ℝ)) := by
   have hb2 : 2 < b := lt_trans (by have := Real.exp_one_gt_d9; linarith) hb
@@ -1280,7 +1280,7 @@ theorem two_sided_moments_gap : GlobalTheory.GapIn.Hyp → ∀ Cg cb Cu cT CT C0
     have key := inv_moment_of_bessel_gap hH hS hTz1 ν q (by rw [hn0]; exact Nat.zero_le _) hr3 R0 hR _ hB A.v0 hA6
       hA7' hne0 hneT a
     have hsz := size_bound_inv (Cu := Cu) (CT := CT) hb hv hvb hg hgb hCg (r := D.R.rS)
-      (inv_nonneg.2 (norm_nonneg (s a))) (hsa a).2
+      (hsa a).2
     rw [← hm'] at hsz
     have hsz2 : (‖s a‖⁻¹) ^ (2 * q) * ((large₂.sc.b ^ max 2 Cu) ^ (2 * D.R.rS)) ^ (2 * q) ≤
         (large₂.sc.b ^ ((2 * |Cg| + 2 + |CT| + 10 * max 2 Cu) * (D.R.m : ℝ))) ^ (2 * q) := by

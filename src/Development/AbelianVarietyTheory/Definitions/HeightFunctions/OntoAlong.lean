@@ -47,8 +47,6 @@ open GlobalTheory.AtMember GlobalTheory.EX GlobalTheory.EX.OB GlobalTheory.Mem G
 
 namespace GlobalTheory.PlugPt
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 
 set_option genInjectivity false in
 set_option genSizeOfSpec false in

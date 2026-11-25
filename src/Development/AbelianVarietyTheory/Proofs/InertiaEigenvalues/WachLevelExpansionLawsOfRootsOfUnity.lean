@@ -107,8 +107,8 @@ theorem levLaws_of_evLaw (W : LocWach PD L O v n) (hp : PD.p = l) (c : W.Gam →
 
 end Generic
 
-theorem levLaws : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; LevLaws W := by
-  intro D HW l _ K s LL h W
+theorem levLaws : ∀ (loc : LocTheory) (HW : HWOf loc) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; LevLaws W := by
+  intro loc HW l _ K s LL h W
   obtain ⟨χ, h1⟩ := exists_padic_char (LL := LL) (gamOf W ((HW l).W_s K s LL h))
   obtain ⟨_, hcomp, -, hu, -⟩ := GlobalTheory.Per.integers_completeDVR l LL
   have hl : (l : ↥(OL LL)) ≠ 0 := fun h0 => by
@@ -116,9 +116,9 @@ theorem levLaws : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (l : ℕ
     rw [map_natCast, map_zero] at h2
     exact (Nat.cast_ne_zero.2 (Fact.out : l.Prime).ne_zero) h2
   have key := fun g : W.Gam => GlobalTheory.Cyc.act_unique l ↥(OL LL) hl hu (W.γ₀ g) W.φ₀ (χ g : ℤ_[l])
-    (by rw [W.φ₀_X, W.q₀_def, (D.loc l).PD_p K]) (W.γ₀_comm g) (W.γ₀_X g).1 ((W.γ₀_X g).2.trans (h1 g).symm)
-  refine levLaws_of_evLaw W ((D.loc l).PD_p K) (fun g => χ g) h1 (key 1).1 (fun g => (key g).2) (dvd_of_le_v (D.loc l)) ?_
-  convert evLaw_integers (D.loc l) LL using 1
+    (by rw [W.φ₀_X, W.q₀_def, (loc l).PD_p K]) (W.γ₀_comm g) (W.γ₀_X g).1 ((W.γ₀_X g).2.trans (h1 g).symm)
+  refine levLaws_of_evLaw W ((loc l).PD_p K) (fun g => χ g) h1 (key 1).1 (fun g => (key g).2) (dvd_of_le_v (loc l)) ?_
+  convert evLaw_integers (loc l) LL using 1
   exact Algebra.algebra_ext _ _ fun r => PowerSeries.algebraMap_apply
 
 end GlobalTheory.NL.Expansion

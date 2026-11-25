@@ -68,18 +68,12 @@ private theorem deltaHalf_and_torusChar_eq_one_of_mem_KO (n : ℕ) (ξ : Fin n �
     deltaHalf k (fun _ : Fin n => Unit) (leviProj k (points (Fin n)) b) = 1 ∧
     torusChar (fun i => unrChar k (ξ i)) ((leviTorus k (Fin n)).symm (leviProj k (points (Fin n)) b)) = 1 := by
   have hL := (GlobalTheory.SmGL.LeviInt.levi_integral_facts k (Fin n) (Fin n) (fun _ => Unit) (points (Fin n))).2.1 b hb
-  have hp {α β ι : Type} [Monoid α] [CommMonoid β] (s : Finset ι)
-      (f : ι → α →* β) (x : α) : (∏ i ∈ s, f i) x = ∏ i ∈ s, f i x := by
-    classical
-    induction s using Finset.induction_on with
-    | empty => simp
-    | insert a s ha ih => simp [ha, ih]
   constructor
-  · rw [deltaHalf, hp]
+  · rw [deltaHalf, MonoidHom.finsetProd_apply]
     refine Finset.prod_eq_one (fun a _ => ?_)
     rw [MonoidHom.comp_apply, detChar_apply]
     exact isUnram_absPow k _ _ (valuation_det_KO (hL a))
-  · rw [torusChar, hp]
+  · rw [torusChar, MonoidHom.finsetProd_apply]
     refine Finset.prod_eq_one (fun i _ => ?_)
     have h0 : ord k (GeneralLinearGroup.det (leviProj k (points (Fin n)) b i)) = 0 :=
       ord_eq_zero_iff.mpr (valuation_det_KO (hL i))

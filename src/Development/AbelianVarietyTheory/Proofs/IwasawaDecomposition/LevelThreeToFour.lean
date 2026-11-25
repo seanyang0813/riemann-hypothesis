@@ -452,8 +452,7 @@ theorem hermRe_ad {B : Formalism.L2.Herm.HermColsCh D} {A : ∀ u, Formalism.L2.
 def hermRe (H : Formalism.L2.Herm.ColsHermS D) : Formalism.L2.Herm.ColsHermS (reD D Z) :=
   ({ H with
     base := hermRe_base Z H.base
-    atT := fun u => hermRe_atT Z (H.atT u)
-    ad := hermRe_ad Z H.ad } : Formalism.L2.Herm.ColsHermS (reD' D Z))
+    atT := fun u => hermRe_atT Z (H.atT u) } : Formalism.L2.Herm.ColsHermS (reD' D Z))
 
 end GlobalTheory.Mem.SRe.ColRe
 

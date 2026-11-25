@@ -37,8 +37,6 @@ section D7
 
 open PI.BetaLUniq
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 def WAniso : Prop :=
   ∀ (D : D7) (u' : D.what₂.Word) (F' : Fl D (Tu D u')) (w : (hS D).V),
     w ∈ orth (hS D) (Xplus F') → (hS D).hT w w = 0 → w ∈ Xsp F'

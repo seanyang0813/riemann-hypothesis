@@ -52,7 +52,6 @@ open scoped TensorProduct nonZeroDivisors Pointwise
 namespace GlobalTheory.FunObj.CosSB
 
 open GlobalTheory.ChiGrid GlobalTheory.SplitFlip GlobalTheory.SplitWeil GlobalTheory.StepData GlobalTheory.StdFrames Formalism.L2.Host Formalism.L2.DIV GlobalTheory.LatVac
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 variable {D : D7}
 
@@ -152,7 +151,6 @@ end GlobalTheory.FunObj.CosSB
 namespace GlobalTheory.FunObj.CosSB
 
 open GlobalTheory.ChiGrid GlobalTheory.SplitFlip GlobalTheory.SplitWeil GlobalTheory.StepData GlobalTheory.StdFrames Formalism.L2.Host Formalism.L2.DIV GlobalTheory.LatVac
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem prod_pow_ne_bot {D : D7} (P : Finset (Pl D.host.E)) (n : ℕ) : (∏ w ∈ P, w.asIdeal ^ n) ≠ ⊥ := by
   rw [← Ideal.zero_eq_bot, Finset.prod_ne_zero_iff]

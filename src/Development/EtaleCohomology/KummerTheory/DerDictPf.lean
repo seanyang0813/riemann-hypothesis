@@ -17,9 +17,6 @@ def hc {C : Type*} [Category C] [Preadditive C] {X Y X' Y' : C} (i : X ≅ X') (
     (X ⟶ Y) ≃+ (X' ⟶ Y') :=
   { i.homCongr j with map_add' := fun f g => by simp [Iso.homCongr_apply] }
 
-lemma zcomp_ofHom {C : Type*} [Category C] [Preadditive C] {K L M : CochainComplex C ℤ} {n : ℤ}
-    (c : Cocycle K L n) (g : L ⟶ M) : zcomp c (Cocycle.ofHom g) (add_zero n) = c.postcomp g := rfl
-
 section
 variable (R : Type) [CommRing R] [HasDerivedCategory (Shv R)]
 

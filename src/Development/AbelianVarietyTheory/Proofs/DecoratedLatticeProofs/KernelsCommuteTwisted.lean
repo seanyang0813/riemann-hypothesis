@@ -79,55 +79,6 @@ variable [Fintype n'] (q : Unif k) {P₁ : Pair k n'} {e₁ : n' → k} (he : P�
 include he
 
 
-open Classical in
-theorem sum_target :
-    ∑ Q₁ ∈ withKer Q.lat with cross q Q₁ Q = 1, phiOne P₁ Q₁ x = midInd q P₁.ker e₁ Q x := by
-  have hm : ∀ Q₁ : Pair k n, Maps P₁ Q₁ x ↔ (∀ y ∈ P₁.ker, x *ᵥ y ∈ Q₁.ker) ∧ Q₁.HasVal (x *ᵥ e₁) 1 := fun Q₁ => by
-    rw [maps_iff_glue he Q₁.hasVal_vec, Pair.hasVal_one_iff Q₁.hasVal_vec]
-  rw [midInd, mulVec_smul]
-  split_ifs with h
-  · have hg : IsGlue Q.lat (x *ᵥ e₁) := (isGlue_iff q).2 ⟨Q.isLat, fun h0 =>
-      one_ne_zero (h.2.unique (Pair.mem_ker.1 (Pair.smul_mem_ker q.mem_max h0))), h.2.mem⟩
-    rw [Finset.sum_eq_single_of_mem (glue hg)]
-    · exact if_pos ((hm _).2 ⟨by rw [glue_ker]; exact h.1, glue_hasVal hg⟩)
-    · exact Finset.mem_filter.2 ⟨mem_withKer.2 (glue_ker hg),
-        (cross_hasVal q (glue_ker hg).symm (glue_hasVal hg)).unique h.2⟩
-    · exact fun Q₁ h1 h2 => if_neg fun h3 =>
-        h2 ((eq_glue_iff hg).2 ⟨mem_withKer.1 (Finset.mem_filter.1 h1).1, ((hm _).1 h3).2⟩)
-  · refine Finset.sum_eq_zero fun Q₁ h1 => if_neg fun h3 => h ?_
-    obtain ⟨h1, h2⟩ := Finset.mem_filter.1 h1
-    rw [mem_withKer] at h1
-    exact ⟨h1 ▸ ((hm _).1 h3).1, h2 ▸ cross_hasVal q h1.symm ((hm _).1 h3).2⟩
-
-
-open Classical in
-theorem sum_source :
-    midInd q P₁.ker e₁ Q x = ∑ P ∈ withLat P₁.ker with cross q P₁ P = 1, phiOne P Q x := by
-  rw [midInd]
-  have hq : q.1 • e₁ ∈ P₁.ker := Pair.smul_mem_ker q.mem_max he.mem
-  split_ifs with h
-  · let f : P₁.ker →ₗ[𝒪[k]] 𝓀[k] := Q.fn ∘ₗ ((Matrix.mulVecLin x).restrictScalars 𝒪[k]).restrict h.1
-    have hf : ∀ y : P₁.ker, Q.HasVal (x *ᵥ y) (f y) := fun y => ⟨h.1 y y.2, rfl⟩
-    have h1 : f ⟨_, hq⟩ = 1 := (hf ⟨_, hq⟩).unique h.2
-    let R : Pair k n' := ⟨P₁.ker, P₁.ker_isLat, f, fun h0 => by simp [h0] at h1⟩
-    have hR : Maps R Q x := ⟨h.1, fun _ => rfl⟩
-    rw [Finset.sum_eq_single_of_mem R]
-    · exact (if_pos hR).symm
-    · exact Finset.mem_filter.2 ⟨mem_withLat.2 rfl, (cross_hasVal q (P := R) rfl he).unique ⟨hq, h1⟩⟩
-    · refine fun P hP h2 => if_neg fun h3 => h2 (Pair.ext fun y a => ?_)
-      have hl : P.lat = R.lat := mem_withLat.1 (Finset.mem_filter.1 hP).1
-      rw [maps_iff_hasVal] at hR h3
-      constructor
-      · intro hy
-        have h4 := R.hasVal_fn ⟨y, hl ▸ hy.mem⟩
-        exact (hR _ _ h4).unique (h3 _ _ hy) ▸ h4
-      · intro hy
-        have h4 := P.hasVal_fn ⟨y, hl ▸ hy.mem⟩
-        exact (h3 _ _ h4).unique (hR _ _ hy) ▸ h4
-  · refine (Finset.sum_eq_zero fun P h1 => if_neg fun h3 => h ?_).symm
-    obtain ⟨h1, h2⟩ := Finset.mem_filter.1 h1
-    rw [mem_withLat] at h1
-    exact ⟨h1 ▸ h3.1, maps_iff_hasVal.1 h3 _ _ (h2 ▸ cross_hasVal q h1 he)⟩
 
 end Indicator
 

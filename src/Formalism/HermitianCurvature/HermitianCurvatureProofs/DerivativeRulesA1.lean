@@ -15,7 +15,7 @@ noncomputable section
 
 namespace Formalism.FourierDecayAlt.P.SmoothnessOrderArithmetic
 
-open Formalism.REAL Formalism.QuantumDeterminants Formalism.FourierDecayAlt Formalism.FourierDecayAlt.B Formalism.FourierDecayAlt.P.B4 Formalism.FourierDecayAlt.P.Ux10
+open Formalism.REAL Formalism.QuantumDeterminants Formalism.FourierDecayAlt Formalism.FourierDecayAlt.B Formalism.FourierDecayAlt.P.B4 Formalism.FourierDecayAlt.P.Ux1 Formalism.FourierDecayAlt.P.Ux10
 
 attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
@@ -62,7 +62,7 @@ lemma rho_self {g0 : Mat k r} (hg0 : g0 ∈ GV k r) : rho g0 g0 = 0 := by
   have hgu : IsUnit g0.det := Formalism.QuantumDeterminants.WeylGroupFacts.isUnit_of_uh hg0
   have hg1 : g0 * g0⁻¹ = 1 := Matrix.mul_nonsing_inv _ hgu
   funext i
-  simp only [Ux10.rho, hg1, iot, sub_self, Matrix.zero_mul]
+  simp only [Ux1.rho, hg1, iot, sub_self, Matrix.zero_mul]
   exact co_zero i
 
 lemma self_mem_Sr {g0 : Mat k r} (hg0 : g0 ∈ GV k r) : g0 ∈ Sr g0 := by

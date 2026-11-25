@@ -109,22 +109,6 @@ section Complete
 
 variable {B : Type*} [CommRing B] [Algebra ℚ B] {I : Ideal B} [IsAdicComplete I B]
 
-theorem mk_seriesEval_eq_truncEval {z : B} (hz : z ∈ I) (f : ℚ⟦X⟧) (n : ℕ) :
-    Ideal.Quotient.mk (I ^ n) (seriesEval I z hz f) =
-      truncEval (Ideal.Quotient.mk (I ^ n) z) (pow_mk_eq_zero I hz n) f :=
-  IsAdicComplete.mk_liftAlgHom I
-    (fun n => truncEval (Ideal.Quotient.mk (I ^ n) z) (pow_mk_eq_zero I hz n))
-    (fun hle => factorₐ_comp_truncEval I hz hle) n f
-
-theorem logOnePlus_mul {x y z : B} (hx : x ∈ I) (hy : y ∈ I) (hz : z ∈ I)
-    (hxyz : 1 + z = (1 + x) * (1 + y)) :
-    logOnePlus I z hz = logOnePlus I x hx + logOnePlus I y hy := by
-  refine eq_of_forall_sub_mem_pow I fun n => ?_
-  rw [← Ideal.Quotient.eq, map_add (f := _), logOnePlus, logOnePlus, logOnePlus,
-    mk_seriesEval_eq_truncEval, mk_seriesEval_eq_truncEval, mk_seriesEval_eq_truncEval]
-  exact truncEval_log_mul _ _ _ (by rw [← map_one (Ideal.Quotient.mk (I ^ n)), ← map_add (f := _), hxyz,
-    map_mul, map_add, map_add, map_one])
-
 end Complete
 
 end GroundTheory.PAdicHodge

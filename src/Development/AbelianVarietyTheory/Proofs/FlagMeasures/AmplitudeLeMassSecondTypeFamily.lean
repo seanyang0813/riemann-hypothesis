@@ -1267,12 +1267,6 @@ section
 variable {F : Type} [Field F] [ValuativeRel F] [TopologicalSpace F]
 variable {E : Type} [CommRing E] [Algebra F E] [TopologicalSpace E]
 
-def hfLin (L : LocE F E) {n : ℕ} (Hm : Matrix (Fin n) (Fin n) E) (y : Fin n → E) :
-    (Fin n → E) →ₗ[E] E where
-  toFun x := hf L Hm x y
-  map_add' a b := _root_.GlobalTheory.HL.Eichler.hf_add_l L Hm a b y
-  map_smul' c a := _root_.GlobalTheory.HL.Eichler.hf_smul_l L Hm c a y
-
 alias exists_coord := _root_.GlobalTheory.HL.MoveTotal.exists_coords
 
 end

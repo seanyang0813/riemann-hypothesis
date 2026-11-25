@@ -317,34 +317,4 @@ end GlobalTheory.CobHom
 
 namespace GlobalTheory.CobHom
 
-theorem coeff_cob1_homogeneous_binomial : ∀ (B O Q : Type) [CommRing B] [CommRing Q] [CommRing O] [Algebra B Q]
-    (θ : B →+* O) (d : ℕ) (μ : Fin d → MvPowerSeries (Fin d ⊕ Fin d) B), IsLift θ μ →
-    ∀ (m : ℕ) (h : MvPowerSeries (Fin d) Q), m ≠ 0 →
-    (∀ α : Fin d →₀ ℕ, α.degree ≠ m → coeff α h = 0) →
-    ∀ a e : Fin d →₀ ℕ, (a + e).degree ≤ m →
-    coeff (Finsupp.sumElim a e) (cob1 (up Q μ) h) =
-      if a ≠ 0 ∧ e ≠ 0 then (∏ i, Nat.choose ((a + e) i) (a i) : Q) * coeff (a + e) h else 0 := by
-  intro B O Q _ _ _ _ θ d μ hμ m h hm hh a e hdeg
-  classical
-  have hlin : ∀ i (α : Fin d ⊕ Fin d →₀ ℕ), α.degree ≤ 1 →
-      coeff α (up Q μ i) = coeff α (addLaw Q d i) := by
-    intro i α hα
-    rw [up, coeff_map, coeff_lift_low hμ i α hα, GlobalTheory.Katz.LowLaw.coeff_addLaw]
-    split_ifs <;> simp
-  have hlow : ∀ α : Fin d →₀ ℕ, α.degree < m → coeff α h = 0 := fun α hα => hh α (by omega)
-  have hγ : (Finsupp.sumElim a e).degree = (a + e).degree := by
-    rw [Finsupp.degree_eq_sum, Finsupp.degree_eq_sum, Fintype.sum_sum_type, ← Finset.sum_add_distrib]
-    simp
-  have h0 : coeff 0 h = 0 := hh 0 (by rw [map_zero]; exact Ne.symm hm)
-  rw [((GlobalTheory.CobLead.cob_eq_additive_lead Q d (up Q μ) m hlin).1 h hlow _).2 (hγ ▸ hdeg),
-    coeff_cob1_additive_law_binomial]
-  by_cases ha : a = 0
-  · subst ha
-    by_cases he : e = 0
-    · subst he; simp [h0]
-    · simp [he]
-  · by_cases he : e = 0
-    · subst he; simp [ha]
-    · simp [ha, he]
-
 end GlobalTheory.CobHom

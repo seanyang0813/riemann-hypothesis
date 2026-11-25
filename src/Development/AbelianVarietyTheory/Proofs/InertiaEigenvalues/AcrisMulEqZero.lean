@@ -72,8 +72,8 @@ theorem acris_mul_eq_zero : ∀ (l : ℕ) [Fact l.Prime] (x y : Formalism.Per.Ac
     · linarith
   by_contra h
   push_neg at h
-  have hx := _root_.GlobalTheory.PMon.Gauss.gC_pos_target l x h.1 (l : ℝ)⁻¹ le_rfl hρ1
-  have hy := _root_.GlobalTheory.PMon.Gauss.gC_pos_target l y h.2 (l : ℝ)⁻¹ le_rfl hρ1
+  have hx := _root_.GlobalTheory.PMon.Gauss.gC_pos_of_ne_zero l x h.1 (l : ℝ)⁻¹ le_rfl hρ1
+  have hy := _root_.GlobalTheory.PMon.Gauss.gC_pos_of_ne_zero l y h.2 (l : ℝ)⁻¹ le_rfl hρ1
   have hm := hG.2.2.2.1 x y
   rw [hxy, h0] at hm
   have := mul_pos hx hy

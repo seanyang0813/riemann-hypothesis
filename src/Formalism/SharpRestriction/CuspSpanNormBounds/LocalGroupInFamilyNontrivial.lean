@@ -13,8 +13,6 @@ open NumberField IsDedekindDomain Formalism.MainNotions.S ValuativeRel
 open scoped BigOperators ComplexOrder
 open Classical
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 variable (D : Formalism.BasicNotions.D7)
 
 abbrev PlF : Type := HeightOneSpectrum (𝓞 D.host.F)

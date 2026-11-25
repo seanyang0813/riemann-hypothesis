@@ -38,12 +38,6 @@ theorem rep_Tm_of {Λ : Fin (2 * r + k + 1) → Fin (2 * r + k + 1) → AA k r E
 
 theorem ev_one (f : Mat k r → E) : ev Eop (1 : AA k r E) f = f := rfl
 
-private theorem ckOn_mono_lemma_4 {m m' : ℕ∞} (h : m' ≤ m) {f : Mat k r → E} (hf : CkOn m (GV k r) f) :
-    CkOn m' (GV k r) f := by
-  intro g₀ hg₀
-  obtain ⟨U, f', hU, hgU, hcd, heq⟩ := hf g₀ hg₀
-  exact ⟨U, f', hU, hgU, hcd.of_le (WithTop.coe_le_coe.mpr h), heq⟩
-
 private theorem rep_prod_lemma_3 {Λ : Fin (2 * r + k + 1) → Fin (2 * r + k + 1) → AA k r E} (hΛ : ∀ c d, Rep 1 (Λ c d)) :
     ∀ ts : List (ℂ × Fin (2 * r + k + 1) × Fin (2 * r + k + 1)),
       Rep ts.length ((ts.map fun t => Tm Λ t.1 t.2.1 t.2.2).prod) := by
@@ -71,9 +65,9 @@ theorem bridge_fold (hC : HC Eop) (hL : HL Eop) (hA : HA Eop) (hS : HS Eop)
     intro f hf g hg
     have hP := rep_prod_lemma_3 hΛ ts
     have hf' : CkOn ((1 + ts.length : ℕ) : ℕ∞) (GV k r) f :=
-      ckOn_mono_lemma_4 (ENat.coe_le_coe.mpr (by simp only [List.length_cons]; omega)) hf
+      sCkOn_mono (ENat.coe_le_coe.mpr (by simp only [List.length_cons]; omega)) hf
     have hfs : CkOn ((ts.length : ℕ) : ℕ∞) (GV k r) f :=
-      ckOn_mono_lemma_4 (ENat.coe_le_coe.mpr (by simp only [List.length_cons]; omega)) hf
+      sCkOn_mono (ENat.coe_le_coe.mpr (by simp only [List.length_cons]; omega)) hf
     have hφ : CkOn 1 (GV k r) (ev Eop ((ts.map fun t => Tm Λ t.1 t.2.1 t.2.2).prod) f) := by
       simpa using ev_ck (Eop := Eop) hC hP 1 f hf'
     have hI := ih f hfs
@@ -218,7 +212,7 @@ theorem ev_LMR (hC : HC Eop) (hL : HL Eop) (hA : HA Eop) (hS : HS Eop) (hG : HGl
   have hψ : CkOn (((L.take i).length + 2 : ℕ) : ℕ∞) (GV k r) (ev Eop (L.drop ((i : ℕ) + 2)).prod f) :=
     ev_ck (Eop := Eop) hC hRt _ f hf3
   have hψ2 : CkOn 2 (GV k r) (ev Eop (L.drop ((i : ℕ) + 2)).prod f) := by
-    have := ev_ck (Eop := Eop) hC hRt 2 f (ckOn_mono_lemma_4 (ENat.coe_le_coe.mpr (by omega)) hf3)
+    have := ev_ck (Eop := Eop) hC hRt 2 f (sCkOn_mono (ENat.coe_le_coe.mpr (by omega)) hf3)
     simpa using this
   have hz : ∀ g' ∈ GV k r,
       ev Eop (Md (Lf k r E) a b σ i) (ev Eop (L.drop ((i : ℕ) + 2)).prod f) g' = 0 := by
@@ -352,31 +346,16 @@ theorem ad_main (hC : HC Eop) (hL : HL Eop) (hA : HA Eop) (hS : HS Eop) (hG : HG
   simp only [Equiv.arrowCongr_apply, Equiv.refl_symm, Equiv.coe_refl, Function.comp_id, Function.comp_apply]
   have hac : ∀ γ : Fin t → Fin t, (Equiv.arrowCongr (Equiv.refl (Fin t)) e) γ = ⇑e ∘ γ := fun γ => rfl
   simp only [hac]
-  have hsplit : ∀ F : (Fin t → Fin t) → E, (∀ γ, ¬ Function.Injective γ → F γ = 0) →
-      ∑ γ, F γ = ∑ τ : Equiv.Perm (Fin t), F ⇑τ := by
-    classical
-    intro F hF
-    rw [← Finset.sum_subset
-      (Finset.subset_univ (Finset.univ.image fun τ : Equiv.Perm (Fin t) => (⇑τ : Fin t → Fin t))) ?_]
-    · rw [Finset.sum_image]
-      intro τ₁ _ τ₂ _ h
-      exact Equiv.coe_fn_injective h
-    · intro γ _ hγ
-      apply hF
-      intro hinj
-      apply hγ
-      exact Finset.mem_image.mpr
-        ⟨Equiv.ofBijective γ (Finite.injective_iff_bijective.mp hinj), Finset.mem_univ _, rfl⟩
   have hz : ∀ γ : Fin t → Fin t, ¬ Function.Injective γ →
       (∏ j, Q (e j) (e (γ j))) • ev Eop (qminor (Lf k r E) (⇑e) (⇑e ∘ γ) u) f g = 0 := by
     intro γ hγ
     rw [sk_zero Eop hC hL hA hS hG (⇑e) (⇑e ∘ γ) u f hf (fun h => hγ (Function.Injective.of_comp h)) g hg,
       smul_zero]
-  rw [hsplit _ hz]
+  rw [sum_inj (Equiv.refl (Fin t)) _ hz]
   have hp : ∀ τ : Equiv.Perm (Fin t), ev Eop (qminor (Lf k r E) (⇑e) (⇑e ∘ ⇑τ) u) f g =
       ((Equiv.Perm.sign τ : ℤ) : ℂ) • ev Eop (qminor (Lf k r E) (⇑e) (⇑e) u) f g :=
     fun τ => sk_perm Eop hC hL hA hS hG (⇑e) u f hf τ (⇑e) g hg
-  simp only [hp, smul_smul, ← Finset.sum_smul]
+  simp only [Equiv.coe_refl, Function.id_comp, hp, smul_smul, ← Finset.sum_smul]
   have hdet : ∑ τ : Equiv.Perm (Fin t), (∏ j, Q (e j) (e (τ j))) * ((Equiv.Perm.sign τ : ℤ) : ℂ) = Q.det := by
     rw [← Matrix.det_submatrix_equiv_self e Q, ← Matrix.det_transpose, Matrix.det_apply]
     refine Finset.sum_congr rfl fun τ _ => ?_

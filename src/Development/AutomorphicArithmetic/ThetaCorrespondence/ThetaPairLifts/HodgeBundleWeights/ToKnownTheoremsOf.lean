@@ -55,16 +55,8 @@ structure PublishedHodgeBundleTheorems : Prop where
   p4 : GlobalTheory.Published.ArCalc
   p5 : GlobalTheory.Published.AbelianDeRham
   p8 : GlobalTheory.Published.RayClassFieldSt
-  p12 : GlobalTheory.Published.SemistableReductionSt
-  p13 : GlobalTheory.Published.StrongApproxSU
-  p14 : GlobalTheory.Published.GreenSeriesSt
   p16 : GlobalTheory.Published.GoodChernWeil
-  p19 : GlobalTheory.Published.LandherrSt
-  p20 : GlobalTheory.Published.HasseNormSt
   p22 : GlobalTheory.Published.SemiAbelianHomExtension
-  p23 : GlobalTheory.Published.InducedSimpleLowestAlcove
-  p25 : GlobalTheory.Published.principalPolarisationOneSection
-  p26 : GlobalTheory.Published.AbMulNSt
   q1 : GlobalTheory.Published.GrothendieckMessing
   q4 : GlobalTheory.Published.PrismaticDieudonneHodge
   q6 : GlobalTheory.Published.KawamataViehweg
@@ -77,8 +69,7 @@ structure PublishedHodgeBundleTheorems : Prop where
 theorem PublishedHodgeBundleTheorems.p18 (_h : _root_.GlobalTheory.CovTop.PublishedHodgeBundleTheorems) : GlobalTheory.Published.FinitenessOfHermitianClasses := GlobalTheory.Published.finitenessOfHermitianClasses_holds
 theorem PublishedHodgeBundleTheorems.toClassicalTheoremsOf (h : _root_.GlobalTheory.CovTop.PublishedHodgeBundleTheorems) (hM : GlobalTheory.Published.GoodChernWeil → GlobalTheory.Published.MumfordProportionality) : _root_.GlobalTheory.CovTop.Hypotheses'' := by
   have hM' := hM h.p16
-  refine ⟨h.p1, h.p4, h.p5, h.p8, h.p12, h.p13, h.p14, ?_,
-    h.p18, h.p19, h.p20, h.p22, h.p23, h.p25, h.p26⟩
+  refine ⟨h.p1, h.p4, h.p5, h.p8, ?_, h.p18, h.p22⟩
   first
     | exact hM'
 end GlobalTheory.CovTop

@@ -257,8 +257,6 @@ end Alg
 
 section Main
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem nxt_mem {D : Formalism.BasicNotions.D7} (X : Formalism.L2.SG.HidaSetting.HidaSetting D) (a : Fin D.R.rS) :
     nxt X.e0 X.z0 a ∈ X.B.I.Lf := by
   simp only [Formalism.L2.SG.HidaSetting.nxt]

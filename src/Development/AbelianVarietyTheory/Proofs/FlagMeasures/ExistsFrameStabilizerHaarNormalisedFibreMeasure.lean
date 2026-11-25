@@ -351,7 +351,7 @@ theorem yv_w (hP : P.IsStd σ J T) (b : Fin (r + 1)) : hA (yv R P x b) (wv R P T
           map_zero, mul_zero]
       · simp [coef, hij]
 
-theorem cc_cond (hσ : ∀ e, σ (σ e) = e) (hJ : IsHermND σ J) (hP : P.IsStd σ J T) (b : Fin (r + 1)) :
+theorem cc_cond (hσ : ∀ e, σ (σ e) = e) (hP : P.IsStd σ J T) (b : Fin (r + 1)) :
     cc R T b + sigR R σ (cc R T b) + hA (wv R P T b) (wv R P T b) = 0 := by
   induction b using Fin.lastCases with
   | last =>
@@ -466,7 +466,7 @@ theorem Pm_unitary (hσ : ∀ e, σ (σ e) = e) (hJ : IsHermND σ J) (hP : P.IsS
       simp only [M]
       split_ifs with hk
       · exact eich_unitary _ _ (sigR_invol R σ hσ) (fun i j => JR_herm R σ J hJ i j) _ _ _
-          (yv_iso x hσ hJ hP _) (yv_w x hP _) (cc_cond hσ hJ hP _)
+          (yv_iso x hσ hJ hP _) (yv_w x hP _) (cc_cond hσ hP _)
       · simp [Formalism.UG.cT_one]
     rw [Formalism.UG.cT_mul]
     calc Formalism.UG.cT (sigR R σ) (Pm R σ J P T x k) * Formalism.UG.cT (sigR R σ) M * JR R J * (M * Pm R σ J P T x k)

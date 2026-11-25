@@ -451,15 +451,15 @@ end Concrete
 open scoped Formalism.Per in
 set_option maxHeartbeats 1000000 in
 set_option synthInstance.maxHeartbeats 200000 in
-theorem image : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.loc D.locA HW F) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; let E := ((F l).E K s LL h).tie; let C := Cm l; ∀ T : Lt K LL, IsCrys ((D.loc l).PD K) T.ρ → ∀ (i : Let K) (ζ : ↥LL.1) τ ι, Comp (HW l) h i ζ τ ι → ∃ Ψ : ↥(W.N T) → T.V ⊗[ℚ_[l]] (D.loc l).R.BdR, (∀ x, Ψ x ∈ FilV ((D.loc l).PD K) (LL := ↥LL.1) (V := T.V) 0) ∧ (∀ z ∈ FilV ((D.loc l).PD K) (LL := ↥LL.1) (V := T.V) 0, ∃ (m : ℕ) (b : Fin m → (D.loc l).R.BdR) (x : Fin m → ↥(W.N T)), (∀ j, b j ∈ ((D.loc l).PD K).Fil 0) ∧ z - ∑ j, mulVR T (b j) (Ψ (x j)) ∈ compKer T ι) ∧ ∀ (x : ↥(W.N T)) (a : ℕ), (∀ r : ℤ, r < -(a : ℤ) → ex C h T i ζ x r = 0) → ∃ c : ℤ, ∀ M : ℕ, mulVR T (tS (D.loc l) s ^ a) (Ψ x) - ∑ r ∈ Finset.range M, mulVR T (tS (D.loc l) s ^ r) (ιV ((D.loc l).PD K) (LL := ↥LL.1) (V := T.V) (ex C h T i ζ x ((r : ℤ) - (a : ℤ)))) ∈ compKer T ι ⊔ FilV ((D.loc l).PD K) (LL := ↥LL.1) (V := T.V) ((M : ℤ) - c) := by
-  intro D HW F Cm l _ K s LL h W E C T hT i ζ τ ι hcomp
-  obtain ⟨m, hS1, hS2⟩ := GlobalTheory.NL.SandArb.sandwich D HW F l K s LL h T hT
-  obtain ⟨hX, -, hinj, -⟩ := GlobalTheory.NL.IoXQ.main D HW F l K s LL h
-  have hι : ∀ c, ι c ∈ ((D.loc l).PD K).Fil 0 := by
+theorem image : ∀ (loc : LocTheory) (locA : ∀ (l : ℕ) [Fact l.Prime], LocAinf l (loc l)) (locT : ∀ (l : ℕ) [Fact l.Prime], Formalism.BasicNotions.LocTied l (loc l) (locA l)) (HW : HWOf loc) (F : FonOf loc locA HW) (Cm : CmpOf loc locA HW F) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; let E := ((F l).E K s LL h).tie; let C := Cm l; ∀ T : Lt K LL, IsCrys ((loc l).PD K) T.ρ → ∀ (i : Let K) (ζ : ↥LL.1) τ ι, Comp (HW l) h i ζ τ ι → ∃ Ψ : ↥(W.N T) → T.V ⊗[ℚ_[l]] (loc l).R.BdR, (∀ x, Ψ x ∈ FilV ((loc l).PD K) (LL := ↥LL.1) (V := T.V) 0) ∧ (∀ z ∈ FilV ((loc l).PD K) (LL := ↥LL.1) (V := T.V) 0, ∃ (m : ℕ) (b : Fin m → (loc l).R.BdR) (x : Fin m → ↥(W.N T)), (∀ j, b j ∈ ((loc l).PD K).Fil 0) ∧ z - ∑ j, mulVR T (b j) (Ψ (x j)) ∈ compKer T ι) ∧ ∀ (x : ↥(W.N T)) (a : ℕ), (∀ r : ℤ, r < -(a : ℤ) → ex C h T i ζ x r = 0) → ∃ c : ℤ, ∀ M : ℕ, mulVR T (tS (loc l) s ^ a) (Ψ x) - ∑ r ∈ Finset.range M, mulVR T (tS (loc l) s ^ r) (ιV ((loc l).PD K) (LL := ↥LL.1) (V := T.V) (ex C h T i ζ x ((r : ℤ) - (a : ℤ)))) ∈ compKer T ι ⊔ FilV ((loc l).PD K) (LL := ↥LL.1) (V := T.V) ((M : ℤ) - c) := by
+  intro loc locA locT HW F Cm l _ K s LL h W E C T hT i ζ τ ι hcomp
+  obtain ⟨m, hS1, hS2⟩ := GlobalTheory.NL.SandArb.sandwich loc locA HW F l K s LL h T hT
+  obtain ⟨hX, -, hinj, -⟩ := GlobalTheory.NL.IoXQ.main loc locA HW F l K s LL h
+  have hι : ∀ c, ι c ∈ ((loc l).PD K).Fil 0 := by
     intro c
-    let tied := D.locT l
-    haveI : IsDomain (D.loc l).R.BdR :=
-      (GlobalTheory.Per.TiedField.tied_field l (D.loc l) (D.locA l) tied).1.isDomain
+    let tied := locT l
+    haveI : IsDomain (loc l).R.BdR :=
+      (GlobalTheory.Per.TiedField.tied_field l (loc l) (locA l) tied).1.isDomain
     haveI : FiniteDimensional ℚ_[l] ↥LL.1 := LL.2
     obtain ⟨a, ha⟩ := GlobalTheory.ExpImage.EmbFil.mem_range_of_isIntegral
       (Ω := Om l) ι (IsIntegral.of_finite ℚ_[l] c)

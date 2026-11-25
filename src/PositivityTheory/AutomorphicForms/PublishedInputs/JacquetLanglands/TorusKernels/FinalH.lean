@@ -13,6 +13,7 @@ public import Development.AutomorphicArithmetic.AutomorphicVarieties.IdeleGenera
 public import Development.AutomorphicArithmetic.AutomorphicVarieties.AutomorphicForms.RTwist
 public import Development.AutomorphicArithmetic.IntegralCasts.CapelliIdentities.Qminor
 public import PositivityTheory.AutomorphicForms.PublishedInputs.JacquetLanglands.TorusKernels.FinalTF
+public import PositivityTheory.AutomorphicForms.PublishedInputs.JacquetLanglands.TorusKernels.ContinuousCompTorusMap
 public import PositivityTheory.AutomorphicForms.PublishedInputs.JacquetLanglands.TorusKernels.PfHolWC
 import Formalism.GaloisIrreducibility.GaloisIrreducibilityProofs.OneNonUnit
 import Mathlib.Algebra.Order.Floor.Extended
@@ -67,9 +68,7 @@ import PositivityTheory.AutomorphicForms.PublishedInputs.JacquetLanglands.TorusK
 import PositivityTheory.AutomorphicForms.PublishedInputs.JacquetLanglands.TorusKernels.HyperbolicTailEstimateProof
 import PositivityTheory.AutomorphicForms.PublishedInputs.JacquetLanglands.TorusKernels.LoweringOperatorRelationHolomorphic
 import PositivityTheory.AutomorphicForms.PublishedInputs.JacquetLanglands.TorusKernels.PfHFinC
-import PositivityTheory.AutomorphicForms.PublishedInputs.JacquetLanglands.TorusKernels.AutomorphyFactorKernelAlgebraProof
 import PositivityTheory.AutomorphicForms.PublishedInputs.JacquetLanglands.TorusKernels.HolomorphicOnHalfPlaneFinsetSum
-import PositivityTheory.AutomorphicForms.PublishedInputs.JacquetLanglands.TorusKernels.HyperbolicKappaPropertiesProof
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: PositivityTheory.AutomorphicForms.PublishedInputs.JacquetLanglands.TorusKernels.HyperbolicKernelAlgebraProof, PositivityTheory.AutomorphicForms.PublishedInputs.JacquetLanglands.TorusKernels.HyperbolicKernelContinuity, PositivityTheory.AutomorphicForms.PublishedInputs.JacquetLanglands.TorusKernels.HyperbolicOrbitBoundProof, PositivityTheory.AutomorphicForms.PublishedInputs.JacquetLanglands.TorusKernels.HyperbolicOrbitIntegralProof, PositivityTheory.AutomorphicForms.PublishedInputs.JacquetLanglands.TorusKernels.HyperbolicRelationProof, PositivityTheory.AutomorphicForms.PublishedInputs.JacquetLanglands.TorusKernels.HyperbolicTermsIntegrableProof, PositivityTheory.AutomorphicForms.PublishedInputs.JacquetLanglands.TorusKernels.HyperbolicTermsSetupProof, PositivityTheory.AutomorphicForms.PublishedInputs.JacquetLanglands.TorusKernels.PfGCh, PositivityTheory.AutomorphicForms.PublishedInputs.JacquetLanglands.TorusKernels.PfGMod, PositivityTheory.AutomorphicForms.PublishedInputs.JacquetLanglands.TorusKernels.PfGUnit, PositivityTheory.AutomorphicForms.PublishedInputs.JacquetLanglands.TorusKernels.PfHCap, PositivityTheory.AutomorphicForms.PublishedInputs.JacquetLanglands.TorusKernels.PfHFin, PositivityTheory.AutomorphicForms.PublishedInputs.JacquetLanglands.TorusKernels.PfTrCong, PositivityTheory.AutomorphicForms.PublishedInputs.JacquetLanglands.TorusKernels.FinalH
@@ -226,7 +225,7 @@ theorem stab {k : InfinitePlace F → ℕ} {c : Pl F → ℕ} {ω : HChar F} (h�
       congr 1
       push_cast
       ring
-    rw [hden, hdet, hp, mul_pow, ← Complex.exp_nat_mul, Complex.ofReal_inv, Complex.ofReal_pow, mul_right_comm,
+    rw [hden, hdet, hp, mul_pow, ← Complex.exp_natCast_mul, Complex.ofReal_inv, Complex.ofReal_pow, mul_right_comm,
       mul_inv_cancel₀ (pow_ne_zero _ (by exact_mod_cast (hρ v).ne')), one_mul]
     congr 1
     ring
@@ -351,7 +350,7 @@ theorem analytic_Fx (hO : Osg) {I : Type} [Fintype I] (f : X I → ℂ) (hf : Se
       exact Fx_eq f w.2
     rw [e]
     refine hc.comp (continuous_pi fun v => ?_)
-    exact Continuous.subtype_mk ((continuous_apply v).comp continuous_subtype_val) _
+    exact Continuous.subtype_mk ((continuous_apply v).comp continuous_subtypeVal) _
   · intro w hw v
     have hw' : ∀ u, (w u).im ≠ 0 := hw
     let z : X I := fun u => ⟨w u, hw' u⟩
@@ -683,14 +682,24 @@ open scoped Matrix NNReal
 
 namespace UpperTheory.Esk.IdeleSplittingLemmas
 
-variable {F : Type} [Field F] [NumberField F] [IsTotallyReal F]
+variable {F : Type} [Field F]
+
+theorem gv_scalar (t : (TR.Rinf F)ˣ) (v : InfinitePlace F) :
+    (gv v (Matrix.GeneralLinearGroup.scalar (Fin 2) t)) 1 0 = 0 ∧ (gv v (Matrix.GeneralLinearGroup.scalar (Fin 2) t)) 0 1 = 0 ∧
+      (gv v (Matrix.GeneralLinearGroup.scalar (Fin 2) t)) 0 0 = t.val v ∧
+      (gv v (Matrix.GeneralLinearGroup.scalar (Fin 2) t)) 1 1 = t.val v := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> simp [gv, Matrix.GeneralLinearGroup.scalar, Matrix.GeneralLinearGroup.map]
+
+variable [NumberField F]
 
 def zg (g : GL (Fin 2) (TR.Rinf F)) : InfinitePlace F → P := fun v => gv v g • iP
 
 def Jg (k : InfinitePlace F → ℕ) (g : GL (Fin 2) (TR.Rinf F)) : ℂ := ∏ v, j1 (k v) (gv v g) iP
 
 theorem Jg_ne (hB : B1b) (k : InfinitePlace F → ℕ) (g : GL (Fin 2) (TR.Rinf F)) : Jg k g ≠ 0 :=
-  Finset.prod_ne_zero_iff.2 fun v _ => hB.2.1 _ _ _
+  Finset.prod_ne_zero_iff.2 fun _ _ => hB.2.1 _ _ _
+
+variable [IsTotallyReal F]
 
 theorem pInf_alg (x : F) (v : InfinitePlace F) :
     TR.pInf F (algebraMap F (Ad F) x) v = InfinitePlace.embedding_of_isReal (IsTotallyReal.isReal v) x := by
@@ -787,12 +796,6 @@ theorem automorphy_factor_scalar_matrix (k : ℕ) (g : GL (Fin 2) ℝ) (s : ℝ)
   rw [j1, den, det_eq, h10, h01, h00, h11, ← Complex.ofReal_pow, ← sign_pow k hs]
   simp [Complex.ofReal_mul]
 
-theorem gv_scalar (t : (TR.Rinf F)ˣ) (v : InfinitePlace F) :
-    (gv v (Matrix.GeneralLinearGroup.scalar (Fin 2) t)) 1 0 = 0 ∧ (gv v (Matrix.GeneralLinearGroup.scalar (Fin 2) t)) 0 1 = 0 ∧
-      (gv v (Matrix.GeneralLinearGroup.scalar (Fin 2) t)) 0 0 = t.val v ∧
-      (gv v (Matrix.GeneralLinearGroup.scalar (Fin 2) t)) 1 1 = t.val v := by
-  refine ⟨?_, ?_, ?_, ?_⟩ <;> simp [gv, Matrix.GeneralLinearGroup.scalar, Matrix.GeneralLinearGroup.map]
-
 theorem part3 (hB : B1b) (h0 : H0b) {k : InfinitePlace F → ℕ} {c : Pl F → ℕ} {ω : HChar F} {χ : Hc c →* ℂˣ}
     {f : (InfinitePlace F → P) × GF F → ℂ} {φ : GA F 2 → ℂ} (hω : IsOfFinOrder ω) (hχ : IsChi c ω χ) (hs : Sgn k ω)
     (hf : (mkDat c χ).IsForm k f) (hr : Rel k f φ) (z : Ideles F) (g : GA F 2) :
@@ -877,7 +880,13 @@ open GlobalTheory.CuspRep GlobalTheory.HeckeGal GlobalTheory.GalOfCusp UpperTheo
 
 namespace UpperTheory.Esk.HyperbolicIntegrabilityLemmas
 
-variable {F : Type} [Field F] [NumberField F] [IsTotallyReal F]
+variable {F : Type} [Field F] [NumberField F]
+
+theorem fin_zc (u : (Af F)ˣ) : finGL F 2 (zc F u) = Matrix.GeneralLinearGroup.scalar (Fin 2) (finId F u) := by
+  rw [zc, finGL, GlobalTheory.CuspRep.cornerGL_scalar]
+  rfl
+
+variable [IsTotallyReal F]
 
 theorem pInf_alg (v : InfinitePlace F) (x : F) :
     TR.pInf F (algebraMap F (Ad F) x) v = InfinitePlace.embedding_of_isReal (IsTotallyReal.isReal v) x := by
@@ -888,10 +897,6 @@ theorem pInf_alg (v : InfinitePlace F) (x : F) :
   rw [e, ← InfinitePlace.embedding_of_isReal_apply (IsTotallyReal.isReal v), Complex.ofReal_re]
 
 omit [IsTotallyReal F] in
-theorem fin_zc (u : (Af F)ˣ) : finGL F 2 (zc F u) = Matrix.GeneralLinearGroup.scalar (Fin 2) (finId F u) := by
-  rw [zc, finGL, GlobalTheory.CuspRep.cornerGL_scalar]
-  rfl
-
 def rr (γ : GL (Fin 2) F) : GL (Fin 2) (TR.Rinf F) := Matrix.GeneralLinearGroup.map ((TR.pInf F).comp (algebraMap F (Ad F))) γ
 
 theorem gv_rr (c : Pl F → ℕ) (χ : Hc c →* ℂˣ) (γ : GL (Fin 2) F) (v : InfinitePlace F) : gv v (rr γ) = (mkDat c χ).r v γ :=
@@ -997,7 +1002,7 @@ theorem stab_open (ρ : Representation ℂ G V) (x : V) (U : Set G) (hU : IsOpen
   have h2 : ρ (g₀⁻¹ * g) x = x := hx _ hg
   have hg₀' : ρ g₀ x = x := hg₀
   change ρ g x = x
-  calc ρ g x = ρ g₀ (ρ (g₀⁻¹ * g) x) := by rw [← Module.End.mul_apply, ← map_mul, mul_inv_cancel_left]
+  calc ρ g x = ρ g₀ (ρ (g₀⁻¹ * g) x) := by rw [← mul_apply_eq_comp, ← map_mul, mul_inv_cancel_left]
     _ = x := by rw [h2, hg₀']
 
 def smV (ρ : Representation ℂ G V) : Submodule ℂ V where
@@ -1009,7 +1014,7 @@ def smV (ρ : Representation ℂ G V) : Submodule ℂ V where
       rw [map_add (f := _), h1, h2]
   zero_mem' := by
     change IsOpen {g | ρ g 0 = 0}
-    simp only [map_zero, Set.setOf_true]
+    simp only [map_zero, Set.ofPred_true]
     exact isOpen_univ
   smul_mem' := fun a x hx => stab_open ρ _ _ hx (by simp) fun g hg => by
     have h1 : ρ g x = x := hg
@@ -1022,7 +1027,7 @@ theorem smV_stable (ρ : Representation ℂ G V) (g : G) : smV ρ ≤ Submodule.
     (by simp) fun h hh => ?_
   have e : ρ (g⁻¹ * h * g) x = x := hh
   calc ρ h (ρ g x) = ρ g (ρ (g⁻¹ * h * g) x) := by
-        rw [← Module.End.mul_apply, ← Module.End.mul_apply, ← map_mul, ← map_mul, mul_assoc, mul_inv_cancel_left]
+        rw [← mul_apply_eq_comp, ← mul_apply_eq_comp, ← map_mul, ← map_mul, mul_assoc, mul_inv_cancel_left]
     _ = ρ g x := by rw [e]
 
 theorem smV_smooth (ρ : Representation ℂ G V) : GlobalTheory.PRep.IsSmooth (ρ.subrepresentation (smV ρ) (smV_stable ρ)) := by
@@ -1034,7 +1039,13 @@ theorem smV_smooth (ρ : Representation ℂ G V) : GlobalTheory.PRep.IsSmooth (�
 
 end Gen
 
-variable {F : Type} [Field F] [NumberField F] [IsTotallyReal F]
+variable {F : Type} [Field F] [NumberField F]
+
+theorem fin_zc (z : (Af F)ˣ) : finGL F 2 (zc F z) = GeneralLinearGroup.scalar (Fin 2) (finId F z) := by
+  rw [zc, finGL, GlobalTheory.CuspRep.cornerGL_scalar]
+  rfl
+
+variable [IsTotallyReal F]
 
 theorem fix_of (k : InfinitePlace F → ℕ) (c : Pl F → ℕ) (ω : HChar F) (φ : TR.Sm F 2) (hφ : IsHolV k c ω φ) :
     φ ∈ Hi.fixd (TR.finRep F 2) (Kc c) := by
@@ -1066,7 +1077,7 @@ theorem sign_holV {k c} {ω : HChar F} {φ : TR.Sm F 2} (hφ : IsHolV k c ω φ)
   classical
   obtain ⟨g, hg⟩ : ∃ g, φ.1 g ≠ 0 := by
     by_contra h
-    push_neg at h
+    push Not at h
     exact h0 (Subtype.ext (funext h))
   set e : TR.Rinf F := Pi.single v 1 with he
   have hr0 : rot ((0 : ℝ) • e) = 1 := by
@@ -1128,17 +1139,13 @@ theorem sign_holV {k c} {ω : HChar F} {φ : TR.Sm F 2} (hφ : IsHolV k c ω φ)
 theorem sgn_of {k c} {ω : HChar F} {φ : TR.Sm F 2} (hφ : IsHolV k c ω φ) (h0 : φ ≠ 0) : Sgn k ω := by
   intro v
   rw [sign_holV hφ h0 v, show Complex.I * ((k v : ℕ) : ℂ) * (Real.pi : ℂ) = (k v : ℕ) * ((Real.pi : ℂ) * Complex.I) by ring,
-    Complex.exp_nat_mul, Complex.exp_pi_mul_I]
-
-theorem fin_zc (z : (Af F)ˣ) : finGL F 2 (zc F z) = GeneralLinearGroup.scalar (Fin 2) (finId F z) := by
-  rw [zc, finGL, GlobalTheory.CuspRep.cornerGL_scalar]
-  rfl
+    Complex.exp_natCast_mul, Complex.exp_pi_mul_I]
 
 theorem chi_of {k c} {ω : HChar F} {φ : TR.Sm F 2} (hφ : IsHolV k c ω φ) (h0 : φ ≠ 0) : ∃ χ, IsChi c ω χ := by
   have hfix := fix_of k c ω φ hφ
   obtain ⟨g, hg⟩ : ∃ g, φ.1 g ≠ 0 := by
     by_contra h
-    push_neg at h
+    push Not at h
     exact h0 (Subtype.ext (funext h))
   have h1 : ∀ z, zc F z ∈ Kc c → (ω.1.comp (finId F)) z = 1 := by
     intro z hz
@@ -1238,16 +1245,16 @@ theorem normV_eq (w : Pl F) : normV w = Ideal.absNorm w.asIdeal := by
 theorem nu_nat {l : ℕ} [Fact l.Prime] (ι : Qbar l ≃+* ℂ) {n : ℕ} (h : ¬ l ∣ n) : nu ι (n : ℂ) = 1 := by
   have e : ι.symm (n : ℂ) = algebraMap ℚ_[l] (Qbar l) (n : ℚ_[l]) := by rw [map_natCast, map_natCast]
   apply NNReal.coe_injective
-  rw [nu_apply, coe_nnnorm, e, norm_algebraMap',
+  rw [nu_apply, coe_nnNorm, e, norm_algebraMap',
     Padic.norm_natCast_eq_one_iff.2 ((Nat.Prime.coprime_iff_not_dvd Fact.out).2 h), NNReal.coe_one]
 
 theorem not_dvd (w : Pl F) {l : ℕ} [hl : Fact l.Prime] (h : ((l : ℕ) : 𝓞 F) ∉ w.asIdeal) : ¬ l ∣ normV w := by
   intro hd
-  haveI := w.isPrime
+  have := w.isPrime
   have hne : normV w ≠ 0 := by
     rw [normV_eq]; have := HeightOneSpectrum.one_lt_absNorm w; omega
-  haveI : Finite (𝓞 F ⧸ w.asIdeal) := Nat.finite_of_card_ne_zero hne
-  haveI := Fintype.ofFinite (𝓞 F ⧸ w.asIdeal)
+  have : Finite (𝓞 F ⧸ w.asIdeal) := Nat.finite_of_card_ne_zero hne
+  have := Fintype.ofFinite (𝓞 F ⧸ w.asIdeal)
   have hd' : l ∣ Fintype.card (𝓞 F ⧸ w.asIdeal) := by rw [Fintype.card_eq_nat_card]; exact hd
   obtain ⟨a, ha⟩ := exists_prime_addOrderOf_dvd_card l hd'
   have h1 : (l : 𝓞 F ⧸ w.asIdeal) * a = 0 := by rw [← nsmul_eq_mul, ← ha, addOrderOf_nsmul_eq_zero]
@@ -1289,7 +1296,7 @@ theorem fin_supp (y : (Af F)ˣ) : (Function.mulSupport fun w : Pl F => ‖pLoc F
   have h2 := Filter.eventually_cofinite.1 ((y⁻¹ : (Af F)ˣ) : Af F).2
   refine (h1.union h2).subset fun w hw => ?_
   by_contra hc
-  simp only [Set.mem_union, Set.mem_setOf_eq, not_or, not_not] at hc
+  simp only [Set.mem_union, Set.mem_ofPred_eq, not_or, not_not] at hc
   have a1 : Valued.v (pLoc F w (y : Af F)) ≤ 1 := hc.1
   have a2 : Valued.v (pLoc F w ((y⁻¹ : (Af F)ˣ) : Af F)) ≤ 1 := hc.2
   have a3 : Valued.v (pLoc F w (y : Af F)) * Valued.v (pLoc F w ((y⁻¹ : (Af F)ˣ) : Af F)) = 1 := by
@@ -1540,7 +1547,7 @@ theorem nu_two {l : ℕ} [Fact l.Prime] (hl : l ≠ 2) (ι : Qbar l ≃+* ℂ) :
     | zero => simp
     | succ m ih => rw [Nat.cast_succ]; exact (nu ι).map_add_le ih (by simp)
   have hlt : nu ι (l : ℂ) < 1 := by
-    rw [nu_apply, map_natCast, ← NNReal.coe_lt_coe, coe_nnnorm, NNReal.coe_one]
+    rw [nu_apply, map_natCast, ← NNReal.coe_lt_coe, coe_nnNorm, NNReal.coe_one]
     rw [← map_natCast (algebraMap ℚ_[l] (PadicAlgCl l)) l]
     exact lt_of_eq_of_lt (PadicAlgCl.norm_extends l _) Padic.norm_p_lt_one
   obtain ⟨m, hm⟩ := (Fact.out : l.Prime).odd_of_ne_two hl
@@ -1622,8 +1629,7 @@ end UpperTheory.Esk.TraceCongruenceBounds
 
 open UpperTheory.Esk UpperTheory.Esk.TraceCongruenceBounds in
 theorem UpperTheory.Esk.pf_TrCong : UpperTheory.Esk.TF → UpperTheory.Esk.DAx → UpperTheory.Esk.DTwo → UpperTheory.Esk.DGood → UpperTheory.Esk.GTerm → UpperTheory.Esk.H0b → UpperTheory.Esk.HFin → UpperTheory.Esk.TrCong := by
-  intro hTF hDAx hTwo hGood hGT hH0b hFin
-  intro F _ _ _ hd l _ hl ι L k₀ hk₀ c hc hcL hu ω χ hω hχ hS N t ht W r hr hW n a hreps h h'
+  intro hTF hDAx hTwo hGood hGT hH0b hFin F _ _ _ hd l _ hl ι L k₀ hk₀ c hc hcL hu ω χ hω hχ hS N t ht W r hr hW n a hreps h h'
   obtain ⟨⟨m, hm0, hm⟩, hsg⟩ := hH0b F (fun _ => k₀) c ω χ hω hχ
   have hS' : Sgn (fun v => k₀ + 2 * t v) ω := fun v => by
     rw [hS v, pow_add, pow_mul]; simp

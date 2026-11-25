@@ -433,12 +433,6 @@ theorem stepCh_all {B : Base} {X : PreX B.toPre} (I : TC B X) (hI : I.Ok) (hP : 
 
 end SMid
 
-theorem liftKA {B : Base} {X : PreX B.toPre} (I : TC B X) (hI : I.Ok) (hP : TC.Pins B X) (l : I.Laws) (Z : TC.Later B (I.cols l))
-    (i : ℕ) (hi : i ≤ B.R.m) (k : TC.GA B (B.R.N i))
-    (hk : ∃ p : Formalism.L2.Col.DecoF B.fields.E (B.R.N i) ∅ ∅ ∅, TC.PtOf k p ∧ p.deco.1.N = Formalism.L2.Col.stdLat B.fields.E (B.R.N i)) :
-    ∃ kA : GA (I.rec7 l Z) ((I.rec7 l Z).sp.X i), kA ∈ GfC _ ∧ finM _ (rankN (I.rec7 l Z) i hi) kA = k.1 :=
-  GlobalTheory.T.exists_adelicUnitaryLift_of_chartBasePoint I hI hP l Z i hi k hk
-
 theorem levData {B : Base} {X : PreX B.toPre} (I : TC B X) (l : I.Laws) (Z : TC.Later B (I.cols l)) (i : ℕ) (hi : i ≤ B.R.m)
     {T : ℕ} {bad : Set (HeightOneSpectrum (𝓞 B.host.F))} {cl : Type} {stab : cl → Type} [∀ c, Group (stab c)]
     {lat : cl → Submodule (𝓞 B.host.E) (Fin (B.R.N i) → B.host.E)} (K : LevelChart (I.rec7 l Z) T bad i hi stab lat) :

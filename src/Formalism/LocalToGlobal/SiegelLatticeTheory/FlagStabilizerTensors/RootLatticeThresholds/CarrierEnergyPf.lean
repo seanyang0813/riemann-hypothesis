@@ -28,8 +28,18 @@ def Parts.Gam0 (P : Parts X u u') : ℝ :=
     (Formalism.FourierDecayAlt.D.deG P.S.g (Formalism.FourierDecayAlt.S6.rd D.host.E)) 0
 
 def Parts.EnergyModel (P : Parts X u u') : Prop :=
-  P.Built → (∀ v, Formalism.FourierDecayAlt.JC.IsModelPlace P.S P.T P.f P.χ v (P.L v) (P.j v) (P.lam v) P.c (P.Cm v) (P.σ v)) →
-    ∀ v, Formalism.FourierDecayAlt.JCT.jvModel P.S P.j P.Cm v = (Formalism.FourierDecayAlt.B.normSq (P.T v).base (P.f v)).toReal / P.Gam0
+  P.Built → ∀ (L : ∀ v : Fin P.S.f, Formalism.FourierDecayAlt.R.LevelData
+        (Formalism.FourierDecayAlt.MA.A (Formalism.FourierDecayAlt.D.parOf P.S v)
+          (Formalism.FourierDecayAlt.MA.DQ (Formalism.FourierDecayAlt.D.parOf P.S v)))
+        (Formalism.FourierDecayAlt.D.parOf P.S v).r)
+      (j : ∀ v : Fin P.S.f, Formalism.FourierDecayAlt.M.Ty (Formalism.FourierDecayAlt.D.parOf P.S v) →
+        Formalism.FourierDecayAlt.MA.SmQ (Formalism.FourierDecayAlt.D.parOf P.S v).r
+          (Formalism.FourierDecayAlt.D.parOf P.S v).TT)
+      (lam : ∀ v : Fin P.S.f, Fin ((Formalism.FourierDecayAlt.D.parOf P.S v).k +
+        2 * (Formalism.FourierDecayAlt.D.parOf P.S v).r + 1) → ℝ)
+      (c : Formalism.FourierDecayAlt.LE.Cut) (Cm σ : Fin P.S.f → ℝ),
+    (∀ v, Formalism.FourierDecayAlt.JC.IsModelPlace P.S P.T P.f P.χ v (L v) (j v) (lam v) c (Cm v) (σ v)) →
+    ∀ v, Formalism.FourierDecayAlt.JCT.jvModel P.S j Cm v =(Formalism.FourierDecayAlt.B.normSq (P.T v).base (P.f v)).toReal / P.Gam0
 
 def Parts.EnergyNorm (P : Parts X u u') (jn : ℝ) : Prop :=
   (∏ v, (Formalism.FourierDecayAlt.B.normSq (P.T v).base (P.f v)).toReal / P.Gam0) = jn

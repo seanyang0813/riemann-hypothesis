@@ -334,26 +334,6 @@ section Phi
 variable (D : D7) (i : D.nd.Loc) (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i))
 
 
-set_option synthInstance.maxHeartbeats 400000 in
-theorem phi_injective (k : ℕ) : Function.Injective (Br.phi (D.nbr i w hw) k) := by
-  rw [← LinearMap.ker_eq_bot (τ₁₂ := (D.nbr i w hw).eO.toRingHom), eq_bot_iff]
-  intro x hx
-  obtain ⟨u, rfl⟩ := Submodule.mkQ_surjective _ x
-  rw [LinearMap.mem_ker] at hx
-  rw [Submodule.mem_bot, Submodule.mkQ_apply, Submodule.Quotient.mk_eq_zero]
-  have h1 : Br.vecS (D.nbr i w hw) k u ∈ stdG (Br.Ow (D.nbr i w hw)) (Br.LLw (D.nbr i w hw)) k := by
-    rw [← Submodule.Quotient.mk_eq_zero]
-    exact hx
-  obtain ⟨c, hc⟩ := h1
-  refine ⟨fun j => (D.nbr i w hw).eO.symm (c j), ?_⟩
-  funext j
-  apply (Br.toLLK (D.nbr i w hw)).injective
-  have := congrFun hc j
-  simp only [LinearMap.compLeft_apply, Function.comp_apply, Algebra.linearMap_apply] at this
-  show Br.toLLK (D.nbr i w hw) (algebraMap _ _ ((D.nbr i w hw).eO.symm (c j))) = Br.toLLK (D.nbr i w hw) (u j)
-  rw [Br.toLLK_alg, RingEquiv.apply_symm_apply]
-  exact this
-
 
 
 theorem phi_act {k : ℕ} (M : Gw D.nd w →* Matrix (Fin k) (Fin k) (D.nd.O i)) (g : ↥(GK (D.nbr i w hw).Kw))

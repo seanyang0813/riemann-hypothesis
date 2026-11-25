@@ -8,6 +8,7 @@ import Development.AutomorphicArithmetic.AutomorphicVarieties.IdeleGenerators.Ho
 import Mathlib.Algebra.Order.Floor.Extended
 import Mathlib.Algebra.Order.Floor.Semifield
 import Mathlib.Algebra.Order.Interval.Basic
+import Mathlib.Analysis.Fourier.ZMod
 import Mathlib.Analysis.Normed.Algebra.GelfandRadius
 import Mathlib.Analysis.SpecialFunctions.Bernstein
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
@@ -116,13 +117,8 @@ private theorem eisChi_slash_sum {k : ℤ} {ι : Type} (s : Finset ι) (c : ι �
 
 private theorem eisChi_gs {N : ℕ} [NeZero N] {χ : DirichletCharacter ℂ N} (hχ : χ.IsPrimitive) (e : ZMod N) :
     ∑ a : ZMod N, χ⁻¹ a * (ZMod.stdAddChar (a * e) : ℂ) = χ e * gaussSum χ⁻¹ ZMod.stdAddChar := by
-  have hi : (χ⁻¹).IsPrimitive := by
-    rw [DirichletCharacter.isPrimitive_def, DirichletCharacter.conductor_inv]; exact hχ
-  have := gaussSum_mulShift_of_isPrimitive (ZMod.stdAddChar (N := N)) hi e
-  rw [inv_inv] at this
-  rw [← this, gaussSum]
-  refine Finset.sum_congr rfl fun a _ => ?_
-  rw [AddChar.mulShift_apply, mul_comm e a]
+  simpa only [ZMod.dft_apply, mul_neg, neg_neg, smul_eq_mul, inv_inv, mul_comm] using
+    hχ.inv.fourierTransform_eq_inv_mul_gaussSum (-e)
 
 theorem UpperTheory.V.Sd.eisChi :
     UpperTheory.V.Sd.EisChi := by

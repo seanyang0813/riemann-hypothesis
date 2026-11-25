@@ -58,8 +58,6 @@ open NumberField Matrix GlobalTheory.ExportSeries GlobalTheory.SeriesTie
 open Formalism.IndefR.Links (PolF labLL)
 open Formalism.L2.Host (embLL0)
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 namespace GlobalTheory.SmallSpan
 
 variable {D : D7} {m n : ℕ}

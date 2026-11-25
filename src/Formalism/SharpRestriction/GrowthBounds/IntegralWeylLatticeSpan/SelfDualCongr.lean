@@ -142,8 +142,6 @@ theorem frlat_re {k : ℕ} (hk : k = n) (v : HeightOneSpectrum (𝓞 F))
 
 end Gen
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 variable {D : D7} {X : Formalism.L2.Herm.Herm0 D}
 
 

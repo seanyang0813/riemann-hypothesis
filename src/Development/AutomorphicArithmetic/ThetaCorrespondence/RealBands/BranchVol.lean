@@ -509,7 +509,7 @@ private theorem vol_arith (n : ℕ) (B : ℝ) (hn : 3 ≤ n) (hB : 1 ≤ B) :
 theorem UpperTheory.Lit.Branch.volDeg :
     VolDeg := by
   have hVol : VolBall := _root_.GlobalTheory.SepReal.volBall
-  have hDegU : DegUpper := _root_.GlobalTheory.SepReal.degUpper_of _root_.GlobalTheory.SepReal.logNear_holds _root_.GlobalTheory.SepReal.lieBound hVol
+  have hDegU : DegUpper := _root_.GlobalTheory.SepReal.degUpper_of _root_.GlobalTheory.SepReal.logNear_holds _root_.GlobalTheory.SepReal.lieBound
   refine ⟨11, by norm_num, ?_⟩
   intro n e ε lam ε' mu B hP H H' _ _ _ _ π σ hπ hσ d hd
   have hn := hP.three_le

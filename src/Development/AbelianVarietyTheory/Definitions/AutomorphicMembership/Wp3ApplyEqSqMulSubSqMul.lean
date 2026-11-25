@@ -60,9 +60,9 @@ abbrev Parts (R : RealDat3 D A Ks) : Type :=
 
 def cxW (R : RealDat3 D A Ks) (F : Face3 D A) (u : Parts R) : Cx.CxData A.fam3.amb3 :=
   { R.toCx3 F with
-    EEp := fun p => (by with_unfolding_all exact ((Tw.sub (twAt D.what₂.embLL A.A.v0) (u.1 p)) :))
-    EEl := fun c => (by with_unfolding_all exact ((Tw.sub (twAt D.what₂.embLL A.A.v0) ((u.2.1 (R.toRealDat.levR F.lv2 c)).comap R.HE.e)) :))
-    Wp := fun i p => (by with_unfolding_all exact ((Tw.sub (twAt D.what₂.embLL A.A.v0) (u.2.2 i p)) :)) }
+    EEp := fun p => (by exact ((Tw.sub (twAt D.what₂.embLL A.A.v0) (u.1 p)) :))
+    EEl := fun c => (by exact ((Tw.sub (twAt D.what₂.embLL A.A.v0) ((u.2.1 (R.toRealDat.levR F.lv2 c)).comap R.HE.e)) :))
+    Wp := fun i p => (by exact ((Tw.sub (twAt D.what₂.embLL A.A.v0) (u.2.2 i p)) :)) }
 
 def carriesW (R : RealDat3 D A Ks) (E : type_of% R.EEc) (p : A.fam3.base3.Ix) (c : Pl D.host.E → List ℤ → ℂ) : Prop :=
   E c ≠ ⊥ ∧ (E c).map (LinearMap.adjoint (R.Th A.A.μ0)) ≤
@@ -86,31 +86,31 @@ section Three
 
 variable {A : FamIn3 a.D.what₂.LL G Pl0 I0 (List ℕ) T a.D.R.m} (R : RealDat3 a.D A Ks) (F : Face3 a.D A)
 
-theorem eec_eq : R.EEc = (by with_unfolding_all exact ((letI := alg b iK; (real3 b R).EEc) :)) :=
-  (by with_unfolding_all exact ((congrArg (fun (m : type_of% (@partFull a.D)) (c : Pl a.D.host.E → List ℤ → ℂ) =>
+theorem eec_eq : R.EEc = letI := alg b iK; (real3 b R).EEc :=
+  (by exact ((congrArg (fun (m : type_of% (@partFull a.D)) (c : Pl a.D.host.E → List ℤ → ℂ) =>
     (m R.θ (R.MY 0) (levS _ (R.βY 0) (R.dat0 R.triv)) (levChi _ (R.βY 0) (R.dat0 R.triv)) R.SF fun P d => c P (dualLab d)).comap
       R.HE.e) (partFull_eq b a)) :))
 
-theorem wc_eq : R.Wc' = (by with_unfolding_all exact ((letI := alg b iK; (real3 b R).Wc') :)) :=
-  (by with_unfolding_all exact ((congrArg₂ (fun (W : type_of% R.toRealDat.Wat) (m : type_of% (@partFull a.D)) (i : Fin a.D.R.m)
+theorem wc_eq : R.Wc' = letI := alg b iK; (real3 b R).Wc' :=
+  (by exact ((congrArg₂ (fun (W : type_of% R.toRealDat.Wat) (m : type_of% (@partFull a.D)) (i : Fin a.D.R.m)
       (c : Pl a.D.host.E → List ℤ → ℂ) =>
     (W i (sg0 a.D A.A) R.triv ⊓
       m R.θ (R.MW i (sg0 a.D A.A)) (levS _ (R.βW i) (R.datWp i R.triv)) (levChi _ (R.βW i) (R.datWp i R.triv)) R.SF c).comap
       (R.HW i _).e) (wat_eq b R.toRealDat) (partFull_eq b a)) :))
 
-theorem carries_eq : R.Carries = (by with_unfolding_all exact ((letI := alg b iK; (real3 b R).Carries) :)) :=
+theorem carries_eq : R.Carries = letI := alg b iK; (real3 b R).Carries :=
   congrArg (carriesW R) (eec_eq b R)
 
-theorem realAdelicInertTransport_typeRows_eq : R.EEp3 = (by with_unfolding_all exact ((letI := alg b iK; (real3 b R).EEp3) :)) :=
+theorem realAdelicInertTransport_typeRows_eq : R.EEp3 = letI := alg b iK; (real3 b R).EEp3 :=
   congrArg₂ (fun (Q : type_of% R.Carries) (E : type_of% R.EEc) (p : A.fam3.base3.Ix) =>
     ⨆ (c : Pl a.D.host.E → List ℤ → ℂ) (_ : Q p c), E c) (carries_eq b R) (eec_eq b R)
 
-theorem wp3_apply_eq_sq_mul_sub_sq_mul : R.Wp3 = (by with_unfolding_all exact ((letI := alg b iK; (real3 b R).Wp3) :)) :=
+theorem wp3_apply_eq_sq_mul_sub_sq_mul : R.Wp3 = letI := alg b iK; (real3 b R).Wp3 :=
   congrArg₂ (fun (Q : type_of% R.Carries) (E : type_of% R.Wc') (i : Fin a.D.R.m) (p : A.fam3.base3.Ix) =>
     ⨆ (c : Pl a.D.host.E → List ℤ → ℂ) (_ : Q p c), E i c) (carries_eq b R) (wc_eq b R)
 
 theorem parts_eq (_F : Face3 a.D A) : ((R.EEp3, R.toRealDat.EEat, R.Wp3) : Parts R) =
-    ((by with_unfolding_all exact ((letI := alg b iK; (real3 b R).EEp3) :)), (by with_unfolding_all exact ((letI := alg b iK; (real b R.toRealDat).EEat) :)), (by with_unfolding_all exact ((letI := alg b iK; (real3 b R).Wp3) :))) :=
+    ((letI := alg b iK; (real3 b R).EEp3), letI := alg b iK; (real b R.toRealDat).EEat, (letI := alg b iK; (real3 b R).Wp3)) :=
   Prod.ext (realAdelicInertTransport_typeRows_eq b R) (Prod.ext (eeat_eq b R.toRealDat) (wp3_apply_eq_sq_mul_sub_sq_mul b R))
 
 theorem toCx3_eq : R.toCx3 F = (@RealDat3.toCx3 (@Late.D B C b) G ‹Group G› ‹Fintype G› Pl0 I0 T (@famInThreeCoefficientChange B C a b G ‹Group G› ‹Fintype G› Pl0 I0 T A) Ks ‹Field Ks› ‹@NumberField Ks ‹Field Ks›› (@alg B C a b Ks ‹Field Ks› iK) (@real3 B C a b G ‹Group G› ‹Fintype G› Pl0 I0 T Ks ‹Field Ks› ‹@NumberField Ks ‹Field Ks›› iK A R) (@face3 B C a b G ‹Group G› ‹Fintype G› Pl0 I0 T A F)) :=
@@ -312,10 +312,10 @@ theorem primRows3_tr (h : PrimRows3 R F) : letI := alg b iK; PrimRows3 (real3 b 
 theorem realAdelicInertTransport_furtherRows (h : UnusedChoiceStatements R F) : letI := alg b iK; UnusedChoiceStatements (real3 b R) (face3 b F) := by
   letI := alg b iK
   constructor
-  case ex => exact (by with_unfolding_all exact ((exAt_tr b h.ex) :))
-  case conj => exact (by with_unfolding_all exact (h.conj :))
-  case levelW => exact (by with_unfolding_all exact ((lLevelW_tr b h.levelW) :))
-  case integral => exact (by with_unfolding_all exact (h.integral :))
+  case ex => exact exAt_tr b h.ex
+  case conj => exact h.conj
+  case levelW => exact (by exact ((lLevelW_tr b h.levelW) :))
+  case integral => exact h.integral
 
 end Three
 

@@ -1012,14 +1012,6 @@ structure StrictTransformAndMonomialCaseHypotheses : Prop where
                               C = closure ({π ξ'} : Set ↥T.scheme)
   monomial : MonomialCaseHypotheses.{u}
 
-theorem OrderReductionHypotheses.of_strictTransformHypotheses (h : StrictTransformAndMonomialCaseHypotheses.{u}) :
-    OrderReductionHypotheses.{u} := by
-  exact {
-    controlledTransform_orderAt_le := orderAt_controlledTransform_le_of_orderAt_eq_on_center
-    strictTransform_components := h.strictTransform_components
-    monomial := h.monomial
-  }
-
 end FunctorialResolution.EmbeddedResolution
 
 end

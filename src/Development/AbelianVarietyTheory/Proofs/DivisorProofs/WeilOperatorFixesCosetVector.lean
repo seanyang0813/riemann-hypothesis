@@ -71,49 +71,6 @@ open Formalism.MainNotions Formalism.MainNotions.TaylorLogMetric Formalism.MainN
 
 namespace GlobalTheory.HeisFix
 
-theorem heis_fix : ∀ {D : D7}, Inp D → ∀ {δ t0 : ℂ} {Q : ℕ} (P : Pair D ⊤ δ t0 Q) {𝔪 : Ideal (𝓞 D.host.E)}, 𝔪 ≠ ⊥ →
-    ∀ (o : ℕ) {k : GA D P.a}, k ∈ intG D P.a → CongOne D 𝔪 k →
-    Iop D (tor0 D ⊤ δ) (La0 D (tor0 D ⊤ δ) P.a P.d) (La D (tor0 D ⊤ δ) (stdL D P.a) (skewLat D 𝔪 P.d)) P.e0 ∈
-      TT D (tor0 D ⊤ δ) P.a P.d →
-    P.W.Om k 1 (Iop D (tor0 D ⊤ δ) (La0 D (tor0 D ⊤ δ) P.a P.d) (La D (tor0 D ⊤ δ) (stdL D P.a) (skewLat D 𝔪 P.d)) P.e0) =
-      Iop D (tor0 D ⊤ δ) (La0 D (tor0 D ⊤ δ) P.a P.d) (La D (tor0 D ⊤ δ) (stdL D P.a) (skewLat D 𝔪 P.d)) P.e0 →
-    P.W.Om k 1 (Wd D (tor0 D ⊤ δ) (pt D (tor0 D ⊤ δ) δ (unitBlock D o P.a P.d))
-      (Iop D (tor0 D ⊤ δ) (La0 D (tor0 D ⊤ δ) P.a P.d) (La D (tor0 D ⊤ δ) (stdL D P.a) (skewLat D 𝔪 P.d)) P.e0)) =
-      Wd D (tor0 D ⊤ δ) (pt D (tor0 D ⊤ δ) δ (unitBlock D o P.a P.d))
-        (Iop D (tor0 D ⊤ δ) (La0 D (tor0 D ⊤ δ) P.a P.d) (La D (tor0 D ⊤ δ) (stdL D P.a) (skewLat D 𝔪 P.d)) P.e0) := by
-  intro D hD δ t0 Q P 𝔪 h𝔪 o k hk hc hIT hfix
-  have h1 := hD.g1
-  have he := P.vac.1
-  have k0 : KLat D (tor0 D ⊤ δ) (La0 D (tor0 D ⊤ δ) P.a P.d) :=
-    VacMove.klat _ (VacMove.moves_one D P.a) (VacMove.moves_one D P.d)
-  have kB : KLat D (tor0 D ⊤ δ) (La D (tor0 D ⊤ δ) (stdL D P.a) (skewLat D 𝔪 P.d)) :=
-    Or.inr ⟨_, _, VacMove.sd_of_moves (VacMove.moves_one D P.a), GlobalTheory.SkewLatSelfDual.skewLat_SD h𝔪 P.d, rfl⟩
-  have hHB := (hD.uni ⊤ δ P.crv P.a P.d _ _ k0 kB P.e0 he).2.1
-  obtain ⟨m, hm, hl⟩ := P.W.lift k 1 (unitBlock D o P.a P.d) _ hIT
-  have hx₀int : ∀ i j, ∃ b : 𝓞 D.host.E, unitBlock D o P.a P.d i j = (b : D.host.E) := by
-    intro i j
-    by_cases h : i.1 = o + j.1
-    · exact ⟨1, by simp [unitBlock, h]⟩
-    · exact ⟨0, by simp [unitBlock, h]⟩
-  obtain ⟨w, hw, hclose⟩ := GlobalTheory.CongApprox.exists_closeTo_congOne D 𝔪 h𝔪 k hk hc _ hx₀int m hm
-  have hmain := hl _ hclose
-  rw [hfix] at hmain
-  rw [hmain]
-  obtain ⟨hw0, hwB⟩ := GlobalTheory.FunObj.SqNum.pt_mem_of_entries_mem D δ 𝔪 w hw
-  have hx0 := pt_unitBlock_mem (D := D) δ o P.a P.d
-  obtain ⟨φ, hφ⟩ := VacMove.wd_wd D (tor0 D ⊤ δ) (pt D (tor0 D ⊤ δ) δ (unitBlock D o P.a P.d)) (pt D (tor0 D ⊤ δ) δ w)
-  have hφ1 : φ = 1 := by
-    have h2 := hφ P.e0
-    rw [VacMove.wd_fix h1 P.crv k0 he hw0, VacMove.wd_fix h1 P.crv k0 he hx0,
-      VacMove.wd_fix h1 P.crv k0 he (add_mem hx0 hw0)] at h2
-    by_contra hne
-    apply P.W.nz
-    have : (φ - 1) • P.e0 = 0 := by rw [sub_smul, one_smul, ← h2, sub_self]
-    exact (smul_eq_zero.1 this).resolve_left (sub_ne_zero.2 hne)
-  have h3 := hφ (Iop D (tor0 D ⊤ δ) (La0 D (tor0 D ⊤ δ) P.a P.d) (La D (tor0 D ⊤ δ) (stdL D P.a) (skewLat D 𝔪 P.d)) P.e0)
-  rw [VacMove.wd_fix h1 P.crv kB hHB hwB, hφ1, one_smul, ← VacMove.pt_add] at h3
-  exact h3.symm
-
 end GlobalTheory.HeisFix
 end -- clump:auto
 end -- clump:auto
@@ -172,57 +129,6 @@ theorem vl_sub_le' {T : Type} {L : LevCh D T} (P : Places L) {y : AE D}
 
 end GlobalTheory.NuTrivSq
 
-
-open GlobalTheory.Mem.Col2.SplitChar Formalism.L2.Host GlobalTheory.NuTrivSq in
-theorem GlobalTheory.NuTrivSq.nuH_finIdl_eq_one : ∀ {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} (G : GridData L sc) (i j : Fin D.R.m) {μ₀ : T},
-    L.Is μ₀ → ∀ x : (AE D)ˣ, IntU D x → (x : AE D) - 1 ∈ hatId D (condE G.pl) →
-      (x : AE D) - 1 ∈ hatId D (D.host.conj • condE G.pl) →
-      (nuH G μ₀ i j).1 (GlobalTheory.Mem.Col2.SplitChar.finIdl D x) = 1 := by
-  intro D T L sc G i j μ₀ hL u hu hc1 hc2
-  refine GlobalTheory.Mem.LocTriv.eq_one_of_local D.host.E _ (nuH G μ₀ i j).2.1 (finIdl D u) (finIdl_unit hu)
-    (fun w => by rw [finIdl_fst]; rfl) fun PP x hx => ?_
-  have hunit : IsUnitAt PP x := by
-    unfold IsUnitAt
-    rw [hx]
-    exact finIdl_unit hu PP
-  have hsub : Valued.v ((x : PP.adicCompletion D.host.E) - 1) = vl D PP ((u : AE D) - 1) := by
-    rw [hx, vl_sub_one]
-  have hμ : (L.C.mu0 j).loc PP x = 1 := by
-    by_cases hg : ∃ k, OverP D.host (D.host.g k) PP
-    · obtain ⟨k, hk⟩ := hg
-      have hS : (_root_.IsDedekindDomain.HeightOneSpectrum.under (𝓞 D.host.F) PP) ∈ G.pl.S0 := by
-        refine G.pl.mem_S0_of_sum_eq.2 (Or.inr ((S1_mem_OmF D).2 ?_))
-        have : ((D.host.g k : ℕ) : 𝓞 D.host.F) ∈ ((_root_.IsDedekindDomain.HeightOneSpectrum.under (𝓞 D.host.F) PP)).asIdeal := by
-          change _ ∈ PP.asIdeal.comap (algebraMap (𝓞 D.host.F) (𝓞 D.host.E))
-          rw [Ideal.mem_comap, map_natCast]
-          exact hk
-        fin_cases k
-        · exact Or.inl this
-        · exact Or.inr (Or.inl this)
-      refine (L.C.isMu0 j).tame PP x hunit ?_
-      rw [hsub]
-      refine (vl_sub_le' G.pl hc1 hc2 hS).trans ?_
-      have : 1 ≤ condExp G.pl ((_root_.IsDedekindDomain.HeightOneSpectrum.under (𝓞 D.host.F) PP)) := by unfold condExp; split_ifs <;> omega
-      exact WithZero.exp_le_exp.2 (by omega)
-    · push_neg at hg
-      exact (L.C.isMu0 j).unr PP hg x hunit
-  have hχ : (G.ch.chiH (D.R.m - i)).loc PP x = 1 := by
-    have h1 : 1 ≤ D.R.m - (i : ℕ) := by omega
-    have h2 : D.R.m - (i : ℕ) ≤ D.R.m := by omega
-    by_cases hS : (_root_.IsDedekindDomain.HeightOneSpectrum.under (𝓞 D.host.F) PP) ∈ G.pl.S0
-    · have hb := vl_sub_le' G.pl hc1 hc2 hS
-      rw [← hsub] at hb
-      rcases G.pl.mem_S0_of_sum_eq.1 hS with h0 | h1'
-      · rw [condExp, if_pos h0] at hb
-        exact (G.ch.lev0 _ h1 h2 PP h0).1 x hunit (by simpa using hb)
-      · have hne : (_root_.IsDedekindDomain.HeightOneSpectrum.under (𝓞 D.host.F) PP) ≠ G.pl.v0 := fun e => G.ch.basePlace_not_mem_chiGridBadPlaces (e ▸ h1')
-        rw [condExp, if_neg hne] at hb
-        exact (G.ch.lev1 _ h1 h2 PP h1').1 x hunit (by simpa using hb)
-    · exact G.ch.unr _ h1 h2 PP hS x hunit
-  show (nuH G μ₀ i j).loc PP x = 1
-  rw [nuH, hL.xi_base, mul_one, div_eq_mul_inv]
-  change (L.C.mu0 j).loc PP x * ((G.ch.chiH (D.R.m - i)).loc PP x)⁻¹ = 1
-  rw [hμ, hχ, inv_one, one_mul]
 
 end
 end -- clump:auto
@@ -300,45 +206,6 @@ theorem iop_facts (hI : Inp D) {δ t0 : ℂ} {Q : ℕ} (P : Pair D ⊤ δ t0 Q) 
   exact fix_of_prop P (VacMove.vac_TT hI.g1 P.crv P.vac.1) (c := c) (by rw [hc]; funext z; rfl)
 
 variable {T : Type} {L : LevCh D T} {sc : Consts}
-
-theorem vac_fix_split (G : GridData L sc) (i j : Fin D.R.m) {μ₀ : T} (hL : L.Is μ₀) {δ t0 : ℂ} {Q : ℕ}
-    {P P' : Pair D ⊤ δ t0 Q} (h : IsBottom G μ₀ i j (condE G.pl) P P') {k : GA D P.a} (hk : k ∈ intG D P.a)
-    (hk' : CongOne D (condE G.pl) k) (hs : SuppSplit D (k : GL (Fin P.a) (AE D))) : P.W.Om k 1 P.e0 = P.e0 := by
-  obtain ⟨x, hxu, hxi, hx, h1, h2⟩ := GlobalTheory.FunObj.NormUniq.SplitDet.exists_splitComp_det hk hk' hs
-  have hm : Moves D (k : GL (Fin P.a) (AE D)) (stdL D P.a) := by
-    simpa using VacMove.moves_mul_int hk (VacMove.moves_one D P.a)
-  have e := P.W.split k 1 x 1 (stdL D P.a) (stdL D P.d) hs (fun q _ _ => trivAt_one q)
-    (fun q hq hi => ⟨hxi q hq hi, by simpa using zeroAt_zero (D := D) q⟩) hx (by simp) hm (VacMove.moves_one D P.d)
-  have hc : P.W.chV'.f x ^ P.W.ep' = 1 := by
-    rw [h.chars.2 x]
-    show ((nuH G μ₀ i j).1 (GlobalTheory.Mem.Col2.SplitChar.finIdl D x))⁻¹ = 1
-    rw [GlobalTheory.NuTrivSq.nuH_finIdl_eq_one G i j hL x hxu h1 h2, inv_one]
-  rw [e, map_one, one_zpow, hc, one_mul,
-    show La D (tor0 D ⊤ δ) (stdL D P.a) (stdL D P.d) = La0 D (tor0 D ⊤ δ) P.a P.d from rfl,
-    VacMove.iop_self D _ (La0 D (tor0 D ⊤ δ) P.a P.d) P.vac.1]
-  funext z
-  simp
-
-theorem vac_fix (G : GridData L sc) (i j : Fin D.R.m) (hI : Inp D) {μ₀ : T} (hL : L.Is μ₀) {δ t0 : ℂ} {Q : ℕ}
-    {P P' : Pair D ⊤ δ t0 Q} (h : IsBottom G μ₀ i j (condE G.pl) P P') {k : GA D P.a} (hk : k ∈ intG D P.a)
-    (hk' : CongOne D (condE G.pl) k) : P.W.Om k 1 P.e0 = P.e0 := by
-  obtain ⟨ks, ki, rfl, hs, hi, hs', hss, hii⟩ := GlobalTheory.CongSplitFactor.exists_split_inert_factor hk hk'
-  have hT := VacMove.vac_TT hI.g1 P.crv P.vac.1
-  have h1 : P.W.Om ki 1 P.e0 = P.e0 :=
-    P.W.inert ki 1 ((mem_intG ki).1 hi) ((mem_intG 1).1 (one_mem _)) hii (fun q _ _ => trivAt_one q)
-  have e := P.W.mul ks ki 1 1 P.e0 hT
-  rw [mul_one] at e
-  rw [e, h1, vac_fix_split G i j hL h hs hs' hss]
-
-theorem cosetVec_fix (G : GridData L sc) (i j : Fin D.R.m) (hI : Inp D) {μ₀ : T} (hL : L.Is μ₀) {δ t0 : ℂ} {Q : ℕ}
-    {P P' : Pair D ⊤ δ t0 Q} (h : IsBottom G μ₀ i j (condE G.pl) P P') {k : GA D P.a} (hk : k ∈ intG D P.a)
-    (hk' : CongOne D (condE G.pl) k) : P.W.Om k 1 (cosetVec P (condE G.pl) 0) = cosetVec P (condE G.pl) 0 := by
-  obtain ⟨hHT, hfix⟩ := iop_facts hI P (condE_ne_bot G.pl)
-  have hH := hfix k (vac_fix G i j hI hL h hk hk')
-  have hW := GlobalTheory.HeisFix.heis_fix hI P (condE_ne_bot G.pl) 0 hk hk' hHT hH
-  have hWT := GlobalTheory.FunObj.NormUniq.wd_rat_mem_TT P.crv one_pos (by rw [one_smul]; exact pt_unitBlock_mem δ 0 P.a P.d) hHT
-  unfold cosetVec
-  rw [P.W.smul _ _ _ _ hWT, hW]
 
 end GlobalTheory.FunObj.CosetFix
 end -- clump:auto

@@ -70,8 +70,6 @@ namespace GlobalTheory.FunObj
 
 open GlobalTheory.ChiGrid GlobalTheory.SplitFlip GlobalTheory.SplitWeil GlobalTheory.StepData GlobalTheory.StdFrames Formalism.L2.Host Formalism.L2.DIV ValuativeRel
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 variable {D : D7}
 
 theorem exists_unit_cpt (f g : ∀ Q : Pl D.host.E, Kw Q) (hfg : ∀ Q, f Q * g Q = 1)
@@ -710,8 +708,6 @@ end GlobalTheory.FunObj
 namespace GlobalTheory.FunObj
 
 open GlobalTheory.ChiGrid Formalism.L2.DIV
-
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem wtOf_entries_eq {N n : ℕ} (h : N = n) {lam : DomWeight N} {S : Formalism.BasicNotions.TH.SPar}
     (hS : Formalism.IndefR.Bridge.IsWtOfPar lam S) (a : Fin N) :

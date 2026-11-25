@@ -16,8 +16,6 @@ open Formalism.BasicNotions Formalism.MainNotions.G Formalism.L2.G Formalism.L2.
   Formalism.MainNotions.G.CmpJ.AgreeLv Formalism.MainNotions.G.KAat
 open scoped TensorProduct
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 variable {D : D7} (X0 : Formalism.L2.Herm.Herm0 D) (u : D.what₂.Word) (w : D.what₂.places.Pl)
   (hg : GIdx D.host (D.mem u).A.T (D.what₂.places.resChar w))
 

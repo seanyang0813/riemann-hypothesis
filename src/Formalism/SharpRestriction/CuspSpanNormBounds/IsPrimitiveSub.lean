@@ -287,8 +287,6 @@ section D7
 
 open Formalism.BasicNotions
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 variable (D : D7)
 
 abbrev hS : HSpace D.host.E := D.sp.Y 0

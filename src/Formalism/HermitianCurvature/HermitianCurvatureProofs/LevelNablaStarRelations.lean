@@ -3,53 +3,7 @@ module
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.EulerZetaGammaInvIdentity
 public import Formalism.HermitianCurvature.StatementM
 public import Mathlib.Algebra.Order.Group.PiLex
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.CStarAlgebra.Classes
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Bernstein
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.PiTensorProduct
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
 import Mathlib.Tactic.Linter.Style
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Topology.Sheaves.Init
 import Std.Tactic.BVDecide.Normalize.Prop
 
 @[expose] public section
@@ -57,112 +11,15 @@ import Std.Tactic.BVDecide.Normalize.Prop
 open Formalism.FourierDecayAlt.M Formalism.FourierDecayAlt Finset
 
 namespace Formalism.FourierDecayAlt.P.Mx2
-
-theorem eulerLeibniz : EulerLeibniz := by
-  apply Formalism.FourierDecayAlt.P.Mx4.eulerLeibniz
-
-theorem eulerCoord : EulerCoord := by
-  intro r v w z
-  constructor
-  · ext γ
-    simp only [euler, coord, LinearMap.coe_mk, AddHom.coe_mk]
-    by_cases h : γ = toLex (Pi.single w (1 : ℤ))
-    · subst h
-      by_cases hv : v = w
-      · subst hv; simp
-      · simp [hv]
-    · split_ifs <;> simp [HahnSeries.coeff_single_of_ne h]
-  · ext γ
-    simp only [euler, LinearMap.coe_mk, AddHom.coe_mk, HahnSeries.algebraMap_apply]
-    by_cases h : γ = 0
-    · subst h; simp; left; rfl
-    · simp [HahnSeries.coeff_single_of_ne h]
-
-theorem eulerMul : EulerMul := by
-  intro r v f
-  ext g : 1
-  simp only [Module.End.mul_apply, LinearMap.add_apply, mulOp, LinearMap.mulLeft_apply]
-  rw [eulerLeibniz, add_comm]
-
-theorem coord_ne (r : ℕ) (v : Var r) : coord v ≠ 0 := by
-  simp [coord]
+open Formalism.FourierDecayAlt.P.Mx4 (comm_eu coord_ne der_fn ec eci eulerComm eulerCoord eulerLeibniz eulerMul euler_GG_z euler_gg_zb euler_inv euler_one gg_ne mk_comm mulOp_add mulOp_mul multiplierPair_add multiplierPair_comm multiplierPair_mul multiplierPair_neg multiplierPair_zero smul_fnP vz_ne)
 
 variable {r : ℕ}
 
-theorem mulOp_mul (f g : Fn r) : mulOp f * mulOp g = mulOp (f * g) := by
-  ext h : 1; simp [mulOp]
-theorem mulOp_add (f g : Fn r) : mulOp f + mulOp g = mulOp (f + g) := by
-  ext h : 1; simp [mulOp, add_mul]
-
-theorem multiplierPair_mul (f fb g gb : Fn r) : fnP f fb * fnP g gb = fnP (f * g) (fb * gb) := by
-  refine Prod.ext ?_ ?_
-  · exact mulOp_mul f g
-  · show MulOpposite.op (mulOp gb * mulOp fb) = MulOpposite.op (mulOp (fb * gb))
-    rw [mulOp_mul, mul_comm]
-theorem multiplierPair_add (f fb g gb : Fn r) : fnP f fb + fnP g gb = fnP (f + g) (fb + gb) := by
-  refine Prod.ext (mulOp_add f g) ?_
-  show MulOpposite.op (mulOp fb + mulOp gb) = MulOpposite.op (mulOp (fb + gb))
-  rw [mulOp_add]
 theorem multiplierPair_one : (fnP 1 1 : Pr r) = 1 := by
   have : mulOp (1 : Fn r) = 1 := by ext h : 1; simp [mulOp]
   refine Prod.ext ?_ ?_
   · exact this
   · exact congrArg MulOpposite.op this
-theorem multiplierPair_neg (f fb : Fn r) : -fnP f fb = fnP (-f) (-fb) := by
-  rw [neg_eq_iff_add_eq_zero, multiplierPair_add]; simp
-  refine Prod.ext ?_ ?_
-  · show mulOp (0 : Fn r) = 0
-    ext h : 1; simp [mulOp]
-  · show MulOpposite.op (mulOp (0 : Fn r)) = 0
-    have : mulOp (0 : Fn r) = 0 := by ext h : 1; simp [mulOp]
-    rw [this]; rfl
-theorem multiplierPair_comm (f fb g gb : Fn r) : fnP f fb * fnP g gb = fnP g gb * fnP f fb := by
-  rw [multiplierPair_mul, multiplierPair_mul, mul_comm f, mul_comm fb]
-
-theorem der_fn (a b : Fn r) (v w : Var r) (f fb : Fn r) :
-    mk (mulOp a * euler v) (-(mulOp b * euler w)) * fnP f fb =
-      fnP f fb * mk (mulOp a * euler v) (-(mulOp b * euler w)) + fnP (a * euler v f) (b * euler w fb) := by
-  apply Formalism.FourierDecayAlt.P.Mx4.der_fn
-
-theorem euler_one (v : Var r) : euler v (1 : Fn r) = 0 := by
-  have := (eulerCoord r v v 1).2
-  simpa using this
-
-theorem euler_inv (v : Var r) (f : Fn r) (hf : f ≠ 0) : euler v f⁻¹ = -(f⁻¹ * f⁻¹ * euler v f) := by
-  have h := eulerLeibniz r v f f⁻¹
-  rw [mul_inv_cancel₀ hf, euler_one] at h
-  have h2 : f * euler v f⁻¹ = -(euler v f * f⁻¹) := by
-    rw [eq_neg_iff_add_eq_zero, add_comm]; exact h.symm
-  have h3 : euler v f⁻¹ = f⁻¹ * (f * euler v f⁻¹) := by rw [← mul_assoc, inv_mul_cancel₀ hf, one_mul]
-  rw [h3, h2]; ring
-
-theorem vz_ne : (vz : Var r) ≠ vzb := by
-  intro h; have := congrArg (fun p : Var r => (ofLex p).2) h; simp [vz, vzb] at this
-
-theorem euler_GG_z (TT : ℝ) : euler vz (gg TT : Fn r) = coord vz * coord vzb := by
-  unfold gg
-  rw [map_sub, eulerLeibniz, (eulerCoord r vz vz 0).1, (eulerCoord r vz vzb 0).1, (eulerCoord r vz vz _).2,
-    if_pos rfl, if_neg vz_ne]; simp
-theorem euler_gg_zb (TT : ℝ) : euler vzb (gg TT : Fn r) = coord vz * coord vzb := by
-  unfold gg
-  rw [map_sub, eulerLeibniz, (eulerCoord r vzb vz 0).1, (eulerCoord r vzb vzb 0).1, (eulerCoord r vzb vz _).2,
-    if_pos rfl, if_neg vz_ne.symm]; simp
-
-theorem gg_ne (TT : ℝ) : (gg TT : Fn r) ≠ 0 := by
-  intro h
-  have h1 := euler_GG_z (r := r) TT
-  rw [h, map_zero] at h1
-  exact mul_ne_zero (coord_ne r vz) (coord_ne r vzb) h1.symm
-
-theorem smul_fnP (a : ℝ) (f fb : Fn r) : (a : ℂ) • fnP f fb = fnP ((a : ℂ) • f) ((a : ℂ) • fb) := by
-  rw [Algebra.smul_def]
-  refine Prod.ext ?_ ?_
-  · show algebraMap ℂ (Op r) a * mulOp f = mulOp ((a : ℂ) • f)
-    ext h : 1; simp [mulOp]
-  · show (algebraMap ℂ (Op r)ᵐᵒᵖ) (starRingEnd ℂ (a : ℂ)) * MulOpposite.op (mulOp fb) = MulOpposite.op (mulOp ((a : ℂ) • fb))
-    rw [Complex.conj_ofReal, ← Algebra.smul_def, ← MulOpposite.op_smul, MulOpposite.op_inj]
-    ext h : 1; simp [mulOp]
-
 noncomputable def nabE (a TT : ℝ) : Pr r := dzP + (a : ℂ) • (zbP * ggiP TT)
 noncomputable def nabsE (a TT : ℝ) : Pr r := -dzbP + (a : ℂ) • (zP * ggiP TT)
 
@@ -221,25 +78,6 @@ theorem p_ci (l : Fin r) : pP l * ciP l = ciP l * pP l - ciP l := by
   rw [partialDeriv_def, ciP, der_fn, euler_inv _ _ (coord_ne r _), euler_inv _ _ (coord_ne r _), (eulerCoord r _ _ 0).1,
     (eulerCoord r _ _ 0).1, if_pos rfl, if_pos rfl, one_mul, one_mul, sub_eq_add_neg, multiplierPair_neg]
   congr 2 <;> field_simp [coord_ne r (vc l), coord_ne r (vcb l)]
-
-theorem eulerComm : EulerComm := by
-  intro r v w
-  ext f γ
-  simp only [Module.End.mul_apply, euler, LinearMap.coe_mk, AddHom.coe_mk]
-  ring
-
-theorem multiplierPair_zero : (fnP 0 0 : Pr r) = 0 := by
-  have h0 : mulOp (0 : Fn r) = 0 := by ext h : 1; simp [mulOp]
-  refine Prod.ext h0 ?_
-  show MulOpposite.op (mulOp (0 : Fn r)) = 0
-  rw [h0]; rfl
-
-theorem ec (v w : Var r) : euler v (coord w) = if v = w then coord w else 0 := (eulerCoord r v w 0).1
-theorem eci (v w : Var r) : euler v (coord w)⁻¹ = if v = w then -(coord w)⁻¹ else 0 := by
-  rw [euler_inv _ _ (coord_ne r w), ec]
-  split_ifs
-  · field_simp [coord_ne r w]
-  · simp
 
 theorem vc_inj (l m : Fin r) : (vc l : Var r) = vc m ↔ l = m := by
   constructor
@@ -300,15 +138,6 @@ theorem partialDeriv_mul_fn (l : Fin r) (f fb : Fn r) : pP l * fnP f fb = fnP f 
   rw [partialDeriv_def, der_fn, one_mul, one_mul]
 theorem partialDerivBar_mul_fn (l : Fin r) (f fb : Fn r) : pbP l * fnP f fb = fnP f fb * pbP l + fnP (euler (vcb l) f) (euler (vc l) fb) := by
   rw [partialDerivBar_def, der_fn, one_mul, one_mul]
-
-theorem comm_eu (v w : Var r) (f : Fn r) (h : euler v f = 0) :
-    euler v * (mulOp f * euler w) = (mulOp f * euler w) * euler v := by
-  have h0 : mulOp (0 : Fn r) = 0 := by ext h : 1; simp [mulOp]
-  rw [← mul_assoc, eulerMul, h, h0, add_zero, mul_assoc, mul_assoc, eulerComm]
-
-theorem mk_comm (X Xs Y Ys : Op r) (h1 : X * Y = Y * X) (h2 : Xs * Ys = Ys * Xs) : mk X Xs * mk Y Ys = mk Y Ys * mk X Xs := by
-  refine Prod.ext h1 ?_
-  exact congrArg MulOpposite.op h2.symm
 
 theorem partialDeriv_commute_nab (l : Fin r) (a TT : ℝ) : pP l * nabE a TT = nabE a TT * pP l := by
   unfold nabE

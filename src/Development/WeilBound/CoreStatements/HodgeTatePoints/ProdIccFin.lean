@@ -110,21 +110,6 @@ lemma exists_inv_card {v : Valuation C NNReal} (hv : v.Integers R) (p : ℕ) [Fa
     exact v.map_one_sub_of_lt hq
   exact hv.exists_of_le_one (by rw [map_inv₀, h1, inv_one])
 
-lemma projL_mem (hu : ∃ u : R, algebraMap R C u = (Fintype.card Fˣ : C)⁻¹) (χ : MulChar F R)
-    (S : Submodule R (N → C)) (hS : FStable (F := F) S) {g : N → C} (hg : g ∈ S) : projL χ g ∈ S := by
-  obtain ⟨u, hu⟩ := hu
-  have : projL χ g = u • ∑ a : Fˣ, χ⁻¹ (a : F) • (fun x => g ((a : F) • x)) := by
-    funext x
-    rw [projL_apply, Pi.smul_apply, Finset.sum_apply, Algebra.smul_def, hu]
-    exact congrArg _ (Finset.sum_congr rfl fun a _ => (Algebra.smul_def _ _).symm)
-  rw [this]
-  exact S.smul_mem _ (S.sum_mem fun a _ => S.smul_mem _ (hS _ g hg))
-
-omit [Fintype F] [DecidableEq F] in
-lemma fstable_sq {M : Submodule R (N → C)} (hM : FStable (F := F) M) :
-    FStable (F := F) (sqIdeal (augIdeal M)) :=
-  fun a _ hg => sq_pull (LinearMap.lsmul F N a).toAddMonoidHom M M (hM a) hg
-
 omit [Fintype F] [DecidableEq F] in
 lemma mul_inv_unit (χ : MulChar F R) (a : Fˣ) : χ (a : F) * χ⁻¹ (a : F) = 1 := by
   rw [← MulChar.mul_apply, mul_inv_cancel, MulChar.one_apply_coe]
@@ -136,23 +121,6 @@ lemma eig_le_aug (M : Submodule R (N → C)) (χ : MulChar F R) : eig M χ ≤ a
   refine ⟨hg.1, ?_⟩
   have := hg.2 0 0
   rwa [zero_smul, MulChar.map_zero, map_zero, zero_mul] at this
-
-lemma projL_eig (hu : ∃ u : R, algebraMap R C u = (Fintype.card Fˣ : C)⁻¹) (χ : MulChar F R)
-    {M : Submodule R (N → C)} (hM : FStable (F := F) M) {g : N → C} (hg : g ∈ augIdeal M) :
-    projL χ g ∈ eig M χ := by
-  rw [mem_aug] at hg
-  refine ⟨projL_mem hu χ M hM hg.1, fun a x => ?_⟩
-  by_cases ha : a = 0
-  · rw [ha, zero_smul, MulChar.map_zero, map_zero, zero_mul, projL_apply]
-    simp only [smul_zero, hg.2, mul_zero, Finset.sum_const_zero]
-  · obtain ⟨a, rfl⟩ := (isUnit_iff_ne_zero.2 ha)
-    rw [projL_apply, projL_apply, mul_left_comm, Finset.mul_sum Finset.univ _ (algebraMap R C _),
-      ← Equiv.sum_comp (Equiv.mulRight a) (fun b : Fˣ => algebraMap R C (χ (a : F)) *
-        (algebraMap R C (χ⁻¹ (b : F)) * g ((b : F) • x)))]
-    congr 1
-    refine Finset.sum_congr rfl fun b _ => ?_
-    rw [Equiv.coe_mulRight, Units.val_mul, mul_smul, ← mul_assoc, ← map_mul, map_mul χ⁻¹,
-      mul_left_comm, mul_inv_unit, mul_one]
 
 lemma projL_self [CharZero C] (χ : MulChar F R) {M : Submodule R (N → C)} {g : N → C}
     (hg : g ∈ eig M χ) : projL χ g = g := by

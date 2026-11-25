@@ -2,43 +2,6 @@ module
 
 public import Development.WeilBound.CoreStatements.PadicHodgeComparison.EtaleCohomologyComparison.BocksteinBaseChange.LimAlg
 public import Development.WeilBound.CoreStatements.PadicHodgeComparison.EtaleCohomologyComparison.CechPairings.MapHComp
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Bernstein
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
 
 @[expose] public section
 
@@ -52,11 +15,6 @@ namespace GlueBL
 
 variable {R : Type} [CommRing R]
 
-theorem lim_sq {A B C D : Sys.{1} R} {σ : R →+* R} (φ : Sys.Hom A B (RingHom.id R)) (ψ : Sys.Hom C D (RingHom.id R))
-    (g : Sys.Hom A C σ) (g' : Sys.Hom B D σ) (h : ∀ n x, ψ.f n (g.f n x) = g'.f n (φ.f n x)) (x : A.lim) :
-    ψ.lim (g.lim x) = g'.lim (φ.lim x) :=
-  Subtype.ext (funext fun n => h n (x.1 n))
-
 variable {Γ Γ' : Type} {S S' : ℕ → Sys.{1} R} {σ : Γ → R →+* R} {σ' : Γ' → R →+* R}
   {act : ∀ j g, Sys.Hom (S j) (S j) (σ g)} {act' : ∀ j g, Sys.Hom (S' j) (S' j) (σ' g)}
   {one : ∀ n, (S 0).M n} {one' : ∀ n, (S' 0).M n}
@@ -68,11 +26,6 @@ theorem lim_cup (φ : ∀ j, Sys.Hom (S j) (S' j) (RingHom.id R))
     (hz : (limAlg S act one cup).cup x y z) :
     (limAlg S' act' one' cup').cup ((φ i).lim x) ((φ j).lim y) ((φ (i + j)).lim z) := fun n =>
   (congrArg ((φ (i + j)).f n) (hz n)).trans (hc n i j _ _)
-
-theorem lim_one (φ : ∀ j, Sys.Hom (S j) (S' j) (RingHom.id R)) (ho : ∀ n, (φ 0).f n (one n) = one' n)
-    (x : (limAlg S act one cup).N 0) (hx : (limAlg S act one cup).one x) :
-    (limAlg S' act' one' cup').one ((φ 0).lim x) := fun n =>
-  (congrArg ((φ 0).f n) (hx n)).trans (ho n)
 
 variable {A B : Sys.{1} R}
 

@@ -91,13 +91,6 @@ theorem fg_comap {V W : Type} [AddCommGroup V] [Module (𝓞 E) V] [AddCommGroup
     (f : V →ₗ[𝓞 E] W) (hf : Function.Injective f) (L : Submodule (𝓞 E) W) (hL : L.FG) : (L.comap f).FG :=
   Submodule.fg_of_fg_map_injective f hf (hL.of_le (Submodule.map_comap_le f L))
 
-theorem isLattice_comap (n n₁ : ℕ) (L : Submodule (𝓞 E) (Fin n → E)) (ι : Matrix (Fin n) (Fin n₁) E)
-    (P : Matrix (Fin n₁) (Fin n) E) (hP : P * ι = 1) (hL : L.IsFullLattice E) :
-    (L.comap ((Matrix.mulVecLin ι).restrictScalars (𝓞 E))).IsLattice E :=
-  Submodule.IsLattice.of_fg E (fg_comap _ (fun u u' e => by
-    have := congrArg (P *ᵥ ·) (show ι *ᵥ u = ι *ᵥ u' from e)
-    simpa [Matrix.mulVec_mulVec, hP] using this) L hL.fg)
-
 theorem exists_ideal (n : ℕ) (L : Submodule (𝓞 E) (Fin n → E)) (hL : L.IsLattice E) (x : Fin n → E) (hx : x ≠ 0) :
     ∃ 𝔟 : FractionalIdeal (𝓞 E)⁰ E, ∀ s : E, s ∈ 𝔟 ↔ s • x ∈ L :=
   ⟨⟨L.comap ((LinearMap.toSpanSingleton E _ x).restrictScalars (𝓞 E)), FractionalIdeal.isFractional_of_fg

@@ -2,7 +2,6 @@ module
 
 public import Development.AutomorphicSpectrum.Definitions.GlobalGeometry.AdelicGroupAlgebraActionInjective
 public import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.PushInvertible
-public import Development.AutomorphicSpectrum.Proofs.GeometryProofs.ModuliIsReduced
 public import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.TwoWeightEqOneAddRoot
 public import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.PullCub
 public import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.SabComp
@@ -53,6 +52,26 @@ import Mathlib.Tactic.NormNum.RealSqrt
 import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
 import Mathlib.Tactic.Linter.Style
 import Mathlib.Topology.Sheaves.Init
+public import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.Spread
+
+section
+@[expose] public section
+
+open AlgebraicGeometry CategoryTheory Limits MonoidalCategory CartesianMonoidalCategory MonObj NumberField
+open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Semi ReciprocityTheory.ChartRestriction.G.Geo.Tor GlobalTheory.CompanionTheory.Ar
+
+namespace GlobalTheory.CompanionTheory.Ar
+
+theorem moduli_isReduced : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H)
+    (l : Level H) (Xo : Moduli D l), IsReduced Xo.X := by
+  intro E _ _ _ H D l Xo
+  have := Xo.smooth
+  have : Smooth Xo.s := SmoothOfRelativeDimension.smooth D.dim _
+  exact isReduced_of_smooth Xo.s
+
+end GlobalTheory.CompanionTheory.Ar
+end
+
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Development.AutomorphicSpectrum.Proofs.GeometryProofs.ModuliTwistAutomorphism, Development.AutomorphicSpectrum.Proofs.GeometryProofs.ObjMapComp, Development.AutomorphicSpectrum.Proofs.AlgebraProofs.ExistsSectionLevel, Development.WeilBound.CoreStatements.HomogeneousNonvanishing.TwBack, Development.AutomorphicSpectrum.Proofs.GeometryProofs.TwistInverseIso, Development.AutomorphicSpectrum.Proofs.GeometryProofs.TwistIsoNonempty, Development.AutomorphicSpectrum.Proofs.GeometryProofs.TwistIsoNonemptyStatement, Development.AutomorphicSpectrum.Proofs.GeometryProofs.TwistObjMapFunctorial, Development.AutomorphicSpectrum.Proofs.GeometryProofs.TwistAutHolds

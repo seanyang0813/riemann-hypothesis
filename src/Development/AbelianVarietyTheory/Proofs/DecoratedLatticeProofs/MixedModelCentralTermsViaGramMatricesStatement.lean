@@ -170,11 +170,6 @@ theorem trace_one_tmul {F E R : Type} [Field F] [Field E] [Algebra F E] [FiniteD
 
 variable {D : D7}
 
-theorem trace_incA (x : D.host.E) :
-    Algebra.trace (AF D.host.F) (AE D) (incA D x) =
-      algebraMap D.host.F (AF D.host.F) (Algebra.trace D.host.F D.host.E x) :=
-  trace_one_tmul x
-
 theorem cA_smul (c : AF D.host.F) (a : AE D) : cA D (c • a) = c • cA D a := by
   induction a using TensorProduct.inductionOn with
   | tmul x y => rfl
@@ -216,7 +211,7 @@ theorem skew_perfect : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ), IsStdChar 
     have e3 : algebraMap D.host.F (AF D.host.F) (1 / 2) * Algebra.trace (AF D.host.F) (AE D)
         ((rat M : Mx D ρ ρ) * (t • (rat (A - Aᴴ) : Mx D ρ ρ))).trace =
         t * algebraMap D.host.F (AF D.host.F) (Algebra.trace D.host.F D.host.E (M * A).trace) := by
-      rw [e2, map_smul, trace_incA, e1, map_add (f := _), trace_star, smul_eq_mul, mul_left_comm, ← map_mul]
+      rw [e2, map_smul, GlobalTheory.BesselChar.trace_incA, e1, map_add (f := _), trace_star, smul_eq_mul, mul_left_comm, ← map_mul]
       congr 2
       ring
     rw [← e3]

@@ -87,10 +87,6 @@ def maxCompact (G : Subgroup (Matrix ι ι 𝕜)ˣ) : Subgroup G where
     rw [Units.inv_eq_of_mul_eq_one_right hmul]
     exact Unitary.star_mem ha
 
-theorem mem_maxCompact {G : Subgroup (Matrix ι ι 𝕜)ˣ} {g : G} :
-    g ∈ maxCompact G ↔ ((g : (Matrix ι ι 𝕜)ˣ) : Matrix ι ι 𝕜) ∈ Matrix.unitaryGroup ι 𝕜 :=
-  Iff.rfl
-
 theorem exp_mem_unitaryGroup {X : Matrix ι ι 𝕜} (hX : Xᴴ = -X) :
     NormedSpace.exp X ∈ Matrix.unitaryGroup ι 𝕜 := by
   rw [Matrix.mem_unitaryGroup_iff', Matrix.star_eq_conjTranspose, ← Matrix.exp_conjTranspose, hX,

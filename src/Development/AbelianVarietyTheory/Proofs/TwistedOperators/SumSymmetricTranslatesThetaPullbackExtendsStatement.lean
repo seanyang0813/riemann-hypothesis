@@ -359,11 +359,6 @@ open GlobalTheory.CechPic GlobalTheory.TripleProd GlobalTheory.ZH.CubeRootAut
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {S : Scheme.{0}}
 
-theorem act_zero (t : SAB H S) : t.act.act 0 = 1 := by
-  have h := t.act.add 0 0
-  rw [add_zero] at h
-  exact mul_eq_left.1 h.symm
-
 theorem act_eq_one_of_gen (t : SAB H S) (hK : KTriv t.G t.PP.L) (π : 𝓞 E) (a b : ℕ)
     (α₀ : LB.Gen (LB.LinComb t.PP.L (K := Fin 2) ![𝟙 t.G.left, (t.act.act π).left] ![(a : ℤ), -(b : ℤ)]))
     (hα : α₀.IsGen) : t.act.act ((a : 𝓞 E) - b * (π * H.bar π)) = 1 := by

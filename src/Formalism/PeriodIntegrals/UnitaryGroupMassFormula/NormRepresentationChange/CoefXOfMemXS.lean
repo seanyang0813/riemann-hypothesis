@@ -79,8 +79,6 @@ theorem nlam_X {Λ : Submodule (𝓞 E) S.V} {G : LFlag S r T} {n : S.V ≃ₗ[E
 
 end Gen
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem fi_zero {D : D7} (I : FractionalIdeal (nonZeroDivisors (𝓞 D.host.E)) D.host.E) : (0 : D.host.E) ∈ I := by
   exact (I : Submodule (𝓞 D.host.E) D.host.E).zero_mem
 

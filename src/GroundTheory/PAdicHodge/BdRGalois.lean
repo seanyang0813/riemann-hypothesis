@@ -68,14 +68,6 @@ theorem ker_evalB (n : ℕ) : RingHom.ker (evalB K p n) = maximalIdeal 𝔹 ^ n 
   rw [← map_ker_fontaineThetaInvertP K p]
   exact h
 
-theorem map_mem_maximalIdeal_pow {F : 𝔹 →+* 𝔹} (hF : ∀ x ∈ maximalIdeal 𝔹, F x ∈ maximalIdeal 𝔹)
-    {x : 𝔹} {n : ℕ} (hx : x ∈ maximalIdeal 𝔹 ^ n) : F x ∈ maximalIdeal 𝔹 ^ n := by
-  have h1 : (maximalIdeal 𝔹).map F ≤ maximalIdeal 𝔹 := Ideal.map_le_iff_le_comap.2 hF
-  have h2 : (maximalIdeal 𝔹 ^ n).map F ≤ maximalIdeal 𝔹 ^ n := by
-    rw [Ideal.map_pow]
-    exact Ideal.pow_right_mono h1 n
-  exact h2 (Ideal.mem_map_of_mem F hx)
-
 theorem eq_zero_of_forall_mem_maximalIdeal_pow {x : 𝔹} (h : ∀ n : ℕ, x ∈ maximalIdeal 𝔹 ^ n) :
     x = 0 := by
   have hc := isAdicComplete_maximalIdeal_bDeRhamPlus (K := K) (p := p)
@@ -279,27 +271,6 @@ theorem gal_smul_mem_maximalIdeal (σ : Gal(PadicAlgCl p/K)) {x : 𝔹} (hx : x 
     σ • x ∈ maximalIdeal 𝔹 := by
   rw [IsPerfectoidField.maximalIdeal_bDeRhamPlus, RingHom.mem_ker] at hx ⊢
   rw [thetaBDeRhamPlusField_gal_smul, hx, smul_zero]
-
-theorem gal_smul_mem_maximalIdeal_pow_iff (σ : Gal(PadicAlgCl p/K)) (x : 𝔹) (n : ℕ) :
-    σ • x ∈ maximalIdeal 𝔹 ^ n ↔ x ∈ maximalIdeal 𝔹 ^ n := by
-  have key : ∀ (τ : Gal(PadicAlgCl p/K)) (y : 𝔹), y ∈ maximalIdeal 𝔹 ^ n →
-      τ • y ∈ maximalIdeal 𝔹 ^ n := fun τ y hy =>
-    IsPerfectoidField.map_mem_maximalIdeal_pow (F := galBdRHom τ)
-      (fun z hz => gal_smul_mem_maximalIdeal τ hz) hy
-  refine ⟨fun h => ?_, key σ x⟩
-  have := key σ⁻¹ _ h
-  rwa [inv_smul_smul] at this
-
-theorem map_galBdR_maximalIdeal_pow (σ : Gal(PadicAlgCl p/K)) (n : ℕ) :
-    (maximalIdeal 𝔹 ^ n).map (galBdR σ) = maximalIdeal 𝔹 ^ n := by
-  ext x
-  rw [Ideal.mem_map_of_equiv]
-  constructor
-  · rintro ⟨y, hy, rfl⟩
-    exact (gal_smul_mem_maximalIdeal_pow_iff σ y n).2 hy
-  · intro hx
-    refine ⟨σ⁻¹ • x, (gal_smul_mem_maximalIdeal_pow_iff σ⁻¹ x n).2 hx, ?_⟩
-    rw [galBdR_apply, smul_inv_smul]
 
 end Galois
 

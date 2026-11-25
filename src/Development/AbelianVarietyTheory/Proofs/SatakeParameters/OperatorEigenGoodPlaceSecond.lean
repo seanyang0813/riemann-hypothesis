@@ -131,8 +131,6 @@ theorem idem_mul_iff {L : Type} [Field L] [NumberField L] [IsCMField L] (v : Hei
       rw [h1, ← Algebra.TensorProduct.one_def, one_mul, sub_self]
     · rw [h u hu, mul_zero, sub_zero]
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 
 
 theorem suppF_iff {D : D7} (hF : D.host.F = maximalRealSubfield D.host.E) {V : Formalism.BasicNotions.TH.HSp D} {n : ℕ}

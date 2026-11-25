@@ -76,23 +76,6 @@ theorem geomMap_isIso {X Y : Scheme.{0}} {p : X ⟶ Spec (CommRingCat.of k)} {q 
 instance isIso_idTower_sΩ (g : (HTower.idTower k).Γ) : IsIso ((HTower.idTower k).sΩ Ω g) :=
   geomMap_isIso Ω (k := k) (𝟙 _) rfl
 
-theorem splits_self_of_iso {Y Z : Scheme.{0}} (s : Y ⟶ Z) [IsIso s] : Splits s s (fun _ : Unit => 𝟙 Y) := by
-  refine ⟨fun _ => Category.id_comp _, ?_⟩
-  have hl : IsIso (pullback.lift (𝟙 Y) (𝟙 Y) (by simp) : Y ⟶ pullback s s) := by
-    have : IsIso (pullback.lift (𝟙 Y) (𝟙 Y) (by simp) ≫ pullback.fst s s) := by
-      rw [pullback.lift_fst]; infer_instance
-    exact IsIso.of_isIso_comp_right _ (pullback.fst _ _)
-  refine ⟨⟨inv (pullback.lift (𝟙 Y) (𝟙 Y) rfl : Y ⟶ pullback s s) ≫ Sigma.ι (fun _ : Unit => Y) (), ?_, ?_⟩⟩
-  · apply Sigma.hom_ext; intro j; cases j; simp
-  · simp
-
-theorem idTower_isCorrOp (l : ℕ) [Fact l.Prime] (g : (HTower.idTower k).Γ) :
-    IsCorrOp l ((HTower.idTower k).sΩ Ω g) ((HTower.idTower k).tΩ Ω g) LinearMap.id := by
-  refine ⟨_, (HTower.idTower k).sΩ Ω g, Unit, inferInstance, inferInstance, fun _ => 𝟙 _, Unit, inferInstance,
-    fun _ => 𝟙 _, ⟨inferInstance, inferInstance, inferInstance, rfl, fun _ _ => (Category.id_comp _).symm,
-      splits_self_of_iso _⟩, splits_self_of_iso _, fun x => ?_⟩
-  simp only [LinearMap.id_apply, Finset.univ_unique, Finset.sum_singleton, Category.id_comp] <;> rfl
-
 end GlobalTheory.GalV.GaloisTowerConditions
 
 end

@@ -337,11 +337,6 @@ def ofLie (X : h.lieSubalgebra) : 𝔤 := ⟨X, X.2⟩
 
 theorem ofLie_lie (X Y : h.lieSubalgebra) : h.ofLie ⁅X, Y⁆ = h.bracket (h.ofLie X) (h.ofLie Y) := rfl
 
-noncomputable def smoothOp (g : G) : h.smoothVectors π →ₗ[ℂ] h.smoothVectors π where
-  toFun v := ⟨π g v, h.isSmoothVector_map π v.2 g⟩
-  map_add' v w := by ext; simp
-  map_smul' c v := by ext; simp
-
 noncomputable def derivEnd (X : 𝔤) : Module.End ℂ (h.smoothVectors π) where
   toFun v := ⟨h.derivOp π X v, h.isSmoothVector_derivOp π v.2 X⟩
   map_add' v w := by ext; exact h.derivOp_add π v.2 w.2 X
@@ -349,11 +344,6 @@ noncomputable def derivEnd (X : 𝔤) : Module.End ℂ (h.smoothVectors π) wher
 
 @[simp] theorem coe_derivEnd (X : 𝔤) (v : h.smoothVectors π) :
     ((h.derivEnd π X v : h.smoothVectors π) : E) = h.derivOp π X v := rfl
-
-theorem derivEnd_smoothOp (g : G) (X : 𝔤) :
-    h.derivEnd π (h.Ad g X) ∘ₗ h.smoothOp π g = h.smoothOp π g ∘ₗ h.derivEnd π X := by
-  ext v
-  exact h.derivOp_map π v.2 g X
 
 attribute [local instance 100] LieRing.ofAssociativeRing
 

@@ -82,10 +82,6 @@ theorem inverse_first_block_eq_conjTranspose {x : M2 n} (hx : InG x) : ub1 x = (
   simp [Matrix.conjTranspose_add, Matrix.conjTranspose_smul]
   abel
 
-theorem det_first_block_ne_zero_group {x : M2 n} (hx : InG x) : (u1 x).det ≠ 0 := by
-  have := PositivityTheory.Rg.Sw.AbsSt.IwaPf.det_ne x hx Complex.I (by simp [Complex.ext_iff]; norm_num)
-  simpa [u1] using this
-
 def Nq (Q : Matrix (Fin n) (Fin n) ℂ) : M2 n := Cm n * fromBlocks 0 Q 0 0 * Cmi n
 
 theorem cmi_mul_cm : Cmi n * Cm n = 1 := mul_eq_one_comm.mp cm_mul_cmi

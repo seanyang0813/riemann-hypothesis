@@ -8,8 +8,6 @@ noncomputable section
 
 open NumberField Module Formalism.BasicNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 namespace PI.BetaLUniq
 
 abbrev Lt (D : D7) : Type := Submodule (𝓞 D.host.E) (hS D).V

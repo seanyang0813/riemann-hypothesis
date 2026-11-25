@@ -53,7 +53,6 @@ open Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Lev Formalism.Inde
 open scoped TensorProduct InnerProductSpace
 open GlobalTheory.Hk3 (Core Good IsSF SchurAll TwoSided FixAll EEc Wcc eH IsLab HoweUnram SphOp hyp)
 open GlobalTheory.StdFrame (StdPsi)
-attribute [local instance] Formalism.IndefR.principalLevelFrame.instCMHostI
 
 noncomputable section
 namespace GlobalTheory.BaseVec

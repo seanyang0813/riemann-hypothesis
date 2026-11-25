@@ -727,37 +727,6 @@ theorem isModel_move : ∀ (D : D7) (k : Type) [Field k] [ValuativeRel k] [Topol
       (hf : IsThetaFunO ψ S T f) (hg : IsThetaFunO ψ S T g) (φ : MvPolynomial (FVar D T.rank S.rank) ℂ) :
       pureTensorO ψ θ S T sS sT BS BT (c • f + g) φ =
         c • pureTensorO ψ θ S T sS sT BS BT f φ + pureTensorO ψ θ S T sS sT BS BT g φ := by
-    have theta_add {f g : WO S T → ℂ} (hf : IsThetaFunO ψ S T f) (hg : IsThetaFunO ψ S T g) :
-        IsThetaFunO ψ S T (f + g) := by
-      refine {
-          quasi γ w := by simp only [Pi.add_apply, hf.quasi, hg.quasi, mul_add]
-          level := by
-            obtain ⟨U, hU, h1⟩ := hf.level
-            obtain ⟨U', hU', h2⟩ := hg.level
-            refine ⟨U ⊓ U', hU.inter hU', fun u hu h0 => ?_⟩
-            funext w
-            have e1 := congrFun (h1 u hu.1 h0) w
-            have e2 := congrFun (h2 u hu.2 h0) w
-            unfold heisO at e1 e2 ⊢
-            rw [Pi.add_apply, Pi.add_apply, mul_add, e1, e2]
-          cont := hf.cont.add hg.cont
-          smooth k L h1 h2 w := (hf.smooth k L h1 h2 w).add (hg.smooth k L h1 h2 w)
-
-      }
-    have theta_smul (c : ℂ) {f : WO S T → ℂ} (hf : IsThetaFunO ψ S T f) : IsThetaFunO ψ S T (c • f) := by
-      refine {
-          quasi γ w := by
-            rw [Pi.smul_apply, Pi.smul_apply, hf.quasi, smul_eq_mul, smul_eq_mul, mul_left_comm]
-          level := by
-            obtain ⟨U, hU, h1⟩ := hf.level
-            refine ⟨U, hU, fun u hu h0 => ?_⟩
-            funext w
-            have e1 := congrFun (h1 u hu h0) w
-            unfold heisO at e1 ⊢
-            rw [Pi.smul_apply, Pi.smul_apply, smul_eq_mul, smul_eq_mul, mul_left_comm, e1]
-          cont := hf.cont.const_smul c
-          smooth k L h1 h2 w := contDiff_const.mul (hf.smooth k L h1 h2 w)
-      }
     have h : pureTensorO ψ θ S T sS sT BS BT (c • f + g) =
         c • pureTensorO ψ θ S T sS sT BS BT f + pureTensorO ψ θ S T sS sT BS BT g := by
       refine (MvPolynomial.basisMonomials _ ℂ).ext fun k => ?_
@@ -778,7 +747,7 @@ theorem isModel_move : ∀ (D : D7) (k : Type) [Field k] [ValuativeRel k] [Topol
             c • aPlusAll (heisO ψ S T) θ (fun τ => cplxO (sS τ) (sT τ)) BS BT k f :=
         fun k c f hf => GlobalTheory.FockIndep.aPlus_smul hψ hθ k.1 (cplxO (sS k.1) (sT k.1)) _ c hf
       exact foldr_lin (IsThetaFunO ψ S T) (aPlusAll (heisO ψ S T) θ (fun τ => cplxO (sS τ) (sT τ)) BS BT) A1 A2 A3
-        (fun _ _ hf hg => theta_add hf hg) (fun c _ hf => theta_smul c hf) c hf hg _
+        (fun _ _ hf hg => GlobalTheory.OrientedHeis.theta_add hf hg) (fun c _ hf => GlobalTheory.OrientedHeis.theta_smul c hf) c hf hg _
     rw [h, LinearMap.add_apply, LinearMap.smul_apply]
 
   have pt_add : ∀ f f', IsThetaFunO ψ S T f → IsThetaFunO ψ S T f' →
@@ -787,20 +756,13 @@ theorem isModel_move : ∀ (D : D7) (k : Type) [Field k] [ValuativeRel k] [Topol
     intro f f' hf hf'
     have := pureTensorO_lin ψ θ S T hψ hθ sS BS sT BT 1 hf hf' P
     rwa [one_smul, one_smul] at this
-  have theta_zero : IsThetaFunO ψ S T 0 := by
-    refine {
-      quasi γ w := by simp only [Pi.zero_apply, mul_zero]
-      level := ⟨⊤, isOpen_univ, fun u _ _ => by funext w; simp only [heisO, Pi.zero_apply, mul_zero]⟩
-      cont := continuous_const
-      smooth k L _ _ w := contDiff_const
-    }
   have pt_zero : pureTensorO ψ θ S T sS sT BS BT (0 : WO S T → ℂ) P = 0 := by
-    have h := pureTensorO_lin ψ θ S T hψ hθ sS BS sT BT (-1) theta_zero theta_zero P
+    have h := pureTensorO_lin ψ θ S T hψ hθ sS BS sT BT (-1) GlobalTheory.OrientedHeis.theta_zero GlobalTheory.OrientedHeis.theta_zero P
     rwa [smul_zero, add_zero, neg_one_smul, neg_add_cancel] at h
   have pt_smul : ∀ (c : ℂ) f, IsThetaFunO ψ S T f →
       pureTensorO ψ θ S T sS sT BS BT (c • f) P = c • pureTensorO ψ θ S T sS sT BS BT f P := by
     intro c f hf
-    have := pureTensorO_lin ψ θ S T hψ hθ sS BS sT BT c hf theta_zero P
+    have := pureTensorO_lin ψ θ S T hψ hθ sS BS sT BT c hf GlobalTheory.OrientedHeis.theta_zero P
     rwa [add_zero, pt_zero, add_zero] at this
   let L : SB (Matrix Y Y' k) →ₗ[ℂ] (WO S T → ℂ) :=
     { toFun := fun Φ => pureTensorO ψ θ S T sS sT BS BT (T₁ Φ) P

@@ -12,8 +12,6 @@ namespace Formalism.MainNotions.KTwoMinorIntegrality
 
 open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat Formalism.MainNotions.S.Cnt
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 def NormLB : Prop := ∀ (D : D7) (x : D.host.E), IsIntegral ℤ x → x ≠ 0 → 1 ≤ ∏ τ : D.what₂.Tau, ‖embS D τ x‖ ^ 2
 
 def LatSum : Prop := ∀ (ι : Type) [Fintype ι] (P : Finset (ι → ℂ)) (R : ℝ), 1 ≤ R →

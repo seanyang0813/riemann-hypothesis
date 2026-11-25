@@ -243,7 +243,7 @@ theorem isHaarOn_smul {S : Set (Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1
     rw [Measure.map_smul, h4 s hs]
     exact (Formalism.L2.SG.Pf.WFL.measurable_lmulM s).aemeasurable
 
-theorem locUniq_gen (hBW : Formalism.L2.SG.LocWSOf.BesselOfW) (hM1 : Formalism.L2.SG.LitS.BesselMultOne)
+theorem locUniq_gen (hBW : Formalism.L2.SG.LocWSOf.BesselOfW) (hM1 : BesselMultOneGap)
     (hB : BesselNVGap) (hCW : CoefWeightedLoc) (hWl : WlocExists)
     (hk : 1 ≤ k) (hke : Even k) {T : ℝ} (hT : 0 < T) {gg : ℕ} (hgg : 0 < gg)
     {e f : Fin r → Fin (2 * r + k + 1) → ℂ} {wf : Fin k → Fin (2 * r + k + 1) → ℂ} {z : Fin (2 * r + k + 1) → ℂ}
@@ -560,7 +560,7 @@ section InstN
 
 open Classical Formalism.L2.SG.SplitPrimeNormLemmas Formalism.L2.SG.WuDecay
 
-theorem locUniq_n (hBW : Formalism.L2.SG.LocWSOf.BesselOfW) (hM1 : Formalism.L2.SG.LitS.BesselMultOne)
+theorem locUniq_n (hBW : Formalism.L2.SG.LocWSOf.BesselOfW) (hM1 : BesselMultOneGap)
     (hB : BesselNVGap) (hCW : CoefWeightedLoc) (hWl : WlocExists) (hHN : LocHNProps)
     {k r n : ℕ} (hn : n = 2 * r + k + 1) (hk : 1 ≤ k) (hke : Even k) {T : ℝ} (hT : 0 < T) {gg : ℕ} (hgg : 0 < gg)
     (ε : Fin n → Bool) (hε : ∀ i, ε i = eps48 k r (Fin.cast hn i))
@@ -691,7 +691,15 @@ section Step
 
 open Classical Formalism.L2.SG.SplitPrimeNormLemmas Formalism.L2.SG.WuDecay
 
-theorem local_uniqueness_reduction : LocUniqStep := by
+def LocUniqStepGap : Prop :=
+  BesselNVGap → CoefWeightedLoc → WlocExists → Formalism.L2.SG.LocWSOf.BesselOfW → BesselMultOneGap →
+    ∀ (D : Formalism.BasicNotions.D7), Formalism.L2.SG.ConcreteSettingExists.GapHyp D →
+      ∀ (X : HidaSetting D) (u : D.what₂.Word)
+      (μS νl : ∀ v, Measure (Formalism.REAL.UJ (X.B.I.ε v))) (C : ℝ≥0∞), QuotWit X u μS νl C →
+      ∀ v (W : Formalism.REAL.UJ (X.B.I.ε v) → X.Vloc u v), Continuous W → LocEquivW X u v W → LocReprodW X u v W →
+        ∫⁻ y, ‖W y‖ₑ ^ 2 ∂(νl v) ≠ 0 → ∫⁻ y, ‖W y‖ₑ ^ 2 ∂(νl v) ≠ ⊤ → LocConcl X u v (νl v) W
+
+theorem local_uniqueness_reduction : LocUniqStepGap := by
   intro hB hCW hWl hBW hM1 D hG X u μS νl C hQW v W hWc hWe hWr hL0 hLt
   obtain ⟨-, -, hloc, -⟩ := hQW
   obtain ⟨hSv, hQv⟩ := hloc v

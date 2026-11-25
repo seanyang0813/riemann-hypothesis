@@ -924,14 +924,14 @@ theorem classSum_princ {B : Base S T} (hB : B.Good) (hS : S.SigOK) {ψ : Twist D
     {ω : PairRep S T} (hω : B.IsWeil ψ.chi ω) {m : ℕ} {h₀ : Fin m → GA D S} (hC₀ : IsClassSystem S ((princ B).levJ ψ) h₀)
     {I : Type} [Fintype I] {h : I → GA D S} (hC : IsClassSystem S (B.levJ ψ) h) {F : Bridge.Gf S → PolF D T.rank S.rank}
     (hFm : F ∈ B.formsC ψ) : (princ B).classSum ω ψ h₀ F = B.classSum ω ψ h F := by
-  obtain ⟨hle, -⟩ := GlobalTheory.T.principalLevel_le_level_characters_agree B hB ψ hQ
+  obtain ⟨hle, -⟩ := _root_.GlobalTheory.FlatVecSum.princ_levJ_le_levLam_eq B hB ψ hQ
   obtain ⟨Fs, hF, hFu⟩ := GlobalTheory.T.finite_coset_representatives_level B hB ψ hQ
   have hκ := sum_om_fock hB hS hψ hQ hω hF hFu
-  have hinv := GlobalTheory.T.classSumTerms_invariant_principalLevel B hB hS ψ hψ hQ ω hω F hFm
+  have hinv := _root_.GlobalTheory.PrincClassSum.terms_inv B hB hS ψ hψ hQ ω hω F hFm
   have hlaw := ((B.mem_formsC).1 hFm).2
   funext g
   rw [Base.classSum_apply, Base.classSum_apply, Finset.sum_apply, Finset.sum_apply]
-  have key := GlobalTheory.T.classSum_regroup_finerLevel_cosets (Bridge.ratF S) (ratF_injective S) hle hF hFu (fun i => finPt S (h₀ i)) hC₀.reps
+  have key := _root_.GlobalTheory.ClassRefineBridge.sum_isReps_refine (Bridge.ratF S) (ratF_injective S) hle hF hFu (fun i => finPt S (h₀ i)) hC₀.reps
     (fun i => finPt S (h i)) hC.reps
     (fun y => series B.F ω ((princ B).vecFlat ψ) (((GlobalTheory.ClassRegroup.finEquiv S).symm y : GfC S) : GA D S) (F y) g)
     (fun γ y => (hinv g).1 γ y) (fun k hk y => (hinv g).2 k hk y)
@@ -1534,7 +1534,7 @@ theorem rational_series_coeff_at_state_alt : _root_.GlobalTheory.HeightCounting.
         have := hxd i j b (Finset.mem_Icc.1 hj).1 (Finset.mem_Icc.1 hj).2
         change a ∈ xd.xd0 i j b
         rw [this]; trivial }
-  exact (GlobalTheory.T.thetaSeries_rationality_and_coefficientBound hP.decay hP.what₂.art hS.rat hS.int (Dof x) X _ Y hX).1
+  exact (_root_.GlobalTheory.Unframe.rat_and_xiBdd hP.decay hP.what₂.art hS.rat hS.int (Dof x) X _ Y hX).1
 end GlobalTheory.PlaceRead.SeriesAtState
 end
 end

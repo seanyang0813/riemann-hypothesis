@@ -698,10 +698,6 @@ theorem npow_inv' {r : ℝ≥0} (hr : 0 < r) (t : ℂ) : npow r⁻¹ t = npow r 
 theorem npow_zero' (r : ℝ≥0) (hr : 0 < r) : npow r 0 = 1 := by
   rw [npow_eq_exp hr]; simp
 
-theorem upperLeft_blockMatrix {R : Type} (x y z t : Matrix (Fin n) (Fin n) R) : blkA (blk4 x y z t) = x := by
-  ext i j
-  simp [blkA, blk4, Matrix.toBlocks₁₁]
-
 theorem det_ad (a : GL (Fin n) (AE D)) :
     (Matrix.GeneralLinearGroup.det (ad a) : (AE D)ˣ) =
       conjUnit (R := AF D.host.F) D.sp.cm.sig (Matrix.GeneralLinearGroup.det a⁻¹ : (AE D)ˣ) := by
@@ -823,7 +819,7 @@ theorem whit_step (hK : WhitKA) {D : D7} {n : ℕ} {V : HSp D} {ψ : AddChar (AF
   have hA : 0 < A := absA_pos _
   obtain ⟨m', hm'P, hm'⟩ := exists_ad a
   have hwm : w * m = m' * w := weyl_mul hw a hm hm'
-  have hblk : blkA (mat m') = (ad a).1 := by rw [hm', upperLeft_blockMatrix]; rfl
+  have hblk : blkA (mat m') = (ad a).1 := by rw [hm', GlobalTheory.CompanionTheory.SwUnf.SmallCell.blkA_blk4]; rfl
   set φ0 : schwartzA θ V.rank n := ω k Φ with hφ0
   have hωe : ω (m * u * k) Φ = ω (m * u) φ0 := by
     rw [map_mul (f := ω) (m * u) k]; rfl

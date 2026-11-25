@@ -18,8 +18,6 @@ namespace Formalism.MainNotions.G.CmpJ
 open Formalism.BasicNotions Formalism.MainNotions.G Formalism.L2.G Formalism.L2.G.Cmp Formalism.L2.Forms Formalism.UG NumberField IsDedekindDomain Matrix
 open scoped TensorProduct
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem gramN_apply (D : D7) (i : ℕ) (hi : i ≤ D.R.m) (x y : Fin (D.R.N i)) :
     gramN D i hi x y = (D.sp.X i).gram (Fin.cast (rankN D i hi).symm x) (Fin.cast (rankN D i hi).symm y) := rfl
 

@@ -16,8 +16,6 @@ namespace Formalism.MainNotions.G.CmpJ
 open Formalism.BasicNotions Formalism.MainNotions.G Formalism.L2.G Formalism.L2.G.Cmp Formalism.L2.Forms Formalism.UG NumberField IsDedekindDomain Matrix
 open scoped TensorProduct
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 structure LocPart (D : D7) {p : ℕ} (G : GAtP p) (Ch : Type) (n : ℕ) where
   cmpt : Ch → Type
   [fin : ∀ β, Fintype (cmpt β)]

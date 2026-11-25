@@ -23,17 +23,6 @@ public import GroundTheory.HeightsAndTheta.Heights.HilbertSamuel.PChartTaylorCov
 public import GroundTheory.HeightsAndTheta.Heights.HilbertSamuel.PIntegralOfBergman
 public import GroundTheory.HeightsAndTheta.Heights.HilbertSamuel.PPolydiscSubmean
 public import GroundTheory.HeightsAndTheta.Heights.HilbertSamuel.PUniformBergmanBound
-import Mathlib.Algebra.Order.Star.Real
-import Mathlib.Algebra.Module.StablyFree.Basic
-import Mathlib.Analysis.LocallyConvex.AbsConvexOpen
-import Mathlib.RingTheory.Coalgebra.IsFrobenius
-import Mathlib.RingTheory.HopfAlgebra.Basic
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.RingTheory.TotallySplit
-import Mathlib.Tactic.Lemma
-import Mathlib.Topology.Separation.CompletelyRegular
-import Mathlib.Order.CompletePartialOrder
-import Mathlib.Tactic.TypeStar
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: GroundTheory.HeightsAndTheta.Heights.HilbertSamuel.ImportsBis, GroundTheory.HeightsAndTheta.Heights.HilbertSamuel.PChartBergmanBound, GroundTheory.HeightsAndTheta.Heights.HilbertSamuel.PComplexTaylorTwo, GroundTheory.HeightsAndTheta.Heights.HilbertSamuel.PLocalBergmanBound, GroundTheory.HeightsAndTheta.Heights.ElementarySymmetric.BergmanLerpSelf

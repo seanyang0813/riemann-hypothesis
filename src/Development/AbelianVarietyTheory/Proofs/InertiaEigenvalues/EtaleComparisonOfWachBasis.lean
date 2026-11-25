@@ -148,9 +148,9 @@ theorem main : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf 
     p1eL D.loc D.locA HW F := by
   intro D HW F l _ K s LL h T hT
   refine ⟨?_, ?_⟩
-  · obtain ⟨b⟩ := N_basis D HW F l K s LL h T hT
+  · obtain ⟨b⟩ := N_basis D.loc D.locA HW F l K s LL h T hT
     exact etale_comparison_of_wach_basis _ T hT b (GlobalTheory.WittTensorFixed.main l K LL T).2.1
-  · obtain ⟨m, h1, h2⟩ := GlobalTheory.NL.SandArb.sandwich D HW F l K s LL h T hT
+  · obtain ⟨m, h1, h2⟩ := GlobalTheory.NL.SandArb.sandwich D.loc D.locA HW F l K s LL h T hT
     exact ⟨m, p5inf_of_sand _ T _ m rfl h1 h2⟩
 
 end GlobalTheory.NL.NygaardExtension

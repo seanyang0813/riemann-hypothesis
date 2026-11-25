@@ -313,8 +313,9 @@ variable {ι : Type*} {T : ι → Set (End ℂ M)}
 theorem commute_adjoin (hcomm : ∀ v w, v ≠ w → ∀ a ∈ T v, ∀ b ∈ T w, Commute a b)
     {v w : ι} (hvw : v ≠ w) {a b : End ℂ M} (ha : a ∈ Algebra.adjoin ℂ (T v))
     (hb : b ∈ Algebra.adjoin ℂ (T w)) : Commute a b :=
-  commute_of_mem_adjoin (fun t ht =>
-    (commute_of_mem_adjoin (fun s hs => (hcomm v w hvw s hs t ht).symm) a ha).symm) b hb
+  Algebra.commute_of_mem_adjoin_of_forall_mem_commute hb fun t ht =>
+    (Algebra.commute_of_mem_adjoin_of_forall_mem_commute ha
+      (fun s hs => (hcomm v w hvw s hs t ht).symm)).symm
 
 theorem eq_zero_of_place (hsimple : IsSimpleUnder (⋃ v, T v))
     (hcomm : ∀ v w, v ≠ w → ∀ a ∈ T v, ∀ b ∈ T w, Commute a b) (v : ι) {N : Submodule ℂ M}
@@ -336,7 +337,8 @@ theorem eq_zero_of_place (hsimple : IsSimpleUnder (⋃ v, T v))
     obtain ⟨w, hw, ht⟩ := ht
     exact hcomm v w (Ne.symm hw) s hs t ht
   refine eq_zero_of_forall_mem (hunion ▸ hsimple) hc hN hNs (fun t ht => ?_) h0
-  exact (commute_of_mem_adjoin (fun s hs => (hc s hs t ht).symm) a ha).symm
+  exact (Algebra.commute_of_mem_adjoin_of_forall_mem_commute ha
+    (fun s hs => (hc s hs t ht).symm)).symm
 
 end FiniteDim
 
@@ -732,7 +734,7 @@ theorem exists_equiv_restrictedTensorRep (hρ : IsAdmissible ρ) (hirr : ρ.IsIr
       ·
         have hmem := heckeOp_mem_adjoin hρs hK'c hK'o hK'e s herase
         have hcomm' : Commute (p a) (heckeOp hρs hHc hHo (eraseAt a g)) := by
-          refine commute_of_mem_adjoin (fun t ht => ?_) _ hmem
+          refine Algebra.commute_of_mem_adjoin_of_forall_mem_commute hmem fun t ht => ?_
           simp only [mem_iUnion] at ht
           obtain ⟨w, hw, ht⟩ := ht
           exact commute_adjoin hcomm (fun h => has (by subst h; exact hw)) (hp a) (Algebra.subset_adjoin ht)

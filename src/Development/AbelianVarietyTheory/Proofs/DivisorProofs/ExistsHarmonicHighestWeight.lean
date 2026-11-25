@@ -193,14 +193,6 @@ open Formalism.BasicNotions.TH GlobalTheory.FockAlg
 
 namespace GlobalTheory.HarmLift
 
-theorem lemA : ∀ (P Q R S : ℕ) (W : Type) [AddCommGroup W] [Module ℂ W] (pr : Pol P Q R S →ₗ[ℂ] W),
-    (∀ Z : Mat P Q, IsPC Z → ∀ f, pr (fockAct1 P Q R S Z f) = 0) →
-    ∀ f, ∃ h ∈ harm2 P Q R S, pr h = pr f := _root_.GlobalTheory.FockAlg.HarmLift.exists_harm2_rep
-
-theorem lemB : ∀ (P Q R S : ℕ) (h : Pol P Q R S), h ∈ harm2 P Q R S →
-    ∃ H0 : Submodule ℂ (Pol P Q R S), FiniteDimensional ℂ H0 ∧ h ∈ H0 ∧ (∀ v ∈ H0, v ∈ harm2 P Q R S) ∧
-      KStable (fockAct1 P Q R S) H0 ∧ KStable (fockAct2 P Q R S) H0 := _root_.GlobalTheory.FockAlg.fin_harm
-
 theorem isKC_adjZ {p q : ℕ} {Z : Mat p q} (hZ : IsKC Z) : IsKC (adjZ Z) := by
   intro a b hab
   rw [GlobalTheory.FockAdj.adjZ_apply, hZ b a (fun h => hab (by revert h; rcases a with a | a <;> rcases b with b | b <;> simp [sameBlock])),

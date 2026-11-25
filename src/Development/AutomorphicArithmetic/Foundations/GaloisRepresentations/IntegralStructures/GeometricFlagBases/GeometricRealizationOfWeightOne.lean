@@ -138,7 +138,7 @@ namespace UpperTheory.Gal.Seam
 
 theorem cstSmooth : CrystallineSemistableComparison.CstSmooth := _root_.CrystallineSemistableComparison.Out.cstSmooth_of_side HT.etSideS
 
-theorem crysStep_holds : UpperTheory.Gal.Int.Geo.CrysStep := crysStep_of cstSmooth.1
+theorem crysStep_holds : UpperTheory.Gal.Int.Geo.CrysStep := crysStep_of cstSmooth
 
 end UpperTheory.Gal.Seam
 end -- clump:auto

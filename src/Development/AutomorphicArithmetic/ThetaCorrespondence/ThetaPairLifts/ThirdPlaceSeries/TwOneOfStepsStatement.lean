@@ -568,7 +568,7 @@ theorem fixAt_holds_alt : GlobalTheory.Published.RayClassFieldSt → _root_.Glob
     rintro _ ⟨y, rfl⟩
     exact hτ y
   have hFB : FixBase p.T p.R.toRealDat j τ :=
-    GlobalTheory.T.fixes_untwistedTupleData_of_fixes_smallField _ _ _ _ _ _ hRF p.T p.R p.cG p.Sx p.nexp (F2 p) p.κ p.v₀ hR.laws hR.core hR.fw hR.tieIn hR.galois
+    _root_.GlobalTheory.FixBaseSmall.fixBase_of_fixes _ _ _ _ _ _ hRF p.T p.R p.cG p.Sx p.nexp (F2 p) p.κ p.v₀ hR.laws hR.core hR.fw hR.tieIn hR.galois
       hR.small.val hR.small.ray hR.small.roots j τ hτ'
   refine ⟨hFB, ?_, ?_, ?_⟩
   · intro y

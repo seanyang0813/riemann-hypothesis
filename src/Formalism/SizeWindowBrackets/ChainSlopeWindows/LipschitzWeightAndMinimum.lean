@@ -544,41 +544,9 @@ namespace CR
 section
 variable {H : Type} [AddCommGroup H] [Fintype H] [DecidableEq H]
 
-lemma primVal_zero (D : ArithData H) (n : ℕ) : primVal D 0 n = 1 := by
-  classical
-  unfold primVal
-  apply Finset.prod_eq_one
-  intro p _
-  unfold cosetMean
-  simp only [AddChar.zero_apply, Finset.sum_const, nsmul_eq_mul, mul_one]
-  apply div_self
-  have h0 : (0 : E0 × H) ∈ univ.filter (fun x => x ∈ D.inertia p) := by
-    simp
-  have := Finset.card_pos.2 ⟨0, h0⟩
-  exact_mod_cast this.ne'
-
-lemma chC_apply' (g : E0 × H) : (chC : AddChar (E0 × H) ℂ) g = ((sgn2 g.1.1 : ℝ) : ℂ) := by
-  show (if g.1.1 = 0 then (1 : ℂ) else -1) = _
-  unfold sgn2; split_ifs <;> simp
-
-lemma psC_apply' (g : E0 × H) : (psC : AddChar (E0 × H) ℂ) g = ((sgn2 g.1.2 : ℝ) : ℂ) := by
-  show (if g.1.2 = 0 then (1 : ℂ) else -1) = _
-  unfold sgn2; split_ifs <;> simp
-
-lemma chpsC_apply' (g : E0 × H) :
-    (chpsC : AddChar (E0 × H) ℂ) g = ((sgn2 g.1.1 * sgn2 g.1.2 : ℝ) : ℂ) := by
-  unfold chpsC; rw [AddChar.mul_apply, chC_apply', psC_apply']; push_cast; ring
-
 def host (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) : CycHost H where
   cv := primVal D
-  cv_zero := primVal_zero D
   ell := ell
-  chC := chC
-  psC := psC
-  chpsC := chpsC
-  chC_apply := chC_apply'
-  psC_apply := psC_apply'
-  chpsC_apply := chpsC_apply'
 
 lemma GC_host (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (ψ : AddChar (E0 × H) ℂ) (y : ℝ) :
     GC (host D ell) ψ y = GPsi D ell ψ y := rfl

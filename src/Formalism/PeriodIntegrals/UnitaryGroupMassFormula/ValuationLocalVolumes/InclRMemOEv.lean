@@ -13,8 +13,6 @@ open Formalism.BasicNotions Formalism.MainNotions.S Formalism.L2.SG.HidaSetting 
   MeasureTheory NumberField IsDedekindDomain Matrix
 open scoped TensorProduct
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 def piv (r : ℕ) (a : Fin (r + 1 + r)) : Fin (r + 1 + r) :=
   ⟨if a.val < r then a.val + (r + 1) else if a.val = r then r else a.val - (r + 1), by
     have := a.2; split_ifs <;> omega⟩

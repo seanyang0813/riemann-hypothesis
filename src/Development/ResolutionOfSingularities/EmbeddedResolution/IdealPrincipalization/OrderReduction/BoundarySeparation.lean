@@ -8,51 +8,8 @@ import Development.ResolutionOfSingularities.EmbeddedResolution.DerivativeIdeal.
 import Development.ResolutionOfSingularities.EmbeddedResolution.IdealPrincipalization.OrderReduction.MarkedBlowupSequenceBoundary
 import Development.ResolutionOfSingularities.EmbeddedResolution.IteratedBlowups.StrictTransform
 import Development.ResolutionOfSingularities.Foundations.Schemes.IdealSheafData
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Bernstein
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.ReduceModChar
 import Std.Tactic.BVDecide.Normalize.Prop
-import Mathlib.Tactic.ENatToNat
 import Mathlib.Tactic.Linter.Style
-import Mathlib.Tactic.TypeStar
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Development.ResolutionOfSingularities.EmbeddedResolution.IdealPrincipalization.OrderReduction.CoverTriple, Development.ResolutionOfSingularities.EmbeddedResolution.IdealPrincipalization.OrderReduction.BoundarySeparation
@@ -277,14 +234,14 @@ theorem locallyOfFiniteType_projectionToBase_comp (hstar : MaxContactCoverProper
     AlgebraicGeometry.LocallyOfFiniteType (s.proj i ≫ S.structMap) := by
   have h := (hstar.valid_level S hV s.toMarkedSequenceOfBlowups i hi).locallyOfFiniteType
   simp at h
-  with_unfolding_all exact h
+  exact h
 
 theorem smooth_projectionToBase_comp (hstar : MaxContactCoverProperties.{u}) (S : MarkedIdealWithBoundary.{u}) (hV : S.IsAdmissible)
     (s : MarkedBlowupSequenceData S.structMap S.ideal S.mult S.boundary) (i : ℕ) (hi : i ≤ s.length) :
     AlgebraicGeometry.Smooth (s.proj i ≫ S.structMap) := by
   have h := (hstar.valid_level S hV s.toMarkedSequenceOfBlowups i hi).smooth
   simp at h
-  with_unfolding_all exact h
+  exact h
 
 theorem iteratedStrictTransform_eq_toBlowupSequenceData {k : Type u} [Field k] {X : Scheme.{u}}
     {p : X ⟶ Spec (CommRingCat.of k)} {I : X.IdealSheafData} {m : ℕ} {E : List X.IdealSheafData}
@@ -378,7 +335,7 @@ theorem isAdmissible_derivedTriple (hstar : MaxContactCoverProperties.{u}) (S : 
     have h := hlev.quasiCompact
     rw [MaxContactCoverData.derivedTriple_structureMorphism]
     simp at h
-    with_unfolding_all exact h
+    exact h
   case smooth =>
     rw [MaxContactCoverData.derivedTriple_structureMorphism]
     exact smooth_projectionToBase_comp hstar S hV s s.length (le_refl s.length)
@@ -819,7 +776,7 @@ theorem separateBoundaryInvariant_appendLowerDimReduction (hstar : MaxContactCov
   have hsncAll : InStrictNormalCrossingPosition (s.proj s.length ≫ S.structMap) (s.boundary s.length) := by
     have h := (hstar.valid_level S hV s.toMarkedSequenceOfBlowups s.length (le_refl s.length)).snc
     simp at h
-    with_unfolding_all exact h
+    exact h
   have hsnc0 : InStrictNormalCrossingPosition (s.proj s.length ≫ S.structMap)
       (([] : List ((s.obj s.length)).IdealSheafData) ++ (s.boundary s.length).drop 0) := by
     simpa using hsncAll
@@ -828,7 +785,7 @@ theorem separateBoundaryInvariant_appendLowerDimReduction (hstar : MaxContactCov
   have hdimC : (MaxContactCoverData.derivedTriple S s hft [] 0).krullDimSucc ≤ T.krullDimSucc := by
     have h1 := hstar.schemeDim_level_le S hV s.toMarkedSequenceOfBlowups s.length (le_refl s.length)
     have h2 : (MaxContactCoverData.derivedTriple S s hft [] 0).krullDimSucc ≤ S.krullDimSucc := by
-      with_unfolding_all exact h1
+      exact h1
     exact le_trans h2 hdimS
   have hPC : P (MaxContactCoverData.derivedTriple S s hft [] 0).krullDimSucc := hmono _ _ hdimC hPdimT
   have hordBound := LowerDimReductionPullback.isOrderBoundedByMult_derivedTriple hstar S hV hm hO s hft [] 0 hVc
@@ -859,7 +816,7 @@ theorem separateBoundaryInvariant_appendLowerDimReduction (hstar : MaxContactCov
     exact isLocallyNoetherian_tunedMarkedBlowupSeq_schemeAt hstar S hV s hft [] 0 hVc
       (A j (MaxContactCoverData.derivedTriple S s hft [] 0)) i hi
   · rw [hC2, hget]
-    with_unfolding_all rfl
+    rfl
   · intro r hr
     by_cases hb : bv = true ∧ r = 0
     · obtain ⟨hb1, hb2⟩ := hb
@@ -1041,7 +998,7 @@ theorem exists_cover_eq_separateAllBoundary_append (hstar : MaxContactCoverPrope
     have h2 := hstar.coverTriple_dim_le T h.valid
     have h3 : (reduceAlongHypersurfaceTriple T h.valid hinv A hft).krullDimSucc ≤
         (MaxContactCoverData.coverTriple T h.valid).krullDimSucc := by
-      with_unfolding_all exact h1
+      exact h1
     exact le_trans h3 h2
   have hP : P (reduceAlongHypersurfaceTriple T h.valid hinv A hft).krullDimSucc := hmono _ _ hdim h.dim_prop
   have hj : 0 < ([MaxContactReduction.strictTransformAtLength (separateAllBoundary T h.valid hinv A)

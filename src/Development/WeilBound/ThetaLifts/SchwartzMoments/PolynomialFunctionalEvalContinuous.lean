@@ -866,52 +866,6 @@ theorem mat_mul_inv (k : UA σ W.J) : mat k * mat k⁻¹ = 1 := by
   show k.1.1 * ((k⁻¹ : UA σ W.J).1.1) = 1
   simp
 
-open scoped Classical in
-theorem gauss_impl (hψ : IsStd ψ) (hs : IsSplitting (adeleClass F) ψ M.co (actAB (cA σ)) om)
-    {τ : ∀ w : InfinitePlace F, EmbOver E w} (hk : k ∈ KInf σ W τ)
-    {A : SInf F (Fin n × Fin d) →ₗ[ℂ] SInf F (Fin n × Fin d)} (hA : Impl om k A)
-    {f₀ : SInf F (Fin n × Fin d)} (h₀ : M.IsGauss ψ τ f₀) : M.IsGauss ψ τ (A f₀) := by
-  obtain ⟨ε, hε⟩ := h₀
-  refine ⟨ε, fun u u' hu hu' hrel f f' hf hf' => ?_⟩
-  set N := (mat k⁻¹).transpose with hN
-  have hNk : N * (mat k).transpose = 1 := by
-    rw [hN, ← Matrix.transpose_mul, mat_mul_inv, Matrix.transpose_one]
-  have e1 : u * N * (mat k).transpose = u := by rw [Matrix.mul_assoc, hNk, Matrix.mul_one]
-  have e2 : u' * N * (mat k).transpose = u' := by rw [Matrix.mul_assoc, hNk, Matrix.mul_one]
-  have hf1 := actsD_unique M hψ hu hf
-  have hf2 := actsD_unique M hψ hu' hf'
-  have i1 := inter hψ hs hA (at_mul hu N) f₀
-  have i2 := inter hψ hs hA (at_mul hu' N) f₀
-  rw [e1, ← hf1] at i1
-  rw [e2, ← hf2] at i2
-  have hcomm : ∀ w, Commute ((mat k⁻¹).map (piInf (τ w))) (W.θ w) := fun w => by
-    have hc : Commute ((mat k).map (piInf (τ w))) (W.θ w) := hk.2 w
-    have h1 : (mat k⁻¹).map (piInf (τ w)) * (mat k).map (piInf (τ w)) = 1 := by
-      rw [← Matrix.map_mul, mat_inv_mul, Matrix.map_one _ (map_zero _) (map_one _)]
-    have h2 : (mat k).map (piInf (τ w)) * (mat k⁻¹).map (piInf (τ w)) = 1 := by
-      rw [← Matrix.map_mul, mat_mul_inv, Matrix.map_one _ (map_zero _) (map_one _)]
-    show _ * _ = _ * _
-    calc (mat k⁻¹).map (piInf (τ w)) * W.θ w
-        = (mat k⁻¹).map (piInf (τ w)) * W.θ w * ((mat k).map (piInf (τ w)) * (mat k⁻¹).map (piInf (τ w))) := by
-          rw [h2, Matrix.mul_one]
-      _ = (mat k⁻¹).map (piInf (τ w)) * (W.θ w * (mat k).map (piInf (τ w))) * (mat k⁻¹).map (piInf (τ w)) := by
-          simp only [Matrix.mul_assoc]
-      _ = (mat k⁻¹).map (piInf (τ w)) * ((mat k).map (piInf (τ w)) * W.θ w) * (mat k⁻¹).map (piInf (τ w)) := by
-          rw [hc.eq]
-      _ = W.θ w * (mat k⁻¹).map (piInf (τ w)) := by
-          rw [← Matrix.mul_assoc, h1, Matrix.one_mul]
-  have hrel' : ∀ w, (u' * N).map (piInf (τ w)) =
-      (((ε w : ℤ) : ℂ) * Complex.I) • (Y.θ w * (u * N).map (piInf (τ w)) * (W.θ w).transpose) := fun w => by
-    have hN' : N.map (piInf (τ w)) = ((mat k⁻¹).map (piInf (τ w))).transpose := by
-      rw [hN, Matrix.transpose_map]
-    have hc : (W.θ w).transpose * N.map (piInf (τ w)) = N.map (piInf (τ w)) * (W.θ w).transpose := by
-      rw [hN', ← Matrix.transpose_mul, ← Matrix.transpose_mul, (hcomm w).eq]
-    rw [Matrix.map_mul, Matrix.map_mul, hrel w, Matrix.smul_mul]
-    simp only [Matrix.mul_assoc, hc]
-  have hg := hε (u * N) (u' * N) (at_mul hu N) (at_mul hu' N) hrel' _ _
-    (actsD_dop M hψ (at_mul hu N) f₀) (actsD_dop M hψ (at_mul hu' N) f₀)
-  rw [← i1, ← i2, hg, map_smul]
-
 end Keep
 
 section Loc

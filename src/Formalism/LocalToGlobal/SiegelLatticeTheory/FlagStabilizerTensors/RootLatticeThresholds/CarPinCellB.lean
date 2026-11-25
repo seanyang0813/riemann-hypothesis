@@ -21,8 +21,6 @@ open Formalism.BasicNotions Formalism.L2.SG.LocWSOf Formalism.L2.SG.Pf.BaseOf Fo
 
 namespace Formalism.L2.SG.Pf.Carrier.CarPinTor
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 section Gen
 
 variable {k r : ℕ}

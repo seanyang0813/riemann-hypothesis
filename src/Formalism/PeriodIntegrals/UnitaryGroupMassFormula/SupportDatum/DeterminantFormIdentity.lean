@@ -12,8 +12,6 @@ open NumberField IsDedekindDomain Formalism.MainNotions.S Formalism.MainNotions.
 open scoped BigOperators ComplexOrder
 open Classical
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem modBlocks_some {A B : Type} [Monoid B] (f : ℕ → ℕ → A → B) (bs : List (A × ℕ)) (a : ℕ)
     (l : List (Bˣ × ℕ+)) (h : modBlocks f a bs = some l) :
     l.map (fun x => ((x.1 : B), (x.2 : ℕ))) = mapBlocks f a bs := by

@@ -12,8 +12,6 @@ noncomputable section
 
 namespace PI.UnitaryGroupMassFormula.CntFormula.RowsMassW
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 section Wb
 
 variable (D : D7) {T : D.host.E} (F0 : FlagG (VS D) D.R.rS T)

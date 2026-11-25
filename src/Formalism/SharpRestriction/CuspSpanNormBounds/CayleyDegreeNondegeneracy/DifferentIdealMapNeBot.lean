@@ -27,8 +27,6 @@ theorem one_mem_ideal_zpow_neg {R K : Type*} [CommRing R] [IsDedekindDomain R] [
   rw [zpow_neg, zpow_natCast]
   exact h2 (FractionalIdeal.one_mem_one _)
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 section Fr
 
 variable (D : D7)

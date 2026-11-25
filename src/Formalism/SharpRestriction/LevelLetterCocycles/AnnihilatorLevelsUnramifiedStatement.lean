@@ -62,15 +62,6 @@ open PowerSeries
 
 variable {O : Type} [CommRing O]
 
-theorem exists_trunc_add (f : PowerSeries O) (N : ℕ) :
-    ∃ g, f = (trunc N f : PowerSeries O) + X ^ N * g := by
-  have h : X ^ N ∣ f - (trunc N f : PowerSeries O) := by
-    rw [X_pow_dvd_iff]
-    intro m hm
-    rw [map_sub, coeff_coe_trunc_of_lt hm, sub_self]
-  obtain ⟨g, hg⟩ := h
-  exact ⟨g, by rw [← hg]; ring⟩
-
 theorem algHom_eq_subst (τ : PowerSeries O →ₐ[O] PowerSeries O) (h0 : constantCoeff (τ X) = 0)
     (f : PowerSeries O) : τ f = subst (τ X) f := by
   have hs : HasSubst (τ X) := HasSubst.of_constantCoeff_zero' h0

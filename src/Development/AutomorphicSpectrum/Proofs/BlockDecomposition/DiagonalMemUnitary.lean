@@ -1204,11 +1204,6 @@ open PositivityTheory.RgBcC PositivityTheory.RgBcC.Real PositivityTheory.RgBcC.R
 namespace GlobalTheory.CompanionTheory.CoefId
 variable {n : ℕ}
 
-theorem den_sq (z : Fin n → ℂ) :
-    (Matrix.of fun i j : Fin n => (z i ^ 2) ^ (n - 1 - (j : ℕ))).det =
-      (Matrix.of fun i j : Fin n => z i ^ (n - 1 - (j : ℕ))).det * ∏ p ∈ prs n, (z p.1 + z p.2) :=
-  _root_.GlobalTheory.CompanionTheory.CoefId.det_vandermonde_sq z
-
 theorem den_ne_zero (t : Fin n → ℂ) (ht : Function.Injective t) :
     (Matrix.of fun i j : Fin n => t i ^ (n - 1 - (j : ℕ))).det ≠ 0 := by
   have h : (Matrix.of fun i j : Fin n => t i ^ (n - 1 - (j : ℕ))) =

@@ -46,8 +46,6 @@ open GlobalTheory.BigTop GlobalTheory.BigOn
 
 namespace GlobalTheory.BigOn
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 open GlobalTheory.OntoChain GlobalTheory.RealIndexBound GlobalTheory.OnTies GlobalTheory.TraceClassRank
 
 section General

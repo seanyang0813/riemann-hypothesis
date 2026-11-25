@@ -1192,10 +1192,6 @@ def negFrame (A : HSp D) : CptF (neg A) := fun τ r c =>
   Sum.elim (fun _ => (0 : ℂ)) (fun k => if (k : ℕ) = (c : ℕ) then 1 else 0) r
 
 open GlobalTheory.Grid (neg) in
-theorem negFrame_inl (A : HSp D) (τ : D.what₂.Tau) (a : Fin ((neg A).sig (tauE D τ)).1) (c : Fin (neg A).rank) :
-    negFrame A τ (Sum.inl a) c = 0 := rfl
-
-open GlobalTheory.Grid (neg) in
 theorem negFrame_inr (A : HSp D) (τ : D.what₂.Tau) (k : Fin ((neg A).sig (tauE D τ)).2) (c : Fin (neg A).rank) :
     negFrame A τ (Sum.inr k) c = if (k : ℕ) = (c : ℕ) then 1 else 0 := rfl
 

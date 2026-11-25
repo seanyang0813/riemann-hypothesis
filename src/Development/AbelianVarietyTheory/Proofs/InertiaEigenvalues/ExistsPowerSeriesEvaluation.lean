@@ -353,7 +353,7 @@ theorem exists_ev_tied (l : ℕ) [Fact l.Prime] (P : LocPrime l) (AI : LocAinf l
       ∀ b : P.R.BdR, (∀ a : ℤ, b ∈ (P.PD K).Fil a) → b = 0 := by
   first | (intros; apply Bridge.exists_power_series_evaluation <;> assumption)
 
-theorem exists_ev_dR : ∀ (D : Formalism.BasicNotions.D7) (l : ℕ) [Fact l.Prime] (K LL : FinExt l) (s : ℕ) (ι : ↥LL.1 →ₐ[ℚ_[l]] (D.loc l).R.BdR), ∃ ev : PowerSeries ↥LL.1 →+* (D.loc l).R.BdR, (∀ (f : PowerSeries ↥LL.1) (M : ℕ), ev f - ∑ k ∈ Finset.range M, ι (PowerSeries.coeff k f) * tS (D.loc l) s ^ k ∈ ((D.loc l).PD K).Fil (M : ℤ)) ∧ (∀ (f : PowerSeries ↥LL.1) (M : ℕ), ev f ∈ ((D.loc l).PD K).Fil (M : ℤ) ↔ PowerSeries.X ^ M ∣ f) ∧ IsUnit (tS (D.loc l) s) ∧ (∀ (a : ℤ) (b : (D.loc l).R.BdR), tS (D.loc l) s * b ∈ ((D.loc l).PD K).Fil (a + 1) ↔ b ∈ ((D.loc l).PD K).Fil a) ∧ ∀ b : (D.loc l).R.BdR, (∀ a : ℤ, b ∈ ((D.loc l).PD K).Fil a) → b = 0 :=
-  fun D l _ K LL s ι => exists_ev_tied l _ _ (D.locT l) K LL s ι
+theorem exists_ev_dR : ∀ (loc : LocTheory) (locA : ∀ (l : ℕ) [Fact l.Prime], LocAinf l (loc l)) (locT : ∀ (l : ℕ) [Fact l.Prime], Formalism.BasicNotions.LocTied l (loc l) (locA l)) (l : ℕ) [Fact l.Prime] (K LL : FinExt l) (s : ℕ) (ι : ↥LL.1 →ₐ[ℚ_[l]] (loc l).R.BdR), ∃ ev : PowerSeries ↥LL.1 →+* (loc l).R.BdR, (∀ (f : PowerSeries ↥LL.1) (M : ℕ), ev f - ∑ k ∈ Finset.range M, ι (PowerSeries.coeff k f) * tS (loc l) s ^ k ∈ ((loc l).PD K).Fil (M : ℤ)) ∧ (∀ (f : PowerSeries ↥LL.1) (M : ℕ), ev f ∈ ((loc l).PD K).Fil (M : ℤ) ↔ PowerSeries.X ^ M ∣ f) ∧ IsUnit (tS (loc l) s) ∧ (∀ (a : ℤ) (b : (loc l).R.BdR), tS (loc l) s * b ∈ ((loc l).PD K).Fil (a + 1) ↔ b ∈ ((loc l).PD K).Fil a) ∧ ∀ b : (loc l).R.BdR, (∀ a : ℤ, b ∈ ((loc l).PD K).Fil a) → b = 0 :=
+  fun loc locA locT l _ K LL s ι => exists_ev_tied l _ _ (locT l) K LL s ι
 
 end GlobalTheory.NL.EvdR

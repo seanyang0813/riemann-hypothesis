@@ -60,7 +60,6 @@ open GlobalTheory.FlatVecSum (princ)
 open scoped TensorProduct
 
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open Classical
 
 namespace GlobalTheory.BigOn.Exp.TupLe.Swap

@@ -201,17 +201,4 @@ theorem det_fMat_eq {Ω : Type} [Field Ω] {n : Ψ ⊕ Ψ → ℕ} (A : ∀ s, M
   · rw [dif_neg e]
     simp [coefF, e]
 
-theorem yv_step :
-    ∀ (Ψ : Type) [Fintype Ψ] (p q : ℕ) (Ω : Type) [Field Ω] (n : Ψ ⊕ Ψ → ℕ)
-      (A : ∀ s, Matrix (Fin (n s)) (Fin (rk Ψ p q s)) Ω) (K₀ : Type) [Fintype K₀]
-      (J₀ : K₀ → Type) [∀ k, Fintype (J₀ k)] (x₀ : (Σ k, J₀ k) → Ω),
-    ∀ r k, blkF (Ψ := Ψ) (p := p) (q := q) K₀ r = some k → ∀ i : idx J₀ n k,
-      yv A x₀ ⟨k, i⟩ = ∑ I, algebraMap Ω (GenField Ω (rk Ψ p q)) (coefF A ⟨k, i⟩ I) *
-        minorIJ (gMat p q Ω r.1) I (stepCols (p + q) p r.2) := by
-  intro Ψ _ p q Ω _ n A K₀ _ J₀ _ x₀ r k hk i
-  unfold blkF at hk
-  split_ifs at hk with hp
-  obtain rfl := Option.some.inj hk
-  exact det_fMat_eq A r.1 (stepOf Ψ p q r) (stepOf_fst r) _ (mem_stepCols_iff r) i
-
 end GlobalTheory.CompanionTheory.Ar.PB.FMX.BlockEmbeddings

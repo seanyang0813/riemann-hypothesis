@@ -293,10 +293,10 @@ end Generic
 
 theorem main : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; let E := ((F l).E K s LL h).tie; ∀ T : Lt K LL, IsCrys ((D.loc l).PD K) T.ρ → ∀ N₁ : Submodule (AA K LL) (W.DD T), FreeA W T N₁ → IsBaseChange W.EE N₁.subtype → (∀ x ∈ N₁, ∃ k : ℕ, W.Q ^ k • W.φD T x ∈ N₁) → (∀ y ∈ N₁, ∃ k : ℕ, W.Q ^ k • y ∈ φspan W T N₁) → ∃ a : ℕ, (∀ x ∈ N₁, W.X ^ a • x ∈ W.N T) ∧ ∀ x ∈ W.N T, W.X ^ a • x ∈ N₁ := by
   intro D HW F l _ K s LL h
-  have hio := GlobalTheory.NL.IoXQ.main D HW F l K s LL h
+  have hio := GlobalTheory.NL.IoXQ.main D.loc D.locA HW F l K s LL h
   exact fun T hT N₁ h1 h2 h3 h4 => compare ((F l).E K s LL h).tie
     (GlobalTheory.FrobIntegralCoeff.frobenius_integrality_coeff l LL) hio.2.2.2.2.1 hio.2.2.2.2.2.1 T hT
-    (GlobalTheory.NL.N_basis D HW F l K s LL h T hT) N₁ h1 h2 h3 h4
+    (GlobalTheory.NL.N_basis D.loc D.locA HW F l K s LL h T hT) N₁ h1 h2 h3 h4
 
 end GlobalTheory.NL.InvX
 end -- clump:auto
@@ -554,7 +554,7 @@ set_option maxHeartbeats 800000 in
 theorem main : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW), WachCharacterisation D HW F := by
   intro D HW F l _ K s LL h T hT N₁ hfree hbc hγN₁ hγπ hφ hφinv
   obtain ⟨a, h1, h2⟩ := _root_.GlobalTheory.NL.InvX.main D HW F l K s LL h T hT N₁ hfree hbc hφ hφinv
-  obtain ⟨nb⟩ := GlobalTheory.NL.N_basis D HW F l K s LL h T hT
+  obtain ⟨nb⟩ := GlobalTheory.NL.N_basis D.loc D.locA HW F l K s LL h T hT
   obtain ⟨r₁, ⟨b₁⟩⟩ := basis_of_freeA _ T hfree
   haveI : Nontrivial ((HW l).W K s LL h).EE := ((HW l).W K s LL h).EE_inj.nontrivial
   have hr : r₁ = Module.finrank ↥(OL LL) ↥T.L.T := by

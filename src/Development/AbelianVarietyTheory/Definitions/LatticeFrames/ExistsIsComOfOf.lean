@@ -298,8 +298,6 @@ structure XStdBy (A : ColDat I l Z v (w.C.herm.base.Ch v)) : Prop where
   cG_zero : ∀ j, B.R.m ≤ j → o.cG j = 0
   ker : ∀ j, j < B.R.m → (a.k j).c = conv a.c.ψ _ _ (o.cG j) (o.cT j)
 
-def XStd : Prop := ∃ A, XStdBy w a o G A
-
 namespace XStdBy
 
 end XStdBy

@@ -308,18 +308,19 @@ theorem UpperTheory.thetaLift_triple_local_split_places :
     rw [← Matrix.map_mul, Units.inv_mul, Matrix.map_one _ (map_zero _) (map_one _)]
   have hth := hX.fst t
   rw [hvac] at hth
-  refine UpperTheory.exists_isSBHalf_theta_of_selfDual_lattices D ψ true A WW _ (finCongr hr) Bs Vs Ws M hP X.rA.Λ X.rW.Λ hL (selfDual_neg hX.rigA.1) hX.rigW.1
+  have hres := (UpperTheory.exists_isSBHalf_theta_of_selfDual_lattices D ψ true A WW _ (finCongr hr) Bs Vs Ws M hP X.rA.Λ X.rW.Λ hL (selfDual_neg hX.rigA.1) hX.rigW.1
     P τ (fun v => (τ v).comp D.sp.cm.sig) (fun _ _ => rfl) (X.e t) hh0 hh1 (fun v => (b v)⁻¹)
-    (fun v => GlobalTheory.SplitFlip.invT (c v)) ι (fun v => hι v) hι0 φ hφ hφ' g
-    (GlobalTheory.IndefiniteRowSideFullHecke.UnitCharTriangle.stdFst (α t / β t) (X.e t) (X.ideal S t) A WW X.rA.β X.rW.β) (X.f t) (fun x => ?_) hth
-  by_cases hx : IsHalf (X.e t) x
-  · rw [if_pos hx]
-    refine (UpperTheory.stdSectionFirst_eq_prod_local D (X.e t) (S t) (hX.idem t) P (fun v => v.1) τ hS hinj (X.c t) (α t / β t) A WW X.rA.β X.rW.β
-      A'.rank hr x hx).trans (Finset.prod_congr rfl fun v _ => ?_)
-    rw [hφA v]
-    exact congrArg _ (key x v).symm
-  · rw [if_neg hx]
-    exact if_neg fun h => hx h.1
+    (fun v => GlobalTheory.SplitFlip.invT (c v)) ι (fun v => hι v) φ hφ hφ' g
+    (GlobalTheory.IndefiniteRowSideFullHecke.UnitCharTriangle.stdFst (α t / β t) (X.e t) (X.ideal S t) A WW X.rA.β X.rW.β) (X.f t) (fun x => by
+      by_cases hx : IsHalf (X.e t) x
+      · rw [ite_eq_left hx]
+        refine (UpperTheory.stdSectionFirst_eq_prod_local D (X.e t) (S t) (hX.idem t) P (fun v => v.1) τ hS hinj (X.c t) (α t / β t) A WW X.rA.β X.rW.β
+          A'.rank hr x hx).trans (Finset.prod_congr rfl fun v _ => ?_)
+        rw [hφA v]
+        exact congrArg _ (key x v).symm
+      · rw [ite_eq_right hx]
+        exact ite_eq_right fun h => hx h.1) hth).2
+  simpa [Finset.prod_eq_one fun v _ => hι0 v] using hres
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.DivisorFrames.ThetaLiftTripleLocalSplitPlaces =====
@@ -453,29 +454,28 @@ theorem UpperTheory.triple_dualCoord_split_places_of_isPair_isLat :
       rw [← Matrix.map_mul, Units.mul_inv, Matrix.map_one _ (map_zero _) (map_one _)]
     rw [e1, Matrix.mul_neg, neg_neg, ← Matrix.mul_one (_ * A'.gram.map (τ v)), ← e3, ← Matrix.mul_assoc,
       Matrix.mul_assoc (b v).1ᵀ, e2, Matrix.one_mul]
-  refine UpperTheory.exists_isSBHalf_theta_of_selfDual_lattices D ψ false A' WW _ (finCongr hr) Bs Vs Ws M hp X.rA'.Λ X.rW.Λ hl hX.rigA'.1 hX.rigW.1 P
+  have hres := (UpperTheory.exists_isSBHalf_theta_of_selfDual_lattices D ψ false A' WW _ (finCongr hr) Bs Vs Ws M hp X.rA'.Λ X.rW.Λ hl hX.rigA'.1 hX.rigW.1 P
     (fun v => (τ v).comp D.sp.cm.sig) τ (fun v x => congrArg (τ v) (star_star x).symm) (cA D (X.e t)) hh0
     (fun z => by rw [GlobalTheory.DualPairCheck.cA_cA]; exact hh1 z)
     (fun v => Matrix.GeneralLinearGroup.map (evW (τ v)) X.rA'.β⁻¹)
-    (fun v => Matrix.GeneralLinearGroup.mkOfDetNeZero _ (hdet v) * c v) ι (fun v => ?_) h1 φ hφ hφP g
-    (GlobalTheory.IndefiniteRowSideFullHecke.UnitCharTriangle.stdSnd (α t / β t) (X.e t) (X.ideal S t) A.rank A' WW X.rA'.β X.rW.β) (X.f' t) (fun x => ?_) ?_
-  · have h := hι v
-    unfold Model.IsLinBar at h
-    convert h using 1
-    funext u
-    change (X.rA'.β⁻¹).1.map (evW (τ v)) * _ * ((Ws.J.map (τ v))ᵀ * (c v).1) = _
-    rw [← hbb v]
-    simp only [Matrix.neg_mul, Matrix.mul_assoc]
-  · by_cases hx : IsHalf (cA D (X.e t)) x
-    · rw [if_pos hx]
-      refine (UpperTheory.stdSectionSecond_eq_prod_local D (X.e t) (S t) (hX.idem t) P (fun v => v.1) τ hS hinj (X.c t) (α t / β t) A.rank A' WW
-        X.rA'.β X.rW.β hr x hx).trans (Finset.prod_congr rfl fun v _ => ?_)
-      rw [hstd v, ← coord_eq, ← hc v, ← hp.JW, Matrix.mul_assoc]
-      rfl
-    · rw [if_neg hx]
-      exact if_neg fun h => hx h.1
-  · rw [← hvac]
-    exact hX.snd t
+    (fun v => Matrix.GeneralLinearGroup.mkOfDetNeZero _ (hdet v) * c v) ι (fun v => by
+      have h := hι v
+      unfold Model.IsLinBar at h
+      convert h using 1
+      funext u
+      change (X.rA'.β⁻¹).1.map (evW (τ v)) * _ * ((Ws.J.map (τ v))ᵀ * (c v).1) = _
+      rw [← hbb v]
+      simp only [Matrix.neg_mul, Matrix.mul_assoc]) φ hφ hφP g
+    (GlobalTheory.IndefiniteRowSideFullHecke.UnitCharTriangle.stdSnd (α t / β t) (X.e t) (X.ideal S t) A.rank A' WW X.rA'.β X.rW.β) (X.f' t) (fun x => by
+      by_cases hx : IsHalf (cA D (X.e t)) x
+      · rw [ite_eq_left hx]
+        refine (UpperTheory.stdSectionSecond_eq_prod_local D (X.e t) (S t) (hX.idem t) P (fun v => v.1) τ hS hinj (X.c t) (α t / β t) A.rank A' WW
+          X.rA'.β X.rW.β hr x hx).trans (Finset.prod_congr rfl fun v _ => ?_)
+        rw [hstd v, ← coord_eq, ← hc v, ← hp.JW, Matrix.mul_assoc]
+        rfl
+      · rw [ite_eq_right hx]
+        exact ite_eq_right fun h => hx h.1) (by rw [← hvac]; exact hX.snd t)).2
+  simpa [Finset.prod_eq_one fun v _ => h1 v] using hres
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.DivisorFrames.TripleDualCoordSplitPlacesOfIsPairIsLat =====

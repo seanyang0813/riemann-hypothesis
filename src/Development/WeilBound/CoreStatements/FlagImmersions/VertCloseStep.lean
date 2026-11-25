@@ -292,10 +292,6 @@ theorem div_le_of_integral (y : (Σ k, ι k) → Ω) (hP : (mCoordIdeal y).IsPri
     simp only [map_prod, map_pow, aeval_X]
     linear_combination ((∏ k, y ⟨k, c k⟩ ^ e k) * aeval y b ^ n) * hp
 
-theorem X_mem_iff (y : (Σ k, ι k) → Ω) (q : Σ k, ι k) : (X q : MRing ι) ∈ mCoordIdeal y ↔ y q = 0 := by
-  show mConeMap y (X q) = 0 ↔ _
-  simp [mConeMap, X_ne_zero]
-
 theorem C_not_mem {P : Ideal (MRing ι)} (hP : IsHorizontal P) {n : ℤ} (hn : n ≠ 0) : (C n : MRing ι) ∉ P := by
   intro h
   have h2 : n ∈ P.comap (C : ℤ →+* MRing ι) := h
@@ -318,7 +314,7 @@ theorem half_bound (y : (Σ k, ι k) → Ω) (hP : (mCoordIdeal y).IsPrime) (hH 
   have hVW : mCoordIdeal y ≤ W := le_sup_left.trans h.1.1.2
   choose c hcW using h.2
   have hcP : ∀ k, (X ⟨k, c k⟩ : MRing ι) ∉ mCoordIdeal y := fun k hk => hcW k (hVW hk)
-  have hc : ∀ k, y ⟨k, c k⟩ ≠ 0 := fun k hk => hcP k ((X_mem_iff y _).2 hk)
+  have hc : ∀ k, y ⟨k, c k⟩ ≠ 0 := fun k hk => hcP k ((GlobalTheory.CompanionTheory.Ar.Top.LineUnit.X_mem_mCoordIdeal_iff y _).2 hk)
   have hmP : (C (m : ℤ) : MRing ι) ∉ mCoordIdeal y := C_not_mem hH (by exact_mod_cast hm.ne')
   have hint : IsIntegral (chartRingZ y c) ((m : Ω) * (u * ∏ k, y ⟨k, c k⟩ ^ (-((df k : ℤ) - dg k))) ^ q) := by
     refine GlobalTheory.CompanionTheory.Ar.ChartVal.isIntegral_of_forall_valuationSubring Subtype.val_injective _

@@ -66,7 +66,7 @@ namespace GlobalTheory.NL.LowLevel
 
 
 
-theorem expansions_low_and_pullback_record : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.loc D.locA HW F) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; let E := ((F l).E K s LL h).tie; let C := Cm l; ∀ T : Lt K LL, IsCrys ((D.loc l).PD K) T.ρ → (∀ (i : Let K) (ζ : ↥LL.1), (∃ m : ℕ, ζ ^ (((D.loc l).PD K).p ^ m) = 1) → PowerSeries.constantCoeff (W.lev i ζ W.X) = 0 → (∀ (x : ↥(W.N T)) (k : ℤ), W.levN T i ζ ((letE i : AA K LL) • x) k ∈ ιDi W T i ∧ (k < 0 → W.levN T i ζ x k = 0)) ∧ Submodule.span ↥LL.1 (Set.range fun x : ↥(W.N T) => W.levN T i ζ ((letE i : AA K LL) • x) 0) = ιDi W T i) ∧ ∀ (i : Let K) (ζ : ↥LL.1) τ, ptK D.loc HW h i ζ τ → (∀ (x : ↥(W.N T)) (k : ℕ) (hk : W.Q ^ k • W.φD T x ∈ W.N T) (j : ℤ), W.levN T i ζ ⟨_, hk⟩ j ∈ ιDi W T i ∧ (j < k → W.levN T i ζ ⟨_, hk⟩ j = 0)) ∧ Submodule.span ↥LL.1 {w | ∃ (x : ↥(W.N T)) (k : ℕ) (hk : W.Q ^ k • W.φD T x ∈ W.N T), w = W.levN T i ζ ⟨_, hk⟩ k} = ιDi W T i :=
+theorem expansions_low_and_pullback_record : ∀ (loc : LocTheory) (locA : ∀ (l : ℕ) [Fact l.Prime], LocAinf l (loc l)) (locT : ∀ (l : ℕ) [Fact l.Prime], Formalism.BasicNotions.LocTied l (loc l) (locA l)) (HW : HWOf loc) (F : FonOf loc locA HW) (Cm : CmpOf loc locA HW F) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; let E := ((F l).E K s LL h).tie; let C := Cm l; ∀ T : Lt K LL, IsCrys ((loc l).PD K) T.ρ → (∀ (i : Let K) (ζ : ↥LL.1), (∃ m : ℕ, ζ ^ (((loc l).PD K).p ^ m) = 1) → PowerSeries.constantCoeff (W.lev i ζ W.X) = 0 → (∀ (x : ↥(W.N T)) (k : ℤ), W.levN T i ζ ((letE i : AA K LL) • x) k ∈ ιDi W T i ∧ (k < 0 → W.levN T i ζ x k = 0)) ∧ Submodule.span ↥LL.1 (Set.range fun x : ↥(W.N T) => W.levN T i ζ ((letE i : AA K LL) • x) 0) = ιDi W T i) ∧ ∀ (i : Let K) (ζ : ↥LL.1) τ, ptK loc HW h i ζ τ → (∀ (x : ↥(W.N T)) (k : ℕ) (hk : W.Q ^ k • W.φD T x ∈ W.N T) (j : ℤ), W.levN T i ζ ⟨_, hk⟩ j ∈ ιDi W T i ∧ (j < k → W.levN T i ζ ⟨_, hk⟩ j = 0)) ∧ Submodule.span ↥LL.1 {w | ∃ (x : ↥(W.N T)) (k : ℕ) (hk : W.Q ^ k • W.φD T x ∈ W.N T), w = W.levN T i ζ ⟨_, hk⟩ k} = ιDi W T i :=
   expansions_low_and_pullback
 
 end GlobalTheory.NL.LowLevel
@@ -182,20 +182,20 @@ private theorem exists_smul_expansion_eq {O L A N M J : Type}
 
 set_option maxHeartbeats 20000000 in
 set_option synthInstance.maxHeartbeats 200000 in
-theorem lattice_at_level : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW)
-    (Cm : CmpOf D.loc D.locA HW F), P4 D HW F Cm := by
-  intro D HW F Cm l _ K s LL h T hT
-  have hP4a := GlobalTheory.NL.LowLevel.expansions_low_and_pullback_record D HW F Cm l K s LL h T hT
+theorem lattice_at_level : ∀ (loc : LocTheory) (locA : ∀ (l : ℕ) [Fact l.Prime], LocAinf l (loc l)) (locT : ∀ (l : ℕ) [Fact l.Prime], Formalism.BasicNotions.LocTied l (loc l) (locA l)) (HW : HWOf loc) (F : FonOf loc locA HW)
+    (Cm : CmpOf loc locA HW F), p4L loc HW locA F Cm := by
+  intro loc locA locT HW F Cm l _ K s LL h T hT
+  have hP4a := GlobalTheory.NL.LowLevel.expansions_low_and_pullback_record loc locA locT HW F Cm l K s LL h T hT
   unfold p4
   refine ⟨hP4a.1, ?_⟩
   intro i ζ τ hpt
   let W := (HW l).W K s LL h
   let tie := ((Cm l).C K s LL h).tie
   let expansion := tie.levB T i ζ
-  let embed := ιV ((D.loc l).PD K) (LL := ↥LL.1) (V := T.V)
+  let embed := ιV ((loc l).PD K) (LL := ↥LL.1) (V := T.V)
   let letter : AA K LL := letE i
   have hlevN (x) (j) : W.levN T i ζ x j = embed (expansion x j) := tie.levN_eq T i ζ x j
-  have hlat := LatFil.lat_eq_fil D HW F Cm l K s LL h T hT i ζ τ hpt
+  have hlat := LatFil.lat_eq_fil loc locA locT HW F Cm l K s LL h T hT i ζ τ hpt
   refine ⟨hP4a.2 i ζ τ hpt, ?_, ?_⟩
   · intro x k
     let y := letter • x
@@ -204,22 +204,22 @@ theorem lattice_at_level : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc)
     have hk := ((hlat _).1 hmem).2 k
     exact (hlevN y k).symm ▸ ⟨Submodule.mem_map_of_mem hk.1, hk.2⟩
   · intro k w hw
-    have hpoint := (GlobalTheory.NL.Points.points D HW l K s LL h).2.1 i ζ τ hpt
+    have hpoint := (GlobalTheory.NL.Points.points loc HW l K s LL h).2.1 i ζ τ hpt
     have hprim := hpoint.1
     refine hpoint.2.2.elim fun ι hcomp => ?_
-    have hC := GlobalTheory.NL.CompD.component D HW l K s LL h T hT i ζ τ ι hcomp hpoint.2.1
-    have hw' : w ∈ DdRE ((D.loc l).PD K) T.ρ τ ⊓ FilV ((D.loc l).PD K) (LL := ↥LL.1) (V := T.V) (-k) := hw
+    have hC := GlobalTheory.NL.CompD.component loc locA locT HW l K s LL h T hT i ζ τ ι hcomp hpoint.2.1
+    have hw' : w ∈ DdRE ((loc l).PD K) T.ρ τ ⊓ FilV ((loc l).PD K) (LL := ↥LL.1) (V := T.V) (-k) := hw
     refine (hC.2.2.1 w (Submodule.mem_inf.1 hw').1).elim fun d hd => ?_
     have hdw := hd.2
-    have hdF : embed d ∈ FilAt ((D.loc l).PD K) T τ (-k) := by
+    have hdF : embed d ∈ FilAt ((loc l).PD K) T τ (-k) := by
       have hsum : w + (embed d - w) = embed d :=
         (add_comm _ _).trans (sub_add_cancel (embed d) w)
       exact hsum ▸ Submodule.add_mem_sup hw hdw
-    let f : ℤ → T.V ⊗[ℚ_[l]] (D.loc l).R.B := Pi.single k d
+    let f : ℤ → T.V ⊗[ℚ_[l]] (loc l).R.B := Pi.single k d
     have hf_same : f k = d :=
-      Pi.single_eq_same (M := fun _ => T.V ⊗[ℚ_[l]] (D.loc l).R.B) k d
+      Pi.single_eq_same (M := fun _ => T.V ⊗[ℚ_[l]] (loc l).R.B) k d
     have hf_ne {r : ℤ} (hr : r ≠ k) : f r = 0 :=
-      Pi.single_eq_of_ne (M := fun _ => T.V ⊗[ℚ_[l]] (D.loc l).R.B) hr d
+      Pi.single_eq_of_ne (M := fun _ => T.V ⊗[ℚ_[l]] (loc l).R.B) hr d
     have hsingle : f ∈ Lat (Cm l) h T i ζ := by
       refine (hlat f).2 ⟨⟨k, fun r hr => hf_ne hr.ne⟩, fun r => ?_⟩
       by_cases hr : r = k
@@ -227,10 +227,10 @@ theorem lattice_at_level : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc)
         exact hf_same.symm ▸ ⟨hd.1, hdF⟩
       · have hzero := (congrArg (fun z => embed z) (hf_ne hr)).trans embed.map_zero
         exact ⟨(hf_ne hr).symm ▸ zero_mem _, hzero.symm ▸ zero_mem _⟩
-    have hfull := _root_.GlobalTheory.NL.FullLevel.full_lat D HW F Cm l K s LL h T hT i ζ hprim
-    refine (@GlobalTheory.NL.N_basis D HW F l _ K s LL h T hT).elim fun nb => ?_
-    have hli := _root_.GlobalTheory.NL.LevInj.expansion_basis D HW F Cm l K s LL h T hT i ζ ⟨s, hprim⟩ hfull
-    have hdense := (GlobalTheory.NL.WDiv.weierstrass_dense D HW l K s LL h).2.2.1 i ζ ⟨s, hprim⟩
+    have hfull := _root_.GlobalTheory.NL.FullLevel.full_lat loc locA locT HW F Cm l K s LL h T hT i ζ hprim
+    refine (@GlobalTheory.NL.N_basis loc locA HW F l _ K s LL h T hT).elim fun nb => ?_
+    have hli := _root_.GlobalTheory.NL.LevInj.expansion_basis loc locA locT HW F Cm l K s LL h T hT i ζ ⟨s, hprim⟩ hfull
+    have hdense := (GlobalTheory.NL.WDiv.weierstrass_dense loc HW l K s LL h).2.2.1 i ζ ⟨s, hprim⟩
     have : FiniteDimensional ℚ_[l] ↥LL.1 := LL.2
     have : IsFractionRing ↥(OL LL) ↥LL.1 :=
       integralClosure.isFractionRing_of_finite_extension ℚ_[l] ↥LL.1
@@ -239,7 +239,7 @@ theorem lattice_at_level : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc)
     refine hagree.elim fun x hexists => ?_
     refine hexists.elim fun c hc => ?_
     have hl1 : W.lev i ζ letter = 1 :=
-      (GlobalTheory.NL.lev_at_root_of_unity D HW l K s LL h i ζ ⟨s, hprim⟩).2.1
+      (GlobalTheory.NL.lev_at_root_of_unity loc HW l K s LL h i ζ ⟨s, hprim⟩).2.1
     let expansionN := W.levN T i ζ
     have hN1 (j : ℤ) : expansionN (letter • x) j = embed (expansion x j) := calc
       _ = conv (W.lev i ζ letter) (expansionN x) j := W.levN_smul T i ζ letter x j

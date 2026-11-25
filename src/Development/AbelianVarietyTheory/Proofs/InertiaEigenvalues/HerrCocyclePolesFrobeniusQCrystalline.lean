@@ -1021,14 +1021,14 @@ theorem main : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf 
   have hTied := D.locT l
   obtain ⟨β, hβ⟩ := GlobalTheory.HWLBeta.exists_beta l _ _ hTied LL
   obtain ⟨gA, φA, hg1, hg2, hφ1, hφ2⟩ := exists_actions K hβ
-  obtain ⟨hX, -, hinj, -, hφ3, -⟩ := GlobalTheory.NL.IoXQ.main D HW F l K s LL h
+  obtain ⟨hX, -, hinj, -, hφ3, -⟩ := GlobalTheory.NL.IoXQ.main D.loc D.locA HW F l K s LL h
   have hXu : IsUnit (β (((F l).E K s LL h).tie.io ((HW l).W K s LL h).X)) := by
     rw [hX, hβ]
     exact ((GlobalTheory.TiedMu.tied_mu_units l _ _ hTied).1 1).map
       (Algebra.TensorProduct.includeRight : (D.loc l).R.B →ₐ[ℚ_[l]] ↥LL.1 ⊗[ℚ_[l]] (D.loc l).R.B)
   obtain ⟨Dc, hC⟩ := exists_disc' hTied h (GamL (HW l) h) (SerL (HW l) (F l) h hL) (IoL (HW l) (F l) h hL)
     (ioW (HW l) (F l) h hL) hβ
-  obtain ⟨m, hm, -⟩ := GlobalTheory.NL.SandArb.sandwich D HW F l K s LL h T hT
+  obtain ⟨m, hm, -⟩ := GlobalTheory.NL.SandArb.sandwich D.loc D.locA HW F l K s LL h T hT
   obtain ⟨zz, hz1, hz2, hz3⟩ := _root_.GlobalTheory.NL.ZgAll.zg_formula D HW F l K s LL h T hT y z hz hyz
   obtain ⟨b, hb⟩ := (GlobalTheory.WittTensorFixed.main l K LL T).1 (((F l).E K s LL h).tie.jD T y)
   obtain ⟨c, hc1, hc2⟩ := hz3 b hb

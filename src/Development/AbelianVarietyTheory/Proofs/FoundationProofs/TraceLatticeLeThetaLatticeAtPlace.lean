@@ -51,7 +51,6 @@ open GlobalTheory.FormTies GlobalTheory.OnTies
 open Formalism.HermitianLatticesTheory (localization₂)
 open scoped TensorProduct Matrix
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 attribute [local instance 2000] Submodule.module
 
 variable {D : D7} {G : Type} [Group G] [Fintype G] {Pl0 T0 : Type} {A : FamIn D.what₂.LL G Pl0 T0 D.R.m}

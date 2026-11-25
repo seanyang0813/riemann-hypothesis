@@ -150,18 +150,6 @@ attribute [local instance] Over.cartesianMonoidalCategory
 
 namespace GlobalTheory.WeilAdjoint
 
-theorem map_unitOn {A B : Type} [CommRing A] [CommRing B] (β : A →+* B) (c : Aˣ) :
-    Units.map (spMap β).appTop.hom.toMonoidHom (unitOn c) = unitOn (Units.map β.toMonoidHom c) :=
-  Units.ext (congrArg (fun q => q.hom c.val) (Scheme.ΓSpecIso_inv_naturality (CommRingCat.ofHom β))).symm
-
-theorem weilIs_algHom {K : Type} [CommRing K] {B : Over (Sp K)} [GrpObj B] (hB : IsAbelianScheme B) {P : LB B.left}
-    (hP : P.IsLB) {k : ℤ} {D E : Type} [CommRing D] [Algebra K D] [CommRing E] [Algebra K E] (α : D →ₐ[K] E)
-    {x y : SpAlg K D ⟶ B} {x' y' : SpAlg K E ⟶ B} (hx : spOver α ≫ x = x') (hy : spOver α ≫ y = y') {U : Dˣ}
-    (hU : Out.WeilIs B P k (T := SpAlg K D) x y (unitOn U)) :
-    Out.WeilIs B P k (T := SpAlg K E) x' y' (unitOn (Units.map (α : D →+* E).toMonoidHom U)) := by
-  rw [← map_unitOn, ← hx, ← hy]
-  exact CommPairing.weilIs_pull GlobalTheory.globalFns_holds hB hP (T := SpAlg K D) (T' := SpAlg K E) (spOver α) hU
-
 end GlobalTheory.WeilAdjoint
 end -- clump:auto
 end -- clump:auto
@@ -193,12 +181,6 @@ variable [Algebra R A] [Algebra R B] {D E : Type} [CommRing D] [Algebra R D] [Co
 
 def ev (x : A →ₐ[R] D) (z : B →ₐ[R] D) : A ⊗[R] B →ₐ[R] D :=
   Algebra.TensorProduct.lift x z fun _ _ => Commute.all _ _
-
-theorem ev_comp_left (x : A →ₐ[R] D) (z : B →ₐ[R] D) : (ev x z).comp Algebra.TensorProduct.includeLeft = x :=
-  AlgHom.ext fun a => by simp [ev]
-
-theorem ev_comp_right (x : A →ₐ[R] D) (z : B →ₐ[R] D) : (ev x z).comp Algebra.TensorProduct.includeRight = z :=
-  AlgHom.ext fun a => by simp [ev]
 
 theorem tensorToHom_ev (f : A →ₐ[R] D) (g : B →ₐ[R] E) (u : A ⊗[R] B) (φ : CartierDual R E) :
     tensorToHom R D E (ev (Algebra.TensorProduct.includeLeft.comp f) (Algebra.TensorProduct.includeRight.comp g) u) φ =
@@ -332,72 +314,7 @@ theorem triv_theta (hC : GlobalTheory.Published.CubeTheorem) {A : Over S} [GrpOb
     (hL : L.IsLB) : ∃ t : LB.Gen (Theta A L), t.IsGen := by
   apply _root_.GlobalTheory.SymMulPull.hasGen_theta <;> assumption
 
-theorem cubWeil_level {A : Over S} [GrpObj A] [IsCommMonObj A] (hA : IsAbelianScheme A) {L : RigLB A}
-    {c : CubicalStr A L} {k l : ℕ} {T : Over S} {x z : T ⟶ A} {ζ ζ' : Γ(T.left, ⊤)ˣ}
-    (h : UU.CubWeil c (k * l) x z ζ) (h' : UU.CubWeil c k x (z ^ l) ζ') : ζ = ζ' := by
-  have a := (UU.cubWeil_iff_weilIs globalFns_holds hA h.2.1 h.1 _).1 h.symm
-  have b := (UU.cubWeil_iff_weilIs globalFns_holds hA h'.2.1 h'.1 _).1 h'.symm
-  rw [Nat.cast_mul] at a
-  exact inv_injective (PairingLevels.weilIs_value_eq globalFns_holds hA L.isLB c.isGen a b)
-
 variable {p : ℕ} {R : Type} [CommRing R] {A B : Over (Sp R)} [GrpObj A] [GrpObj B]
-
-theorem exists_of_cubical [IsCommMonObj (A ⊗ B)] (hAB : IsAbelianScheme (A ⊗ B)) {M : RigLB (A ⊗ B)}
-    (c : CubicalStr (A ⊗ B) M) {𝒜 ℬ : PDivGroup p R} (t : 𝒜.TorsionTower A) (s : ℬ.TorsionTower B) :
-    ∃ w : 𝒜 ⟶ ℬ.dual, IsWeilHom t s M.L w := by
-  let X : ∀ (n : ℕ) (D : Type) [CommRing D] [Algebra R D], WithConv (𝒜.A n →ₐ[R] D) →* (SpAlg R D ⟶ A ⊗ B) :=
-    fun n D _ _ => MonoidHom.mk' (fun x => CartesianMonoidalCategory.lift (spOver x.ofConv ≫ t.y n) 1) fun x x' => by
-      ext1 <;> simp [MonObj.mul_comp, t.mul]
-  let Z : ∀ (n : ℕ) (D : Type) [CommRing D] [Algebra R D], WithConv (ℬ.A n →ₐ[R] D) →* (SpAlg R D ⟶ A ⊗ B) :=
-    fun n D _ _ => MonoidHom.mk' (fun z => CartesianMonoidalCategory.lift 1 (spOver z.ofConv ≫ s.y n)) fun x x' => by
-      ext1 <;> simp [MonObj.mul_comp, s.mul]
-  have ex : ∀ n, ∃ U : (𝒜.A n ⊗[R] ℬ.A n)ˣ, UU.CubWeil c (p ^ n)
-      (X n _ (toConv Algebra.TensorProduct.includeLeft)) (Z n _ (toConv Algebra.TensorProduct.includeRight))
-      (unitOn U) := fun n => by
-    obtain ⟨ζ, hζ, -⟩ := UU.existsUnique_cubWeil c (N := p ^ n)
-      (x := X n (𝒜.A n ⊗[R] ℬ.A n) (toConv Algebra.TensorProduct.includeLeft))
-      (y := Z n _ (toConv Algebra.TensorProduct.includeRight))
-      (by rw [← map_pow, 𝒜.pts_pow_self, map_one]) (by rw [← map_pow, ℬ.pts_pow_self, map_one])
-    obtain ⟨U, rfl⟩ := EpsWeil.unitOn_bijective.2 ζ
-    exact ⟨U, hζ⟩
-  choose U hU using ex
-  have at' : ∀ (n : ℕ) (D : Type) [CommRing D] [Algebra R D] (x : WithConv (𝒜.A n →ₐ[R] D))
-      (z : WithConv (ℬ.A n →ₐ[R] D)), UU.CubWeil c (p ^ n) (X n D x) (Z n D z)
-        (unitOn (Units.map (ev x.ofConv z.ofConv).toRingHom.toMonoidHom (U n))) := fun n D _ _ x z => by
-    have h := (hU n).comp (spOver (ev x.ofConv z.ofConv))
-    have e₁ : spOver (ev x.ofConv z.ofConv) ≫ X n _ (toConv Algebra.TensorProduct.includeLeft) = X n D x := by
-      simp only [X, MonoidHom.mk'_apply, comp_lift, MonObj.comp_one, ← Category.assoc, spOver_comp, ev_comp_left]
-    have e₂ : spOver (ev x.ofConv z.ofConv) ≫ Z n _ (toConv Algebra.TensorProduct.includeRight) = Z n D z := by
-      simp only [Z, MonoidHom.mk'_apply, comp_lift, MonObj.comp_one, ← Category.assoc, spOver_comp, ev_comp_right]
-    rw [e₁, e₂] at h
-    exact EpsWeil.map_unitOn (ev x.ofConv z.ofConv).toRingHom (U n) ▸ h
-  have um : ∀ {D : Type} [CommRing D] {a : Dˣ} (b d : Dˣ), unitOn a = unitOn b * unitOn d → a.val = b.val * d.val := by
-    intro D _ a b d h
-    have e : unitOn (b * d) = unitOn b * unitOn d :=
-      Units.ext (_root_.map_mul (Scheme.ΓSpecIso (CommRingCat.of D)).inv.hom b.val d.val)
-    exact congrArg Units.val ((EpsWeil.unitOn_bijective (D := D)).1 (h.trans e.symm))
-  obtain ⟨w, hw⟩ := exists_hom 𝒜 ℬ (fun n => (U n).val)
-    (fun n => ⟨(U n).isUnit, fun D _ _ x x' z => by
-        have := (at' n D x (toConv z)).mul_left (at' n D x' (toConv z))
-        rw [← map_mul] at this
-        exact um _ _ ((at' n D (x * x') (toConv z)).unique this),
-      fun D _ _ x z z' => by
-        have := ((at' n D (toConv x) z).symm.mul_left (at' n D (toConv x) z').symm).symm
-        rw [← map_mul, ← mul_inv, inv_inv] at this
-        exact um _ _ ((at' n D (toConv x) (z * z')).unique this)⟩)
-    fun n D _ _ x z => by
-      have a := at' (n + 1) D (toConv (x.comp (𝒜.res n : 𝒜.A (n + 1) →ₐ[R] 𝒜.A n))) (toConv z)
-      have b := at' n D (toConv x) (toConv (z.comp (ℬ.mulP n : ℬ.A n →ₐ[R] ℬ.A (n + 1))))
-      have e₁ : X (n + 1) D (toConv (x.comp (𝒜.res n : 𝒜.A (n + 1) →ₐ[R] 𝒜.A n))) = X n D (toConv x) := by
-        simp only [X, MonoidHom.mk'_apply, ← spOver_comp, Category.assoc, t.res]
-      have e₂ : Z n D (toConv (z.comp (ℬ.mulP n : ℬ.A n →ₐ[R] ℬ.A (n + 1)))) = Z (n + 1) D (toConv z) ^ p := by
-        ext1 <;> simp only [Z, MonoidHom.mk'_apply, ← spOver_comp, Category.assoc, s.mulP_y, MonObj.pow_comp,
-          lift_fst, lift_snd, one_pow, MonObj.comp_pow]
-      rw [e₁, pow_succ] at a
-      rw [e₂] at b
-      exact congrArg Units.val (EpsWeil.unitOn_bijective.1 (cubWeil_level hAB a b))
-  exact ⟨w, fun n => ⟨U n, (UU.cubWeil_iff_weilIs globalFns_holds hAB (hU n).1 (hU n).2.1 _).1 (hU n),
-    fun χ => (hw n χ).trans (tensorToHom_apply _ _)⟩⟩
 
 end Geo
 
@@ -454,14 +371,6 @@ variable {p : ℕ} [Fact p.Prime] {R R₀ : Type} [CommRing R] [CommRing R₀] [
   {A B : Over (Sp R)} [GrpObj A] [GrpObj B] {A₀ B₀ : Over (Sp R₀)} [GrpObj A₀] [GrpObj B₀]
   {i : A₀.left ⟶ A.left} {j : B₀.left ⟶ B.left} {G H : PDivGroup p R}
 
-theorem weilIs_push {S S' : Scheme.{0}} {X : Over S} {X' : Over S'} [GrpObj X] [GrpObj X'] [IsCommMonObj X]
-    {f : S' ⟶ S} {φ : X'.left ⟶ X.left} {L : LB X.left} {L' : LB X'.left} (hL : L.IsLB) (hL' : L'.IsLB)
-    (hp : IsGrpPullback X' X f φ) (hw : LBIso L' (L.pull φ)) (T : Over S') (g : T.left ⟶ S) (hg : g = T.hom ≫ f)
-    (k : ℤ) (x y : T ⟶ X') (x₀ y₀ : Over.mk g ⟶ X) (c : Γ(T.left, ⊤)ˣ) (ex : x₀.left = x.left ≫ φ)
-    (ey : y₀.left = y.left ≫ φ) (h : Out.WeilIs X L k x₀ y₀ c) : Out.WeilIs X' L' k x y c := by
-  subst hg
-  exact (_root_.GlobalTheory.weilIs_grpPullback_of_comm _ _ _ _ _ _ _ _ hL hL' hp hw T k x y x₀ y₀ c ex ey).2 h
-
 
 omit [Algebra R R₀] [GrpObj A] [GrpObj B] [GrpObj A₀] [GrpObj B₀] in
 theorem IsPairRed.polBundle {P : LB (A ⊗ B).left} {P₀ : LB (A₀ ⊗ B₀).left} (hP : P.IsLB) (hP₀ : P₀.IsLB)
@@ -482,80 +391,6 @@ theorem IsPairRed.polBundle {P : LB (A ⊗ B).left} {P₀ : LB (A₀ ⊗ B₀).l
       lift_snd, Over.comp_left, Over.comp_left, Category.assoc, ← e, ← Category.assoc, ← l₂, Category.assoc]
 
 
-omit [Fact p.Prime] in
-theorem exists_isWeilHom (hA : IsAbelianScheme A) {P : LB (A ⊗ B).left} (hP : IsDual A B P) (lam : A ⟶ B)
-    (t : G.TorsionTower A) : ∃ ψ : G ⟶ G.dual, IsWeilHom t t (polBundle P lam) ψ := by
-  have hAA := AbelianSchemeGerms.isAbelianScheme_tensor A A hA hA
-  have := hAA.comm
-  have hQ : (polBundle P lam).IsLB := pull_isLB hP.isLB _
-  obtain ⟨r, hr⟩ : AbLaw.Triv ((polBundle P lam).pull (eSec (A ⊗ A))) := by
-    have e' : CartesianMonoidalCategory.lift (1 : 𝟙_ (Over (Sp R)) ⟶ A) (1 : 𝟙_ (Over (Sp R)) ⟶ A) = η[A ⊗ A] := by
-      ext <;> simp [Hom.one_def]
-    have e := (AbDual.triv_ev_iff hQ (1 : 𝟙_ (Over (Sp R)) ⟶ A) (1 : 𝟙_ (Over (Sp R)) ⟶ A)).2 (by
-      rw [evc_ev hP.isLB, lift_fst]
-      exact hP.additive.evc_one hP.isLB _)
-    rw [AbDual.ev, e'] at e
-    exact e
-  obtain ⟨τ, hτ⟩ := WeilHom.triv_theta _root_.GlobalTheory.SpreadingModels.cubeTheorem_holds hAA hQ
-  obtain ⟨τ', hτ', hn⟩ := AbLaw.Cube.exists_normalised hQ τ hτ
-  exact WeilHom.exists_of_cubical hAA
-    (AbLaw.Cube.cubicalOfNormalised globalFns_holds hAA ⟨polBundle P lam, r, hQ, hr⟩ τ' hτ' hn) t t
-
-theorem isWeilHom_baseChange (hA : IsAbelianScheme A) (h : IsGrpPullback A₀ A (red R R₀) i) {Q : LB (A ⊗ A).left}
-    {Q₀ : LB (A₀ ⊗ A₀).left} (hQ : Q.IsLB) (hQ₀ : Q₀.IsLB) (r : IsPairRed i i Q Q₀) (t : G.TorsionTower A)
-    {ψ : G ⟶ G.dual} (hψ : IsWeilHom t t Q ψ) :
-    IsWeilHom (t.baseChange h) (t.baseChange h) Q₀
-      (PDivGroup.baseChangeMap R₀ ψ ≫ (dualBaseChange R₀ G).inv) := by
-  intro n
-  obtain ⟨l, l₁, l₂, hl⟩ := r
-  obtain ⟨U, hU, e⟩ := hψ n
-  have hAA := AbelianSchemeGerms.isAbelianScheme_tensor A A hA hA
-  have := hAA.comm
-  let α := WeilIntegral.twoMap (R := R) (K := R₀) (G.A n)
-  refine ⟨Units.map (α : G.A n ⊗[R] G.A n →+* _).toMonoidHom U, ?_, fun χ => ?_⟩
-  · have hg : spMap (algebraMap R ((R₀ ⊗[R] G.A n) ⊗[R₀] (R₀ ⊗[R] G.A n))) =
-        (SpAlg R₀ ((R₀ ⊗[R] G.A n) ⊗[R₀] (R₀ ⊗[R] G.A n))).hom ≫ red R R₀ := by
-      rw [IsScalarTower.algebraMap_eq R R₀, Cris.spMap_comp]
-      rfl
-    have hy : ∀ (bb : R₀ ⊗[R] G.A n →ₐ[R₀] (R₀ ⊗[R] G.A n) ⊗[R₀] (R₀ ⊗[R] G.A n))
-        (gg : G.A n →ₐ[R] G.A n ⊗[R] G.A n), (∀ a, α (gg a) = bb (1 ⊗ₜ a)) →
-        (spOver bb ≫ (t.baseChange h).y n).left ≫ i =
-          spMap (α : G.A n ⊗[R] G.A n →+* _) ≫ (spOver gg ≫ t.y n).left := fun bb gg hβ => by
-      rw [Over.comp_left, Over.comp_left, Category.assoc, ← t.toBase_y h n, spOver_left, spOver_left,
-        ← Category.assoc, ← Category.assoc, ← Cris.spMap_comp, ← Cris.spMap_comp]
-      exact congrArg (fun q => spMap q ≫ (t.y n).left) (RingHom.ext fun a => (hβ a).symm)
-    have hτ : spMap (α : G.A n ⊗[R] G.A n →+* _) ≫ (SpAlg R (G.A n ⊗[R] G.A n)).hom =
-        (SpAlg R₀ ((R₀ ⊗[R] G.A n) ⊗[R₀] (R₀ ⊗[R] G.A n))).hom ≫ red R R₀ := (Over.w (spOver α)).trans hg
-    have o := WeilIntegral.one_left_comm h (T := SpAlg R (G.A n ⊗[R] G.A n))
-      (T' := SpAlg R₀ ((R₀ ⊗[R] G.A n) ⊗[R₀] (R₀ ⊗[R] G.A n))) _ hτ
-    refine weilIs_push hQ hQ₀ (WeilIntegral.isGrpPullback_prod h h l₁ l₂) hl _ _ hg _ _ _ _ _ _ ?_ ?_
-      (WeilAdjoint.weilIs_algHom hAA hQ α rfl rfl hU)
-    · refine (WeilIntegral.lift_left_comm l₁ l₂ _ (hy _ _ fun a => ?_) o).symm
-      simp only [α, Algebra.TensorProduct.includeLeft_apply, WeilIntegral.twoMap_tmul]
-      rfl
-    · refine (WeilIntegral.lift_left_comm l₁ l₂ _ o (hy _ _ fun a => ?_)).symm
-      simp only [α, Algebra.TensorProduct.includeRight_apply,
-        WeilIntegral.twoMap_tmul]
-      rfl
-  · have key : ∀ x : R₀ ⊗[R] CartierDual R (G.A n), bcMap R₀ (ψ.app n) x = TensorProduct.rid R₀ _
-        ((CartierDual.baseChange R R₀ (G.A n) x).ofConv.lTensor _ (α U.val)) := fun x => by
-      induction x with
-      | add x y hx hy =>
-        rw [map_add (f := _), map_add (f := _), hx, hy, ← map_add (f := _), ← LinearMap.add_apply, ← LinearMap.lTensor_add]
-        rfl
-      | tmul c χ =>
-        have ec : c ⊗ₜ[R] χ = c • ((1 : R₀) ⊗ₜ[R] χ) := by rw [smul_tmul', smul_eq_mul, _root_.mul_one]
-        rw [ec, map_smul, map_smul]
-        refine Eq.trans ?_ (congrArg (fun q => TensorProduct.rid R₀ _ (q (α U.val)))
-          (LinearMap.lTensor_smul _ c (CartierDual.baseChange R R₀ (G.A n) ((1 : R₀) ⊗ₜ χ)).ofConv)).symm
-        rw [LinearMap.smul_apply, map_smul, WeilIntegral.contract_twoMap, ← e]
-        rfl
-    have hx : (CartierDual.baseChange R R₀ (G.A n)) ((dualBaseChange R₀ G).inv.app n χ) = χ :=
-      (CartierDual.baseChange R R₀ (G.A n)).apply_symm_apply χ
-    refine (key _).trans ?_
-    erw [hx]
-    rfl
-
 end Functor
 
 section Consequences
@@ -565,8 +400,6 @@ variable {p : ℕ} [Fact p.Prime] {R R₀ : Type} [CommRing R] [CommRing R₀] [
 end Consequences
 
 section Base
-
-abbrev Zmod4 : Type := ZMod (2 ^ 2)
 
 end Base
 
@@ -587,45 +420,6 @@ instance : curve.IsElliptic := by
   omega
 
 variable (R R₀ : Type) [CommRing R] [CommRing R₀] [Algebra R R₀] [IsNoetherianRing R] [IsNoetherianRing R₀]
-
-theorem elliptic_hyps (f : ℤ_[2] →+* R) : ∃ (A : Over (Sp R)) (_ : GrpObj A) (A₀ : Over (Sp R₀)) (_ : GrpObj A₀)
-    (i : A₀.left ⟶ A.left) (h : IsGrpPullback A₀ A (red R R₀) i) (G : PDivGroup 2 R) (t : G.TorsionTower A)
-    (P : LB (A ⊗ A).left) (P₀ : LB (A₀ ⊗ A₀).left) (ψ : G ⟶ G.dual),
-    IsAbelianScheme A ∧ IsAbelianScheme A₀ ∧ SmoothOfRelativeDimension 1 A.hom ∧ G.height = 2 ∧
-    IsDual A A P ∧ IsDual A₀ A₀ P₀ ∧ IsPairRed i i P P₀ ∧ IsPolarisation A A P (𝟙 A) ∧
-    IsPolarisation A₀ A₀ P₀ (𝟙 A₀) ∧ IsWeilHom t t (polBundle P (𝟙 A)) ψ ∧
-    IsWeilHom (t.baseChange h) (t.baseChange h) (polBundle P₀ (𝟙 A₀))
-      (PDivGroup.baseChangeMap R₀ ψ ≫ (dualBaseChange R₀ G).inv) := by
-  let _ : Algebra ℤ_[2] R := f.toAlgebra
-  let W := curve.map f
-  let E := ellPolAV W
-  let E₀ := ellPolAV (W.map (algebraMap R R₀))
-  let i := WeierstrassCurve.mapHom W (algebraMap R R₀) rfl
-  have h : IsGrpPullback E₀.A E.A (red R R₀) i :=
-    WeierstrassCurve.isGrpPullback_ellPolAV W (algebraMap R R₀) rfl
-  have hO := WeierstrassCurve.isGrpPullback_ellPolAV curve f rfl
-  obtain ⟨GO, hGO, ⟨tO⟩⟩ := AbelianPDiv.exists_pDivGroup 2 ℤ_[2] (by norm_num) (ellPolAV curve).A
-    (ellPolAV curve).isAb 1 ((WeierstrassCurve.ellPolAV_g curve) ▸ (ellPolAV curve).smoothDim)
-  let t := tO.baseChange (A' := E.A) hO
-  obtain ⟨-, hA, hP, hl⟩ := CompanionTheory.Hypotheses₂.Zarhin.hyp_elliptic dualAbelianScheme W
-  obtain ⟨-, hA₀, hP₀, hl₀⟩ := CompanionTheory.Hypotheses₂.Zarhin.hyp_elliptic dualAbelianScheme (W.map (algebraMap R R₀))
-  have := hA.comm
-  have := hA₀.comm
-  obtain ⟨β₂, ⟨b₁, b₂⟩, hβ⟩ := Mum.lbIso_lam_pull_of_isGrpPullback _ _ _ E.A E₀.A _ h
-  have hΛ : (abelian₂ E.A E.L).IsLB := LB.isLB_linComb E.isLB _ _
-  have r : IsPairRed i i (abelian₂ E.A E.L) (abelian₂ E₀.A E₀.L) := by
-    refine ⟨β₂, b₁, b₂, ?_⟩
-    have k := hβ E.L E₀.L _ (abelian₂ E.A E.L) (𝟙 _) E.isLB E₀.isLB hΛ
-      (WeierstrassCurve.lbIso_ellPolAV W (algebraMap R R₀) rfl)
-      ((CechPic.cls_eq_iff hΛ (pull_isLB hΛ _)).1 (by rw [CechPic.cls_pull hΛ, CechPic.pull_id]))
-    rwa [Category.comp_id] at k
-  obtain ⟨ψ, hψ⟩ := exists_isWeilHom hA hP (𝟙 E.A) t
-  obtain ⟨l, l₁, l₂⟩ := exists_prod_pullback h h
-  refine ⟨E.A, inferInstance, E₀.A, inferInstance, i, h, _, t, _, _, ψ, hA, hA₀,
-    (WeierstrassCurve.ellPolAV_g W) ▸ E.smoothDim, hGO, hP, hP₀, r, hl, hl₀, hψ, ?_⟩
-  exact isWeilHom_baseChange hA h (pull_isLB hΛ _) (pull_isLB (LB.isLB_linComb E₀.isLB _ _) _)
-    (r.polBundle hΛ (LB.isLB_linComb E₀.isLB _ _)
-      (by rw [Over.id_left, Over.id_left]; exact (Category.comp_id _).trans (Category.id_comp _).symm) l₁ l₂) t hψ
 
 end Elliptic
 

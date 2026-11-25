@@ -168,20 +168,6 @@ theorem smul_mem_locF_of_SP {𝔭 : Ideal (𝓞 F)} [hp : 𝔭.IsPrime] {L : Sub
   rw [he]
   exact L.smul_mem z hv
 
-theorem eq_zero_of_orth {h : V →ₗ⋆[K] V →ₗ[K] K} (hs : h.IsSymm) (hnd : Nondeg h) {ι' : Type}
-    (G : ι' → V) (hG : Submodule.span K (Set.range G) = ⊤) {z : V} (hz : ∀ s, h (G s) z = 0) :
-    z = 0 := by
-  apply hnd
-  intro y
-  have hy : y ∈ Submodule.span K (Set.range G) := hG ▸ Submodule.mem_top
-  induction hy using Submodule.span_induction with
-  | mem x hx =>
-    obtain ⟨s, rfl⟩ := hx
-    rw [← hs.eq, hz s, map_zero]
-  | zero => simp
-  | add x w _ _ hx hw => rw [map_add (f := _), hx, hw, add_zero]
-  | smul c x _ hx => rw [map_smul, hx, smul_zero]
-
 end Vec
 
 end Formalism.L2.SG.Pf.UnitPairSolutions

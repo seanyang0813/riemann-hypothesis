@@ -781,27 +781,10 @@ theorem comb_smul' {ψ : AddChar (AF D.host.F) ℂ} {S T : HSp D} (c : WO S T �
   simp only [comb, heisO, Finset.sum_apply, Pi.smul_apply, smul_eq_mul, Finset.mul_sum]
   exact Finset.sum_congr rfl fun _ _ => by ring
 
-theorem mem_cong {V : HSp D} {I : Ideal (AE D)} {g : GA D V} :
-    g ∈ congGrp V I ↔ ∀ i j, Formalism.L2.Theta.mt V g i j - (1 : Matrix (Fin V.rank) (Fin V.rank) (AE D)) i j ∈ I := by
-  unfold congGrp
-  rw [MonoidHom.mem_ker]
-  constructor
-  · intro h i j
-    have := congrArg (fun x : GL (Fin V.rank) (AE D ⧸ I) => x.1 i j) h
-    rw [← Ideal.Quotient.eq]
-    simp [Formalism.L2.Theta.mt, Matrix.one_apply] at this ⊢
-    exact this
-  · intro h
-    ext i j
-    have := h i j
-    rw [← Ideal.Quotient.eq] at this
-    simp [Formalism.L2.Theta.mt, Matrix.one_apply] at this ⊢
-    exact this
-
 theorem real_le_off (V : HSp D) (P : Pl D → Prop) : GinfC V ≤ grpOff V P := by
   intro a ha
   rw [GinfC, MonoidHom.mem_ker] at ha
-  rw [grpOff, mem_cong]
+  rw [grpOff, GlobalTheory.FinPl.PlacesAdeles.mem_congGrp]
   intro i j
   have h2 : finPart D (Formalism.L2.Theta.mt V a i j) = (1 : Matrix (Fin V.rank) (Fin V.rank) _) i j :=
     congrArg (fun x : GL (Fin V.rank) _ => x.1 i j) ha
@@ -817,7 +800,7 @@ theorem grpOff_inf_le (V : HSp D) (P P' : Pl D → Prop) :
     grpOff V P ⊓ grpOff V P' ≤ grpOff V (fun p => P p ∨ P' p) := by
   intro g hg
   obtain ⟨h1, h2⟩ := Subgroup.mem_inf.1 hg
-  rw [grpOff, mem_cong] at h1 h2 ⊢
+  rw [grpOff, GlobalTheory.FinPl.PlacesAdeles.mem_congGrp] at h1 h2 ⊢
   intro i j
   have a1 := h1 i j
   have a2 := h2 i j

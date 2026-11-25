@@ -270,10 +270,6 @@ theorem cardAddB {m : ℕ} (ε : Fin m → Bool) :
   have := Finset.card_filter_add_card_filter_not (s := (Finset.univ : Finset (Fin m))) (fun a => ε a = true)
   simpa using this
 
-theorem nexpB (t r : ℝ) : ‖Complex.exp (-(Complex.I * t * r))‖ = 1 := by
-  rw [Complex.norm_exp]
-  simp
-
 theorem contIpB {n : ℕ} (y : E n) : Continuous fun β : E n => ip β y := by
   unfold ip
   fun_prop
@@ -350,7 +346,7 @@ theorem dens_of (hA : AlgA) (hI : IntG) (hD : DerivF) (hM : MollId) (hG : Gauss)
   have hF : Continuous fun β : E n => ∫ y : E n, FP ε c t P' y * Complex.exp (-(Complex.I * (t : ℂ) * (ip β y : ℂ))) := by
     refine continuous_of_dominated (bound := fun y => ‖FP ε c t P' y‖) (fun β => ?_) (fun β => Filter.Eventually.of_forall fun y => ?_) hFP'int.norm (Filter.Eventually.of_forall fun y => ?_)
     · exact hFP'c.aestronglyMeasurable.mul (Complex.continuous_exp.comp ((continuous_const.mul (Complex.continuous_ofReal.comp (hcy β))).neg)).aestronglyMeasurable
-    · rw [norm_mul, nexpB, mul_one]
+    · rw [norm_mul, PositivityTheory.Rg.Sw.WR.D.Moll.norm_cexp_neg_It, mul_one]
     · exact continuous_const.mul (Complex.continuous_exp.comp ((continuous_const.mul (Complex.continuous_ofReal.comp (contIpB y))).neg))
   obtain ⟨g, hg⟩ : ∃ g : E n → ℂ, g = fun β => (((Complex.I * (t : ℂ)) ^ n * (herm β).det) ^ N)⁻¹ * ((((|t| / (2 * Real.pi)) ^ n ^ 2 : ℝ) : ℂ) * ∫ y : E n, FP ε c t P' y * Complex.exp (-(Complex.I * (t : ℂ) * (ip β y : ℂ)))) := ⟨_, rfl⟩
   have hgU : ContinuousOn g {y : E n | (herm y).det ≠ 0} := by
@@ -823,10 +819,6 @@ theorem continuous_gsD (c : ℝ) : Continuous (gs (m := m) (n := n) c) := by
 theorem continuous_ip_right (y : E n) : Continuous (fun q : E n => ip y q) := by
   unfold ip; fun_prop
 
-theorem norm_exp_I_mul (t r : ℝ) : ‖Complex.exp (Complex.I * t * r)‖ = 1 := by
-  have : Complex.I * (t : ℂ) * (r : ℂ) = ((t * r : ℝ) : ℂ) * Complex.I := by push_cast; ring
-  rw [this]; exact Complex.norm_exp_ofReal_mul_I _
-
 def pr (a b : Fin n) : E n →L[ℝ] ℝ :=
   (ContinuousLinearMap.proj (R := ℝ) (φ := fun _ : Fin n => ℝ) b).comp
     (ContinuousLinearMap.proj (R := ℝ) (φ := fun _ : Fin n => Fin n → ℝ) a)
@@ -892,7 +884,7 @@ theorem continuous_Fd (hq : Continuous (qX (n := n) ε)) (P : PX m n) (y : E n) 
   exact h1.smul (continuous_Lc_comp hq)
 
 theorem norm_Fi (P : PX m n) (y : E n) (x : Fin m → Fin n → ℂ) : ‖Fi ε c t P y x‖ = ‖evX P x * gs c x‖ := by
-  unfold Fi; rw [norm_mul, norm_exp_I_mul, mul_one]
+  unfold Fi; rw [norm_mul, PositivityTheory.Rg.Sw.WR.D.Moll.norm_cexp_It, mul_one]
 
 theorem integrable_Fi (hI : IntG) (hq : Continuous (qX (n := n) ε)) (hc : 0 < c) (P : PX m n) (y : E n) :
     Integrable (Fi ε c t P y) :=
@@ -910,7 +902,7 @@ theorem integrable_bnd (hI : IntG) (hc : 0 < c) (P : PX m n) : Integrable (bnd �
 
 theorem norm_Fd_le (P : PX m n) (y : E n) (x : Fin m → Fin n → ℂ) : ‖Fd ε c t P y x‖ ≤ bnd ε c t P x := by
   have e0 : ‖Fd ε c t P y x‖ = ‖evX P x * gs c x‖ * |t| * ‖Lc (qX ε x)‖ := by
-    simp only [Fd, norm_smul, norm_mul, norm_exp_I_mul, Complex.norm_I, Complex.norm_real, Real.norm_eq_abs,
+    simp only [Fd, norm_smul, norm_mul, PositivityTheory.Rg.Sw.WR.D.Moll.norm_cexp_It, Complex.norm_I, Complex.norm_real, Real.norm_eq_abs,
       one_mul, mul_one]
   rw [e0]
   unfold bnd
@@ -1345,9 +1337,6 @@ theorem dEv_apply (P : PX m n) (x v : Fin m → Fin n → ℂ) :
     dEv P x v = evX (∑ k, C (crd k v) * pderiv k P) x := by
   simp [dEv, evX_eq, mul_comm]
 
-theorem evX_continuous (P : PX m n) : Continuous (evX P) :=
-  continuous_iff_continuousAt.2 fun x => (hasFDerivAt_evX P x).continuousAt
-
 theorem crd_wirt (a : Fin m) (j : Fin n) (k : Fin m × Fin n × Bool) :
     crd k (fun a' i' => if a' = a ∧ i' = j then (1 : ℂ) else 0) -
       Complex.I * crd k (fun a' i' => if a' = a ∧ i' = j then Complex.I else 0) =
@@ -1422,7 +1411,7 @@ theorem wick_of (hI : IntegP) : Wick := by
   have hint : ∀ P, Integrable (fun x => evX P x * E x) := by
     intro P
     refine (hI m n c hc P).mono ?_ ?_
-    · exact ((evX_continuous P).mul (evX_continuous (phiP ε c t b)).cexp).aestronglyMeasurable
+    · exact ((PositivityTheory.Rg.Sw.WR.D.continuous_evXD P).mul (PositivityTheory.Rg.Sw.WR.D.continuous_evXD (phiP ε c t b)).cexp).aestronglyMeasurable
     · refine Filter.Eventually.of_forall fun x => ?_
       have hx : E x = gs c x * Complex.exp (Complex.I * t * (b * gramX ε x).trace) := (exp_phiP ε c t b x).symm
       rw [hx, ← mul_assoc, norm_mul _ (Complex.exp _), norm_exp_tr ε t b hb x, mul_one]

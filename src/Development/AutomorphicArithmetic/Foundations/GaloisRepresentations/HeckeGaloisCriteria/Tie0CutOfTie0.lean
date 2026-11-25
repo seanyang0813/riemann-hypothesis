@@ -221,8 +221,7 @@ theorem rowsB_cut (h : RowsB D) : RowsB (cut D c) :=
   { rowSize := fun i => h.rowSize i.1, a3 := fun i => h.a3 i.1, a4 := fourthAdmissible_restrictToPoints h.a4, thetaOne := fun i => h.thetaOne i.1 }
 
 theorem rowsC_cut (hc : c.Good) (h : RowsC D) : RowsC (cut D c) :=
-  { c4b := fun σ k v h1 h2 i => h.c4b σ k v h1 h2 i.1
-    rho := fun i x hx Sig hS => h.rho i.1 x.1 ((zg_iff i x).1 hx) Sig ((par_iff i x Sig).1 hS)
+  { rho := fun i x hx Sig hS => h.rho i.1 x.1 ((zg_iff i x).1 hx) Sig ((par_iff i x Sig).1 hS)
     dz := fun i x hx Sig hS => h.dz i.1 x.1 ((zg_iff i x).1 hx) Sig ((par_iff i x Sig).1 hS)
     parUp := fun i x hx Sig hS => by
       rw [eigC_eq]; exact h.parUp i.1 x.1 ((zg_iff i x).1 hx) Sig ((par_iff i x Sig).1 hS)

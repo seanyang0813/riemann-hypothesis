@@ -70,27 +70,27 @@ variable (R : RealDat3 a.D A3 Ks)
 def once : @RealDat3 c.D G _ _ Pl0 I0 T₀ (famInThreeCoefficientChange c A3) Ks _ _ (alg c iK) := real3 c R
 
 def thru : @RealDat3 c.D G _ _ Pl0 I0 T₀ (famInThreeCoefficientChange c A3) Ks _ _ (alg c iK) :=
-  (by with_unfolding_all exact ((real3 (a := b) c (iK := alg b iK) (real3 b R)) :))
+  real3 (a := b) c (iK := alg b iK) (real3 b R)
 
-def thruY : letI := alg c iK; type_of% (once c R).ioY := letI := alg c iK; (by with_unfolding_all exact ((thru b c R).ioY :))
+def thruY : letI := alg c iK; type_of% (once c R).ioY := letI := alg c iK; (thru b c R).ioY
 
-def thruX : letI := alg c iK; type_of% (once c R).ioX := letI := alg c iK; (by with_unfolding_all exact ((thru b c R).ioX :))
+def thruX : letI := alg c iK; type_of% (once c R).ioX := letI := alg c iK; (thru b c R).ioX
 
 theorem thruY_eq : letI := alg c iK; (once c R).ioY = thruY b c R :=
   letI := alg c iK
-  eq_of_heq (HEq.trans ((by with_unfolding_all exact ((real_ioY c R.toRealDat).symm :)) : HEq (once c R).ioY R.ioY)
-    ((by with_unfolding_all exact ((HEq.trans (real_ioY b R.toRealDat) ((by with_unfolding_all exact ((real_ioY (a := b) c (iK := alg b iK) (real b R.toRealDat)) :))) :
-    HEq _ (thruY b c R)) :))))
+  eq_of_heq (HEq.trans ((real_ioY c R.toRealDat).symm : HEq (once c R).ioY R.ioY)
+    (HEq.trans (real_ioY b R.toRealDat) (real_ioY (a := b) c (iK := alg b iK) (real b R.toRealDat)) :
+    HEq _ (thruY b c R)))
 
 theorem thruX_eq : letI := alg c iK; (once c R).ioX = thruX b c R :=
   letI := alg c iK
-  eq_of_heq (HEq.trans ((by with_unfolding_all exact ((real_ioX c R.toRealDat).symm :)) : HEq (once c R).ioX R.ioX)
-    ((by with_unfolding_all exact ((HEq.trans (real_ioX b R.toRealDat) ((by with_unfolding_all exact ((real_ioX (a := b) c (iK := alg b iK) (real b R.toRealDat)) :))) :
-    HEq _ (thruX b c R)) :))))
+  eq_of_heq (HEq.trans ((real_ioX c R.toRealDat).symm : HEq (once c R).ioX R.ioX)
+    (HEq.trans (real_ioX b R.toRealDat) (real_ioX (a := b) c (iK := alg b iK) (real b R.toRealDat)) :
+    HEq _ (thruX b c R)))
 
 theorem thru_eq : once c R = thru b c R :=
   letI := alg c iK
-  (by with_unfolding_all exact ((congrArg₂ (DatCopy.setIo (once c R)) (thruY_eq b c R) (thruX_eq b c R)) :))
+  congrArg₂ (DatCopy.setIo (once c R)) (thruY_eq b c R) (thruX_eq b c R)
 
 end Comp
 
@@ -117,16 +117,16 @@ theorem transportModuliCoreWithConstants_comp (z₀ : Dat a.st I hX T Wt) (Xg : 
       HEq (real3 (a := b) c (iK := al) R) (real3 (a := a) c (iK := z₀.alg) z₀.R) := by
   have hc' := eq_of_heq hc
   subst hXg htr hc'
-  have e : al = ((by with_unfolding_all exact ((alg (a := a) b z₀.alg) :))) := by
+  have e : al = (alg (a := a) b z₀.alg) := by
     refine Algebra.algebra_ext _ _ fun y => B.embLL.injective ?_
     refine Eq.trans (ale y) ?_
-    exact (by with_unfolding_all exact ((z₀.alg_eq ((by with_unfolding_all exact (y :)))).symm :))
+    exact (z₀.alg_eq (y)).symm
   subst e
-  have hR' : R = ((by with_unfolding_all exact ((real3 (a := a) b (iK := z₀.alg) z₀.R) :))) := eq_of_heq ((by with_unfolding_all exact (hR :)))
+  have hR' : R = (real3 (a := a) b (iK := z₀.alg) z₀.R) := eq_of_heq (hR)
   subst hR'
   refine ⟨?_, ?_⟩
-  · exact (by with_unfolding_all exact ((HEq.refl (coreJ (a := a) c z₀.core)) :))
-  · exact (by with_unfolding_all exact ((heq_of_eq (thru_eq (a := a) b c (iK := z₀.alg) z₀.R).symm) :))
+  · exact HEq.refl (coreJ (a := a) c z₀.core)
+  · exact heq_of_eq (thru_eq (a := a) b c (iK := z₀.alg) z₀.R).symm
 
 
 
@@ -134,7 +134,7 @@ theorem copy_comp (z₀ : Dat a.st I hX T Wt) (z : Dat b.st I hX T Wt) (hXg : z.
     (hc : HEq z.core (coreJ (a := a) b z₀.core)) (hR : HEq z.R (real3 (a := a) b (iK := z₀.alg) z₀.R)) :
     HEq (coreJ (a := b) c z.core) (coreJ (a := a) c z₀.core) ∧
       HEq (real3 (a := b) c (iK := z.alg) z.R) (real3 (a := a) c (iK := z₀.alg) z₀.R) :=
-  (by with_unfolding_all exact ((transportModuliCoreWithConstants_comp b c z₀ z.Xg z.tr z.core z.alg z.alg_eq z.R hXg htr hc hR) :))
+  transportModuliCoreWithConstants_comp b c z₀ z.Xg z.tr z.core z.alg z.alg_eq z.R hXg htr hc hR
 
 end Dat
 
@@ -151,36 +151,36 @@ theorem moved_again (o o' : q.Over) (s : SameGrp (B := B) (C := w.C) o.Z o'.Z) (
   obtain ⟨t, a1, a2, a3, a4, a5, a6, a7⟩ := _root_.GlobalTheory.Mem.R3.Rw.Mv.pkT_tr (a := o.Z) o'.Z (iK := m.z.alg) m.z.F m.y y' hy m.t
   have he := (@GlobalTheory.Mem.R3.Rw.rr_eta_tr B w.C o.Z o'.Z _ _ _ _ _ _ _ _ _ m.z.alg _ m.z.R m.z.F).1
   letI : Algebra m.z.core.Q.c.F (Late.D o'.Z).what₂.LL := alg (a := o.Z) o'.Z m.z.alg
-  have hA : ((by with_unfolding_all exact (t.tA :)) : type_of% m.t.tA) = m.t.tA := eq_of_heq ((by with_unfolding_all exact (a1 :)))
-  have hk := copy_comp (a := Z₀) o.Z o'.Z z₀ m.z m.Xg m.tr ((by with_unfolding_all exact (hc.core :))) ((by with_unfolding_all exact (hc.R :)))
+  have hA : (t.tA : type_of% m.t.tA) = m.t.tA := eq_of_heq (a1)
+  have hk := copy_comp (a := Z₀) o.Z o'.Z z₀ m.z m.Xg m.tr (hc.core) (hc.R)
   have hW := forcedContentPlaces_eq_transport_sameFiniteGroup (a := o.Z) o'.Z s m.z
   refine ⟨{ z := DatCopy.copy (a := o.Z) o'.Z s m.z
-            intersectionNumber_baseChange := (by with_unfolding_all exact ((cp_holds (a := o.Z) o'.Z s m.z m.intersectionNumber_baseChange) :))
+            intersectionNumber_baseChange := cp_holds (a := o.Z) o'.Z s m.z m.intersectionNumber_baseChange
             exAt := DatCopy.copy_exAt (a := o.Z) o'.Z s m.exAt
-            inGeo := (by with_unfolding_all exact ((cp_inGeo (a := o.Z) o'.Z s m.z m.inGeo) :))
-            Xg := (by with_unfolding_all exact (m.Xg :))
-            tr := (by with_unfolding_all exact (m.tr :))
-            core := fun h => ⟨(by with_unfolding_all exact ((lawsCore_tr (a := o.Z) o'.Z (m.core h).1) :)), (by with_unfolding_all exact ((m.core h).2.1 :)), (by with_unfolding_all exact ((m.core h).2.2.1 :)),
-              (by with_unfolding_all exact ((m.core h).2.2.2 :))⟩
-            eta := fun j v => Eq.trans ((by with_unfolding_all exact ((he j ((by with_unfolding_all exact (v :)))) :)) : _ = etaOf m.z.R m.z.F j v) (m.eta j v)
-            W1 := fun F0 => Eq.trans ((by with_unfolding_all exact ((hW ((by with_unfolding_all exact (F0 :)))) :)) : _ = m.z.W1 ((by with_unfolding_all exact (F0 :)))) ((by with_unfolding_all exact ((m.W1 ((by with_unfolding_all exact (F0 :)))) :)))
-            y := (by with_unfolding_all exact ((hd3 (a := o.Z) o'.Z (iK := m.z.alg) m.y y') :))
-            tup := (by with_unfolding_all exact (m.tup :))
-            t := (by with_unfolding_all exact (t :))
-            tA := fun c u => (by with_unfolding_all exact ((HEq.trans (heq_of_eq (congrArg (fun r : type_of% m.t.tA => (r c ((by with_unfolding_all exact (u :)))).j) hA))
-              (m.tA c ((by with_unfolding_all exact (u :))))) :)) }, rfl, ⟨?_, ?_⟩,
+            inGeo := cp_inGeo (a := o.Z) o'.Z s m.z m.inGeo
+            Xg := m.Xg
+            tr := m.tr
+            core := fun h => ⟨lawsCore_tr (a := o.Z) o'.Z (m.core h).1, (m.core h).2.1, (m.core h).2.2.1,
+              (m.core h).2.2.2⟩
+            eta := fun j v => Eq.trans (he j (v) : _ = etaOf m.z.R m.z.F j v) (m.eta j v)
+            W1 := fun F0 => Eq.trans (hW (F0) : _ = m.z.W1 (F0)) (m.W1 (F0))
+            y := hd3 (a := o.Z) o'.Z (iK := m.z.alg) m.y y'
+            tup := m.tup
+            t := t
+            tA := fun c u => HEq.trans (heq_of_eq (congrArg (fun r : type_of% m.t.tA => (r c (u)).j) hA))
+              (m.tA c (u)) }, rfl, ⟨?_, ?_⟩,
     ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩⟩
-  · exact (by with_unfolding_all exact (hk.1 :))
-  · exact (by with_unfolding_all exact (hk.2 :))
-  · exact (by with_unfolding_all exact (hh.tupT :))
-  · exact (by with_unfolding_all exact ((HEq.trans ((by with_unfolding_all exact (hy.PY :)) : HEq (fixTup (a := o.Z) o'.Z (iK := m.z.alg) m.y y').PY.ψ m.y.PY.ψ) hh.PY) :))
-  · exact (by with_unfolding_all exact ((HEq.trans ((by with_unfolding_all exact (hy.PW :)) : HEq (fun i => ((fixTup (a := o.Z) o'.Z (iK := m.z.alg) m.y y').PW i).ψ) (fun i => (m.y.PW i).ψ)) hh.PW) :))
-  · exact (by with_unfolding_all exact ((a2.trans hh.rep) :))
-  · exact (by with_unfolding_all exact ((fun c => (a3 c).trans (hh.jE c)) :))
-  · exact (by with_unfolding_all exact ((fun c => (a4 c).trans (hh.jM c)) :))
-  · exact (by with_unfolding_all exact ((fun c => (a5 c).trans (hh.jX c)) :))
-  · exact (by with_unfolding_all exact ((a6.trans hh.eW) :))
-  · exact (by with_unfolding_all exact ((a7.trans hh.jMt) :))
+  · exact hk.1
+  · exact hk.2
+  · exact hh.tupT
+  · exact HEq.trans (hy.PY : HEq (fixTup (a := o.Z) o'.Z (iK := m.z.alg) m.y y').PY.ψ m.y.PY.ψ) hh.PY
+  · exact HEq.trans (hy.PW : HEq (fun i => ((fixTup (a := o.Z) o'.Z (iK := m.z.alg) m.y y').PW i).ψ) (fun i => (m.y.PW i).ψ)) hh.PW
+  · exact a2.trans hh.rep
+  · exact fun c => (a3 c).trans (hh.jE c)
+  · exact fun c => (a4 c).trans (hh.jM c)
+  · exact fun c => (a5 c).trans (hh.jX c)
+  · exact a6.trans hh.eW
+  · exact a7.trans hh.jMt
 
 end Main
 

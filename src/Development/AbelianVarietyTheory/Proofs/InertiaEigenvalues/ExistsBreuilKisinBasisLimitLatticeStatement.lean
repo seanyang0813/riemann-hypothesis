@@ -537,7 +537,7 @@ theorem mittagLeffler_approx : ∀ (l : ℕ) [Fact l.Prime] (K : FinExt l) (bk :
   have hxOE : ∀ i, (R n *ᵥ fun j => bk.evW (X ^ c * s j)) i ∈ bk.OE := fun i => by
     simp only [Matrix.mulVec, dotProduct]
     exact Subring.sum_mem _ fun j _ => Subring.mul_mem _ (hR n i j) (hev _)
-  obtain ⟨s', hs'⟩ := _root_.GlobalTheory.descentCoefficients l K bk d (tw.d' m) n (R m) (R n *ᵥ fun j => bk.evW (X ^ c * s j)) a (hR m) hxOE
+  obtain ⟨s', hs'⟩ := _root_.GlobalTheory.CoefDescent.descent l K bk d (tw.d' m) n (R m) (R n *ᵥ fun j => bk.evW (X ^ c * s j)) a (hR m) hxOE
     (fun i => by
       rw [hq, Pi.sub_apply, map_sub, sub_eq_zero]
       have h1 : q ((R n *ᵥ fun j => bk.evW (X ^ c * s j)) i) =
@@ -1025,13 +1025,6 @@ theorem main : ∀ (l : ℕ) [Fact l.Prime] (K : FinExt l) (bk : BK K) (τ : Ain
       have : ι (fun a => (l : Ainf l) * y a) = ((l : ℕ) : WCb l) • ι y := by funext a; simp [ι]
       rw [this, Matrix.mulVec_smul] at h
       exact hOEcl.1 _ h)
-    (fun y hy _ z hz i => by
-      refine hOEcl.2.1 _ fun n => ⟨_, hy n i, ?_⟩
-      rw [← Pi.sub_apply, ← Matrix.mulVec_sub]
-      simp only [Matrix.mulVec, dotProduct]
-      refine Finset.dvd_sum fun j _ => Dvd.dvd.mul_left ?_ _
-      have := map_dvd (inclW l) (hz n j)
-      simpa [ι, map_sub, map_pow, map_natCast] using this)
     Y1 M (by rw [hY1M, Matrix.det_mul]; exact (hMu.mul hVu).ne_zero)
     ((Matrix.isUnit_iff_isUnit_det M).2 hMu) hmemV
     (fun y hy => by

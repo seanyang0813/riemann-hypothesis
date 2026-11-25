@@ -54,8 +54,6 @@ open GlobalTheory.IndefiniteRowSideFullHecke.UnitCharTriangle (Tri FieldCond)
 
 namespace GlobalTheory.RowTest
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem isLattice_pairs {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} (G : GridData L sc) {μ₀ : T} (hL : L.Is μ₀)
     (t : T) (j : ℕ) (hj : j < D.R.m) :
       (Submodule.IsLattice D.host.E (G.latS (.top t j)) ∧ Submodule.IsLattice D.host.E (G.latT (.top t j))) ∧

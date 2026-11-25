@@ -46,15 +46,6 @@ theorem IsStable.adjoin {T : Set (End ℂ M)} {p : Submodule ℂ M} (h : IsStabl
     rw [Module.End.mul_apply]
     exact ha _ (hb x hx)
 
-theorem commute_of_mem_adjoin {T : Set (End ℂ M)} {a : End ℂ M} (ha : ∀ t ∈ T, Commute a t) :
-    ∀ b ∈ Algebra.adjoin ℂ T, Commute a b := by
-  intro b hb
-  induction hb using Algebra.adjoin_induction with
-  | mem t ht => exact ha t ht
-  | algebraMap c => exact (Algebra.commutes' c a).symm
-  | add b c _ _ hb hc => exact hb.add_right hc
-  | mul b c _ _ hb hc => exact hb.mul_right hc
-
 theorem IsStable.mono {T₁ T₂ : Set (End ℂ M)} {p : Submodule ℂ M} (h : IsStable T₂ p)
     (hT : T₁ ⊆ T₂) : IsStable T₁ p :=
   fun t ht => h t (hT ht)
@@ -114,7 +105,7 @@ theorem eq_zero_of_forall_mem {T₁ T₂ : Set (End ℂ M)} (h : IsSimpleUnder (
       rw [Submodule.mem_comap]
       rcases ht with ht | ht
       · have hcomm : Commute t (b : End ℂ M) :=
-          commute_of_mem_adjoin (fun s hs => hc t ht s hs) b b.2
+          Algebra.commute_of_mem_adjoin_of_forall_mem_commute b.2 (fun s hs => hc t ht s hs)
         have : t ((b : End ℂ M) n) = (b : End ℂ M) (t n) := by
           rw [← Module.End.mul_apply, hcomm.eq, Module.End.mul_apply]
         rw [this]
@@ -134,7 +125,7 @@ theorem eq_zero_of_forall_mem {T₁ T₂ : Set (End ℂ M)} (h : IsSimpleUnder (
     refine iSup_le fun b => ?_
     rintro _ ⟨n, hn, rfl⟩
     rw [LinearMap.mem_ker]
-    have hcomm : Commute a (b : End ℂ M) := commute_of_mem_adjoin ha b b.2
+    have hcomm : Commute a (b : End ℂ M) := Algebra.commute_of_mem_adjoin_of_forall_mem_commute b.2 ha
     rw [← Module.End.mul_apply, hcomm.eq, Module.End.mul_apply, h0 n hn, map_zero]
   ext x
   have : x ∈ LinearMap.ker a := hker (hPtop ▸ Submodule.mem_top)

@@ -128,10 +128,6 @@ theorem vanish {G M : Type} [Group G] [TopologicalSpace G] [AddCommGroup M] [Top
     (hH : ∀ h ∈ H, d h = 0) (hdγ : d γ = 0) : ∀ σ ∈ S, d σ = 0 := by
   apply _root_.GlobalTheory.Cyc.LogClass.vanish <;> assumption
 
-theorem norm_chiC {χ : GQ l →* ℚ_[l]ˣ} (hχ : IsCyc χ) (j : ℤ) (g : GQ l) : ‖chiC χ j g‖ = 1 := by
-  rw [chiC, norm_algebraMap, Units.val_zpow_eq_zpow_val, norm_zpow, (GlobalTheory.Cyc.cyc_basic l χ hχ).1,
-    one_zpow]
-
 theorem continuous_chiC {χ : GQ l →* ℚ_[l]ˣ} (hχ : IsCyc χ) (j : ℤ) : Continuous (chiC χ j) := by
   unfold chiC
   refine continuous_algMap.comp ?_

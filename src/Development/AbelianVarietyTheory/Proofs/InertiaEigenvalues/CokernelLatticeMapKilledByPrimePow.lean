@@ -263,47 +263,6 @@ theorem bounds_of_mem {e : ℕ} [NeZero e] {Sig : Finset (ZMod e)} {c : ZMod e} 
   have := ZMod.val_lt (c - c')
   constructor <;> nlinarith
 
-theorem rootPoly_monic (T : Finset ℕ) : (rootPoly T).Monic :=
-  Polynomial.monic_prod_of_monic _ _ fun _ _ => Polynomial.monic_X_sub_C _
-
-theorem mem_roots_rootPoly {T : Finset ℕ} {x : ℤ} (h : x ∈ (rootPoly T).roots) : ∃ i ∈ T, x = i := by
-  rw [Polynomial.mem_roots (rootPoly_monic T).ne_zero, Polynomial.IsRoot, rootPoly, Polynomial.eval_prod,
-    Finset.prod_eq_zero_iff] at h
-  obtain ⟨i, hi, h⟩ := h
-  exact ⟨i, hi, by simpa [sub_eq_zero] using h⟩
-
-theorem card_degrees_le {e : ℕ} (Sig : Finset (ZMod e)) (c : ZMod e) (m m' : ℕ) :
-    (degrees Sig c m m').card ≤ Sig.card * (m' - m) :=
-  Finset.card_image_le.trans (by simp [Finset.card_product])
-
-theorem degreeBounds {e : ℕ} [NeZero e] (Sig : Finset (ZMod e)) (c : ZMod e) (A' : ℕ) :
-    DegreeBounds Sig c A' := by
-  refine
-    { lt_of_mem₁ := ?_
-      mem_Ico₂ := ?_
-      monic₁ := rootPoly_monic _
-      monic₂ := rootPoly_monic _
-      disjoint_roots := ?_
-      card₁ := ?_
-      card₂ := ?_ }
-  · intro i hi
-    have := bounds_of_mem hi
-    nlinarith
-  · intro j hj
-    have := bounds_of_mem hj
-    constructor <;> nlinarith
-  ·
-    rw [Multiset.disjoint_left]
-    intro x h1 h2
-    obtain ⟨i, hi, rfl⟩ := mem_roots_rootPoly h1
-    obtain ⟨j, hj, hij⟩ := mem_roots_rootPoly h2
-    have := bounds_of_mem hi
-    have := bounds_of_mem hj
-    have : i = j := by exact_mod_cast hij
-    omega
-  · exact (card_degrees_le _ _ _ _).trans (by simp)
-  · exact (card_degrees_le _ _ _ _).trans (by rw [show 2 * A' - A' = A' by omega])
-
 theorem climb {R S V : Type} [Ring R] [Ring S] [AddCommGroup V] [Module R V] [Module S V]
     (f : Module.End S V) (W : ℕ → Submodule R V) (m : ℕ) :
     ∀ k (T : Finset ℕ), (∀ i ∈ T, ∀ x ∈ W i, f x - i • x ∈ W (i + 1)) →
@@ -463,7 +422,7 @@ theorem raisesDegree (hR : Reduction O K l e a) (Sig : Finset (ZMod e)) (c : ZMo
     refine (sup_le_sup (inf_le_left.trans (le_of_eq (vL_eq _ _).symm)) inf_le_left) h
 
 theorem degrees_of_reduction (hR : Reduction O K l e a) : Degrees O K l e a :=
-  fun Sig c A' hA => ⟨degreeBounds Sig c A', fun ι _ _ η H D hch => raisesDegree hR Sig c A' hA D hch⟩
+  fun Sig c A' hA ι _ _ η H D hch => raisesDegree hR Sig c A' hA D hch
 
 end Main
 
@@ -1494,7 +1453,7 @@ theorem isotypic_step : ∀ (O K : Type) [CommRing O] [NormedField K] [IsUltrame
   have hA : Polynomial.aeval D₂.conn (GlobalTheory.IndefiniteRowSideFullHecke.ImageStableDegreeBounds.P₁ Sig c A') y ∈ T := by
     rw [haeZ, hyd, map_add (f := _), map_smul, ← app_aeval, ← haeZ]
     refine add_mem ?_ ?_
-    · have hr := ((hdeg Sig c A' (by omega)).2 ι η H D₁ h₁).aeval₁ _ ⟨hy₁L, hy₁iso⟩
+    · have hr := (hdeg Sig c A' (by omega) ι η H D₁ h₁).aeval₁ _ ⟨hy₁L, hy₁iso⟩
       obtain ⟨u, hu, h, hh, hsum⟩ := Submodule.mem_sup.1 hr
       rw [← hsum, map_add (f := _)]
       obtain ⟨w, hw, rfl⟩ := GlobalTheory.IndefiniteRowSideFullHecke.ImageStableDegreeBounds.mem_mulL.1 hu
@@ -1513,7 +1472,7 @@ theorem isotypic_step : ∀ (O K : Type) [CommRing O] [NormedField K] [IsUltrame
       exact (GlobalTheory.IndefiniteRowSideFullHecke.ImageStableDegreeBounds.MMHigh D₂.toPhiMod).toAddSubmonoid.nsmul_mem hh.1 _
 
   have hB' : Polynomial.aeval D₂.conn (GlobalTheory.IndefiniteRowSideFullHecke.ImageStableDegreeBounds.P₂ Sig c A') y ∈ T := by
-    have hr := ((hdeg Sig c A' (by omega)).2 κ η H D₂ h₂).aeval₂ _ ⟨hy_v, hy_iso⟩
+    have hr := (hdeg Sig c A' (by omega) κ η H D₂ h₂).aeval₂ _ ⟨hy_v, hy_iso⟩
     obtain ⟨u, hu, h, hh, hsum⟩ := Submodule.mem_sup.1 hr
     rw [← hsum]
     refine add_mem ?_ (memT3 _ hh)

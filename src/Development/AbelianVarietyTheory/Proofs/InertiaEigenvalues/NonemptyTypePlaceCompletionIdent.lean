@@ -46,8 +46,6 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N Formal
 
 namespace GlobalTheory.TypeIdent
 
-attribute [local instance] GlobalTheory.TypeRec.factG
-
 theorem irreducible_natCast_compl {E : Type} [Field E] [NumberField E] (w : HeightOneSpectrum (𝓞 E)) {g : ℕ}
     (hin : ((g : ℕ) : 𝓞 E) ∈ w.asIdeal) (hnot : ((g : ℕ) : 𝓞 E) ∉ w.asIdeal ^ 2) :
     Irreducible ((g : ℕ) : 𝒪[w.adicCompletion E]) := by

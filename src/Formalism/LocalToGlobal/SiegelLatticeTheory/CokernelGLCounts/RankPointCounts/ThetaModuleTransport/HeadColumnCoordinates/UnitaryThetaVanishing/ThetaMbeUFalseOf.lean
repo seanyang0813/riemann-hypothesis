@@ -19,13 +19,6 @@ variable {F : Type} [Field F] [ValuativeRel F] [TopologicalSpace F]
 variable {E : Type} [CommRing E] [Algebra F E] [TopologicalSpace E] [MeasurableSpace E]
 variable {M : Model F E} {V : Type} [AddCommGroup V] [Module E V]
 
-theorem gdet_fix (H : HermSp M V) {r : ℕ} (f f' : Fin (r + 1) → V) (T T' : F) :
-    M.L.cj (H.Gdet f f' T T') = H.Gdet f f' T T' := by
-  have hn : ∀ x : E, M.L.cj (H.normE x) = H.normE x := by
-    intro x
-    rw [HermSp.normE, map_mul, M.L.cj_cj, mul_comm]
-  simp only [HermSp.Gdet, map_sub, map_mul, AlgEquiv.commutes, hn]
-
 theorem gdet_rel (H : HermSp M V) {r : ℕ} (f₁ f₁' f₂ f₂' : Fin (r + 1) → V) (T T' : F)
     (hrel : H.Dl f₁ f₁' r * H.Dl f₂ f₂' (r + 1) = H.Dl f₂ f₂' r * H.Dl f₁ f₁' (r + 1)) :
     H.Gdet f₂ f₂' T T' * H.normE (H.Dl f₁ f₁' (r + 1)) =

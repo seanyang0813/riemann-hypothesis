@@ -45,7 +45,6 @@ open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.MainNotions F
 open Formalism.L2.Host (CharFrame HChar TupTied)
 open GlobalTheory.AtMember GlobalTheory.EX GlobalTheory.EX.OB GlobalTheory.Mem GlobalTheory.Mem.Top GlobalTheory.Mem.Top.Bl GlobalTheory.Fc GlobalTheory.BigTop GlobalTheory.BigOn GlobalTheory.Plug
 namespace GlobalTheory.PlugPt
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 namespace Side
 variable {D : D7} {nch : NChoice D} (s : Side D nch)
 end Side

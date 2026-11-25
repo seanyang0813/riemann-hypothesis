@@ -14,6 +14,8 @@ open scoped ContDiff ComplexConjugate
 
 namespace ReciprocityTheory.ChartRestriction.DS.Mult1.InvCC
 
+open Formalism.FourierDecayAlt.P.B2x3
+
 open Formalism.REAL Formalism.QuantumDeterminants Formalism.FourierDecayAlt.B Formalism.FourierDecayAlt.B2
 
 open scoped Matrix.Norms.Elementwise
@@ -292,7 +294,7 @@ theorem main (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) (γ : Matrix (Fin (k 
     (hγ : IsZFrame k r z γ) :
     (∃ C : ℝ, ∀ g ∈ GV k r, gN (th k r γ g) ≤ C * gN g) ∧
     ∀ (A : ℝ) (m : ℕ) (F : Mat k r → ℂ), InCC A m F → InCC A m (F ∘ th k r γ) := by
-  have hEG : embWb k r γ ∈ GV k r := emb_mem hγ.1
+  have hEG : embWb k r γ ∈ GV k r := (emb_mem γ).2 hγ.1
   have hE : IsUnit (embWb k r γ).det := isUnit_of_uh hEG
   refine ⟨th_bound hE hEG, ?_⟩
   rintro A m F ⟨c, hCk, hb⟩

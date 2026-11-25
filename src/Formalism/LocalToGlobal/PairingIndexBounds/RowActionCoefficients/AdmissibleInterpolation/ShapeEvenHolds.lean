@@ -65,35 +65,6 @@ theorem kap_antitone {n : ℕ} {μ : Fin n → ℕ} (hμ : Antitone μ) (c : ℕ
   intro s t hst
   exact Nat.sub_le_sub_left (hμ (Fin.rev_le_rev.mpr hst)) c
 
-theorem colH_kap {n : ℕ} {μ : Fin n → ℕ} (c : ℕ) (hc : ∀ t, μ t ≤ c) (k : Fin c) :
-    n - colH μ k.val = colH (fun t : Fin n => c - μ t.rev) (Fin.rev k).val := by
-  simp only [colH]
-  have e1 : (Finset.univ.filter fun t : Fin n => (Fin.rev k).val < c - μ t.rev).card =
-      (Finset.univ.filter fun s : Fin n => ¬ k.val < μ s).card := by
-    refine Finset.card_bij (fun t _ => t.rev) ?_ ?_ ?_
-    · intro t ht
-      simp only [Finset.mem_filter, Finset.mem_univ, true_and, Fin.val_rev] at ht ⊢
-      have := hc t.rev
-      have := k.isLt
-      omega
-    · intro a _ b _ h
-      exact Fin.rev_injective h
-    · intro s hs
-      refine ⟨s.rev, ?_, Fin.rev_rev s⟩
-      simp only [Finset.mem_filter, Finset.mem_univ, true_and, Fin.val_rev, Fin.rev_rev] at hs ⊢
-      have := hc s
-      have := k.isLt
-      omega
-  have hsub : (Finset.univ.filter fun s : Fin n => k.val < μ s) ⊆ Finset.univ := Finset.subset_univ _
-  have h2 := Finset.card_sdiff_add_card_eq_card hsub
-  have h3 : (Finset.univ.filter fun s : Fin n => ¬ k.val < μ s) =
-      Finset.univ \ (Finset.univ.filter fun s : Fin n => k.val < μ s) := by
-    ext s
-    simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_sdiff]
-  rw [Finset.card_univ, Fintype.card_fin] at h2
-  rw [h3] at e1
-  omega
-
 theorem card_ge_eq {n K K' : ℕ} (sz : Fin K → ℕ) (sz' : Fin K' → ℕ) (hsz : ∀ k, sz k ≤ n) (hsz' : ∀ k, sz' k ≤ n)
     (h : (shapeDeg sz : Fin n → ℕ) = shapeDeg sz') (l : ℕ) (hl : 0 < l) :
     (Finset.univ.filter fun k => l ≤ sz k).card = (Finset.univ.filter fun k => l ≤ sz' k).card := by

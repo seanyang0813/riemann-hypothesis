@@ -79,9 +79,9 @@ end GlobalTheory.BCT.StabFin
 open GlobalTheory.BCT.StabFin in
 theorem GlobalTheory.BCT.finite_ratFinU_inf_conj_globLev : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E → ∀ n : ℕ, 1 ≤ n → ∀ (S : Set (Pl E)), IsSection S → ∀ (K' : ∀ w : Pl E, Subgroup (UL n w)), IsLevelFam (fun w : Pl E => MonoidHom.id (UL n w)) (KL n) K' → ∀ x : finU (E := E) (n := n), Finite ↥(ratFinU E n ⊓ (globLev S K').map (MulAut.conj x).toMonoidHom) := by
   intro E _ _ _ _ n _ S hS K' hK x
-  obtain ⟨d, hd, hC⟩ := GlobalTheory.T.exists_bounded_denominator_definiteUnitary_conjugate E n S hS x
+  obtain ⟨d, hd, hC⟩ := _root_.GlobalTheory.BCT.StabDenom.exists_denom E n S hS x
   haveI : Finite {z : E | (∀ w : HeightOneSpectrum (𝓞 E), (d : w.adicCompletion E) * algebraMap E (w.adicCompletion E) z ∈
-      w.adicCompletionIntegers E) ∧ ∀ τ : E →+* ℂ, ‖τ z‖ ≤ 1} := (GlobalTheory.T.finite_numberField_bdd_denom_conj_norm_le_one E d hd).to_subtype
+      w.adicCompletionIntegers E) ∧ ∀ τ : E →+* ℂ, ‖τ z‖ ≤ 1} := (_root_.GlobalTheory.NumFin.finite_bdd_denom_conj_le_one E d hd).to_subtype
   have hrat := (GlobalTheory.BCT.FinPart.finPt_props E n).2.2
   let γ : ↥(ratFinU E n ⊓ (globLev S K').map (MulAut.conj x).toMonoidHom) → UE E n :=
     fun g => ((hrat g.1).1 (Subgroup.mem_inf.1 g.2).1).choose
@@ -91,7 +91,7 @@ theorem GlobalTheory.BCT.finite_ratFinU_inf_conj_globLev : ∀ (E : Type) [Field
     (fun g i j => ⟨((γ g : UE E n) : GL (Fin n) E).val i j, fun w => by
         have := hC g.1 (cLoc_conj_mem_KGL hK x g.1 (Subgroup.mem_inf.1 g.2).2) w i j
         rwa [← hγ g, cLoc_finPt] at this,
-      fun τ => GlobalTheory.T.norm_embedding_entry_definiteUnitaryRationalPoint_le_one E n (γ g) τ i j⟩) fun g g' e => ?_
+      fun τ => _root_.GlobalTheory.BCT.FinPart.norm_emb_entry_le_one E n (γ g) τ i j⟩) fun g g' e => ?_
   have e1 : γ g = γ g' := by
     apply Subtype.ext
     apply Units.ext

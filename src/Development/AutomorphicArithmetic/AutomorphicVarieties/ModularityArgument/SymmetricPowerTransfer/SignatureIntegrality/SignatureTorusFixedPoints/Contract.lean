@@ -55,18 +55,10 @@ noncomputable section
 
 open ValuativeRel Matrix Polynomial GlobalTheory.SmGL GlobalTheory.SplitWeil UpperTheory.V.Hi UpperTheory.V.AlgebraTools UpperTheory.V.Z.Sym UpperTheory.V.Z.Sym.Sig UpperTheory.V.Z.Sym.Loc UpperTheory.V.Z.Sym.Glob
 
-private theorem vo {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (x : kˣ) :
-    valuation k (x : k) = uniformizer k ^ ord k x := by
-  have h1 := GlAx.val_div_ord x
-  have h2 := GlAx.val_zpow (k := k) (ord k x)
-  have e : (x : k) = ((x / unif k ^ ord k x : kˣ) : k) * ((unif k ^ ord k x : kˣ) : k) := by
-    rw [← Units.val_mul, div_mul_cancel]
-  rw [e, map_mul, h1, h2, one_mul]
-
 theorem UpperTheory.V.Z.Sym.Sig.shrink : UpperTheory.V.Z.Sym.Sig.Shrink := by
   intro k _ _ _ _ n d hd m
   set a : Fin n → ℤ := fun i => ord k (d i) with ha
-  have hv : ∀ i, valuation k (d i : k) = uniformizer k ^ a i := fun i => vo (d i)
+  have hv : ∀ i, valuation k (d i : k) = uniformizer k ^ a i := fun i => val_ord (d i)
   have hlt : ∀ i j : Fin n, i < j → a j < a i := by
     intro i j hij
     have h := hd i j hij

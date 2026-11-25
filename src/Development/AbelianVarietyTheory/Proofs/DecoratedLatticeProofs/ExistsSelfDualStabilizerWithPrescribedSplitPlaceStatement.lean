@@ -64,11 +64,6 @@ namespace GlobalTheory.SplitOnto
 
 variable {D : D7}
 
-theorem eq_zero_at_off (P : Pl D → Prop) {a : AE D} (h1 : a ∈ idAt D P) (h2 : a ∈ idOff D P) : a = 0 := by
-  obtain ⟨ε, -, -, -, hA, hO⟩ := (_root_.GlobalTheory.FinPl.localComponents D P).1
-  rw [← (hA a).1 h1]
-  exact (hO a).1 h2
-
 theorem moves_one {S : HSp D} {L : Lat S} {P : Pl D → Prop} : Moves S 1 L L P := by
   intro y _
   rw [PlacesAdeles.mt_one, Matrix.one_mulVec]

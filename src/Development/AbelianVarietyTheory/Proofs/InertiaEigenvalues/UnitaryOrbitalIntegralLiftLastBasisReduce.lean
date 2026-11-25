@@ -1015,10 +1015,7 @@ open GlobalTheory.JR Matrix MeasureTheory Filter Topology
 
 namespace GlobalTheory.JR.Step.OrbULift
 theorem actU_uEmb_liftH : ∀ {F E : Type} [NontriviallyNormedField F] [NontriviallyNormedField E] [NormedAlgebra F E] [StarRing E] [Unram F E] {r : ℕ} (s : Matrix.unitaryGroup (Fin r) E) (X : Hn r F E) (ν : E) (l : F), actU (GlobalTheory.JR.Step.uEmb r E s) (GlobalTheory.JR.Step.liftH X ν l) = GlobalTheory.JR.Step.liftH (actU s X) ν l := _root_.GlobalTheory.JR.Step.actU_uEmb_liftH
-theorem unitU_liftH : ∀ {F E : Type} [NontriviallyNormedField F] [NontriviallyNormedField E] [NormedAlgebra F E] [StarRing E] [Unram F E] {r : ℕ} (X : Hn r F E) (ν : E) (l : F), ‖ν‖ ≤ 1 → unitU (r + 1) F E (GlobalTheory.JR.Step.liftH X ν l) = (if ‖l‖ ≤ 1 then 1 else 0) * unitU r F E X := _root_.GlobalTheory.JR.Step.unitU_liftH_of_norm_le_one
 theorem support_sub : ∀ {F E : Type} [NontriviallyNormedField F] [NontriviallyNormedField E] [NormedAlgebra F E] [StarRing E] [Unram F E] {r : ℕ} (X : Hn r F E) (ν : E) (l : F), ‖ν‖ = 1 → ∀ g : Matrix.unitaryGroup (Fin (r + 1)) E, unitU (r + 1) F E (actU g (GlobalTheory.JR.Step.liftH X ν l)) ≠ 0 → ∃ k ∈ uO (r + 1) E, ∃ s, g = k * GlobalTheory.JR.Step.uEmb r E s := _root_.GlobalTheory.JR.Step.actU_liftH_mem_uO_mul_uEmb
-theorem support_bounded : ∀ {F E : Type} [NontriviallyNormedField F] [NontriviallyNormedField E] [NormedAlgebra F E] [StarRing E] [Unram F E] {n : ℕ} (Y : Hn n F E), Delta (inv Y.toGl) ≠ 0 → ∃ K : Set (Matrix.unitaryGroup (Fin n) E), IsCompact K ∧ ∀ g, unitU n F E (actU g Y) ≠ 0 → g ∈ K := _root_.GlobalTheory.JR.SuppBdd.exists_compact_of_integral
-theorem uEmb_isClosedEmbedding : ∀ (r : ℕ) (E : Type) [NormedField E] [StarRing E] [ContinuousStar E], Topology.IsClosedEmbedding (GlobalTheory.JR.Step.uEmb r E) := _root_.GlobalTheory.JR.Step.isClosedEmbedding_uEmb
 
 section Reformulated
 variable {E : Type} [NormedField E]
@@ -1155,8 +1152,8 @@ theorem compact_support {F E : Type} [NontriviallyNormedField F] [NontriviallyNo
     (hΔ : Delta (inv (liftH X ν l).toGl) ≠ 0) :
     HasCompactSupport (fun s => unitU (r + 1) F E (actU (uEmb r E s) (liftH X ν l))) := by
   haveI : NormedStarGroup E := ⟨fun x => (Unram.norm_star (F := F) x).le⟩
-  obtain ⟨K, hK, hsub⟩ := support_bounded (liftH X ν l) hΔ
-  refine HasCompactSupport.intro ((uEmb_isClosedEmbedding r E).isCompact_preimage hK) ?_
+  obtain ⟨K, hK, hsub⟩ := _root_.GlobalTheory.JR.SuppBdd.exists_compact_of_integral (liftH X ν l) hΔ
+  refine HasCompactSupport.intro ((_root_.GlobalTheory.JR.Step.isClosedEmbedding_uEmb r E).isCompact_preimage hK) ?_
   intro s hs
   by_contra h
   exact hs (hsub _ h)
@@ -1180,12 +1177,12 @@ theorem orbU_liftH (F E : Type) [NontriviallyNormedField F] [NontriviallyNormedF
   haveI := M.haarU; haveI := M'.haarU
   haveI := (_root_.GlobalTheory.JR.UnitChar.posChar_trivial_and_unimodular F E (r+1)).2 M
   haveI := (_root_.GlobalTheory.JR.UnitChar.posChar_trivial_and_unimodular F E r).2 M'
-  rw [GlobalTheory.CosetIntegral.integral_eq_of_coset_support _ _ (uEmb r E) (uEmb_isClosedEmbedding r E) M.μU M'.μU R₀
+  rw [GlobalTheory.CosetIntegral.integral_eq_of_coset_support _ _ (uEmb r E) (_root_.GlobalTheory.JR.Step.isClosedEmbedding_uEmb r E) M.μU M'.μU R₀
     uO_isOpen uO_isCompact M.volU (by
       show M'.μU (uEmb r E ⁻¹' uO (r + 1) E) = 1
       rw [preimage_uO]; exact M'.volU)
     _ (fun k hk g => unitU_actU_mul k g hk _) (support_sub X ν l hν) (compact_support X ν l hΔ)]
-  simp_rw [actU_uEmb_liftH, unitU_liftH _ ν l hν.le]
+  simp_rw [actU_uEmb_liftH, _root_.GlobalTheory.JR.Step.unitU_liftH_of_norm_le_one _ ν l hν.le]
   rw [integral_const_mul]
 end GlobalTheory.JR.Step.OrbULift
 end -- clump:auto

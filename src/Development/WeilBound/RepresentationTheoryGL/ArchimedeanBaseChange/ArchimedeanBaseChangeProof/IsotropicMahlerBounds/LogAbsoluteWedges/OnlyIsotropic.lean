@@ -286,16 +286,9 @@ theorem det_mul_submatrix_expand {K ι ι' κ : Type} [CommRing K] [Fintype ι] 
   rw [MultilinearMap.map_smul_univ, smul_eq_mul]
   rfl
 
-theorem sz_nonneg {K ι κ : Type} [NormedField K] (g : Matrix ι κ K) : 0 ≤ sz g :=
-  Real.iSup_nonneg fun _ => norm_nonneg _
-
 theorem le_sz {K ι κ : Type} [NormedField K] [Finite ι] [Finite κ] (g : Matrix ι κ K)
     (i : ι) (j : κ) : ‖g i j‖ ≤ sz g :=
   le_ciSup (f := fun p : ι × κ => ‖g p.1 p.2‖) (Set.finite_range _).bddAbove (i, j)
-
-theorem nF_nonneg {K ι κ : Type} [NormedField K] [Fintype κ] [DecidableEq κ]
-    (A : Matrix ι κ K) : 0 ≤ nF A :=
-  Real.iSup_nonneg fun _ => norm_nonneg _
 
 theorem le_nF {K ι κ : Type} [NormedField K] [Finite ι] [Fintype κ] [DecidableEq κ]
     (A : Matrix ι κ K) (s : κ → ι) : ‖(A.submatrix s id).det‖ ≤ nF A :=
@@ -306,9 +299,9 @@ theorem norm_minor_mul_le {K ι ι' κ : Type} [NormedField K] [IsUltrametricDis
     ‖((g * A).submatrix t id).det‖ ≤ sz g ^ Fintype.card κ * nF A := by
   rw [det_mul_submatrix_expand]
   refine IsUltrametricDist.norm_sum_le_of_forall_le_of_nonneg
-    (mul_nonneg (pow_nonneg (sz_nonneg g) _) (nF_nonneg A)) fun s _ => ?_
+    (mul_nonneg (pow_nonneg (GlobalTheory.CompanionTheory.Wedge.sz_nonneg' g) _) (GlobalTheory.CompanionTheory.Wedge.nF_nonneg' A)) fun s _ => ?_
   rw [norm_mul, norm_prod]
-  refine mul_le_mul ?_ (le_nF A s) (norm_nonneg _) (pow_nonneg (sz_nonneg g) _)
+  refine mul_le_mul ?_ (le_nF A s) (norm_nonneg _) (pow_nonneg (GlobalTheory.CompanionTheory.Wedge.sz_nonneg' g) _)
   calc ∏ i, ‖g (t i) (s i)‖ ≤ ∏ _i : κ, sz g :=
         Finset.prod_le_prod₀ (fun _ _ => norm_nonneg _) fun i _ => le_sz g _ _
     _ = sz g ^ Fintype.card κ := by simp
@@ -317,7 +310,7 @@ theorem nF_mul_le {K ι ι' κ : Type} [NormedField K] [IsUltrametricDist K] [Fi
     [Fintype ι'] [Fintype κ] [DecidableEq κ] (g : Matrix ι' ι K) (A : Matrix ι κ K) :
     nF (g * A) ≤ sz g ^ Fintype.card κ * nF A :=
   Real.iSup_le (fun t => norm_minor_mul_le g A t)
-    (mul_nonneg (pow_nonneg (sz_nonneg g) _) (nF_nonneg A))
+    (mul_nonneg (pow_nonneg (GlobalTheory.CompanionTheory.Wedge.sz_nonneg' g) _) (GlobalTheory.CompanionTheory.Wedge.nF_nonneg' A))
 
 theorem nF_mul_right {K ι κ : Type} [NormedField K] [Fintype ι] [Fintype κ] [DecidableEq κ]
     (A : Matrix ι κ K) (s : Matrix κ κ K) : nF (A * s) = nF A * ‖s.det‖ := by
@@ -734,10 +727,6 @@ theorem exists_leftInv {K ι κ : Type} [Field K] [Fintype ι] [DecidableEq ι] 
   rw [← h2, hg]
   simp
 
-theorem map_fromCols {R S ι κ κ' : Type} (f : R → S) (P : Matrix ι κ R) (Q : Matrix ι κ' R) :
-    (fromCols P Q).map f = fromCols (P.map f) (Q.map f) := by
-  ext i (j | j) <;> rfl
-
 theorem log_ineq {K ι : Type} [Field K] [Fintype ι] [DecidableEq ι] (N : Fam K ι) (hN : IsWedge N) (hS : WedgeSub)
     {κ₀ κ₁ κ₂ : Type} [Fintype κ₀] [DecidableEq κ₀] [Fintype κ₁] [DecidableEq κ₁] [Fintype κ₂] [DecidableEq κ₂]
     (B : Matrix ι κ₀ K) (A : Matrix ι κ₁ K) (C : Matrix ι κ₂ K)
@@ -769,7 +758,7 @@ theorem frame_fromCols {κ κ' : Type} [Fintype κ] [Fintype κ'] (x : GA E n) (
     (Q : Matrix (Fin n) κ' E) :
     (x⁻¹ : GA E n).val * (fromCols P Q).map (algebraMap E (Ad E)) =
       fromCols ((x⁻¹ : GA E n).val * P.map (algebraMap E (Ad E))) ((x⁻¹ : GA E n).val * Q.map (algebraMap E (Ad E))) := by
-  rw [map_fromCols, Matrix.mul_fromCols]
+  rw [GlobalTheory.CompanionTheory.DegPairingProof.map_fromCols', Matrix.mul_fromCols]
 
 theorem sum_ineq (hF : WedgeF) (hI : WedgeI) (hS : WedgeSub) (hFS : FinSupp)
     {κ₀ κ₁ κ₂ : Type} [Fintype κ₀] [DecidableEq κ₀] [Fintype κ₁] [DecidableEq κ₁] [Fintype κ₂] [DecidableEq κ₂]
@@ -801,9 +790,9 @@ theorem sum_ineq (hF : WedgeF) (hI : WedgeI) (hS : WedgeSub) (hFS : FinSupp)
     have a₀ := i₀ v
     have a₂ := i₂ v
     have a₃ := i₃ v
-    rw [map_fromCols] at a₂ a₃
-    rw [map_fromCols, map_fromCols] at a₀
-    rw [map_fromCols, map_fromCols, map_fromCols, map_fromCols]
+    rw [GlobalTheory.CompanionTheory.DegPairingProof.map_fromCols'] at a₂ a₃
+    rw [GlobalTheory.CompanionTheory.DegPairingProof.map_fromCols', GlobalTheory.CompanionTheory.DegPairingProof.map_fromCols'] at a₀
+    rw [GlobalTheory.CompanionTheory.DegPairingProof.map_fromCols', GlobalTheory.CompanionTheory.DegPairingProof.map_fromCols', GlobalTheory.CompanionTheory.DegPairingProof.map_fromCols', GlobalTheory.CompanionTheory.DegPairingProof.map_fromCols']
     exact log_ineq (fun _ _ _ A => nI A) (hI _) hS _ _ _ a₀ (i₁ v) a₂ a₃
   have finp : ∑ᶠ w, Real.log (nF ((fromCols P (fromCols Q R)).map (cW w))) + ∑ᶠ w, Real.log (nF (P.map (cW w))) ≤
       ∑ᶠ w, Real.log (nF ((fromCols P Q).map (cW w))) + ∑ᶠ w, Real.log (nF ((fromCols P R).map (cW w))) := by
@@ -813,10 +802,10 @@ theorem sum_ineq (hF : WedgeF) (hI : WedgeI) (hS : WedgeSub) (hFS : FinSupp)
     have a₀ := f₀ w
     have a₂ := f₂ w
     have a₃ := f₃ w
-    rw [map_fromCols] at a₂ a₃
-    rw [map_fromCols, map_fromCols] at a₀
+    rw [GlobalTheory.CompanionTheory.DegPairingProof.map_fromCols'] at a₂ a₃
+    rw [GlobalTheory.CompanionTheory.DegPairingProof.map_fromCols', GlobalTheory.CompanionTheory.DegPairingProof.map_fromCols'] at a₀
     simp only
-    rw [map_fromCols, map_fromCols, map_fromCols, map_fromCols]
+    rw [GlobalTheory.CompanionTheory.DegPairingProof.map_fromCols', GlobalTheory.CompanionTheory.DegPairingProof.map_fromCols', GlobalTheory.CompanionTheory.DegPairingProof.map_fromCols', GlobalTheory.CompanionTheory.DegPairingProof.map_fromCols']
     exact log_ineq (fun _ _ _ A => nF A) (hF _ _) hS _ _ _ a₀ (f₁ w) a₂ a₃
   linarith
 

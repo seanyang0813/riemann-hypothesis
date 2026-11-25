@@ -75,7 +75,7 @@ theorem loc_zero (hP : IdFrame hF P) (hn : V.rank = n) {κ : GAf D.host.E n} (h�
     (s : ReciprocityTheory.Aut.SplitPlace D.host.E) (a c : Fin V.rank) :
     Valued.v (NX.locM s κ (Fin.cast hn a) (Fin.cast hn c)) < 1 ↔
       (Formalism.L2.DIV.redFn 1 s.w (Lev.finE V (P.ψ κ)) : Matrix (Fin V.rank) (Fin V.rank) (Formalism.L2.DIV.kP s.w)) a c = 0 := by
-  have h := ((GlobalTheory.T.frameKeepsMatrices_splitPlace_reduction_local D V n hF P hP hn κ).2 s hκ a c).2 0
+  have h := ((_root_.GlobalTheory.MtRead.Red.red_eq_local D V n hF P hP hn κ).2 s hκ a c).2 0
   simp only [map_zero, zero_sub, Valuation.map_neg] at h
   exact h
 
@@ -83,7 +83,7 @@ theorem loc_one (hP : IdFrame hF P) (hn : V.rank = n) {κ : GAf D.host.E n} (hκ
     (s : ReciprocityTheory.Aut.SplitPlace D.host.E) (a : Fin V.rank) :
     Valued.v (NX.locM s κ (Fin.cast hn a) (Fin.cast hn a) - 1) < 1 ↔
       (Formalism.L2.DIV.redFn 1 s.w (Lev.finE V (P.ψ κ)) : Matrix (Fin V.rank) (Fin V.rank) (Formalism.L2.DIV.kP s.w)) a a = 1 := by
-  have h := ((GlobalTheory.T.frameKeepsMatrices_splitPlace_reduction_local D V n hF P hP hn κ).2 s hκ a a).2 1
+  have h := ((_root_.GlobalTheory.MtRead.Red.red_eq_local D V n hF P hP hn κ).2 s hκ a a).2 1
   simp only [map_one] at h
   rw [Valuation.map_sub_swap] at h
   exact h
@@ -103,7 +103,7 @@ theorem inParah_iff (hP : IdFrame hF P) (hn : V.rank = n) {κ : GAf D.host.E n} 
     refine ⟨fun a b => ?_, fun a b ha hb => ?_⟩
     · obtain ⟨a', rfl⟩ := cast_surj hn a
       obtain ⟨b', rfl⟩ := cast_surj hn b
-      exact ((GlobalTheory.T.frameKeepsMatrices_splitPlace_reduction_local D V n hF P hP hn κ).2 s hκ a' b').1
+      exact ((_root_.GlobalTheory.MtRead.Red.red_eq_local D V n hF P hP hn κ).2 s hκ a' b').1
     · obtain ⟨a', rfl⟩ := cast_surj hn a
       obtain ⟨b', rfl⟩ := cast_surj hn b
       refine (loc_zero hP hn hκ s a' b').2 (Formalism.L2.DIV.mem_blockTri.1 h a' b' ?_)
@@ -216,7 +216,7 @@ theorem levMem : ∀ (D : D7) (i : D.ntw.Tw) (j : Fin D.R.m) (b : Bool) (k : ℕ
   classical
   obtain ⟨hn, -⟩ := id hP
   have hrW : (Wc D j).rank = D.R.r := FWT.rank_Wc j
-  have hSt := (GlobalTheory.T.frameKeepsMatrices_splitPlace_reduction_local D (Vc D j) D.R.nV hF P hP hn g).1
+  have hSt := (_root_.GlobalTheory.MtRead.Red.red_eq_local D (Vc D j) D.R.nV hF P hP hn g).1
   have hUA := GlobalTheory.LevSplit.finE_mem_UA (Vc D j) (P.ψ g)
   have levG_iff : ∀ (hU' : g ∈ ReciprocityTheory.Aut.Umax D.host.E D.R.nV) kv,
       NX.InLevG (M.sp (NX.pG D kv)).v D.R.r (NX.locM (M.sp (NX.pG D kv)) g) ↔

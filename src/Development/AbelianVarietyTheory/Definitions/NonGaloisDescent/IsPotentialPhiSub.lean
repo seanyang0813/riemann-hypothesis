@@ -58,64 +58,12 @@ variable {l : ℕ} [hl : Fact l.Prime] {a : ℕ} [NeZero a] {e : ℕ} [NeZero e]
   {G : Type} [Group G] [TopologicalSpace G]
 
 
-omit [NeZero a] [NeZero e] [Algebra ℤ_[l] O] [Module.Free ℤ_[l] O] [Module.Finite ℤ_[l] O]
-  [NormedAlgebra ℚ_[l] K] in
-theorem xi_unit (d : (unitMod l a e O K ι).D) : (unitMod l a e O K ι).xi d = cst d :=
-  (PhiMod.xi_unique _ (s := fun d => cst d) red_cst (fun d => by
-    ext1 τ
-    rw [PhiMod.phi_apply, mx_unitMod, Matrix.one_mulVec]
-    ext1 i
-    rw [cst_apply, PhiMod.phiD_apply, PhiMod.mx0, mx_unitMod, Matrix.map_one _ (map_zero _) (map_one _), Matrix.one_mulVec]
-    simp [PhiMod.phiD_apply, PhiMod.mx0, mx_unitMod, frob_C]) d).symm
 
-
-omit [NeZero a] [NeZero e] [Algebra ℤ_[l] O] [Module.Free ℤ_[l] O] [Module.Finite ℤ_[l] O]
-  [NormedAlgebra ℚ_[l] K] in
-theorem nabla_bas (i : ι) : (unitMod l a e O K ι).nabla (bas i) = 0 := by
-  rw [← cst_single, ← xi_unit (O := O) (l := l) (e := e), PhiMod.nabla_xi]
-
-
-omit [NeZero a] [NeZero e] [Algebra ℤ_[l] O] [Module.Free ℤ_[l] O] [Module.Finite ℤ_[l] O]
-  [NormedAlgebra ℚ_[l] K] in
-theorem phi_bas_unit (i : ι) : (unitMod l a e O K ι).phi (bas i) = bas i := by
-  ext1 τ
-  rw [PhiMod.phi_bas, mx_unitMod]
-  ext1 j
-  simp [bas, Matrix.one_apply, Pi.single_apply]
 
 variable [TameDescentExponentData K l e a]
 
 
-variable (O K l e a ι) in
-def unitDesc : Descent (unitMod l a e O K ι) :=
-  Descent.ofMatrix _ (fun _ _ => 1)
-    (fun _ _ i j => by rw [Matrix.one_apply]; split_ifs; exacts [one_mem _, zero_mem _])
-    (fun _ => rfl)
-    (fun _ _ _ => by rw [Matrix.map_one _ (map_zero _) (map_one _), one_mul])
-    fun _ _ => by
-      rw [mx_unitMod, mx_unitMod, Matrix.map_one _ (map_zero _) (map_one _),
-        Matrix.map_one _ (map_zero _) (map_one _)]
 
-
-omit [Algebra ℤ_[l] O] [Module.Free ℤ_[l] O] [Module.Finite ℤ_[l] O] in
-theorem unitDesc_act (γ : TameGal K l e a) (v : Vec K a ι) (τ : ZMod a) (i : ι) :
-    (unitDesc l a e O K ι).act γ v τ i = ringAct γ (fun σ => v σ i) τ := by
-  change Descent.matAct γ (fun _ => 1) v τ i = _
-  rw [Descent.matAct_apply, Matrix.one_mulVec, ringAct_apply]
-
-
-variable (O K l e a ι) in
-def unitDat (η H : ℕ) : BKDat O K l e a ι η H where
-  toPhiMod := unitMod l a e O K ι
-  desc := unitDesc l a e O K ι
-  nabla_mem _ := PhiMod.nabla_mem_MM_of_basis _
-    (fun i => by rw [phi_bas_unit, nabla_bas]; exact zero_mem _)
-    fun i => PhiMod.ext_mono _ (A_le_S l e) (PhiMod.phi_mem_L _ (PhiMod.bas_mem_M _ i))
-  EN_mem _ hm := PhiMod.EN_mem_Man_of_basis _ (fun i => by
-    rw [PhiMod.EN_apply, PhiMod.conn_apply, nabla_bas, smul_zero, smul_zero]
-    exact zero_mem _) (PhiMod.M_le_Man _ hm)
-  lower m hm := mem_ext_unitMod.2 fun τ i => mul_mem (pow_mem (E_mem l e _) _) (mem_tot.1 hm τ i)
-  upper m hm := mem_tot.2 fun τ i => mul_mem (pow_mem (E_mem l e _) _) (mem_ext_unitMod.1 hm τ i)
 
 theorem galOW_iW_of_covers {h : GQ l} {γ : TameGal K l e a} (hc : Covers K t ϖ h γ)
     (f f' : ZMod a → invE l e (A O K))
@@ -152,77 +100,6 @@ theorem galOW_iW_of_covers {h : GQ l} {γ : TameGal K l e a} (hc : Covers K t ϖ
   exact (hu.pow N).mul_left_cancel h3
 
 
-omit [TameDescentExponentData K l e a] in
-theorem galOB_iB_const {h : GQ l} (hh : h ∈ GK (ϖ.field a)) (f : ZMod a → invL l (S O K e))
-    (c : ZMod a → K) (hf : ∀ τ, (f τ : K⟦X⟧) = C (c τ)) : galOB O h (ϖ.iB t K f) = ϖ.iB t K f := by
-
-  rw [PiSys.iB, glue_apply, map_sum]
-  refine Finset.sum_congr rfl fun τ _ => ?_
-  rw [map_mul]
-  congr 1
-  · exact (galOB_toOB h _).trans (congrArg _ (galOCr_idem t ϖ ⟨h, hh⟩ τ))
-  · obtain ⟨n, hn⟩ := monomial_mem_invL (O := O) l 0 (c τ)
-    obtain ⟨o, ho⟩ := (IsUnitBall.mem_range_iff (O := O) ((l : K) ^ n * c τ)).2 (by
-      have h0 := mem_A.1 hn 0
-      rwa [SubringClass.coe_natCast, ← map_natCast (C : K →+* K⟦X⟧), ← map_pow, coeff_C_mul,
-        coeff_monomial_same] at h0)
-    have h1 : (l : invL l (S O K e)) ^ n * f τ = algebraMap O _ o := Subtype.ext (by
-      rw [Subalgebra.coe_algebraMap, algebraMap_eq_C, ho]
-      simp [hf τ])
-    have h2 := congrArg (ϖ.iSl O K) h1
-    rw [map_mul, map_pow, map_natCast, AlgHom.commutes] at h2
-    have h3 := congrArg (galOB O h) h2
-    rw [map_mul, map_pow, map_natCast, AlgHom.commutes, ← h2] at h3
-    exact (isUnit_l_OB.pow n).mul_left_cancel h3
-
-def coordEq (R : Type) [CommRing R] [Algebra O R] (T : LocLat G ℚ_[l] K O) (b : Module.Basis ι O ↥T.L.T) :
-    (ι → R) ≃ₗ[R] TW R T := (b.baseChange R).equivFun.symm
-
-
-omit [Algebra ℤ_[l] O] [Module.Free ℤ_[l] O] [Module.Finite ℤ_[l] O] [IsUltrametricDist K] [IsUnitBall O K]
-  [DecidableEq ι] in
-theorem coordEq_apply (R : Type) [CommRing R] [Algebra O R] (T : LocLat G ℚ_[l] K O)
-    (b : Module.Basis ι O ↥T.L.T) (v : ι → R) : coordEq R T b v = ∑ i, v i ⊗ₜ[O] b i := by
-  simp only [coordEq, Module.Basis.equivFun_symm_apply, Module.Basis.baseChange_apply, smul_tmul',
-    smul_eq_mul, mul_one]
-
-def unitGal (s : G →* GQ l) (η H : ℕ) (T : LocLat G ℚ_[l] K O) (hT : ∀ g x, T.ρ g x = x)
-    (b : Module.Basis ι O ↥T.L.T) : GalDat t ϖ s (unitDat l a e O K ι η H) T where
-  I := unitIdent t ϖ T b
-  jB := coordEq (OB l O) T b
-  cmp c z h := by
-    obtain ⟨c', rfl⟩ := (coordEq (OA l O) T b).surjective z
-    have h1 : (unitIdent t ϖ T b).j (inclL t ϖ (unitMod l a e O K ι) c) =
-        (unitIdent t ϖ T b).j (inclL t ϖ (unitMod l a e O K ι) c') := by
-      refine h.trans ?_
-
-      rw [unitIdent_j, coordEq_apply, map_sum, inclL_apply, frobMat_unitMod, Matrix.one_mulVec]
-      rfl
-    obtain rfl := inclL_injective t ϖ _ ((unitIdent t ϖ T b).j.injective h1)
-
-    rw [coordEq_apply, coordEq_apply, map_sum]
-    rfl
-  desc g γ hc v v' hv := by
-    refine (unitIdent_act t ϖ T b (s g) (hT g) _).trans (funext fun i => ?_)
-    exact galOW_iW_of_covers t ϖ hc _ _ fun τ =>
-      (congrFun (congrFun hv τ) i).trans (unitDesc_act γ v.1 τ i)
-  stable g := (Ident.exists_isLMat_iff _ _ _).1 ⟨1, isLMat_unitIdent t ϖ T b (s g) (hT g)⟩
-  horiz g hg d h := by
-
-    rw [coordEq_apply, map_sum]
-    refine Finset.sum_congr rfl fun i _ => ?_
-    have h1 : T.actT g (b i) = b i := Subtype.ext (hT g _)
-    rw [actB, TWact, TensorProduct.map_tmul, h1, AlgHom.toLinearMap_apply, toBcris_apply,
-      galOB_iB_const t ϖ hg _ (fun τ => d τ i) fun τ => ?_]
-    change ((unitMod l a e O K ι).mxInv τ *ᵥ (unitMod l a e O K ι).xi d τ) i = _
-    rw [mxInv_unitMod, Matrix.one_mulVec, xi_unit, cst_apply]
-
-def unitPack {LL : FinExt l} [HasUnr a LL] [TameDescentExponentData ↥LL.1 l e a] (η H : ℕ) (T : QLat LL)
-    (hT : ∀ g x, T.ρ g x = x) : Pack a ϖ η H T where
-  n := _
-  D := unitDat l a e _ _ _ η H
-  R := unitGal _ ϖ (sQ l) η H T hT (latBasis T)
-  isBK := isBK_unitIdent (thetaW a LL) ϖ (T := resF T (ϖ.field a)) (fun g x => hT _ x) (latBasis T)
 
 
 omit [TameDescentExponentData K l e a] in
@@ -326,12 +203,5 @@ theorem isGood_of_trivial (Pl : LocPrime l) {LL : FinExt l} (T : QLat LL) (hT : 
   simp only [Finset.prod_singleton, ZMod.val_zero, pow_zero, map_one, map_sub, Polynomial.aeval_X]
   exact sub_eq_zero.2 (key y)
 
-
-omit [Algebra ℤ_[l] O] [Module.Free ℤ_[l] O] [Module.Finite ℤ_[l] O] in
-variable (O K G l) in
-theorem finrank_unitLat : Module.finrank O ↥(unitLat G : LocLat G ℚ_[l] K O).L.T = 1 := by
-  have : Nontrivial O := (algebraMap O K).domain_nontrivial
-  exact (LinearEquiv.ofInjective (Algebra.linearMap O K) IsUnitBall.inj).finrank_eq.symm.trans
-    (Module.finrank_self O)
 
 end GlobalTheory.BKGal.UnitModel

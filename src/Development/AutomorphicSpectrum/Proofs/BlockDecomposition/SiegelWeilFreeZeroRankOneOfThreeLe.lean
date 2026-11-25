@@ -382,56 +382,7 @@ namespace PositivityTheory.PlacePermOperatorBicommutantSpan
 
 variable {F : Type} [Field F] [NumberField F]
 
-theorem prod_rho {ρ : InfinitePlace F → (F →+* ℝ)} (hF : IsTotallyReal F)
-    (hρ : ∀ w x, ((ρ w x : ℝ) : ℂ) = w.embedding x) (a : F) : ∏ w, |ρ w a| = |((Algebra.norm ℚ a : ℚ) : ℝ)| := by
-  have h := InfinitePlace.prod_eq_abs_norm a
-  rw [← Rat.cast_abs, ← h]
-  refine Finset.prod_congr rfl fun w _ => ?_
-  rw [IsTotallyReal.mult_eq, pow_one, ← w.norm_embedding_eq, ← hρ, Complex.norm_real, Real.norm_eq_abs]
-
-theorem map_nMat {R S : Type} [CommRing R] [CommRing S] (f : R →+* S) (b : R) :
-    Matrix.SpecialLinearGroup.map f (nMat b) = nMat (f b) :=
-  Matrix.SpecialLinearGroup.ext _ _ fun i j => by
-    show f (nMat b i j) = _
-    fin_cases i <;> fin_cases j <;> simp [nMat]
-
-theorem map_wMat {R S : Type} [CommRing R] [CommRing S] (f : R →+* S) : Matrix.SpecialLinearGroup.map f wMat = wMat :=
-  Matrix.SpecialLinearGroup.ext _ _ fun i j => by
-    show f ((wMat : SL(2, R)) i j) = _
-    fin_cases i <;> fin_cases j <;> simp [wMat]
-
-theorem map_mMat {R S : Type} [CommRing R] [CommRing S] (f : R →+* S) (a : Rˣ) :
-    Matrix.SpecialLinearGroup.map f (mMat a) = mMat (Units.map (f : R →* S) a) :=
-  Matrix.SpecialLinearGroup.ext _ _ fun i j => by
-    show f (mMat a i j) = _
-    fin_cases i <;> fin_cases j <;> simp [mMat]
-
 def uA (a : Fˣ) : (A F)ˣ := Units.map (algebraMap F (A F) : F →* A F) a
-
-theorem mod_rat [MeasurableSpace (A F)] [BorelSpace (A F)] {lf : Measure (A F)} (hlf : lf.IsAddHaarMeasure)
-    (h1 : lf (Oh F) = 1) {ι : Type} [Fintype ι] [DecidableEq ι] {M : ℕ} (hc : Fintype.card ι = 2 * M)
-    (B : Matrix ι ι F) (a : Fˣ) (s : Set (ι → A F)) (hs : MeasurableSet s) :
-    muF B lf ((fun u => (uA a : A F) • u) '' s) =
-      ENNReal.ofReal ((|((Algebra.norm ℚ (a : F) : ℚ) : ℝ)|⁻¹ ^ M) ^ 2) * muF B lf s := by
-  have h2 := (_root_.GlobalTheory.CompanionTheory.SW.Core.PiScale.pi_scale F lf hlf h1 ι).2 (uA a) s hs
-  have h3 := (_root_.GlobalTheory.CompanionTheory.SW.Core.Scale.lf_scale F lf hlf h1).1 a a.ne_zero _ (_root_.GlobalTheory.CompanionTheory.SW.Core.AfTop.finiteAdele_topology F).2.2.2.2.1.measurableSet
-  rw [h1, mul_one] at h3
-  rw [muF, Measure.smul_apply, Measure.smul_apply, h2, smul_eq_mul, smul_eq_mul, mul_left_comm, ← pow_mul,
-    ENNReal.ofReal_pow (by positivity), hc, mul_comm M 2]
-  exact congrArg (fun t => t ^ (2 * M) * _) h3
-
-theorem good_ex [MeasurableSpace (A F)] [BorelSpace (A F)] {lf : Measure (A F)} (hlf : lf.IsAddHaarMeasure)
-    (h1 : lf (Oh F) = 1) {ψ : AddChar (A F) ℂ} (hψ : IsStdChar F ψ) {ι : Type} [Fintype ι] [DecidableEq ι] {M : ℕ}
-    {B : Matrix ι ι F} {ρ : InfinitePlace F → (F →+* ℝ)} {P : InfinitePlace F → Matrix ι ι ℝ} (hQ : QSetup M B ρ P)
-    {𝒟 : ((ι → A F) → ℂ) → (InfinitePlace F → ℂ) → ℂ}
-    (hD : ∀ φ τ, SB φ → (∀ w, 0 < (τ w).im) →
-      (∀ b : F, 𝒟 (opU ψ (hf F) (Bf B) (algebraMap F (A F) b) φ) (fun w => τ w + (ρ w b : ℝ)) = 𝒟 φ τ) ∧
-      (∀ a : F, a ≠ 0 → 𝒟 (opD 1 (algebraMap F (A F) a) φ) (fun w => ((ρ w a : ℝ) : ℂ) ^ 2 * τ w) = 𝒟 φ τ) ∧
-      (cG B ρ P τ * 𝒟 (fou (chiB ψ (Bf B)) (muF B lf) φ) (fun w => -(τ w)⁻¹) = 𝒟 φ τ) ∧
-      ∀ c : ℂ, 𝒟 (c • φ) τ = c * 𝒟 φ τ) (γ : SL(2, F)) :
-    ∃ T, Impl ψ (hf F) (Bf B) (muF B lf) (Matrix.SpecialLinearGroup.map (algebraMap F (A F)) γ) T ∧
-      ∀ φ τ, SB φ → (∀ w, 0 < (τ w).im) → wt M (mob ρ γ τ) * ‖𝒟 (T φ) (mob ρ γ τ)‖ = wt M τ * ‖𝒟 φ τ‖ := by
-  apply _root_.CompanionTheory.PlacePermOperatorBicommutantSpan.good_ex <;> assumption
 
 end PositivityTheory.PlacePermOperatorBicommutantSpan
 end -- clump:auto

@@ -773,13 +773,8 @@ theorem twConj_ratCent (d : GL (Fin n) E) {h : GA E n} (hh : h ∈ ratCent d) (x
   rw [twConj_ratGL]
   exact congrArg _ ht
 
-theorem discreteTopology_ratCent (d : GL (Fin n) E) : DiscreteTopology (ratCent d) := by
-  haveI := GlobalTheory.CompanionTheory.KerTwFin.discreteTopology_range (E := E) (n := n)
-  exact DiscreteTopology.of_subset (s := ((ratGL E n).range : Set (GA E n)))
-    GlobalTheory.CompanionTheory.KerTwFin.discreteTopology_range (by rintro _ ⟨t, -, rfl⟩; exact ⟨t, rfl⟩)
-
 theorem countable_ratCent (d : GL (Fin n) E) : Countable (ratCent d) := by
-  haveI := discreteTopology_ratCent d
+  haveI := PositivityTheory.Rg.BcB.CV.AdelicTopology.discrete_ratCent d
   haveI := GlobalTheory.CuspRep.CuspidalL2GL.secondCountableTopology_GA E n
   exact TopologicalSpace.separableSpace_iff_countable.1 inferInstance
 
@@ -849,8 +844,8 @@ theorem sliceTerm_of (hM : Mahler) : SliceTerm := by
   haveI := GlobalTheory.CuspRep.CuspidalL2GL.secondCountableTopology_GA E b
   haveI := GlobalTheory.CuspRep.CuspidalL2GL.locallyCompactSpace_GA E a
   haveI := GlobalTheory.CuspRep.CuspidalL2GL.locallyCompactSpace_GA E b
-  haveI := discreteTopology_ratCent d₁
-  haveI := discreteTopology_ratCent d₂
+  haveI := PositivityTheory.Rg.BcB.CV.AdelicTopology.discrete_ratCent d₁
+  haveI := PositivityTheory.Rg.BcB.CV.AdelicTopology.discrete_ratCent d₂
   haveI := countable_ratCent d₁
   haveI := countable_ratCent d₂
   have c₁ : Measurable (chiT τ : GA E a → ℂ) :=

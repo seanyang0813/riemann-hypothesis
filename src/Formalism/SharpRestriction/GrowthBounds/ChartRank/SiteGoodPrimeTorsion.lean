@@ -1304,16 +1304,9 @@ theorem HypTies.toI {Z : AtIn X0 Tw u μ w h Lv} (A : HypTies Z Gt c) : HypTiesI
 
 theorem HypTies.hyp {Z : AtIn X0 Tw u μ w h Lv} (A : HypTies Z Gt c) (K : CmpTied D X0 T Gt c) : CmpJHyp c (Z.I Gt) := A.toI.hyp K
 
-theorem HypTies.atHyp {Z : AtIn X0 Tw u μ w h Lv} (A : HypTies Z Gt c) (K : CmpTied D X0 T Gt c) : AtHyp Z Gt c :=
-  { fl_t := A.fl_t
-    fill := A.fill
-    ties := fun j hj => (A.step j hj).ties
-    hypC := fun j hj => (A.step j hj).hypC
-    ok := fun j hj => (A.step j hj).ok
-    twUnit := fun j hj => (A.step j hj).twUnit K A.fl_t A.fill
-    valIntN := fun j hj => (A.step j hj).valIntN K A.fl_t A.fill
-    fin := A.toI.fin K
-    card := (A.hyp K).card }
+theorem HypTies.atHyp {Z : AtIn X0 Tw u μ w h Lv} (A : HypTies Z Gt c) (_K : CmpTied D X0 T Gt c) : AtHyp Z Gt c :=
+  { ties := fun j hj => (A.step j hj).ties
+    hypC := fun j hj => (A.step j hj).hypC }
 
 section Fam
 

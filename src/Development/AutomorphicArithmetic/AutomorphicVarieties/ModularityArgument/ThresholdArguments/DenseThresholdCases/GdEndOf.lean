@@ -1188,21 +1188,8 @@ theorem UpperTheory.V.Z.Win.Dn.gdEnd_of_frame_linkedEnd_downCsdK_descent (H : _r
   have hram : ∀ B' : ValuationSubring Ω, ¬ Ine (F := ℚ) B' ≤ D.η.ker →
       B'.valuation ((l * N * (discr K).natAbs : ℕ) : Ω) < 1 := by
     intro B' h
-    haveI : IsAlgClosed Ω := IsAlgClosure.isAlgClosed ℚ
-    have hd : B'.valuation ((discr K : ℤ) : Ω) < 1 := by
-      by_contra h4
-      refine h fun s hs => ?_
-      rw [D.η_ker]
-      have key := GlobalTheory.UnramDiscr.embedding_eq B' h4 ((s : Ω →+* Ω).comp (algebraMap K Ω)) (algebraMap K Ω) (fun x => by
-        refine hs.2 _ ((B'.valuation_le_one_iff _).mpr (GlobalTheory.UnramDiscr.mem_of_isIntegral B' ?_))
-        exact (RingOfIntegers.isIntegral_coe x).map (algebraMap K Ω).toIntAlgHom)
-      exact fun x => DFunLike.congr_fun key x
-    have hd' : B'.valuation (((discr K).natAbs : ℕ) : Ω) < 1 := by
-      rcases Int.natAbs_eq (discr K) with h1 | h1
-      · rw [h1, Int.cast_natCast] at hd; exact hd
-      · rw [h1, Int.cast_neg, Int.cast_natCast, Valuation.map_neg] at hd; exact hd
-    rw [Nat.cast_mul, map_mul]
-    exact lt_of_le_of_lt (mul_le_of_le_one_left' ((B'.valuation_le_one_iff _).2 (natCast_mem B' _))) hd'
+    rw [D.η_ker] at h
+    exact valuation_lt_one_of_ramified_of_discr_dvd K B' h (dvd_mul_left _ _)
   have hlM : l ∣ l * N * (discr K).natAbs := (dvd_mul_right l N).mul_right _
   obtain ⟨hfin, haut, ka, hka, haut2⟩ := hL Ω l ι c N e ψ D.gd.e_pos D.gd.N_even D.η D.cc g₁ B _ (dvd_mul_right _ _) hram L Φ C₀ k hB ok big sc
   haveI : IsAlgClosure L Ω := Th.Db.algClo L Ω

@@ -65,7 +65,7 @@ theorem boundAtPoint_all_localisations_of_objectConditions : GlobalTheory.Publis
   have TB78 : EmbeddingTypes.admTB i r π dc cB := fun w hw _ C hC => TB w hw C hC
   exact _root_.GlobalTheory.SelmerBoundAtPoint.main hGAR hLTD hLEC D i r ρ π dc lenRow e' cB G1 G2 G3 G4 G5 G5x G6 BK
     (_root_.GlobalTheory.BKaRows.bkaAll_of_hypotheses hBK hLTD hLEC D i) Cont Decomp Font (_root_.GlobalTheory.finAll_of_localTateDuality hLTD D i) Comparison₂ a51
-    (GlobalTheory.T.unramifiedTrivialH1f_of_decl D i dc) ROW LIFT TB78 hl0 hl1
+    (_root_.GlobalTheory.ColumnUnramified.blochKatoFinite_trivialRep_unramified_columnPlaces D i dc) ROW LIFT TB78 hl0 hl1
 
 end GlobalTheory.LocalisationBoundAtPoint
 end -- clump:auto
@@ -79,8 +79,6 @@ section -- clump:auto
 
 open Formalism Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N NumberField IsDedekindDomain Formalism.ConjugateSelfDual ReciprocityTheory.Gal Formalism.WeaklyAdmissibleFiltrations
 
-theorem _root_.GlobalTheory.T.integralityFromMetric_of_designConditionAll : GlobalTheory.Published.GlobalArtinReciprocity → GlobalTheory.Published.BlochKatoLocal → Formalism.GaloisCohomology.LocalTateDualityK → Formalism.GaloisCohomology.LocalEulerCharK → ∀ D : D7, Formalism.MainNotions.N.K.Rows.AllDesignConditions D → TruncatedSeriesCountingIdentities.IntegralityFromMetric D := by
-  first | exact @GlobalTheory.LocalisationBoundAtPoint.boundAtPoint_all_localisations_of_objectConditions
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.BoundAtPointAllLocalisationsOfObjectConditionsAlStatement =====

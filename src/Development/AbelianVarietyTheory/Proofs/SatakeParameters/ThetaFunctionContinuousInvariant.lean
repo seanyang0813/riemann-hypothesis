@@ -52,7 +52,6 @@ namespace GlobalTheory.ThetaFormV
 
 open Formalism.BasicNotions.TH Formalism.L2.Theta Formalism.IndefR GlobalTheory.ThetaTri
 open scoped Topology
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 section Frame
 

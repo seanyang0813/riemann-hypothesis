@@ -28,9 +28,6 @@ section Metrizable
 variable [SecondCountableTopology C] [MeasurableSpace C] [BorelSpace C]
   (μ : Measure C) [μ.IsHaarMeasure]
 
-def transl (h : C) : Lp ℂ 2 μ →L[ℂ] Lp ℂ 2 μ :=
-  (Lp.compMeasurePreservingₗᵢ ℂ (fun x => h * x) (measurePreserving_mul_left μ h)).toContinuousLinearMap
-
 variable (ψ : C(C, ℝ))
 
 

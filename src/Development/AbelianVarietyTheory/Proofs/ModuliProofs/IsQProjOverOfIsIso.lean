@@ -119,9 +119,6 @@ theorem Triv.lbIso {L M : LB X} (h : Triv L) (h' : Triv M) : LBIso L M := by
     (gm_div L M (𝟙 X) y p q hy) ((gm_res _ y _ hy _).trans (v q hy.2))).trans ?_)))
   rw [w u hu p.1 q.1 ⟨hy.1.1, hy.2.1⟩, w t ht p.2 q.2 ⟨hy.1.2, hy.2.2⟩, mul_inv, _root_.mul_mul_mul_comm]
 
-theorem triv_trivLB (X : Scheme.{0}) : Triv (Out.Inh.trivLB X) :=
-  ⟨⟨fun _ => 1⟩, ZJ.isGen_one_of_g_eq_one _ fun _ _ => rfl⟩
-
 end Bundles
 
 section Groups
@@ -135,11 +132,6 @@ theorem left_unique {G : Over S} (hG : IsIso G.hom) {T : Scheme.{0}} {x y : T �
     x = y := (cancel_mono G.hom).1 h
 
 theorem isIso_unit (S : Scheme.{0}) : IsIso (𝟙_ (Over S)).hom := inferInstanceAs (IsIso (𝟙 S))
-
-theorem isIso_tensor {G G' : Over S} (hG : IsIso G.hom) (hG' : IsIso G'.hom) : IsIso (G ⊗ G').hom := by
-  have : IsIso (fst G G').left := inferInstanceAs (IsIso (pullback.fst G.hom G'.hom))
-  rw [← Over.w (fst G G')]
-  infer_instance
 
 theorem isIso_left {G G' : Over S} (hG : IsIso G.hom) (hG' : IsIso G'.hom) (x : G ⟶ G') : IsIso x.left :=
   IsIso.of_isIso_fac_right (Over.w x)
@@ -163,11 +155,6 @@ theorem isGrpPullback_zero {G' : Over S'} {G : Over S} [GrpObj G'] [GrpObj G] (h
     (f : S' ⟶ S) : IsGrpPullback G' G f (zmap hG f) :=
   ⟨IsPullback.of_vert_isIso ⟨zmap_w hG f⟩, fun T x y x₀ y₀ _ _ => left_unique hG (by
     rw [Over.w, Category.assoc, zmap_w, ← Category.assoc, Over.w]; rfl)⟩
-
-theorem isSquare_zero {G' : Over S'} {G : Over S} (hG : IsIso G.hom) (f : S' ⟶ S) :
-    IsSquare (zmap (G' := G') hG f) (zmap (isIso_tensor hG hG) f) :=
-  ⟨left_unique hG (by rw [Category.assoc, Over.w, Category.assoc, zmap_w, zmap_w, ← Category.assoc, Over.w]),
-    left_unique hG (by rw [Category.assoc, Over.w, Category.assoc, zmap_w, zmap_w, ← Category.assoc, Over.w])⟩
 
 theorem isAbelianScheme_zero {G : Over S} [GrpObj G] [IsCommMonObj G] (hG : IsIso G.hom) : IsAbelianScheme G :=
   ⟨inferInstance, inferInstance, inferInstance, MorphismProperty.of_isPullback (P := @GeometricallyConnected)
@@ -395,240 +382,8 @@ theorem isIso_moduli (hc : Count) (hD : D.p + D.q = 0) {l : Level H} (Xo : Modul
 
 end Objects
 
-section Siegel
-
-variable {N : ℕ} {B B' : Type} [CommRing B] [CommRing B'] {ζ : B} {ζ' : B'} {S S' : Scheme.{0}}
-
-def zeroSieg (N : ℕ) (ζ : B) (s : S ⟶ Sp B) : SiegPre 0 N ζ s where
-  A := 𝟙_ _
-  ab := UU.isAbelianScheme_unit S
-  P := Out.Inh.trivLB _
-  isLB := Out.Inh.trivLB_isLB _
-  rig₁ := (triv_trivLB _).linComb _ _
-  rig₂ := (triv_trivLB _).linComb _ _
-  symm := (triv_trivLB _).lbIso ((triv_trivLB _).linComb _ _)
-  lev := fun _ => 1
-  lev_add := fun _ _ => (_root_.mul_one _).symm
-  lev_tors := fun _ => one_pow _
-  geom := fun k _ _ x β z _ _ => by
-    refine ⟨fun a => ⟨fun _ => ⟨0, Subsingleton.elim _ _⟩, fun _ => toUnit_unique _ _⟩,
-      fun _ _ => ⟨0, toUnit_unique _ _⟩, fun a b => ?_⟩
-    have e : unitOn (z ^ (2 * omegaStd a b)) = 1 := by
-      rw [omegaStd, Fin.sum_univ_zero, mul_zero, zpow_zero, unitOn, map_one]
-    rw [e]
-    exact weilIs_zero (isIso_unit S) (pull_isLB (Out.Inh.trivLB_isLB _) _) ((triv_trivLB _).linComb _ _) _ _ _
-
-theorem principal_zeroSieg {R : Type} [CommRing R] (s : Sp R ⟶ Sp B) : (zeroSieg N ζ s).Principal := by
-  refine ⟨?_, fun _ _ _ => toUnit_unique _ _⟩
-  obtain ⟨w, hw⟩ : LBIso (zeroSieg N ζ s).diag ((Out.Inh.trivLB _).pull (𝟙 _)) :=
-    ((triv_trivLB _).linComb _ _).lbIso ((triv_trivLB _).linComb _ _)
-  exact relAmple_pull (A := 𝟙_ _) (f := 𝟙 _) (φ := 𝟙 _)
-    (IsPullback.of_horiz_isIso ⟨(Category.id_comp _).trans (Category.comp_id _).symm⟩) (Out.Inh.trivLB_isLB _)
-    (pull_isLB (Out.Inh.trivLB_isLB _) _) ((isGen_iff w).1 hw) ⊤ (isAffineOpen_top _) (fun _ => trivial)
-    (Out.Inh.zeroPolAV _).ample
-
-theorem siegPB_zero {h : ℕ} {s : S ⟶ Sp B} {s' : S' ⟶ Sp B'} {o' : SiegPre h N ζ' s'} {o : SiegPre h N ζ s}
-    (h' : IsIso o'.A.hom) (h : IsIso o.A.hom) (f : S' ⟶ S) : SiegPB o' o f :=
-  ⟨_, _, isGrpPullback_zero h' h f, isSquare_zero h f,
-    (triv_of_pull h' (isIso_tensor h' h') _ o'.rig₁).lbIso ((triv_of_pull h (isIso_tensor h h) _ o.rig₁).linComb _ _),
-    fun _ => sec_comm h (zmap_w h f) _ _⟩
-
-theorem natCast_mul_inv {p N n : ℕ} (hp : p.Prime) (hn : n.Coprime p) (h : (n : ℂ)⁻¹ ∈ ZP p N) :
-    (n : ZP p N) * ⟨_, h⟩ = 1 := by
-  have : n ≠ 0 := by
-    rintro rfl
-    exact hp.one_lt.ne' (Nat.coprime_zero_left _ |>.1 hn)
-  exact Subtype.ext (by simpa using mul_inv_cancel₀ (Nat.cast_ne_zero.2 this : (n : ℂ) ≠ 0))
-
-theorem isUnit_natCast {p N n : ℕ} (hp : p.Prime) (hn : n.Coprime p) : IsUnit (n : ZP p N) :=
-  IsUnit.of_mul_eq_one _ (natCast_mul_inv hp hn (Subring.subset_closure (Or.inr ⟨n, hn, rfl⟩)))
-
-theorem zeta_pow_eq_one (p : ℕ) (hN : 0 < N) : zetaZP p N ^ N = 1 := Subtype.ext (BaseRing.zeta_pow_self hN)
-
-theorem isIso_sieg (hc : Count) {p : ℕ} (hp : p.Prime) (h₁ : 1 < N) (hN : N.Coprime p) [IsReduced S]
-    {s : S ⟶ Sp (ZP p N)} (o : SiegPre 0 N (zetaZP p N) s) : IsIso o.A.hom := by
-  refine isIso_of_no_torsion hc _ o.ab fun k _ _ x => ?_
-  obtain ⟨β, hβ⟩ := exists_spMap (x ≫ s)
-  have hu : IsUnit (β (zetaZP p N)) :=
-    ((isUnit_pow_iff (by omega : N ≠ 0)).1 (zeta_pow_eq_one p (by omega : 0 < N) ▸ isUnit_one)).map β
-  obtain ⟨e₁, e₂, -⟩ := o.geom k x β hu.unit hβ rfl
-  refine ⟨N, h₁, ?_, fun g hg => ?_⟩
-  · have := ((isUnit_natCast (N := N) hp hN).map β).ne_zero
-    rwa [map_natCast] at this
-  · obtain ⟨a, rfl⟩ := e₂ g hg
-    exact (e₁ a).2 ⟨0, Subsingleton.elim _ _⟩
-
-theorem eq_constPt_ZP {p : ℕ} (hp : p.Prime) (h₁ : 0 < N) (hN : N.Coprime p) {k : Type} [Field k]
-    (x : Sp (DualNumber k) ⟶ Sp (ZP p N)) : x = constPt x := by
-  refine eq_constPt_of x fun β => ?_
-  generalize hδ : ((algebraMap k (DualNumber k)).comp (TrivSqZeroExt.fstHom k k k).toRingHom).comp β = δ
-  refine RingHom.ext fun ⟨y, hy⟩ => ?_
-  induction hy using Subring.closure_induction with
-  | mem y hy =>
-    rcases hy with rfl | ⟨n, hn, rfl⟩
-    · subst hδ
-      have hz : β (zetaZP p N) ^ N = 1 := by rw [← map_pow, zeta_pow_eq_one p h₁, map_one]
-      have hk : (N : k) ≠ 0 := by
-        have := (((isUnit_natCast (N := N) hp hN).map β).map (TrivSqZeroExt.fstHom k k k)).ne_zero
-        rwa [map_natCast, map_natCast] at this
-      have ha : (β (zetaZP p N)).fst ≠ 0 := fun h0 => by
-        have := congrArg TrivSqZeroExt.fst hz
-        rw [TrivSqZeroExt.fst_pow, h0, zero_pow h₁.ne', TrivSqZeroExt.fst_one] at this
-        exact zero_ne_one this
-      have hb := congrArg TrivSqZeroExt.snd hz
-      rw [TrivSqZeroExt.snd_pow, TrivSqZeroExt.snd_one, nsmul_eq_mul, smul_eq_mul] at hb
-      have hb' := (mul_eq_zero.1 ((mul_eq_zero.1 hb).resolve_left hk)).resolve_left (pow_ne_zero _ ha)
-      exact TrivSqZeroExt.ext (x := β (zetaZP p N)) rfl hb'
-    · have e := natCast_mul_inv (N := N) hp hn (Subring.subset_closure (Or.inr ⟨n, hn, rfl⟩))
-      have e₁ := congrArg β e
-      have e₂ := congrArg δ e
-      rw [map_mul, map_natCast, map_one] at e₁ e₂
-      exact left_inv_eq_right_inv ((mul_comm _ _).trans e₁) e₂
-  | zero => exact (map_zero β).trans (map_zero δ).symm
-  | one => exact (map_one β).trans (map_one δ).symm
-  | add a b ha hb h h' =>
-    exact (map_add β ⟨a, ha⟩ ⟨b, hb⟩).trans ((congrArg₂ (· + ·) h h').trans (map_add δ ⟨a, ha⟩ ⟨b, hb⟩).symm)
-  | neg a ha h => exact (map_neg β ⟨a, ha⟩).trans ((congrArg (- ·) h).trans (map_neg δ ⟨a, ha⟩).symm)
-  | mul a b ha hb h h' =>
-    exact (map_mul β ⟨a, ha⟩ ⟨b, hb⟩).trans ((congrArg₂ (· * ·) h h').trans (map_mul δ ⟨a, ha⟩ ⟨b, hb⟩).symm)
-
-def zeroFamily (hc : Count) {p : ℕ} (hp : p.Prime) (h₁ : 1 < N) (hN : N.Coprime p) : SiegelFamily 0 p N where
-  X := Sp (ZP p N)
-  s := 𝟙 _
-  smooth := inferInstanceAs (SmoothOfRelativeDimension 0 (𝟙 _))
-  qc := inferInstance
-  univ := zeroSieg _ _ _
-  princ := principal_zeroSieg _
-  points := fun C O _ _ _ _ _ _ _ _ hO _ β o _ _ =>
-    have : _root_.IsReduced O := isReduced_of_injective (algebraMap O C) hO.1
-    ⟨spMap β, Category.comp_id _, siegPB_zero (isIso_sieg hc hp h₁ hN o) (isIso_unit _) _⟩
-  unram := fun _ _ x _ _ _ => eq_constPt_ZP hp (by omega) hN x
-
-end Siegel
-
-section Full
-
-variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {D : Datum H} {n N : ℕ}
-
-def inc (n : ℕ) (l : Level H) (h : l.A = N) : RZ H n N →+* KA l :=
-  (RZ H n N).subtype.codRestrict (KA l) fun x => BaseRing.RZ_le_KA l n (h ▸ x.2)
-
-theorem eq_inc {l : Level H} (h : l.A = N) {β : RZ H n N →+* KA l}
-    (hβ : IsInc (RZ H n N).subtype (KA l).val.toRingHom β) : β = inc n l h :=
-  RingHom.ext fun x => Subtype.ext (hβ x)
-
-theorem map_inc_mem {l : Level H} (h : l.A = N) (σ : KA l →+* KA l) (hσ : σ (baseKA l).ρ = (baseKA l).ρ)
-    (x : RZ H n N) : ((σ (inc n l h x) : KA l) : ℂ) ∈ RZ H n N := by
-  obtain ⟨y, hy⟩ := x
-  induction hy using Subring.closure_induction with
-  | mem y hy =>
-    rcases hy with rfl | rfl | rfl
-    · show ((σ ((1 + (baseKA l).ρ) / 2) : KA l) : ℂ) ∈ _
-      rw [map_div₀, map_add (f := _), map_one, hσ, map_ofNat]
-      exact Subring.subset_closure (Or.inl rfl)
-    · show ((σ ((n : KA l)⁻¹) : KA l) : ℂ) ∈ _
-      rw [map_inv₀, map_natCast]
-      exact Subring.subset_closure (Or.inr (Or.inl rfl))
-    · subst h
-      have : NeZero l.A := ⟨l.A_pos.ne'⟩
-      obtain ⟨i, -, hi⟩ := (baseKA l).ζ_prim.eq_pow_of_pow_eq_one (ξ := σ (baseKA l).ζ)
-        (by rw [← map_pow, (baseKA l).ζ_prim.pow_eq_one, map_one])
-      show ((σ (baseKA l).ζ : KA l) : ℂ) ∈ _
-      rw [← hi]
-      exact pow_mem (Subring.subset_closure (Or.inr (Or.inr rfl)) : zeta l.A ∈ RZ H n l.A) i
-  | zero => exact (congrArg Subtype.val (map_zero (σ.comp (inc n l h)))).symm ▸ zero_mem _
-  | one => exact (congrArg Subtype.val (map_one (σ.comp (inc n l h)))).symm ▸ one_mem _
-  | add a b ha hb h₁ h₂ =>
-    exact (congrArg Subtype.val (map_add (σ.comp (inc n l h)) ⟨a, ha⟩ ⟨b, hb⟩)).symm ▸ add_mem h₁ h₂
-  | neg a ha h₁ => exact (congrArg Subtype.val (map_neg (σ.comp (inc n l h)) ⟨a, ha⟩)).symm ▸ neg_mem h₁
-  | mul a b ha hb h₁ h₂ =>
-    exact (congrArg Subtype.val (map_mul (σ.comp (inc n l h)) ⟨a, ha⟩ ⟨b, hb⟩)).symm ▸ mul_mem h₁ h₂
-
-def restr {l : Level H} (h : l.A = N) (σ : KA l →+* KA l) (hσ : σ (baseKA l).ρ = (baseKA l).ρ) :
-    RZ H n N →+* RZ H n N :=
-  ((KA l).val.toRingHom.comp (σ.comp (inc n l h))).codRestrict _ (map_inc_mem h σ hσ)
-
-theorem restr_comp {l : Level H} (h : l.A = N) (σ τ : KA l →+* KA l) (hσ : σ (baseKA l).ρ = (baseKA l).ρ)
-    (hτ : τ (baseKA l).ρ = (baseKA l).ρ) (e : ∀ x, σ (τ x) = x) :
-    spMap (restr (n := n) h σ hσ) ≫ spMap (restr h τ hτ) = 𝟙 _ := by
-  have : (restr (n := n) h σ hσ).comp (restr h τ hτ) = RingHom.id _ :=
-    RingHom.ext fun x => Subtype.ext (congrArg (fun y : KA l => (y : ℂ)) (e (inc n l h x)))
-  rw [spMap_comp, this]
-  exact Spec.map_id _
-
-theorem isIso_top (X : Scheme.{0}) : IsIso (⊤ : X.Opens).ι := inferInstanceAs (IsIso X.topIso.hom)
-
-theorem siegel_zero (hc : Count) (hD : D.p + D.q = 0) {g p : ℕ} (hg : g = 0) (hp : p.Prime) (h₁ : 1 < N)
-    (hN : N.Coprime p) : ∃ (Ag : SiegelFamily g p N) (bas : (Fin g ⊕ Fin g → ℤ) ≃ₗ[ℤ] D.La),
-      (∀ x y, D.EF (bas x) (bas y) = omegaStd x y) ∧
-      ∀ (O : Type) [CommRing O] (z : ZP p N →+* O) (T : Scheme.{0}) (sT : T ⟶ Sp O) (tT : SAB H T)
-        (levT : D.La → (𝟙_ (Over T) ⟶ tT.G)), IsIso sT → IsIso tT.G.hom →
-        ∃ w : T ⟶ pullback Ag.s (spMap z), SiegData sT tT levT Ag z bas w ∧ IsFinite w ∧ FormallyUnramified w := by
-  subst hg
-  have := subsingleton_La hD
-  refine ⟨zeroFamily hc hp h₁ hN, LinearEquiv.ofSubsingleton _ _, fun x y => ?_, fun O _ z T sT tT levT hs ht => ?_⟩
-  · rw [omegaStd, Fin.sum_univ_zero, Subsingleton.elim (LinearEquiv.ofSubsingleton _ _ y) (0 : D.La), map_zero]
-  · have : IsIso (zeroFamily hc hp h₁ hN).s := inferInstanceAs (IsIso (𝟙 _))
-    refine ⟨sT ≫ inv (pullback.snd _ _), ⟨zeroSieg _ _ _, _, _, isGrpPullback_zero (isIso_unit T) ht _,
-      isSquare_zero ht _, (triv_trivLB _).lbIso (((triv_rig ht _).linComb _ _).linComb _ _),
-      fun _ => (sec_comm ht (zmap_w ht _) _ _).trans (Category.id_comp _), by simp,
-      siegPB_zero (isIso_unit _) (isIso_unit _) _⟩, inferInstance, inferInstance⟩
-
-theorem nonempty_top (hc : Count) (hD : D.p + D.q = 0) (Xo : ∀ l : Level H, Moduli D l) {J : ℕ} (hn : n.Prime)
-    (hJ : 1 ≤ J) : Nonempty (Top Xo n (n ^ J)) := by
-  have h₁ : 1 < n ^ J := Nat.one_lt_pow (by omega) hn.one_lt
-  have : IsDedekindDomain (RZ H n (n ^ J)) :=
-    BaseRing.isDedekindDomain_RZ (HostModel.level H (n ^ J) (by omega)) hn.pos (dvd_refl (n ^ J))
-  let Z := Sp (RZ H n (n ^ J))
-  have hz := isIso_zeroTriple (H := H) Z
-  have hab : abLocus (Inhab.zeroTriple H Z).G = Set.univ := Inhab.abLocus_eq_univ _ (Inhab.isProper_zeroTriple Z)
-  have htop := isIso_top Z
-  have hX := fun l => isIso_moduli hc hD (Xo l)
-  let m : ∀ l h, SABMap (Xo l).univ.t (Inhab.zeroTriple H Z) ((Xo l).s ≫ spMap (inc n l h)) :=
-    fun l h => (nonempty_sabMap (hX l).2 hz _).some
-  obtain ⟨mU⟩ := nonempty_sabMap (isIso_zeroTriple (H := H) (⊤ : Z.Opens).toScheme) hz (⊤ : Z.Opens).ι
-  refine ⟨{ Z := Z, s := 𝟙 _, normal := ZJ.isNormalScheme_sp _, proj := Inhab.isProjOver_id _, flat := inferInstance
-            t := Inhab.zeroTriple H Z, qproj := isQProjOver_of_isIso _ inferInstance
-            good := Inhab.good_zeroTriple Z, ga := hab ▸ Set.subset_univ _
-            a := fun l h => (Xo l).s ≫ spMap (inc n l h), m := m
-            fin := fun l h β hβ => ?_, compat := fun l l' h h' r ν k hk hr _ => ?_
-            sym := fun l h r _ _ σ hσ hr _ => ?_
-            U := ⊤, U_eq := hab.symm, MM := Z, sM := 𝟙 _, tM := Inhab.zeroTriple H Z, lev := fun _ => 1
-            MM_red := inferInstance, MM_flat := inferInstance, MM_ab := Inhab.isProper_zeroTriple Z
-            u := (⊤ : Z.Opens).ι, u_over := rfl, u_fin := inferInstance, u_surj := inferInstance
-            u_gen := ⟨⊤, fun _ _ => trivial, inferInstance⟩
-            tU := Inhab.zeroTriple H _, mU := mU, mM := mU
-            lev_eq := fun l h a' x y ha hy => ?_, sieg := fun p hp hpn => ?_ }⟩
-  · obtain rfl := eq_inc h hβ
-    have := (hX l).1
-    have := isIso_top (pullback (𝟙 Z) (spMap (inc n l h)))
-    refine ⟨⊤, (Xo l).s ≫ inv (pullback.snd _ _) ≫ inv (Scheme.Opens.ι ⊤), by rw [hab]; rfl, inferInstance,
-      inferInstance, ?_, by simp⟩
-    have e : pullback.fst (𝟙 Z) (spMap (inc n l h)) = pullback.snd _ _ ≫ spMap (inc n l h) :=
-      (Category.comp_id _).symm.trans pullback.condition
-    rw [e]
-    simp
-  · have e : r ≫ (Xo l).s ≫ spMap (inc n l h) = (Xo l').s ≫ spMap (inc n l' h') := by
-      rw [← Category.assoc, hr, Category.assoc, spMap_comp, eq_inc h' (β := k.comp (inc n l h)) fun x => hk _]
-    refine ⟨e, left_unique hz ?_⟩
-    rw [Category.assoc, (m l h).cart.1.w, (m l' h').cart.1.w, ← Category.assoc, ν.cart.1.w, Category.assoc, e]
-  · have hσ' : σ.symm (baseKA l).ρ = (baseKA l).ρ := σ.symm_apply_eq.2 hσ.symm
-    refine ⟨⟨spMap (restr h σ.toRingHom hσ), spMap (restr h σ.symm.toRingHom hσ'),
-      restr_comp h _ _ _ _ σ.apply_symm_apply, restr_comp h _ _ _ _ σ.symm_apply_apply⟩, ?_⟩
-    rw [← Category.assoc, hr, Category.assoc, Category.assoc, spMap_comp, spMap_comp]
-    rfl
-  · rw [← Category.assoc, ha]
-    exact hy.trans (sec_comm hz (m l h).cart.1.w _ _)
-  · obtain ⟨Ag, bas, e₁, e₂⟩ := siegel_zero (H := H) hc hD (g := Module.finrank ℚ E / 2 * (D.p + D.q))
-      (by rw [hD, mul_zero]) hp h₁ (((Nat.coprime_primes hn hp).2 hpn.symm).pow_left J)
-    exact ⟨Ag, bas, e₁, fun O _ _ z b _ _ _ T sT f tT ν levT hpb _ => e₂ O z T sT tT levT
-      (MorphismProperty.of_isPullback (P := MorphismProperty.isomorphisms _) hpb (inferInstanceAs (IsIso (𝟙 Z))))
-      (MorphismProperty.of_isPullback (P := MorphismProperty.isomorphisms _) ν.cart.1 hz)⟩
-
-end Full
-
-theorem main : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H), D.p + D.q = 0 → Nonempty (∀ l : Level H, Moduli D l) ∧ ∀ (Xo : ∀ l : Level H, Moduli D l) (n J : ℕ), AuxiliaryInertOddPrime H n → 1 ≤ J → Nonempty (Top Xo n (n ^ J)) :=
-  fun _ _ _ _ _ _ hD => ⟨⟨zeroModuli GlobalTheory.card_torsion_abelianVariety hD⟩, fun Xo _ _ hn hJ => nonempty_top GlobalTheory.card_torsion_abelianVariety hD Xo hn.1 hJ⟩
+theorem main : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H), D.p + D.q = 0 → Nonempty (∀ l : Level H, Moduli D l) :=
+  fun _ _ _ _ _ _ hD => ⟨zeroModuli GlobalTheory.card_torsion_abelianVariety hD⟩
 
 end GlobalTheory.Models.RankZero
 

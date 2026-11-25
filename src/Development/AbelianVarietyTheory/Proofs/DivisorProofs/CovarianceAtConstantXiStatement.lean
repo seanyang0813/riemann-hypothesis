@@ -6,7 +6,7 @@ public import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ClsAt
 public import Formalism.LocalToGlobal.IndefiniteReal.FWExist
 public import Development.AbelianVarietyTheory.Proofs.CuspFormEvaluations.EmbeddingsDifferOnInteger
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.DictionaryComponentFrameMarkingUniformisation
-public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsCcIsEquivAtSerOfOneMapRowOfCore
+public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsCcIsEquivAtSerOfOneMapRowOfFive
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsLatOfInt
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.OscillatorModelValuesFifth
 public import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsLevelOfLinearMap
@@ -80,9 +80,9 @@ theorem exists_scalar_core : ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 
   swap
   · exact ⟨1, norm_one, fun Tp tup O h1 h2 => absurd ⟨Tp, tup, O, h1, h2⟩ hex⟩
   obtain ⟨Tp₀, tup₀, O₀, hP₀, hB₀⟩ := hex
-  obtain ⟨ka₀, hn₀, hk₀⟩ := GlobalTheory.AdTh.PhaseMap.io_eq_phase_smul_ofCore D G Pl0 T0 A T R F κ v₀ hC hT hI i Tp₀ tup₀ O₀ hP₀
+  obtain ⟨ka₀, hn₀, hk₀⟩ := GlobalTheory.AdTh.PhaseMap.io_eq_phase_smul_ofFive D G Pl0 T0 A T R F κ v₀ (Core5.of_core hC) hT hI i Tp₀ tup₀ O₀ hP₀
   refine ⟨ka₀, hn₀, fun Tp tup O hP hB => ?_⟩
-  obtain ⟨ka, -, hk⟩ := GlobalTheory.AdTh.PhaseMap.io_eq_phase_smul_ofCore D G Pl0 T0 A T R F κ v₀ hC hT hI i Tp tup O hP
+  obtain ⟨ka, -, hk⟩ := GlobalTheory.AdTh.PhaseMap.io_eq_phase_smul_ofFive D G Pl0 T0 A T R F κ v₀ (Core5.of_core hC) hT hI i Tp tup O hP
   intro lt hlt u hu
   suffices h : ka = ka₀ by
     subst h
@@ -94,20 +94,20 @@ theorem exists_scalar_core : ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 
   have hne : O.io O.hw ≠ 0 := by
     intro h0
     have h1 : O.hw = 0 := hinj (h0.trans (map_zero _).symm)
-    have h2 := (GlobalTheory.AdTh.coefMap_norm_equivariant_basis_ofCore D G Pl0 T0 A T R F κ v₀ hC hT i Tp tup O hP).1
+    have h2 := (GlobalTheory.AdTh.coefMap_norm_equivariant_basis_ofFive D G Pl0 T0 A T R F κ v₀ (Core5.of_core hC) hT i Tp tup O hP).1
     rw [h1, map_zero, norm_zero] at h2
     exact zero_ne_one h2
   rw [GlobalTheory.PtId.OneScalar.coefficientMap_extremalTensor_baseChange O hw1 hB] at e1
   rw [GlobalTheory.PtId.OneScalar.coefficientMap_extremalTensor_baseChange O₀ hw2 hB₀, hio₀, GlobalTheory.PtId.OneScalar.map_pG_eq O₀.c' O.c' (inC O₀.c') (inC O.c'), ← hio, e1] at e2
   have hV := hP.lift.std
-  obtain ⟨f1, f2, f3, f4, f5⟩ := GlobalTheory.AdTh.VecFock.vec_fock_ofCore D G Pl0 T0 A T.Q.c.F R F hC i A.μ0 hV
+  obtain ⟨f1, f2, f3, f4, f5⟩ := GlobalTheory.AdTh.VecFock.vec_fock_ofFive D G Pl0 T0 A T.Q.c.F R F (Core5.of_core hC) i A.μ0 hV
   have hON : ∀ τ, IsONBasis (gramAt D (Vc D i) τ) 1 1 (Vc D i).rank := fun τ => by
     refine ⟨fun _ => 1, fun a => Or.inl ⟨rfl, a.2⟩, ?_, ?_⟩
     · simp [gramAt, hV.1]
     · simp
   have hinjP := GlobalTheory.FockVecInj.pureTensorO_injective D R.ψ R.θ (Vc D i) (Wc D i) (hC.thP.ωP i A.μ0).std hC.models.inf
     (fun _ => 1) (fun _ => 1) (cart (R.MW i (sg0 D A))) (onb (R.MW i (sg0 D A))) (fun _ => (Vc D i).rank) _ f4 f3 hON f5
-    (D.sp.V_sig _) (D.sp.W_sig _) (R.vP i A.μ0) f1 f2 (GlobalTheory.AdTh.VecNe.thetaVector_ne_zero_of_core D G Pl0 T0 A T.Q.c.F R F hC i hV)
+    (D.sp.V_sig _) (D.sp.W_sig _) (R.vP i A.μ0) f1 f2 (GlobalTheory.AdTh.VecNe.thetaVector_ne_zero_of_core_five D G Pl0 T0 A T.Q.c.F R F (Core5.of_core hC) i hV)
   have hlti : Function.Injective lt := GlobalTheory.PtId.OneScalar.lt_injective (fun ρ => hT.laws.pins.1.2.2.2 ρ) lt hlt
   refine smul_left_injective ℂ (fun h0 => hne ?_) e2
   have h1 := hinjP (h0.trans (map_zero _).symm)
@@ -121,7 +121,7 @@ theorem covAt_of_xiConst_core : ∀ (D : D7) (G : Type) [Group G] [Fintype G] (P
     t X g bas idx e k xk mk hX hp hs hi hL hxk hmk hk y₂ A₂ hA₂
   obtain ⟨hU, hW, g', e', F', ik, φ, th, hth, hD, hval⟩ := hc t
   obtain ⟨hlev, hA, -⟩ := hO.cov t
-  obtain ⟨hX₀, hon₀, -, hp₀, -, -, h1, -, hΨ₀, -⟩ := GlobalTheory.AdTh.models_at_record_ofCore D G Pl0 T0 A T R F κ v₀ hR hT i O.s0
+  obtain ⟨hX₀, hon₀, -, hp₀, -, -, h1, -, hΨ₀, -⟩ := GlobalTheory.AdTh.models_at_record_ofFive D G Pl0 T0 A T R F κ v₀ (Core5.of_core hR) hT i O.s0
     (sOv_eq _ _ _) (T.dict _ O.s0 1).1
   have hσ : GoodEmb (O.dδ t).c₂ ((inC O.c').comp ((O.dδ t).eF.symm : (O.dδ t).c₂.F →+* O.c'.F)) := rfl
   have hmod : ∀ j, IsMod (Wc D i) (rank_Wc i) ((O.U₂ t).X j) := fun j =>
@@ -153,10 +153,10 @@ theorem point_identity_core : ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0
   · exact ⟨fun _ => 1, 1, fun _ => one_ne_zero, fun Tp tup O _ hP => absurd ⟨Tp, tup, O, hP⟩ hex⟩
   obtain ⟨Tp₀, tup₀, O₀, hP₀⟩ := hex
   obtain ⟨ka, hka1, hka⟩ := exists_scalar_core D G Pl0 T0 A T R F κ v₀ hC hT hio i (c0L i)
-  obtain ⟨c₀, hc₀⟩ := GlobalTheory.AdTh.CcEx.exists_ccIs_ofCore GlobalTheory.ChartFree.chartIndep D G Pl0 T0 A T R F κ v₀ hC hT i Tp₀ tup₀ O₀ hP₀
+  obtain ⟨c₀, hc₀⟩ := GlobalTheory.AdTh.CcEx.exists_ccIs_ofFive GlobalTheory.ChartFree.chartIndep D G Pl0 T0 A T R F κ v₀ (Core5.of_core hC) hT i Tp₀ tup₀ O₀ hP₀
   have hs₀ : O₀.s0 = T.toCore.σ₀ := sOv_eq _ _ _
   obtain ⟨hemb, hiso, -⟩ := dict_cast T hT.laws _ (inR i) O₀.s0 (hs₀ ▸ T.toCore.good_σ₀) (Wc D i) O₀.hV (rank_Wc i)
-  obtain ⟨δ, hδ⟩ := GlobalTheory.AdTh.ShortSeries.thetaKO_eq_short_series_ofCore D G Pl0 T0 A _ R F hC i hP₀.lift.std _ _ (iotaW T i) hemb hiso
+  obtain ⟨δ, hδ⟩ := GlobalTheory.AdTh.ShortSeries.thetaKO_eq_short_series_ofFive D G Pl0 T0 A _ R F (Core5.of_core hC) i hP₀.lift.std _ _ (iotaW T i) hemb hiso
   refine ⟨fun q => cmpConst D ka δ (degW (T.Q.Dw ((i : ℕ) + 1)) (wtA (κ i))) * c₀ (O₀.dict q.out).1, 1, fun q => ?_, ?_⟩
   · exact mul_ne_zero (cmpConst_ne_zero (norm_ne_zero_iff.1 (hka1 ▸ one_ne_zero)) _ _)
       (norm_ne_zero_iff.1 (hc₀.1 _ ▸ one_ne_zero))
@@ -168,7 +168,7 @@ theorem point_identity_core : ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0
   have hL := hP.act.2
   have h1 : actLev (Xo := T.Q.Xo ((i : ℕ) + 1)) O.c' O.lev2 1 f = f :=
     actL_one _ _ _ hL.total hL.func hL.one hf.1
-  have h2 := exact_identity_ofCore hC hT O hP (hka Tp tup O hP hbc) hδ
+  have h2 := exact_identity_ofFive (Core5.of_core hC) hT O hP (hka Tp tup O hP hbc) hδ
     (covAt_of_xiConst_core D G Pl0 T0 A T R F κ v₀ hC hT i Tp tup O hP c0 hxi) hcst t h J' hR _ x hx₀ f hcl q.out
   rw [rdQ, h1, hA _ x hx₀, one_mul]
   exact h2.trans (congrArg (fun z => _ * z * _) (hceq q.out))

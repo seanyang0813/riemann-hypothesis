@@ -121,7 +121,7 @@ theorem fixed_at_place_of_local_alt : _root_.GlobalTheory.HeightCounting.Up.Publ
   have hTie : TieIn X.core X.R.toRealDat X.geo.κ X.geo.v₀ :=
     ⟨X.geo.fw.laws, X.geo.fw.alg_eq, X.geo.fw.kap, X.geo.fw.hv₀, X.geo.fw.chiR, X.geo.fw.x0⟩
   have hFB : FixBase X.core X.R.toRealDat j τ :=
-    GlobalTheory.T.fixes_untwistedTupleData_of_fixes_smallField _ _ _ _ _ _ hP.rayF X.core X.R X.cG S YS X.F.lv2 X.geo.κ X.geo.v₀ X.geo.fw.laws
+    _root_.GlobalTheory.FixBaseSmall.fixBase_of_fixes _ _ _ _ _ _ hP.rayF X.core X.R X.cG S YS X.F.lv2 X.geo.κ X.geo.v₀ X.geo.fw.laws
       ⟨hC.lev, hC.grp, hC.fam, hC.models, hC.chain, hC.thP⟩ ⟨X.geo.fw⟩ hTie H.field.galois
       H.field.vals H.field.ray H.field.roots j τ hτ'
   refine ⟨hFB, ?_, ?_, ?_⟩

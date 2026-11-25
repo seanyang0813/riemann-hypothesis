@@ -1,5 +1,7 @@
 module
 
+import PositivityTheory.AutomorphicForms.PublishedInputs.RealGaloisRepresentations.IwahoriSphericalTransfer.LocCompROfAdmissibleReal
+
 public import Development.AutomorphicArithmetic.AutomorphicVarieties.AutomorphicForms.NewformCoefficients.CuspCritAlt
 public import Development.AutomorphicArithmetic.AutomorphicVarieties.PublishedTheorems.GelfandKazhdanReal
 public import Development.AbelianVarietyTheory.Proofs.FoundationProofs.HasSatakeGLOfIsSatVecGL
@@ -53,69 +55,8 @@ open NumberField IsDedekindDomain Formalism.L2.Host Matrix GlobalTheory.PRep Glo
 open GlobalTheory.CuspRep (SmIrr Af locGL pLoc finGL)
 
 namespace UpperTheory.V.Af.Nf.LocalComponentIsotypic
+open GlobalTheory.RealGal.LocCompRProof (orb orb_comm orb_act annPart exists_type)
 
-section Gen
-
-variable {K V : Type} [Group K] [AddCommGroup V] [Module ℂ V]
-
-private def orb (κ : Representation ℂ K V) (x : V) : (K →₀ ℂ) →ₗ[ℂ] V := Finsupp.linearCombination ℂ fun k => κ k x
-
-private theorem orb_comm (κ : Representation ℂ K V) (T : Module.End ℂ V) (hT : ∀ k x, T (κ k x) = κ k (T x)) (x : V)
-    (c : K →₀ ℂ) : orb κ (T x) c = T (orb κ x c) := by
-  set_option synthInstance.maxHeartbeats 100000 in
-    simp only [orb, Finsupp.linearCombination_apply, Finsupp.sum, map_sum, map_smul, hT]
-
-private theorem orb_act (κ : Representation ℂ K V) (x : V) (k : K) (c : K →₀ ℂ) :
-    orb κ x (c.mapDomain (k * ·)) = κ k (orb κ x c) := by
-  induction c using Finsupp.induction_linear with
-  | zero => simp
-  | add c c' h h' => rw [Finsupp.mapDomain_add, map_add (f := _), map_add (f := _), map_add (f := _), h, h']
-  | single a b => simp [orb]
-
-private def annPart (κ : Representation ℂ K V) (φ : V) : Submodule ℂ V where
-  carrier := {x | ∀ c, orb κ φ c = 0 → orb κ x c = 0}
-  add_mem' := fun {x y} hx hy c hc => by
-    have : orb κ (x + y) c = orb κ x c + orb κ y c := by
-      simp only [orb, Finsupp.linearCombination_apply, Finsupp.sum, map_add (f := _), smul_add, Finset.sum_add_distrib]
-    rw [this, hx c hc, hy c hc, add_zero]
-  zero_mem' := fun c _ => by simp [orb, Finsupp.linearCombination_apply, Finsupp.sum]
-  smul_mem' := fun a x hx c hc => by
-    have := orb_comm κ (a • (1 : Module.End ℂ V)) (fun k x => by simp) x c
-    simpa [hx c hc] using this
-
-private theorem exists_type (κ : Representation ℂ K V) (φ : V)
-    (hφ : FiniteDimensional ℂ (Submodule.span ℂ (Set.range fun k => κ k φ))) :
-    ∃ (d : ℕ) (ξ : K →* Matrix (Fin d) (Fin d) ℂ), ∀ x ∈ annPart κ φ, ∃ f : (Fin d → ℂ) →ₗ[ℂ] V,
-      (∀ k v, f (ξ k *ᵥ v) = κ k (f v)) ∧ x ∈ LinearMap.range f ∧ ∀ v, ∃ c, f v = orb κ x c := by
-  have hO : ∀ k, ∀ y ∈ LinearMap.range (orb κ φ), κ k y ∈ LinearMap.range (orb κ φ) := by
-    rintro k _ ⟨c, rfl⟩
-    exact ⟨_, orb_act κ φ k c⟩
-  haveI : FiniteDimensional ℂ (LinearMap.range (orb κ φ)) := by
-    rw [orb, Finsupp.range_linearCombination]; exact hφ
-  let b := Module.finBasis ℂ (LinearMap.range (orb κ φ))
-  obtain ⟨s, hs⟩ := (orb κ φ).rangeRestrict.exists_rightInverse_of_surjective (LinearMap.range_rangeRestrict _)
-  refine ⟨_, (LinearMap.toMatrixAlgEquiv b).toMonoidHom.comp (sub κ _ hO), fun x hx => ?_⟩
-  have key : ∀ c, orb κ x (s ((orb κ φ).rangeRestrict c)) = orb κ x c := fun c => by
-    rw [← sub_eq_zero, ← map_sub]
-    refine hx _ ?_
-    rw [map_sub, sub_eq_zero]
-    exact congrArg Subtype.val (LinearMap.congr_fun hs ((orb κ φ).rangeRestrict c))
-  refine ⟨orb κ x ∘ₗ s ∘ₗ b.equivFun.symm.toLinearMap, fun k v => ?_,
-    ⟨b.equivFun ((orb κ φ).rangeRestrict (Finsupp.single 1 1)), ?_⟩, fun v => ⟨_, rfl⟩⟩
-  · obtain ⟨y, rfl⟩ := b.equivFun.surjective v
-    obtain ⟨c, rfl⟩ := (orb κ φ).surjective_rangeRestrict y
-    have h1 : (LinearMap.toMatrixAlgEquiv b).toMonoidHom.comp (sub κ _ hO) k *ᵥ b.equivFun ((orb κ φ).rangeRestrict c) =
-        b.equivFun ((orb κ φ).rangeRestrict (c.mapDomain (k * ·))) := by
-      have h2 : (orb κ φ).rangeRestrict (c.mapDomain (k * ·)) = sub κ _ hO k ((orb κ φ).rangeRestrict c) :=
-        Subtype.ext (orb_act κ φ k c)
-      rw [h2]
-      exact LinearMap.toMatrix_mulVec_repr b b _ _
-    rw [h1]
-    simp only [LinearMap.comp_apply, LinearEquiv.coe_coe, LinearEquiv.symm_apply_apply, key, orb_act]
-  · simp only [LinearMap.comp_apply, LinearEquiv.coe_coe, LinearEquiv.symm_apply_apply, key]
-    simp [orb]
-
-end Gen
 
 variable {F : Type} [Field F] [NumberField F] [IsTotallyReal F] {n : ℕ}
 

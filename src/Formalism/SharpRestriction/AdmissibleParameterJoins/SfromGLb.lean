@@ -11,8 +11,6 @@ namespace Formalism.MainNotions.J
 
 open NumberField Formalism.HermitianLatticesTheory Formalism.BasicNotions
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem stdForm_apply (K : Type) [Field K] [StarRing K] (M : ℕ) (x y : Fin M → K) :
     StandardLattice.stdForm K M x y = ∑ i, star (x i) * y i := rfl
 

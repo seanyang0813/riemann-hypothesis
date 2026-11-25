@@ -1162,7 +1162,7 @@ theorem padic_root_one {l : ℕ} [Fact l.Prime] (hl : l ≠ 2) (x : ℤ_[l]) (hx
 
 theorem invariant_basis : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL), let W := (HW l).W K s LL h; let _E := ((F l).E K s LL h).tie; ∀ T : Lt K LL, IsCrys ((D.loc l).PD K) T.ρ → W.s = 1 → l ≠ 2 → ∀ (e s' : ℕ) (π' : AA K LL) (E' : Let K → Polynomial ↥(OL LL)), 0 < s' → wachRingRelations W e s' π' E' → wachModuleOverLetters W T π' := by
   intro D HW F l _ K s LL h W _E T hT _ hl e s' π' E' hs h9
-  obtain ⟨b₀⟩ := N_basis D HW F l K s LL h T hT
+  obtain ⟨b₀⟩ := N_basis D.loc D.locA HW F l K s LL h T hT
   obtain ⟨χ, hχ, -⟩ := GlobalTheory.NL.CycRing.rings_cyclotomic D HW l K s LL h
   have hnd : ¬ l ∣ W.DelF.card := by
     refine not_dvd_card W l fun g hg => W.χΓ_inj ?_

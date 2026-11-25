@@ -71,8 +71,4 @@ def colon {ι κ : Type} [Fintype ι] (G : Matrix κ ι K⟦X⟧) : Ideal O⟦X�
       exact mul_mem (map_mem_A c) (hm j)
     · rw [smul_eq_mul, map_mul, mul_smul, h, Matrix.mulVec_smul]
 
-theorem mem_colon {ι κ : Type} [Fintype ι] {G : Matrix κ ι K⟦X⟧} {α : O⟦X⟧} :
-    α ∈ colon O K G ↔ ∀ w : κ → K⟦X⟧, (∀ i, w i ∈ A O K) →
-      ∃ m : ι → K⟦X⟧, (∀ j, m j ∈ A O K) ∧ PowerSeries.map (algebraMap O K) α • w = G *ᵥ m := Iff.rfl
-
 end GlobalTheory.LiftCoker

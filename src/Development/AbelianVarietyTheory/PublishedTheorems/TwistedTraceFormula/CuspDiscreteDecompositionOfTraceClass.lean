@@ -176,10 +176,6 @@ theorem isTraceClass_of_isHilbertSchmidt (hDM : Published.DixmierMalliavinFactor
     have c := continuous_of_mem_ccAd hg
     exact ⟨Submodule.smul_mem _ a hg, by rw [RcuspOp, hu.repOp_smul c.1 c.2 a]; exact t.smul a⟩
 
-theorem multIn_L2cusp_lt (h : IsDiscreteSum (Rcusp V μ)) {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
-    {π : GA D V →* (H →L[ℂ] H)} (hπ : IsIrrUnitary π) : multIn π (RG V μ) (L2cusp V μ) < Cardinal.aleph0 :=
-  multIn_rep (π := π) (isSubrep_L2cusp V μ) ▸ h.2 ⟨H, π, hπ⟩
-
 theorem traceIsDiagonal (hP : Published.CuspTraceClass) {f : GA D V → ℂ} (hf : f ∈ CcGA V)
     (h : IndefiniteRowSideFullHecke.TraceKernelDecomposition.MapsIntoCusp V μ (starFn f)) :
     IndefiniteRowSideFullHecke.TraceKernelDecomposition.TraceIsDiagonal (ν := autMeasure V μ) (RopG V μ f) (kernelQ (GQ V) f) :=

@@ -113,8 +113,22 @@ theorem map_one_apply {A B n : Type} [CommRing A] [CommRing B] [DecidableEq n] (
 
 theorem suppF_iff_fin (V : HSp D) (f : Formalism.L2.Theta.AE D) {g : Formalism.L2.Theta.GA D V} (hg : g ∈ GfC V) :
     SuppF V f g ↔ finPart D f • (finMat D.sp.cm.sig V.gram g - 1) = finMat D.sp.cm.sig V.gram g - 1 := by
-  intros
-  apply _root_.GlobalTheory.FinAdIdent.suppF_iff <;> assumption
+  have h0 : (Formalism.L2.Theta.mt V g).map (infPart D) = 1 := congrArg Units.val (MonoidHom.mem_ker.1 hg)
+  have hi : ∀ i j, infPart D ((Formalism.L2.Theta.mt V g - 1) i j) = 0 := fun i j => by
+    rw [Matrix.sub_apply, map_sub, map_one_apply, ← h0, Matrix.map_apply, sub_self]
+  have hf : ∀ i j, finPart D ((Formalism.L2.Theta.mt V g - 1) i j) =
+      (finMat D.sp.cm.sig V.gram g - 1) i j := fun i j => by
+    rw [Matrix.sub_apply, map_sub, map_one_apply]
+    rfl
+  constructor
+  · intro h
+    refine Matrix.ext fun i j => ?_
+    rw [Matrix.smul_apply, smul_eq_mul, ← hf, ← map_mul, h i j]
+  · intro h i j
+    refine parts_ext ?_ ?_
+    · rw [map_mul, hi, mul_zero]
+    · rw [map_mul, hf]
+      exact congrFun (congrFun h i) j
 
 theorem comp_of_isPrimeIdem {P : HeightOneSpectrum (𝓞 D.host.E)} {e f : Formalism.L2.Theta.AE D} (h : IsPrimeIdem P e f)
     (Q : HeightOneSpectrum (𝓞 D.host.E)) :

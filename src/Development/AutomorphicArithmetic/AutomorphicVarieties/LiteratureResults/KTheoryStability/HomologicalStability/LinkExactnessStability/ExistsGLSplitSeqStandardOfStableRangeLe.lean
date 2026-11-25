@@ -86,13 +86,6 @@ theorem vecMul_tv_inv (a b : m → R) (h : b ⬝ᵥ a = 0) (f : m → R) :
   change f ᵥ* (1 - vecMulVec a b) = _
   rw [vecMul_sub, vecMul_one, vecMul_vecMulVec]
 
-theorem reach_trans {v w u : m → R} (h1 : ∃ g : GL m R, (g : Matrix m m R) *ᵥ v = w)
-    (h2 : ∃ g : GL m R, (g : Matrix m m R) *ᵥ w = u) : ∃ g : GL m R, (g : Matrix m m R) *ᵥ v = u := by
-  obtain ⟨g1, hg1⟩ := h1
-  obtain ⟨g2, hg2⟩ := h2
-  refine ⟨g2 * g1, ?_⟩
-  rw [Units.val_mul, ← mulVec_mulVec, hg1, hg2]
-
 variable {n : ℕ}
 
 theorem reach_of_last_one (u : Fin (n + 1) → R) (hu : u (Fin.last n) = 1) :

@@ -66,42 +66,7 @@ section Pointwise
 variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℂ V]
 variable {ι κ : Type*} [Fintype ι] [Fintype κ]
 
-theorem norm_sq_le_sum_mul {E : Type*} [SeminormedAddCommGroup E] [NormedSpace ℂ E]
-    (b : OrthonormalBasis ι ℂ V) (l : V →ₗ[ℂ] E) (f : V) :
-    ‖l f‖ ^ 2 ≤ (∑ i, ‖l (b i)‖ ^ 2) * ‖f‖ ^ 2 := by
-  have h1 : l f = ∑ i, ⟪b i, f⟫_ℂ • l (b i) := by
-    conv_lhs => rw [← b.sum_repr' f]
-
-    simp [map_sum, map_smul]
-  have h2 : ‖l f‖ ≤ ∑ i, ‖l (b i)‖ * ‖⟪b i, f⟫_ℂ‖ := by
-    rw [h1]
-    refine (norm_sum_le _ _).trans (le_of_eq ?_)
-    refine Finset.sum_congr rfl fun i _ => ?_
-    rw [norm_smul, mul_comm]
-  have h3 : ∑ i, ‖⟪b i, f⟫_ℂ‖ ^ 2 = ‖f‖ ^ 2 := b.sum_sq_norm_inner_right f
-  calc ‖l f‖ ^ 2 ≤ (∑ i, ‖l (b i)‖ * ‖⟪b i, f⟫_ℂ‖) ^ 2 := by gcongr
-    _ ≤ (∑ i, ‖l (b i)‖ ^ 2) * ∑ i, ‖⟪b i, f⟫_ℂ‖ ^ 2 := Finset.sum_mul_sq_le_sq_mul_sq _ _ _
-    _ = _ := by rw [h3]
-
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-
-theorem sum_norm_sq_eq (b : OrthonormalBasis ι ℂ V) (c : OrthonormalBasis κ ℂ V)
-    (l : V →ₗ[ℂ] E) : ∑ i, ‖l (b i)‖ ^ 2 = ∑ j, ‖l (c j)‖ ^ 2 := by
-  have key : ∑ i, ⟪l (b i), l (b i)⟫_ℂ = ∑ j, ⟪l (c j), l (c j)⟫_ℂ := by
-    have hb : ∀ i, ⟪l (b i), l (b i)⟫_ℂ = ∑ j, ⟪b i, c j⟫_ℂ * ⟪l (c j), l (b i)⟫_ℂ := by
-      intro i
-      conv_lhs => enter [2]; rw [← c.sum_repr' (b i)]
-
-      simp [map_sum, map_smul, mul_comm]
-    have hc : ∀ j, ⟪l (c j), l (c j)⟫_ℂ = ∑ i, ⟪b i, c j⟫_ℂ * ⟪l (c j), l (b i)⟫_ℂ := by
-      intro j
-      conv_lhs => enter [3]; rw [← b.sum_repr' (c j)]
-
-      simp [map_sum, map_smul]
-    simp_rw [hb, hc]
-    exact Finset.sum_comm
-  simp_rw [inner_self_eq_norm_sq_to_K] at key
-  exact_mod_cast key
 
 theorem sum_norm_sq_eq_adjoint [FiniteDimensional ℂ V] [FiniteDimensional ℂ E]
     (b : OrthonormalBasis ι ℂ V) (e : OrthonormalBasis κ ℂ E) (l : V →ₗ[ℂ] E) :
@@ -190,25 +155,6 @@ theorem finite_and_finrank_le' [IsFiniteMeasure μ]
     exact Module.rank_lt_aleph0_iff.1 (hrank.trans_lt Cardinal.natCast_lt_aleph0)
   exact ⟨hfin, finrank_le_of_finite' hr l hint hnorm hC h⟩
 
-theorem sum_eq_finrank_of_homogeneous' [IsProbabilityMeasure μ] {ι : Type*} [Fintype ι]
-    (l : ∀ x, V →ₗ[ℂ] E x) (hint : ∀ f, Integrable (fun x => ‖l x f‖ ^ 2) μ)
-    (hnorm : ∀ f, ‖f‖ ^ 2 = ∫ x, ‖l x f‖ ^ 2 ∂μ)
-    (hhom : ∀ x y, ∃ u : V →ₗ[ℂ] V, (∀ f, ‖u f‖ = ‖f‖) ∧ ∀ f, ‖l y (u f)‖ = ‖l x f‖)
-    (b : OrthonormalBasis ι ℂ V) (x : X) :
-    ∑ i, ‖l x (b i)‖ ^ 2 = finrank ℂ V := by
-  haveI : FiniteDimensional ℂ V := Module.Finite.of_basis b.toBasis
-  have hconst : ∀ y, ∑ i, ‖l y (b i)‖ ^ 2 = ∑ i, ‖l x (b i)‖ ^ 2 := by
-    intro y
-    obtain ⟨u, hu, hl⟩ := hhom x y
-    let u' : V ≃ₗᵢ[ℂ] V := (⟨u, hu⟩ : V →ₗᵢ[ℂ] V).toLinearIsometryEquiv rfl
-    rw [sum_norm_sq_eq b (b.map u') (l y)]
-    refine Finset.sum_congr rfl fun i _ => ?_
-    rw [← hl]
-    rfl
-  rw [← integral_sum_eq_finrank' l hint hnorm b]
-  simp_rw [hconst]
-  simp
-
 end Hilbert
 
 section Plain
@@ -270,27 +216,6 @@ theorem l2_inner_product_norm_sq_eq_integral (l : ∀ x, V →ₗ[ℂ] E x)
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 
-theorem exists_orthonormal_basis [FiniteDimensional ℂ V] (l : ∀ x, V →ₗ[ℂ] E x)
-    (hint : ∀ f, Integrable (fun x => ‖l x f‖ ^ 2) μ)
-    (hpos : ∀ f, ∫ x, ‖l x f‖ ^ 2 ∂μ = 0 → f = 0) :
-    ∃ b : Basis (Fin (finrank ℂ V)) ℂ V,
-      ∀ i j, ∫ x, ⟪l x (b i), l x (b j)⟫_ℂ ∂μ = if i = j then 1 else 0 := by
-  letI := (l2InnerCore μ l hint hpos).toNormedAddCommGroup
-  letI : InnerProductSpace ℂ V := InnerProductSpace.ofCore (l2InnerCore μ l hint hpos).toCore
-  exact ⟨(stdOrthonormalBasis ℂ V).toBasis,
-    orthonormal_iff_ite.1 (stdOrthonormalBasis ℂ V).orthonormal⟩
-
-theorem norm_sq_le_bergman_mul (l : ∀ x, V →ₗ[ℂ] E x)
-    (hint : ∀ f, Integrable (fun x => ‖l x f‖ ^ 2) μ)
-    (hpos : ∀ f, ∫ x, ‖l x f‖ ^ 2 ∂μ = 0 → f = 0) (b : Basis ι ℂ V)
-    (hb : ∀ i j, ∫ x, ⟪l x (b i), l x (b j)⟫_ℂ ∂μ = if i = j then 1 else 0) (f : V) (x : X) :
-    ‖l x f‖ ^ 2 ≤ (∑ i, ‖l x (b i)‖ ^ 2) * ∫ y, ‖l y f‖ ^ 2 ∂μ := by
-  letI := (l2InnerCore μ l hint hpos).toNormedAddCommGroup
-  letI : InnerProductSpace ℂ V := InnerProductSpace.ofCore (l2InnerCore μ l hint hpos).toCore
-  have := norm_sq_le_sum_mul (b.toOrthonormalBasis (orthonormal_iff_ite.2 hb)) (l x) f
-  rw [l2_inner_product_norm_sq_eq_integral l hint hpos f] at this
-  simpa using this
-
 theorem finite_and_finrank_le_mul [IsFiniteMeasure μ]
     [∀ x, FiniteDimensional ℂ (E x)] {r : ℕ} (hr : ∀ x, finrank ℂ (E x) ≤ r)
     (l : ∀ x, V →ₗ[ℂ] E x) (hmeas : ∀ f, AEStronglyMeasurable (fun x => ‖l x f‖) μ)
@@ -323,33 +248,6 @@ section Transitive
 variable {G : Type*} [Group G] [MulAction G X] [MulAction.IsPretransitive G X]
   [MeasurableConstSMul G X] [SMulInvariantMeasure G X μ] [IsProbabilityMeasure μ]
 
-theorem bergman_eq_finrank_of_transitive (l : ∀ x, V →ₗ[ℂ] E x)
-    (hint : ∀ f, Integrable (fun x => ‖l x f‖ ^ 2) μ)
-    (hpos : ∀ f, ∫ x, ‖l x f‖ ^ 2 ∂μ = 0 → f = 0)
-    (ρ : G → V →ₗ[ℂ] V) (hρ : ∀ g x f, ‖l (g • x) (ρ g f)‖ = ‖l x f‖) (b : Basis ι ℂ V)
-    (hb : ∀ i j, ∫ x, ⟪l x (b i), l x (b j)⟫_ℂ ∂μ = if i = j then 1 else 0) (x : X) :
-    ∑ i, ‖l x (b i)‖ ^ 2 = finrank ℂ V := by
-  letI := (l2InnerCore μ l hint hpos).toNormedAddCommGroup
-  letI : InnerProductSpace ℂ V := InnerProductSpace.ofCore (l2InnerCore μ l hint hpos).toCore
-  have := sum_eq_finrank_of_homogeneous' l hint (l2_inner_product_norm_sq_eq_integral l hint hpos) ?_
-    (b.toOrthonormalBasis (orthonormal_iff_ite.2 hb)) x
-  · simpa using this
-  intro x y
-  obtain ⟨g, rfl⟩ := MulAction.exists_smul_eq G x y
-  refine ⟨ρ g, fun f => ?_, hρ g x⟩
-  rw [← pow_left_inj₀ (norm_nonneg _) (norm_nonneg _) two_ne_zero, l2_inner_product_norm_sq_eq_integral l hint hpos,
-    l2_inner_product_norm_sq_eq_integral l hint hpos, ← integral_smul_eq_self (μ := μ) _ (g := g)]
-  simp_rw [hρ]
-
-theorem norm_sq_le_finrank_mul [FiniteDimensional ℂ V] (l : ∀ x, V →ₗ[ℂ] E x)
-    (hint : ∀ f, Integrable (fun x => ‖l x f‖ ^ 2) μ)
-    (hpos : ∀ f, ∫ x, ‖l x f‖ ^ 2 ∂μ = 0 → f = 0)
-    (ρ : G → V →ₗ[ℂ] V) (hρ : ∀ g x f, ‖l (g • x) (ρ g f)‖ = ‖l x f‖) (f : V) (x : X) :
-    ‖l x f‖ ^ 2 ≤ finrank ℂ V * ∫ y, ‖l y f‖ ^ 2 ∂μ := by
-  obtain ⟨b, hb⟩ := exists_orthonormal_basis l hint hpos
-  rw [← bergman_eq_finrank_of_transitive l hint hpos ρ hρ b hb x]
-  exact norm_sq_le_bergman_mul l hint hpos b hb f x
-
 end Transitive
 
 end Plain
@@ -377,21 +275,6 @@ section Functions
 variable {X : Type*} [MeasurableSpace X] {μ : Measure X}
 
 variable [IsProbabilityMeasure μ]
-
-theorem norm_sq_le_finrank_mul_fun {G : Type*} [Group G] [MulAction G X]
-    [MulAction.IsPretransitive G X] [MeasurableConstSMul G X] [SMulInvariantMeasure G X μ]
-    (V : Submodule ℂ (X → ℂ)) [FiniteDimensional ℂ V]
-    (hint : ∀ f ∈ V, Integrable (fun x => ‖f x‖ ^ 2) μ)
-    (hpos : ∀ f ∈ V, ∫ x, ‖f x‖ ^ 2 ∂μ = 0 → f = 0)
-    (hG : ∀ g : G, ∀ f ∈ V, (fun x => f (g • x)) ∈ V) {f : X → ℂ} (hf : f ∈ V) (x : X) :
-    ‖f x‖ ^ 2 ≤ finrank ℂ V * ∫ y, ‖f y‖ ^ 2 ∂μ :=
-  norm_sq_le_finrank_mul (E := fun _ => ℂ) (G := G)
-    (fun x => (LinearMap.proj x).comp V.subtype) (fun f => hint f f.2)
-    (fun f hf => Subtype.ext (hpos f f.2 hf))
-    (fun g => (LinearMap.funLeft ℂ ℂ fun x => g⁻¹ • x).restrict fun f hf => hG g⁻¹ f hf)
-    (fun g x f => by
-      change ‖(f : X → ℂ) (g⁻¹ • g • x)‖ = ‖(f : X → ℂ) x‖
-      rw [inv_smul_smul]) ⟨f, hf⟩ x
 
 end Functions
 

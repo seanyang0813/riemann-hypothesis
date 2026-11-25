@@ -509,14 +509,6 @@ theorem Wx_mul (x : HomE X.E a b) (c : ℂ) (F : VCx X.Tau a b → ℂ) (z : VCx
     Wx A x (fun z => c * F z) z = c * Wx A x F z := by
   simp only [Wx, opU]; ring
 
-theorem Wx_add {x y : HomE X.E a b} (h : ∃ n : ℤ, coc A x y = n) (F : VCx X.Tau a b → ℂ) :
-    Wx A x (Wx A y F) = Wx A (x + y) F := by
-  obtain ⟨n, hn⟩ := h
-  rw [(_root_.GlobalTheory.MomT.Heis.calculus X A a b).1, hn]
-  have : Complex.exp (-(2 * (Real.pi : ℂ)) * Complex.I * (((n : ℝ)) : ℂ)) = 1 :=
-    Complex.exp_eq_one_iff.2 ⟨-n, by push_cast; ring⟩
-  rw [this]; simp
-
 theorem charsum (e : VCx X.Tau a b → ℂ) (M B Z C B' : AddSubgroup (HomE X.E a b)) [DecidablePred (· ∈ B')]
     (hfix : ∀ y ∈ M, Wx A y e = e)
     (hCM : C ≤ M) (hCZ : ∀ j ∈ C, j ∈ Z → j ∈ B) (hB : ∀ x ∈ B, ∀ y ∈ B, ∃ n : ℤ, imH A x y = n)
@@ -559,12 +551,6 @@ theorem prodsum (e e'' : VCx X.Tau a b → ℂ) (c : ℂ) (M B' B₁ B₂ : AddS
   rw [← Wx_mul, ← funext he, Wx_sum']
   refine Finset.sum_congr rfl fun y₁ h₁ => ?_
   rw [_root_.GlobalTheory.MomT.ThShape.Wx_mul A (hB _ (l2 (hR₂.1 _ h₂)) _ (l1 (hR₁.1 _ h₁))), add_comm]
-
-theorem coc_nsmul (n : ℕ) (x y : HomE X.E a b) : coc A ((n : X.E) • x) y = n * coc A x y := by
-  have h4 := (_root_.GlobalTheory.MomT.Heis.calculus X A a b).2.2.2.1
-  induction n with
-  | zero => have := (h4 0 0 y).1; simp only [add_zero] at this; simp only [Nat.cast_zero, zero_smul]; linarith
-  | succ n ih => rw [Nat.cast_succ, add_smul, one_smul, (h4 _ _ _).1, ih]; push_cast; ring
 
 end An
 

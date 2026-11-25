@@ -56,15 +56,7 @@ theorem sub_mul_choose_le_mul_choose (T D : ℕ) (hT : D * (2 * D + 7) ≤ T) :
     have key : ((T : ℝ) - ((k : ℝ) + 1) * (2 * D + 7)) *
         (((T + 2 * D + 6).choose (k + 1) : ℕ) : ℝ) * ((k : ℝ) + 1) ≤
         (T : ℝ) * (((T - 1).choose (k + 1) : ℕ) : ℝ) * ((k : ℝ) + 1) := by
-      have e1 : ((T : ℝ) - ((k : ℝ) + 1) * (2 * D + 7)) *
-          (((T + 2 * D + 6).choose (k + 1) : ℕ) : ℝ) * ((k : ℝ) + 1) =
-          ((T : ℝ) - ((k : ℝ) + 1) * (2 * D + 7)) *
-          ((((T + 2 * D + 6).choose k : ℕ) : ℝ) * ((T : ℝ) + 2 * D + 6 - k)) := by
-        linear_combination ((T : ℝ) - ((k : ℝ) + 1) * (2 * D + 7)) * hA
-      have e2 : (T : ℝ) * (((T - 1).choose (k + 1) : ℕ) : ℝ) * ((k : ℝ) + 1) =
-          (T : ℝ) * ((((T - 1).choose k : ℕ) : ℝ) * ((T : ℝ) - 1 - k)) := by
-        linear_combination (T : ℝ) * hB
-      rw [e1, e2]
+      rw [mul_assoc, hA, mul_assoc, hB]
       nlinarith [P, Q]
     push_cast
     exact le_of_mul_le_mul_right key hk1

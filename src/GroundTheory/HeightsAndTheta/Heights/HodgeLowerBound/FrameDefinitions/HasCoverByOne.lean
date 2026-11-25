@@ -76,11 +76,6 @@ instance instFintypeιY : ∀ k, Fintype (Pl.ιY k)
 
 abbrev ΩY (_Pl : PlueckerData D) : Type := FractionRing (MvPolynomial (Ψ × Fin D.N × Fin D.N) Ω)
 
-def ofΩ (x : Ω) : Pl.ΩY := algebraMap (MvPolynomial (Ψ × Fin D.N × Fin D.N) Ω) Pl.ΩY (C x)
-
-def gvar (τ : Ψ) (a b : Fin D.N) : Pl.ΩY :=
-  algebraMap (MvPolynomial (Ψ × Fin D.N × Fin D.N) Ω) Pl.ΩY (X (τ, a, b))
-
 
 abbrev Incr (s N : ℕ) : Type := {A : Fin s → Fin N // StrictMono A}
 

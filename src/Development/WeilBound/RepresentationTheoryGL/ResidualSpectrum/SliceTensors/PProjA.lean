@@ -58,11 +58,6 @@ theorem mulChi_absC_neg (n : ℕ) (z : ℂ) (φ : Sm E n) :
   rw [mulChi_apply, mulChi_apply, ExponentTwist.chiDet_absC_val, ExponentTwist.chiDet_absC_val, mul_assoc, ← Complex.exp_add]
   simp
 
-theorem mulChi_absC_neg' (n : ℕ) (z : ℂ) (φ : Sm E n) :
-    mulChi n (Model.absC E z) (mulChi n (Model.absC E (-z)) φ) = φ := by
-  have h := mulChi_absC_neg n (-z) φ
-  rwa [neg_neg] at h
-
 theorem isStable_tw {n : ℕ} {U : Submodule ℂ (Sm E n)} (hU : _root_.GlobalTheory.CuspRep.IsStable U) (z : ℂ) : _root_.GlobalTheory.CuspRep.IsStable (tw U z) := by
   rintro o _ ⟨φ, hφ, rfl⟩
   exact ⟨_, add_mem (U.smul_mem _ (hU o φ hφ)) (U.smul_mem _ hφ), (act_mulChi _ o φ).symm⟩

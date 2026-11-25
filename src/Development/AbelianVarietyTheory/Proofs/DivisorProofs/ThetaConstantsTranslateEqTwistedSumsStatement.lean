@@ -525,7 +525,7 @@ theorem twist_resid : ∀ (I : Type) (X₁ : GlobalTheory.GSep.GSet) (z₁ : X�
     intro a mu h
     by_cases h0 : mu = 0
     · subst h0
-      have ha : a ∈ X₁.S.HH X₁.M z₁ := (GlobalTheory.T.mem_dividingLabels_iff_class_zero I X₁ z₁ act x₀ hx₀ V ev Y t δ 𝔪 a).2 h
+      have ha : a ∈ X₁.S.HH X₁.M z₁ := (_root_.GlobalTheory.GSep.mem_HH_iff_yy_zero I X₁ z₁ act x₀ hx₀ V ev Y t δ 𝔪 a).2 h
       have h1 : eStd X₁.S.g _ τ a = 0 := hτ a ha
       simp only [wt', if_pos rfl, h1, smul_zero]
     · simp only [wt', if_neg h0]

@@ -88,9 +88,6 @@ structure AdInW (ι : Qbar l ≃+* ℂ) (M m : ℕ) (r : G L Ω →* GL (Fin 2) 
       ∀ s : ↥(Dec (F := L) A), (s : G L Ω) ∈ Ine (F := L) A →
         κ 0 s ^ k = (cycBar L Ω l s ^ (b + m)) ^ k ∧ κ 1 s ^ k = (cycBar L Ω l s ^ b) ^ k
 
-theorem AdInW.toIn {ι : Qbar l ≃+* ℂ} {M m : ℕ} {r : G L Ω →* GL (Fin 2) (Qbar l)} (h : AdInW ι M m r) : AdIn ι M m r :=
-  ⟨h.cont, Birth.mkCsdW h.aut fun _ => h.wit, h.irr, h.gap, h.unr, h.away, h.above⟩
-
 structure GalT {n : ℕ} (ι : Qbar l ≃+* ℂ) (σ : Submodule ℂ (UA L n → ℂ)) (r : G L Ω →* GL (Fin n) (Qbar l)) : Prop where
   cont : Continuous r
   comp : ∀ w, IsSplitAt w → ∃ τ, Comp σ w τ

@@ -13,8 +13,6 @@ namespace PI.NormRepChange
 
 open NumberField Formalism.BasicNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat Formalism.L2.SG.TermDef PI.PairValDefs
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 variable (D : D7) (u u' : D.what₂.Word)
 
 def NormRepMove : Prop :=

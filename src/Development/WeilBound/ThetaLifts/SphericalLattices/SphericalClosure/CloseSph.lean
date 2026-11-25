@@ -65,7 +65,6 @@ public import Development.WeilBound.CoreStatements.GaussianSeminormBounds.RealSe
 public import Development.WeilBound.CoreStatements.GaussianSeminormBounds.RealSeminormFiltration.KRealAsm
 public import Development.WeilBound.CoreStatements.GaussianSeminormBounds.RealSeminormFiltration.RLLieH
 public import Development.WeilBound.CoreStatements.LocalThetaKernels.Locpair
-public import Development.WeilBound.CoreStatements.LocalThetaKernels.LocpairU
 public import Development.WeilBound.CoreStatements.LocallyConstantCoinvariants.PfDictSec
 public import Development.WeilBound.ThetaLifts.AgreeOfLeaves
 public import Development.WeilBound.ThetaLifts.CartanFactorisation.ArchimedeanEvaluationVector
@@ -1715,7 +1714,6 @@ theorem PositivityTheory.Sph.Tr.closeSph
   have h_GlobalTheory_ThK_CTSmallCone : GlobalTheory.ThK.CTSmallCone := (PositivityTheory.ThKCT.ct_all h_Weil6_ThKCT_Ext).2.2.2.2.2
   have h_Weil6_ThKF_ILeft : PositivityTheory.ThKF.ILeft := (PositivityTheory.ThKF.iLeft h_GlobalTheory_ThK_ThetaBasic)
   have h_GlobalTheory_ThK_AnAll : GlobalTheory.ThK.AnAll := (PositivityTheory.ThKF.anAll_of h_GlobalTheory_ThK_WeilConv h_GlobalTheory_ThK_KCoinv h_Weil6_ThKF_ILeft)
-  have h_Weil6_ThKF_LocUPairEx : PositivityTheory.ThKF.LocUPairEx := (PositivityTheory.ThKH.Locpair.locUPairEx)
   have h_Weil6_ThKF_MaxFin : PositivityTheory.HoweDualityUnitaryAlt.MaxFinT := PositivityTheory.Sph.maxFinT_of hSph
   have h_Weil6_ThKF_ArchOp : PositivityTheory.ThKF.ArchOp := (PositivityTheory.ThKF.A.archOp)
   have h_Weil6_ThKF_ArchUniq : PositivityTheory.ThKF.ArchUniq := (PositivityTheory.ThKF.A.archUniq)

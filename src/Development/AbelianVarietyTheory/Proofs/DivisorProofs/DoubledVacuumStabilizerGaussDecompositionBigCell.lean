@@ -116,8 +116,6 @@ end Blocks
 
 section Elt
 
-attribute [-instance] CStarMatrix.instHMulOfFintypeOfMulOfAddCommMonoid
-
 theorem fromBlocks_mul_fromRows' {d : ℕ} (A B C D X Y : Matrix (Fin d) (Fin d) (AE F E)) :
     Matrix.fromBlocks A B C D * Matrix.fromRows X Y = Matrix.fromRows (A * X + B * Y) (C * X + D * Y) := by
   ext (i | i) j <;> simp [Matrix.mul_apply, Fintype.sum_sum_type, Matrix.fromRows_apply_inl, Matrix.fromRows_apply_inr, Matrix.add_apply]
@@ -177,8 +175,6 @@ theorem nbU_mem_PAnti (Z : Matrix (Fin d) (Fin d) (AE F E))
 end Elt
 
 section Main
-
-attribute [-instance] CStarMatrix.instHMulOfFintypeOfMulOfAddCommMonoid
 
 theorem invOf_two_smul_add_self {M : Type} [AddCommGroup M] [Module (AF F) M] (x : M) :
     ⅟(2 : AF F) • x + ⅟(2 : AF F) • x = x := by

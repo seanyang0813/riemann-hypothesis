@@ -444,31 +444,6 @@ theorem exists_idem_seq {O : Type} [CommRing O] (l ε : O) (hε : ∃ y, ε * ε
       exact ⟨y + l ^ n * z, by linear_combination hy + hz⟩
 
 
-open ReciprocityTheory.ChartRestriction.G.Geo.Tor ReciprocityTheory.ChartRestriction.G.Geo.Tor.Germ Formalism.MainNotions.ModuliIntegralCharts.H1.LinEig in
-theorem exists_linHom {C : Type} [Field C] {O : Type} [CommRing O] {dd : ℕ} (G : FGLaw C dd) (A : OAct O G) :
-    ∃ ρ : O →+* Matrix (Fin dd) (Fin dd) C,
-      (∀ a i j, ρ a i j = MvPowerSeries.coeff (Finsupp.single ((0 : Fin 1), j) 1) (A.act a i)) ∧
-      ∀ a v, linAct (A.act a) v = ρ a *ᵥ v := by
-  let f : O → Matrix (Fin dd) (Fin dd) C := fun a =>
-    Matrix.of fun i j => MvPowerSeries.coeff (Finsupp.single ((0 : Fin 1), j) 1) (A.act a i)
-  have hadd : ∀ a b, f (a + b) = f a + f b := by
-    intro a b
-    ext i j
-    simp only [f, Matrix.of_apply, Matrix.add_apply, A.add_act, FGLaw.add, addOf, ev]
-    rw [coeff_single_subst' _ (by rintro ⟨k, l⟩; fin_cases k <;> simp [A.const])]
-    simp [Fintype.sum_prod_type, Fin.sum_univ_two, law_coeff]
-  have hmul : ∀ a b, f (a * b) = f a * f b := by
-    intro a b
-    ext i j
-    simp only [f, Matrix.of_apply, Matrix.mul_apply, A.mul_act, comp1, ev]
-    rw [coeff_single_subst' _ (by rintro ⟨k, l⟩; fin_cases k; simp [A.const])]
-    simp [Fintype.sum_prod_type]
-  have hone : f 1 = 1 := by
-    ext i j
-    simp only [f, Matrix.of_apply, A.one_act, pt, MvPowerSeries.coeff_X, Matrix.one_apply]
-    simp [Finsupp.single_left_inj, eq_comm]
-  exact ⟨RingHom.mk' ⟨⟨f, hone⟩, hmul⟩ hadd, fun _ _ _ => rfl, fun _ _ => rfl⟩
-
 section Limit
 
 variable {C : Type} [Field C] {V : VF C} {O : Type} [CommRing O] {n : Type} [Fintype n] [DecidableEq n]

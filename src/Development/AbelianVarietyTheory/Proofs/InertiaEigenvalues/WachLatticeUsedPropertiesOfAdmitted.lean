@@ -1056,7 +1056,7 @@ theorem linesAt_of_record (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW)
     (GlobalTheory.NL.ex (Cm l) hA.2.2 T i ζ) (((Cm l).C K 1 LL hA.2.2).tie.levB_supp T i ζ) _
     (((Cm l).C K 1 LL hA.2.2).tie.levN_eq T i ζ)
     (GlobalTheory.IndefiniteRowSideFullHecke.GradedSeries.FilLet ((HW l).W K 1 LL hA.2.2) T i (GlobalTheory.IndefiniteRowSideFullHecke.GradedSeries.resEmb hA.2.2 τ))
-    (_root_.GlobalTheory.NL.LatFil.lat_eq_fil D HW F Cm l K 1 LL hA.2.2 T hc.1 i ζ _ hP) u d fun a => ?_⟩
+    (_root_.GlobalTheory.NL.LatFil.lat_eq_fil D.loc D.locA D.locT HW F Cm l K 1 LL hA.2.2 T hc.1 i ζ _ hP) u d fun a => ?_⟩
   exact (GlobalTheory.Per.FilLetUnram.toDR_FilLet _ T i _ a hbij.2 hτ (hfil a)).trans (hs a)
 
 theorem senOp_of_record : ∀ (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.loc D.locA HW F)

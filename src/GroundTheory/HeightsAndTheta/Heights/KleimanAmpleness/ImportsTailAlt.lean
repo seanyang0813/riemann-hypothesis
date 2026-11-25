@@ -19,7 +19,4 @@ def SegreLiftIntNum.Statement : Prop :=
     [∀ k, Fintype (ι k)] (W : Ideal (MRing ι F)), IsMultiProjPrime W → ∀ β : K → ℤ,
       intNum F (segreLift ι F W) ![IndefiniteRowSideFullHecke.Kleiman2.pullDeg β] = intNum F W ![β]
 
-theorem SegreLiftIntNum.hyps : IsMultiProjPrime (⊥ : Ideal (MRing (fun _ : Unit => Fin 2) ℚ)) :=
-  NumbersDVR.isMultiProjPrime_bot
-
 end GroundTheory.Heights₂.Heights.Kleiman.SectionsOverLocalization

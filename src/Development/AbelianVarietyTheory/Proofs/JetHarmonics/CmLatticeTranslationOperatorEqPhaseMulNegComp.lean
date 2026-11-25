@@ -103,12 +103,6 @@ variable {p : ℕ} [hp : Fact p.Prime]
 
 def ball (p : ℕ) [Fact p.Prime] : Subring ℂ_[p] := GlobalTheory.ClosedBallValuationSubring.closedBallSubring ℂ_[p]
 
-theorem norm_p_lt_one : ‖(p : ℂ_[p])‖ < 1 := by
-  have h := PadicComplex.norm_extends' p (p : ℚ_[p])
-  have h2 : ‖(p : ℚ_[p])‖ < 1 := Padic.norm_p_lt_one
-  rw [← h] at h2
-  simpa using h2
-
 theorem norm_sub_one_lt {y : ℂ_[p]} {k : ℕ} (h : y ^ p ^ k = 1) : ‖y - 1‖ < 1 := by
   apply GlobalTheory.MomOne.ShiftComp.norm_sub_one_lt_of_root <;> assumption
 

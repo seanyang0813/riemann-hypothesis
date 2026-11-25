@@ -95,17 +95,6 @@ section Dense
 
 variable (Y : Model Xo c β)
 
-theorem densePart (h : IsDedFrac β) : IsLocallyNoetherian Y.X ∧ IsReduced Y.X ∧ Y.X.IsSeparated ∧
-    IsPreimmersion Y.j ∧ Flat Y.j ∧ IsDominant Y.j ∧ QuasiCompact Y.j := by
-  obtain ⟨⟨_, _⟩, -, hfr⟩ := h
-  letI := β.toAlgebra
-  obtain ⟨h₁, -, h₂, h₃⟩ :=
-    GlobalTheory.genericPart_dense_proOpen O c.F Y.X _ Y.s Y.jQ Y.flat Y.proj Y.jQ_open Y.jQ_dense
-  have : ∀ x : Y.X, _root_.IsReduced (Y.X.presheaf.stalk x) := fun x ↦
-    have := (Y.normal x).1
-    inferInstance
-  exact ⟨h₁, isReduced_of_isReduced_stalk Y.X, h₂, h₃⟩
-
 end Dense
 
 section Transition
@@ -202,30 +191,6 @@ section Trait
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E}
 
-theorem exists_unif_ext (T : CDVR) (t : SAB H (Sp T.V)) (hp : PolAt t (jK T.V)) :
-    ∃ (T' : CDVR) (φ : T.V →+* T'.V) (t' : SAB H (Sp T'.V)), Function.Injective φ ∧ IsLocalHom φ ∧
-      Nonempty (SABMap t' t (spMap φ)) ∧ Nonempty (PELUnif (maximalIdeal T'.V) t') := by
-  let F := AlgebraicClosure (FractionRing T.V)
-  have hF : Function.Injective (algebraMap T.V F) := by
-    rw [IsScalarTower.algebraMap_eq T.V (FractionRing T.V) F]
-    exact (algebraMap (FractionRing T.V) F).injective.comp (IsFractionRing.injective T.V _)
-  have : FaithfulSMul T.V F := (faithfulSMul_iff_algebraMap_injective _ _).2 hF
-  have : Algebra.IsAlgebraic T.V F := (IsFractionRing.comap_isAlgebraic_iff (K := FractionRing T.V)).2 inferInstance
-  obtain ⟨W, hd, hc, hf, hs⟩ := GlobalTheory.Ex.UnifModel.exists_split T.V F t.G t.semi
-  have hi : Function.Injective (algebraMap T.V W) := fun _ _ h => hF (congrArg (fun z : W => (z : F)) h)
-  have hz : CharZero W := charZero_of_injective_ringHom hi
-  have : FaithfulSMul T.V W := (faithfulSMul_iff_algebraMap_injective _ _).2 hi
-  have hl : IsLocalHom (algebraMap T.V W) := inferInstance
-  obtain ⟨PP', cub, sym, adj, prim, m, -⟩ := sabPull CubePf.cubePull (spMap (algebraMap T.V W)) t
-  have j : Function.Injective ((algebraMap W (FractionRing W)).comp (algebraMap T.V W)) :=
-    (IsFractionRing.injective W _).comp hi
-  let g : FractionRing T.V →+* FractionRing W := IsFractionRing.lift j
-  have hp' := GlobalTheory.DatUniq.polAt_pull m hp (jK W) (spMap g)
-    ((GlobalTheory.Ex.UnifModel.spMap_comp (IsFractionRing.lift_algebraMap j)).trans
-      (GlobalTheory.Ex.UnifModel.spMap_comp fun _ => rfl).symm)
-  obtain ⟨P, -⟩ := GlobalTheory.LN.uDvrSt_holds E H W ⟨hd, hc, hz⟩ _ hp' hs
-  exact ⟨{ V := W }, algebraMap T.V W, _, hi, hl, ⟨m⟩, ⟨P⟩⟩
-
 theorem closed_mem_abLocus_iff (T : CDVR) {t : SAB H (Sp T.V)} (P : PELUnif (maximalIdeal T.V) t) :
     (closedPoint T.V : Sp T.V) ∈ abLocus t.G ↔ Subsingleton P.D.toPre.X := by
   constructor
@@ -251,63 +216,6 @@ theorem closed_mem_abLocus_iff (T : CDVR) {t : SAB H (Sp T.V)} (P : PELUnif (max
 
 variable {D : Datum H} {l : Level H} {Xo : Moduli D l} {c : Coeff l} {O : Type} [CommRing O] {β : O →+* c.F}
 
-theorem charZero_of_point {K : CommRingCat.{0}} [Nontrivial K] (y : Spec K ⟶ Xo.XF c) : CharZero K := by
-  let f := Spec.preimage (y ≫ pullback.snd Xo.s (spMap (IntermediateField.inclusion c.le).toRingHom))
-  exact charZero_of_injective_ringHom f.hom.injective
-
-
-open GlobalTheory.HomExt in
-theorem exists_base_trait (Z : Model Xo c β) (hβ : IsDedFrac β) (x : Z.X) :
-    ∃ (T : CDVR) (χ : Sp T.V ⟶ Z.X) (y : Sp (FractionRing T.V) ⟶ Xo.XF c),
-      χ (closedPoint T.V : Sp T.V) = x ∧ y ≫ Z.j = jK T.V ≫ χ := by
-  by_cases hx : x ∈ Set.range Z.j
-  · obtain ⟨u, rfl⟩ := hx
-    let K := (Xo.XF c).residueField u
-    have : CharZero K := charZero_of_point ((Xo.XF c).fromSpecResidueField u)
-    obtain ⟨h₁, h₂, h₃⟩ := (GlobalTheory.FrameCmp.cDvr_powerSeries K : CDvr (PowerSeries K))
-    let a : Sp (PowerSeries K) ⟶ Xo.XF c := spMap (PowerSeries.C (R := K)) ≫ (Xo.XF c).fromSpecResidueField u
-    refine ⟨{ V := PowerSeries K }, a ≫ Z.j, jK _ ≫ a, ?_, Category.assoc _ _ _⟩
-    exact (Scheme.Hom.comp_apply a Z.j _).trans (congrArg Z.j ((Scheme.Hom.comp_apply _ _ _).trans
-      (Scheme.fromSpecResidueField_apply u _)))
-  · obtain ⟨h₁, -, -, _, _, _, _⟩ := GlobalTheory.ModelRelCompare.densePart Z hβ
-    obtain ⟨ξ, hξ, hs⟩ := exists_mem_genericPoints_specializes x
-    have hξ' := genericPoints_subset_range_of_isDominant Z.j hξ
-    have hne : ξ ≠ x := fun e => hx (e ▸ hξ')
-    obtain ⟨W, _, _, _, a, h₀, h₁⟩ := exists_complete_discreteValuationRing_of_specializes hs hne
-    obtain ⟨y, hy⟩ := exists_lift_of_range_subset Z.j
-      (spMap (algebraMap W (FractionRing W)) ≫ a) (by
-        rintro _ ⟨t, rfl⟩
-        have : spMap (algebraMap W (FractionRing W)) t = (⊥ : PrimeSpectrum W) := by
-          apply PrimeSpectrum.ext
-          change Ideal.comap (algebraMap W (FractionRing W)) t.asIdeal = ⊥
-          rw [@Ideal.eq_bot_of_prime _ _ t.asIdeal t.isPrime]
-          exact Ideal.comap_bot_of_injective _ (IsFractionRing.injective _ _)
-        rw [Scheme.Hom.comp_apply, this]
-        exact h₀ ▸ hξ')
-    have hc : CharZero (FractionRing W) := charZero_of_point (K := .of (FractionRing W)) y
-    have hc' : CharZero W := ⟨fun p q e => Nat.cast_injective (R := FractionRing W) (by
-      simpa using congrArg (algebraMap W (FractionRing W)) e)⟩
-    exact ⟨{ V := W }, a, y, h₁, hy⟩
-
-theorem exists_trait (Z : Model Xo c β) (hβ : IsDedFrac β) (x : Z.X) :
-    ∃ (T : CDVR) (χ : Sp T.V ⟶ Z.X) (t : SAB H (Sp T.V)) (_ : SABMap t Z.t χ) (_ : PELUnif (maximalIdeal T.V) t),
-      χ (closedPoint T.V : Sp T.V) = x ∧ Set.range (jK T.V ≫ χ) ⊆ Set.range Z.j := by
-  obtain ⟨T, χ, y, hx, hy⟩ := exists_base_trait Z hβ x
-  obtain ⟨_, ⟨m⟩⟩ := exists_sab χ Z.t
-  have hp := GlobalTheory.GoodTrait.polAt_of_point Z m (jK T.V) y hy
-  obtain ⟨T', φ, t', hi, hl, ⟨m'⟩, ⟨P⟩⟩ := exists_unif_ext T _ hp
-  obtain ⟨n, -⟩ := sabComp pullCubComp E H _ _ _ _ _ _ _ _ m m'
-  have j : Function.Injective ((algebraMap T'.V (FractionRing T'.V)).comp φ) :=
-    (IsFractionRing.injective T'.V _).comp hi
-  let g : FractionRing T.V →+* FractionRing T'.V := IsFractionRing.lift j
-  have e : jK T'.V ≫ spMap φ = spMap g ≫ jK T.V :=
-    (GlobalTheory.Ex.UnifModel.spMap_comp fun _ => rfl).trans
-      (GlobalTheory.Ex.UnifModel.spMap_comp (IsFractionRing.lift_algebraMap j)).symm
-  refine ⟨T', spMap φ ≫ χ, t', n, P, ?_, ?_⟩
-  · exact (Scheme.Hom.comp_apply (spMap φ) χ _).trans ((congrArg χ (comap_closedPoint φ)).trans hx)
-  · rintro _ ⟨p, rfl⟩
-    refine ⟨(spMap g ≫ y) p, ?_⟩
-    rw [← Scheme.Hom.comp_apply, Category.assoc, hy, ← Category.assoc, ← e, Category.assoc]
 
 end Trait
 

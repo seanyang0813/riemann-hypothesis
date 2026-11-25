@@ -67,8 +67,6 @@ theorem sStable_zpow {I : FractionalIdeal (nonZeroDivisors (𝓞 K)) K} (hI : SS
 
 end Generic
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem sStable_ddS (D : Formalism.BasicNotions.D7) : SStable (ddS D) := by
   intro a ha
   rw [FractionalIdeal.mem_coe] at ha ⊢

@@ -665,21 +665,6 @@ theorem anaStep_of_thHyp (hm : R.m = m2 + 2) (h : ThHyp W Ch sel mu cst A u m2) 
     rw [show m2 + 1 + 1 = R.m from hm.symm]
     exact h.2.1
 
-theorem kAt_top_heq (hL : L.Ok Ch sel mu cst G m2) (b : Idx sel mu L (m2 + 1)) (b' : Idx sel mu L (m2 + 1 + 1))
-    (p : PtAt R sel mu cst u (m2 + 1)) (p' : PtAt R sel mu cst u (m2 + 1 + 1)) (q : ChPt (R := R) sel mu u R.m) (e : HEq p'.1.1 q)
-    (x : VV X.K (W.lamTrue u (m2 + 1))) :
-    HEq (kAt W Ch sel mu cst L A u (m2 + 1) b b' p p' x) (topDegreeKTwo W Ch sel mu cst (chTh W Ch sel mu cst A u m2) p.1.1 p.1.2 q x) := by
-  have key : ∀ (j : ℕ) (h : j = R.m) (q' : ChPt (R := R) sel mu u j), HEq q' q →
-      HEq (KerT.ker W Ch sel mu cst A u (m2 + 1) j p.1.1.deco.1.N (frsF sel mu p.1.1) q'.deco.1.N (frsF sel mu q')
-        (xiOver Ch sel mu cst m2 h p.1.1 p.1.2 q') x) (topDegreeKTwo W Ch sel mu cst (chTh W Ch sel mu cst A u m2) p.1.1 p.1.2 q x) := by
-    rintro _ rfl q' e
-    obtain rfl := eq_of_heq e
-    rw [ker_top W Ch A u hL]
-    exact HEq.rfl
-  unfold kAt
-  rw [xiAt_last Ch sel mu cst L hL.hm.symm]
-  exact key _ _ _ e
-
 variable {u} {r : Reps sel mu cst L u (topLev Ch sel mu cst (rPsymF Ch))} {rho : ∀ i, (r.step i).Cl → ℂ}
   {rho' : ∀ i, (r.step (i + 1)).Cl → ℂ}
   {jet : ∀ i, (r.step i).Cl → (r.step (i + 1)).Cl → (Pol ℂ X.Tau (R.N i) →ₗ[ℂ] Pol ℂ X.Tau (R.N (i + 1)))} {DG : ℕ}
@@ -770,24 +755,6 @@ def rowForm (h : I.Ok) (u : B.Word) (a : I.ι) (z : MtildeV (Pr := B.primes X) B
 
 structure KernelsOver (h : I.Ok) (u : B.Word) (a : I.ι) : Prop where
 
-  mat : ∀ i (hi : i + 2 < B.R.m) c c' x, (I.chain l u a).Kmap i c c' (evT B u i x) = evT B u (i + 1)
-    (matK (Pr := B.primes X) B.wts I.Ch I.sel (I.tup a) (I.cst a) (I.idx a) (thTrue I u a (B.R.m - 2)) i (Idx.get c.1 (by omega))
-      (Idx.get c'.1 (by omega)) ((I.stp u a i).rep c).1.1 ((I.stp u a (i + 1)).rep c').1.1 x)
-
-  cp1 : ∀ c c' x, (I.chain l u a).Kmap (B.R.m - 2) c c' (evT B u _ x) = evT B u _
-    (cp1K (Pr := B.primes X) B.wts I.Ch I.sel (I.tup a) (I.cst a) (I.idx a) (thTrue I u a (B.R.m - 2))
-      (Idx.get c.1 (by have := h.hm; omega)) ((I.stp u a _).rep c).1.1 ((I.stp u a _).rep c').1.1 ((I.stp u a _).rep c').1.2 x)
-
-  top : ∀ c c' x q, HEq ((I.stp u a (B.R.m - 2 + 1 + 1)).rep c').1.1 q → ∃ y,
-    (I.chain l u a).Kmap (B.R.m - 2 + 1) c c' (evT B u _ x) = evT B u _ y ∧
-      HEq y (topDegreeKTwo (Pr := B.primes X) B.wts I.Ch I.sel (I.tup a) (I.cst a) (thTrue I u a (B.R.m - 2))
-        ((I.stp u a _).rep c).1.1 ((I.stp u a _).rep c).1.2 q x)
-
-  cp2 : ∀ c c' x d, ((I.stp u a (B.R.m - 2 + 1 + 1)).rep c').1.1 = tilAt I.sel (I.tup a) u h.hm.symm d → ∃ y,
-    (I.chain l u a).Kmap (B.R.m - 2 + 1) c c' (evT B u _ x) = evT B u _ y ∧
-      HEq y (cp2K (Pr := B.primes X) B.wts I.Ch I.sel (I.tup a) (I.cst a) (thTrue I u a (B.R.m - 2))
-        ((I.stp u a _).rep c).1.1 ((I.stp u a _).rep c).1.2 (toRow I.sel (I.tup a) d) x)
-
   krat : ∀ i, i < B.R.m → (I.fm l u a).KRat i
 
   prat : (I.fm l u a).PRat
@@ -851,22 +818,12 @@ theorem kernelsOver_of_ok (h : I.Ok) (hJ : I.JetsIn) (u : B.Word) (a : I.ι)
   have hR : ∀ i, i < B.R.m → ReadsAt B.fields.emb B.embLL (l.ch u a) (kTrue I u a) i := fun i hi =>
     readsAt h hJ u a (l.ch u a) hi (hA i hi).1 (hA i hi).2
   have hE := eqTarget_true h hT
-  refine ⟨fun i hi c c' x => ?_, fun c c' x => ?_, fun c c' x q e => ?_, fun c c' x d e => ?_,
-    fun i hi => kRat_true l (hR i hi) (hE i hi), pRat_true l u a, ⟨hL.last_uniq.choose⟩, fun b => ?_⟩
-  · rw [← kAt_mat (Pr := B.primes X) B.wts I.Ch I.A u hL hi, Idx.of_get, Idx.of_get]
-    exact hR i (by omega) c c' x
-  · rw [← kernelAtPoint_penultimateStep_firstCoupledKernel (Pr := B.primes X) B.wts I.Ch I.A u hL _ c'.1, Idx.of_get]
-    exact hR _ (by omega) c c' x
-  · exact ⟨_, hR (B.R.m - 2 + 1) (by omega) c c' x, kAt_top_heq (Pr := B.primes X) B.wts I.A u hL c.1 c'.1 _ _ q e x⟩
-  · rw [← k2top_tilF hX l.pr h.sel_ok hm hL.cst_ok (tilOk I h u a)
-      (tameFr_chTh (Pr := B.primes X) B.wts I.Ch I.sel (I.tup a) (I.cst a) I.A u _)]
-    exact ⟨_, hR (B.R.m - 2 + 1) (by omega) c c' x,
-      kAt_top_heq (Pr := B.primes X) B.wts I.A u hL c.1 c'.1 _ _ _ ((eq_tilAt_iff I.sel (I.tup a) _ _ d).1 e) x⟩
-  · have hY := ybHyp (Pr := B.primes X) (cst := I.cst a) u hm b
-    have hK := kerEquivC (Pr := B.primes X) B.wts I.A u hX l.pr h.sel_ok ⟨h.T_mem u, h.g_mem⟩ hL (h.sharp a) hT b hY
-    have hF := chF_ok (Pr := B.primes X) B.wts u hX hL
-    have hM := mtildeOk (Pr := B.primes X) B.wts I.Ch I.sel (I.tup a) hX I.Ps
-    exact ⟨hY, hK, hF, hM, period_true l h hR hE hY hK hF hM⟩
+  refine ⟨fun i hi => kRat_true l (hR i hi) (hE i hi), pRat_true l u a, ⟨hL.last_uniq.choose⟩, fun b => ?_⟩
+  have hY := ybHyp (Pr := B.primes X) (cst := I.cst a) u hm b
+  have hK := kerEquivC (Pr := B.primes X) B.wts I.A u hX l.pr h.sel_ok ⟨h.T_mem u, h.g_mem⟩ hL (h.sharp a) hT b hY
+  have hF := chF_ok (Pr := B.primes X) B.wts u hX hL
+  have hM := mtildeOk (Pr := B.primes X) B.wts I.Ch I.sel (I.tup a) hX I.Ps
+  exact ⟨hY, hK, hF, hM, period_true l h hR hE hY hK hF hM⟩
 
 variable (Z : TC.Later B (I.cols l))
 

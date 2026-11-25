@@ -219,8 +219,8 @@ private theorem listPin_thetaTwist {K : Ctx} {B : Base} {f : Fr B.toPre}
   obtain ⟨G, hF, hTie⟩ := h
   let G' := GlobalTheory.Mem.GridMove.gdC (a := x.o.Z) (oTw x (thTw (Dof x) th)).Z G
   refine ⟨G', ⟨?_, ?_⟩, ?_⟩
-  · with_unfolding_all exact hF.values
-  · with_unfolding_all exact hF.roots
+  · exact hF.values
+  · exact hF.roots
   · dsimp only [G', GlobalTheory.BigTop.Fun.lamOf, GlobalTheory.Mem.GridMove.gdC,
       GlobalTheory.Mem.GridMove.plC, GlobalTheory.Mem.GridMove.chC] at hTie ⊢
     exact hTie
@@ -806,7 +806,7 @@ theorem listPin_oTw (x : St P) (N : TwNew (Dof x))
     (Lc : Formalism.IndefR.Links.LevCh (Dof x) I) (h : ListPin (Dof x) Lc c b) :
     ListPin (w.st (oTw x N).Z).toD7 (GlobalTheory.Mem.R3.Tr.levCh (a := x.o.Z) (oTw x N).Z Lc) c b := by
   obtain ⟨G, h1, h2⟩ := h
-  exact ⟨(by with_unfolding_all exact ((GlobalTheory.Mem.GridMove.gdC (a := x.o.Z) (oTw x N).Z G) :)), ⟨(by with_unfolding_all exact (h1.values :)), (by with_unfolding_all exact (h1.roots :))⟩, (by with_unfolding_all exact ((hN _ h2) :))⟩
+  exact ⟨(by exact ((GlobalTheory.Mem.GridMove.gdC (a := x.o.Z) (oTw x N).Z G) :)), ⟨(by exact h1.values), (by exact h1.roots)⟩, (by exact ((hN _ h2) :))⟩
 
 theorem listSt_oTw (cDep : ℝ) (x : St P) (N : TwNew (Dof x))
     (hN : ∀ Z : GlobalTheory.LamTie.LamDat (Dof x), GlobalTheory.LamTie.IsLamTieFull (Dof x).ntw Z → GlobalTheory.LamTie.IsLamTieFull N.tw Z)
@@ -960,26 +960,25 @@ theorem pre_at_twisted_copy_of_side_b_tau_true (hA : GlobalTheory.Published.Glob
     (hSb : ∀ i, l.rat.In.Sb ⊆ N.tw.S0 i) (hZ : ∃ Z : GlobalTheory.LamTie.LamDat N.toD7, Z.Ok) :
     PreAt (P := P) (Z := (oTw x N).Z) (datTw x N)
       (cast (congrArg RowSide (dof_oTw x N).symm) (N.row l.a.A.row))
-      (by with_unfolding_all exact l.Pq) l.rat.In.hL
-      (by with_unfolding_all exact l.rat.In.eig) (by with_unfolding_all exact l.rat.In.θ) := by
+      l.Pq l.rat.In.hL
+      l.rat.In.eig l.rat.In.θ := by
   obtain ⟨x', l', ho, -, hrow, hPq, hS', hSb', hhL, heig, hθ, hR, hcG, hgeo⟩ := _root_.GlobalTheory.HeightCounting.Up.restage_copy_real_alt hL x l N
   obtain ⟨o', fits', G_eq', etaF', bk', m', copy', coh', s', r', pin'⟩ := x'
   dsimp only at ho
   subst ho
   have hz : m'.z = datTw x N := moved_eq_datTw x N m' copy' hR hcG hgeo
   have hc : HEq (N.cf (cfOf x)) (TC.cf w.I w.l (oTw x N).Z) := by
-    with_unfolding_all
-      apply charFrame_heq_of_fields (dof_oTw x N).symm <;> rfl
+    apply charFrame_heq_of_fields (dof_oTw x N).symm <;> rfl
   have hZ' : ∃ Z : GlobalTheory.LamTie.LamDat (DN x N), Z.Ok :=
     Eq.mpr (congrArg (fun D => ∃ Z : GlobalTheory.LamTie.LamDat D, Z.Ok) (dof_oTw x N)) hZ
-  have e2 : l'.Pq = (by with_unfolding_all exact (l.Pq :)) := (by with_unfolding_all exact ((eq_of_heq hPq) :))
-  have e4 : l'.rat.In.Sb = (by with_unfolding_all exact (l.rat.In.Sb :)) := (by with_unfolding_all exact ((eq_of_heq hSb') :))
-  have e5 : l'.rat.In.eig = (by with_unfolding_all exact (l.rat.In.eig :)) := (by with_unfolding_all exact ((eq_of_heq heig) :))
-  have e6 : l'.rat.In.θ = (by with_unfolding_all exact (l.rat.In.θ :)) := (by with_unfolding_all exact ((eq_of_heq hθ) :))
+  have e2 : l'.Pq = l.Pq := eq_of_heq hPq
+  have e4 : l'.rat.In.Sb = l.rat.In.Sb := eq_of_heq hSb'
+  have e5 : l'.rat.In.eig = l.rat.In.eig := eq_of_heq heig
+  have e6 : l'.rat.In.θ = l.rat.In.θ := eq_of_heq hθ
   have h := pre_at_of_side_b_tau_true_lam_ok hA hK hS _ l'
-    (sideB_tau_reindex (dof_oTw x N).symm hc hrow.symm (by with_unfolding_all rfl)
+    (sideB_tau_reindex (dof_oTw x N).symm hc hrow.symm rfl
       hPq.symm hS'.symm hhL.symm heig.symm hθ.symm hB)
-    (by rw [e4]; with_unfolding_all exact hSb) hZ'
+    (by rw [e4]; exact hSb) hZ'
   have hrow' := hrow.trans (cast_heq (congrArg RowSide (dof_oTw x N).symm) (N.row l.a.A.row)).symm
   exact preAt_congr hz (eq_of_heq hrow') e2 hhL e5 e6 h
 section Install
@@ -1004,10 +1003,10 @@ theorem series_state_b1_twist_alt {hL : _root_.UpperTheory.Zero.LLC.RecTExists} 
     Nonempty (_root_.GlobalTheory.HeightCounting.SeriesData z.geo a n PV Pq') := by
   subst hz
   obtain ⟨Z, z1, z2, z3, z4, z5⟩ := hZ
-  have e1 : ((by with_unfolding_all exact (((kwP p).cf cf) :)) : CharFrame (DN x (nP p))) = TC.cf w.I w.l (oTw x (nP p)).Z := (by with_unfolding_all exact ((congrArg (kwP p).cf hC) :))
-  exact _root_.GlobalTheory.HeightCounting.SerCopy.series_state_b1_of_geometry_alt _ a n PV (bsP p) (ysP p) ((by with_unfolding_all exact ((Eq.refl Bs.eF) :))) ((by with_unfolding_all exact ((ysOf_fi Bs) :)))
-    ((by with_unfolding_all exact ((serP p hu ho Bs.bsup PV hPV Z ⟨z1, z2, z3.trans e1.symm, z4, z5⟩) :))) ((by with_unfolding_all exact (hτ :))) e1 ((by with_unfolding_all exact ((eq_of_heq e2).symm :)))
-    ((by with_unfolding_all exact ((eq_of_heq e3).symm :))) ((by with_unfolding_all exact (e4.symm :))) ((by with_unfolding_all exact ((eq_of_heq e5).symm :))) ((by with_unfolding_all exact ((eq_of_heq e6).symm :))) h1 h2
+  have e1 : (((kwP p).cf cf) : CharFrame (DN x (nP p))) = TC.cf w.I w.l (oTw x (nP p)).Z := congrArg (kwP p).cf hC
+  exact _root_.GlobalTheory.HeightCounting.SerCopy.series_state_b1_of_geometry_alt _ a n PV (bsP p) (ysP p) (Eq.refl Bs.eF) (ysOf_fi Bs)
+    (serP p hu ho Bs.bsup PV hPV Z ⟨z1, z2, z3.trans e1.symm, z4, z5⟩) hτ e1 ((eq_of_heq e2).symm)
+    ((eq_of_heq e3).symm) e4.symm ((eq_of_heq e5).symm) ((eq_of_heq e6).symm) h1 h2
 end Install
 end GlobalTheory.HeightCounting.SerCopy
 end
@@ -1054,10 +1053,10 @@ theorem series_copy_embedding_alt : _root_.GlobalTheory.HeightCounting.Up.Publis
   obtain ⟨o', fits', G_eq', etaF', bk', m', copy', coh', s', r', pin'⟩ := x'
   dsimp only at ho
   subst ho
-  have e4 : l'.rat.In.Sb = (by with_unfolding_all exact (l.rat.In.Sb :)) := (by with_unfolding_all exact ((eq_of_heq hSb') :))
-  exact _root_.GlobalTheory.HeightCounting.SerCopy.series_state_b1_twist_alt p hτ hC ((by with_unfolding_all exact (h4 :))) ((by with_unfolding_all exact (h3 :))) m'.z (moved_eq_datTw x _ m' copy' hR hcG hgeo) r'.Y l'.a l'.rat m.ad.PV hm l'.Pq
-    ⟨(by with_unfolding_all exact ((lamT (nP p) Z) :)), (by with_unfolding_all exact ((lamT_spec (nP p) ⟨z1, z2, z3, z4, h1 Z z5⟩) :))⟩ ((by with_unfolding_all exact (hrow :))) ((by with_unfolding_all exact (hPq :))) (hhL.trans g.symm) ((by with_unfolding_all exact (heig :))) ((by with_unfolding_all exact (hθ :)))
-    (by rewrite [e4]; exact (by with_unfolding_all exact (hSb :))) ((by with_unfolding_all exact (hS0 :)))
+  have e4 : l'.rat.In.Sb = l.rat.In.Sb := eq_of_heq hSb'
+  exact _root_.GlobalTheory.HeightCounting.SerCopy.series_state_b1_twist_alt p hτ hC h4 h3 m'.z (moved_eq_datTw x _ m' copy' hR hcG hgeo) r'.Y l'.a l'.rat m.ad.PV hm l'.Pq
+    ⟨lamT (nP p) Z, lamT_spec (nP p) ⟨z1, z2, z3, z4, h1 Z z5⟩⟩ hrow hPq (hhL.trans g.symm) heig hθ
+    (by rewrite [e4]; exact hSb) hS0
 end GlobalTheory.HeightCounting.SerCopy
 end
 end

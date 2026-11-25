@@ -124,16 +124,8 @@ def bQuot (D : Datum ε h Λ) : ((Fin h → O) ⧸ D.Fil) →ₗ[O] (Fin h → O
   D.Fil.liftQ D.bb le_rfl
 
 structure Realizes [IsDomain O] (hε : IsPrimitiveSystem ε) (u₁ u₂ : Oˣ) (G : PDivGroup p O)
-    (ρ : Action Λ G) (D : Datum ε h Λ) (e : G.Tate ≃ₗ[ℤ_[p]] (Fin h → ℤ_[p]))
+    (_ρ : Action Λ G) (D : Datum ε h Λ) (e : G.Tate ≃ₗ[ℤ_[p]] (Fin h → ℤ_[p]))
     (fil : G.dual.omega ≃ₗ[O] D.Fil) (lie : ((Fin h → O) ⧸ D.Fil) ≃ₗ[O] G.Lie) : Prop where
-
-  tate_act : ∀ (a : Λ) (t : G.Tate), e (ρ.onTate O a t) = D.ρT a *ᵥ e t
-
-  fil_act : ∀ (a : Λ) (w : G.dual.omega),
-    (fil (ρ.onOmegaDual a w) : Fin h → O) = actH D a (fil w)
-
-  lie_act : ∀ (a : Λ) (m : Fin h → O),
-    lie (D.Fil.mkQ (actH D a m)) = ρ.onLie a (lie (D.Fil.mkQ m))
 
   al_eq : ∀ t : G.Tate, D.al (toO e t) =
     (u₁ : O) • (fil (omegaMap G.dual (PDivGroup.mu p O) (dualChar G t) (dlogT p O)) : Fin h → O)

@@ -2,6 +2,7 @@ module
 
 public import Development.AutomorphicArithmetic.AutomorphicVarieties.WeakShimuraTheory.NearSplit
 public import Development.AutomorphicArithmetic.AutomorphicVarieties.HeightAndVanishing.CoefSup
+import Development.AutomorphicArithmetic.AutomorphicVarieties.WeakShimuraTheory.SpaceMap
 import Mathlib.Algebra.Order.Floor.Extended
 import Mathlib.Algebra.Order.Floor.Semifield
 import Mathlib.Algebra.Order.Interval.Basic
@@ -51,17 +52,14 @@ section Inj
 
 variable {R R' R'' : Type} [CommRing R] [CommRing R'] [CommRing R'']
 
-private theorem adj_mp (f : R →+* R') (X : M4 R) : (adj X).map f = adj (X.map f) := by
-  ext i j; simp [adj_apply]
-
 private theorem conj_mp (f : R →+* R') (n m : M4 R) (i j : Fin 4) :
     (adj (n.map f) * m.map f * n.map f) i j = f ((adj n * m * n) i j) := by
-  rw [← adj_mp, ← Matrix.map_mul, ← Matrix.map_mul, Matrix.map_apply]
+  rw [adj_map, ← Matrix.map_mul, ← Matrix.map_mul, Matrix.map_apply]
 
 private theorem gsp_of (f : R →+* R') (hf : Function.Injective f) (ν : R) (X : M4 R) (h : IsGSp (f ν) (X.map f)) :
     IsGSp ν X := by
   unfold IsGSp at h ⊢
-  rw [← adj_mp, ← Matrix.map_mul] at h
+  rw [adj_map, ← Matrix.map_mul] at h
   ext i j
   apply hf
   have hij := congrFun (congrFun h i) j
@@ -92,8 +90,6 @@ private theorem ent_of (f : R →+* R') (r : Γ →* M4 R) (w : ℤ × ℤ) (h :
   obtain ⟨g, i, j, h1, h2⟩ := h
   exact ⟨g, i, j, h1, fun h0 => h2 (by rw [mapRep_apply, h0, map_zero])⟩
 
-private theorem map_map' (P : PD ι Γ R) (f : R →+* R') (g : R' →+* R'') : (P.map f).map g = P.map (g.comp f) := rfl
-
 private theorem map_inj' (f : R →+* R') (hf : Function.Injective f) {P Q : PD ι Γ R} (h : P.map f = Q.map f) : P = Q := by
   have hr := congrArg PD.r h
   have hn := congrArg PD.n h
@@ -107,9 +103,6 @@ private theorem map_inj' (f : R →+* R') (hf : Function.Injective f) {P Q : PD 
     apply hf
     have := congrArg (fun n => n v i j) hn
     simpa [PD.map] using this
-
-private theorem psi_mp (f : R →+* R') (P : PD ι Γ R) (v : ι) (i : Fin 4) (s : Γ) : (P.map f).ψ v i s = f (P.ψ v i s) :=
-  conj_mp f (P.n v) (P.r s) i i
 
 private theorem desc_ex (f : R →+* R') (hf : Function.Injective f) (P : PD ι Γ R')
     (h1 : ∀ g i j, P.r g i j ∈ f.range) (h2 : ∀ v i j, P.n v i j ∈ f.range) : ∃ Q : PD ι Γ R, Q.map f = P := by
@@ -176,10 +169,10 @@ private theorem isRes_of [TopologicalSpace Γ] (f : R →+* R') (hf : Function.I
       fun i j hij => hf (by rw [map_zero]; exact l3 i j hij)⟩
   · rw [map_zero, ← conj_mp]
     exact m5 v s hs i j hij
-  · rw [map_one, ← psi_mp]
+  · rw [map_one, ← PD.map_ψ]
     exact m6 v s hs i
   · exact r1 g i
-  · rw [← psi_mp]
+  · rw [← PD.map_ψ]
     exact r2 v s hs i
   · exact r3.imp (fun ha => ⟨fun g => supp_of f hf _ _ (ha.1 g), fun v => supp_of f hf _ _ (ha.2 v)⟩)
       (fun ha g => supp_of f hf _ _ (ha g))
@@ -308,11 +301,11 @@ theorem UpperTheory.V.Ws.chainDesc :
       simp
     have hQ0 : Q.map (evalRingHom 0) = x' := by
       apply map_inj' (𝔞.j c') (𝔞.j c').injective
-      rw [hx', map_map', e0, ← map_map', hQ, h0]
+      rw [hx', PD.map_map, e0, ← PD.map_map, hQ, h0]
     refine ⟨s', Q.map (evalRingHom 1), hs', ?_, hr', hch.1, Relation.ReflTransGen.tail hch.2 ⟨?_, Q, ?_, hQ0, rfl⟩⟩
-    · rw [map_map', e1, ← map_map', hQ, h1]
+    · rw [PD.map_map, e1, ← PD.map_map, hQ, h1]
     · apply good_of Φ _ (𝔞.j c') (𝔞.j c').injective
-      rw [hb, map_map', e1, ← map_map', hQ, h1]
+      rw [hb, PD.map_map, e1, ← PD.map_map, hQ, h1]
       exact hgy
     · apply isRes_of Φ _ (mapRingHom (𝔞.j c')) (Polynomial.map_injective _ (𝔞.j c').injective)
       rw [hC, hQ]

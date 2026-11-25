@@ -48,8 +48,6 @@ open Formalism.CohomologicalDescent.ShortWeightBounds (Wts HidaSetting WInputsLi
 
 namespace GlobalTheory.ExpTie
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 def LIncl {K : Type} [Field K] [NumberField K] [StarRing K] {G : Type} [Group G] [Fintype G] {Pl0 : Type} (B : BlockDat K G Pl0)
     (ℓ : Lvl K G) (Z : Submodule K B.S.Forms) (w : HeightOneSpectrum (𝓞 K)) (J : ℕ) : Prop :=
   ∀ z ∈ B.cutZ ℓ Z, (((Formalism.EigenvalueLevelCeiling.plc w : ℕ) : 𝓞 K) ^ J) • z ∈ Formalism.HermitianLatticesTheory.localization₂ w.asIdeal (B.delZ ℓ Z)

@@ -35,20 +35,6 @@ structure LabSGeoCore (C3 : IntChart T io y) (ι : T.Fr →+* C) (Y : FBChart C 
   e_full : ∀ o a (v : Fin (chD C3.ch) → C), (∀ x, linAct (Y.B.A.act x) v = emA3 io ι (lab.tau o a) x • v) →
     ∃ b : lab.II Dw o → C, (∀ q, q.1 ≠ a → b q = 0) ∧ v = ∑ q, b q • selfLieBasisVector C3 ι lab o q
 
-theorem labSGeo_of (hstar : ∀ a : 𝓞 E, star a = H.bar a) {C3 : IntChart T io y} {ι : T.Fr →+* C} (hι : EmbOK T V ι)
-    {Y : FBChart C V (𝓞 E) (chD C3.ch)} {lab : LabS E C Orb d} (ha : LabSArith V io ι lab)
-    (h : LabSGeoCore C3 ι Y lab) : LabSGeo C3 ι Y lab := by
-  refine {
-    em_int := fun _ _ x => embedding_integral ι _ x
-    em_conj := ?_
-    e_int := fun _ _ i => a3uvec_int C3 hι _ i
-    e_eig := h.e_eig
-    e_sat := h.e_sat
-    e_full := h.e_full }
-  intro o a x
-  rw [← ha.conj o a]
-  exact (embedding_conjugate hstar ι _ x).symm
-
 end Core
 
 def RankMaximalSelfOfNondegenerate : Prop :=

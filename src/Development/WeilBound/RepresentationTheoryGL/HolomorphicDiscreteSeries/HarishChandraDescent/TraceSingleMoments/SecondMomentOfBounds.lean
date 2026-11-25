@@ -73,20 +73,16 @@ theorem trace_dg {m : ℕ} (d : Fin m → ℝ) (X : Matrix (Fin m) (Fin m) ℂ) 
 theorem trace_dg_single {m : ℕ} (d : Fin m → ℝ) (a b : Fin m) :
     trace (dg d * Matrix.single a b (1 : ℂ)) = if a = b then ((d a : ℝ) : ℂ) else 0 := by
   rw [trace_dg]
-  by_cases h : a = b
-  · subst h
-    simp [Matrix.single_apply]
-  · rw [if_neg h]
-    refine Finset.sum_eq_zero (fun c _ => ?_)
-    rw [Matrix.single_apply, if_neg, zero_mul]
-    rintro ⟨rfl, rfl⟩
-    exact h rfl
+  split_ifs with h
+  · subst h; simp [Matrix.single_apply]
+  · refine Finset.sum_eq_zero fun c _ => ?_
+    simp [show ¬(a = c ∧ b = c) from fun ⟨h1, h2⟩ => h (h1.trans h2.symm)]
 
 theorem casValK_lowK {m : ℕ} (ε : Fin m → Bool) (μ : Fin m → ℝ) :
     casValK ε (lowK ε μ) - casVal μ = 2 * dot μ (rhoN ε) + nsq (rhoN ε) - nsq (rhoC ε) + nsq (rho m) := by
   simp only [casValK, lowK, casVal, nsq, dot, Pi.add_apply, Finset.mul_sum, ← Finset.sum_sub_distrib,
     ← Finset.sum_add_distrib]
-  refine Finset.sum_congr rfl (fun a _ => by simp only [Pi.add_apply, Pi.sub_apply]; ring)
+  refine Finset.sum_congr rfl fun a _ => by simp only [Pi.add_apply, Pi.sub_apply]; ring
 
 theorem dot_add_smul {m : ℕ} (x y z : Fin m → ℝ) (t : ℝ) : dot (x + t • y) z = dot x z + t * dot y z := by
   simp only [dot, Pi.add_apply, Pi.smul_apply, smul_eq_mul, add_mul, Finset.sum_add_distrib, Finset.mul_sum]
@@ -106,135 +102,95 @@ private theorem conj_lemma_2 {n : ℕ} (ε : Fin n → Bool) (g : Formalism.REAL
   have h1 : um g * um g⁻¹ = 1 := Units.mul_inv (g : (Matrix (Fin n) (Fin n) ℂ)ˣ)
   rw [hi, ← Matrix.mul_assoc, ← Matrix.mul_assoc, h1, Matrix.one_mul, Matrix.mul_assoc, h1, Matrix.mul_one]
 
-
 open Mom2Aux in
 theorem second_moment_of_bounds : RootBd → MatBd → AdEq → Mom2 := by
   intro hRoot hMat hAd n ε e lam d d' g hOver
-  obtain ⟨L, hL⟩ : ∃ L : Fin (n + 1) → ℝ, ∀ c, L c = lam c + rhoN ε c - rhoC ε c := ⟨_, fun _ => rfl⟩
-  obtain ⟨Y, hY⟩ : ∃ Y : Fin n → Fin n → Matrix (Fin (n + 1)) (Fin (n + 1)) ℂ,
-      ∀ a b, Y a b = um g⁻¹ * blk0 e (Matrix.single a b 1) * um g := ⟨_, fun _ _ => rfl⟩
-  obtain ⟨S, hS⟩ : ∃ S : Fin n → Fin n → ℝ, ∀ a b, S a b = ∑ i, ∑ j, ‖Y a b i j‖ := ⟨_, fun _ _ => rfl⟩
-  obtain ⟨S', hS'⟩ : ∃ S' : Fin n → Fin n → ℝ, ∀ a b, S' a b = ∑ c, ‖Y a b c c‖ * |L c| :=
-    ⟨_, fun _ _ => rfl⟩
-  obtain ⟨P, hP⟩ : ∃ P : ℝ, P = (∑ a, ∑ b, |L a - L b|)
-      + |2 * dot lam (rhoN ε) + nsq (rhoN ε) - nsq (rhoC ε) + nsq (rho (n + 1))| := ⟨_, rfl⟩
-  obtain ⟨Q, hQ⟩ : ∃ Q : ℝ, Q = (∑ a, ∑ b, |d a - d b|) + |2 * dot d (rhoN ε)| := ⟨_, rfl⟩
-  have hP0 : 0 ≤ P := by
-    rw [hP]
-    exact add_nonneg (Finset.sum_nonneg fun _ _ => Finset.sum_nonneg fun _ _ => abs_nonneg _) (abs_nonneg _)
-  have hQ0 : 0 ≤ Q := by
-    rw [hQ]
-    exact add_nonneg (Finset.sum_nonneg fun _ _ => Finset.sum_nonneg fun _ _ => abs_nonneg _) (abs_nonneg _)
+  let L : Fin (n + 1) → ℝ := fun c => lam c + rhoN ε c - rhoC ε c
+  let Y : Fin n → Fin n → Matrix (Fin (n + 1)) (Fin (n + 1)) ℂ :=
+    fun a b => um g⁻¹ * blk0 e (Matrix.single a b 1) * um g
+  let S : Fin n → Fin n → ℝ := fun a b => ∑ i, ∑ j, ‖Y a b i j‖
+  let S' : Fin n → Fin n → ℝ := fun a b => ∑ c, ‖Y a b c c‖ * |L c|
+  let P : ℝ := (∑ a, ∑ b, |L a - L b|)
+    + |2 * dot lam (rhoN ε) + nsq (rhoN ε) - nsq (rhoC ε) + nsq (rho (n + 1))|
+  let Q : ℝ := (∑ a, ∑ b, |d a - d b|) + |2 * dot d (rhoN ε)|
+  have hP0 : 0 ≤ P := add_nonneg (Finset.sum_nonneg fun _ _ => Finset.sum_nonneg fun _ _ => abs_nonneg _) (abs_nonneg _)
+  have hQ0 : 0 ≤ Q := add_nonneg (Finset.sum_nonneg fun _ _ => Finset.sum_nonneg fun _ _ => abs_nonneg _) (abs_nonneg _)
   have hcab0 : 0 ≤ ∑ a, ∑ b, (2 * S a b ^ 2 * (P + Q) + 2 * S' a b ^ 2) :=
-    Finset.sum_nonneg fun _ _ => Finset.sum_nonneg fun _ _ =>
-      add_nonneg (mul_nonneg (by positivity) (add_nonneg hP0 hQ0)) (by positivity)
+    Finset.sum_nonneg fun _ _ => Finset.sum_nonneg fun _ _ => by positivity
   refine ⟨1 + ∑ a, ∑ b, (2 * S a b ^ 2 * (P + Q) + 2 * S' a b ^ 2), by linarith, ?_⟩
   intro t ht H _ _ _ π hπ v hv1 hKHW hcas
   have hDer := isDerivedOn_smE hπ
   have hGl := hDer.glRep
   have hIU := isInfUnitary_of_isDerivedOn hπ hDer
   obtain ⟨T', hT'1, hT'2⟩ := hAd (n + 1) ε H π hπ (um g) g.2
-  have hTn : ∀ x, ‖T' x‖ = ‖x‖ := by
-    intro x
+  have hTn : ∀ x, ‖T' x‖ = ‖x‖ := fun x => by
     show ‖(T' x : H)‖ = ‖(x : H)‖
     rw [hT'1]
     exact hπ.2.1 _ g.2 _
   have ht0 : 0 < t := by linarith
-  have hΛ : ∀ c, lowK ε (lam + t • d) c = L c + t * d c := by
-    intro c
-    rw [hL]
-    simp only [lowK, Pi.add_apply, Pi.sub_apply, Pi.smul_apply, smul_eq_mul]
-    ring
-  have hcasb : |casValK ε (lowK ε (lam + t • d)) - casVal (lam + t • d)|
+  let μ : Fin (n + 1) → ℝ := lowK ε (lam + t • d)
+  have hΛ : ∀ c, μ c = L c + t * d c := fun c => by
+    simp only [μ, L, lowK, Pi.add_apply, Pi.sub_apply, Pi.smul_apply, smul_eq_mul]; ring
+  have hcasb : |casValK ε μ - casVal (lam + t • d)|
       ≤ |2 * dot lam (rhoN ε) + nsq (rhoN ε) - nsq (rhoC ε) + nsq (rho (n + 1))| + t * |2 * dot d (rhoN ε)| := by
-    rw [casValK_lowK, dot_add_smul]
-    have e1 : 2 * (dot lam (rhoN ε) + t * dot d (rhoN ε)) + nsq (rhoN ε) - nsq (rhoC ε) + nsq (rho (n + 1))
-        = (2 * dot lam (rhoN ε) + nsq (rhoN ε) - nsq (rhoC ε) + nsq (rho (n + 1))) + t * (2 * dot d (rhoN ε)) := by
-      ring
-    rw [e1]
-    refine (abs_add_le _ _).trans (le_of_eq ?_)
-    rw [abs_mul, abs_of_pos ht0]
-  have hR0 : 0 ≤ P + Q * t := add_nonneg hP0 (mul_nonneg hQ0 ht0.le)
-  have hoff : ∀ a b, a ≠ b → ‖smE ε π a b v‖ ≤ Real.sqrt (P + Q * t) * ‖v‖ := by
-    intro a b hab
-    have h1 := hRoot (n + 1) ε _ (smE ε π) hGl hIU (lowK ε (lam + t • d)) _ v hKHW hcas a b hab
+    rw [casValK_lowK, dot_add_smul,
+      show 2 * (dot lam (rhoN ε) + t * dot d (rhoN ε)) + nsq (rhoN ε) - nsq (rhoC ε) + nsq (rho (n + 1))
+        = (2 * dot lam (rhoN ε) + nsq (rhoN ε) - nsq (rhoC ε) + nsq (rho (n + 1))) + t * (2 * dot d (rhoN ε)) by ring]
+    exact (abs_add_le _ _).trans_eq (by rw [abs_mul, abs_of_pos ht0])
+  have hR0 : 0 ≤ P + Q * t := by positivity
+  have pairLe : ∀ (f : Fin (n + 1) → ℝ) (a b : Fin (n + 1)), |f a - f b| ≤ ∑ a', ∑ b', |f a' - f b'| :=
+    fun f a b => (Finset.single_le_sum (f := fun b' => |f a - f b'|) (fun _ _ => abs_nonneg _) (Finset.mem_univ b)).trans
+      (Finset.single_le_sum (f := fun a' => ∑ b', |f a' - f b'|)
+        (fun _ _ => Finset.sum_nonneg fun _ _ => abs_nonneg _) (Finset.mem_univ a))
+  have hoff : ∀ a b, a ≠ b → ‖smE ε π a b v‖ ≤ Real.sqrt (P + Q * t) * ‖v‖ := fun a b hab => by
+    have h1 := hRoot (n + 1) ε _ (smE ε π) hGl hIU μ _ v hKHW hcas a b hab
     rw [hv1, one_pow, mul_one] at h1
     rw [hv1, mul_one]
-    have hLab : |L a - L b| ≤ ∑ a, ∑ b, |L a - L b| :=
-      (Finset.single_le_sum (f := fun b' => |L a - L b'|) (fun _ _ => abs_nonneg _) (Finset.mem_univ b)).trans
-        (Finset.single_le_sum (f := fun a' => ∑ b', |L a' - L b'|)
-          (fun _ _ => Finset.sum_nonneg fun _ _ => abs_nonneg _) (Finset.mem_univ a))
-    have hdab : |d a - d b| ≤ ∑ a, ∑ b, |d a - d b| :=
-      (Finset.single_le_sum (f := fun b' => |d a - d b'|) (fun _ _ => abs_nonneg _) (Finset.mem_univ b)).trans
-        (Finset.single_le_sum (f := fun a' => ∑ b', |d a' - d b'|)
-          (fun _ _ => Finset.sum_nonneg fun _ _ => abs_nonneg _) (Finset.mem_univ a))
-    have hΛab : |lowK ε (lam + t • d) a - lowK ε (lam + t • d) b| ≤ |L a - L b| + t * |d a - d b| := by
-      rw [hΛ, hΛ]
-      have e2 : L a + t * d a - (L b + t * d b) = (L a - L b) + t * (d a - d b) := by ring
-      rw [e2]
-      refine (abs_add_le _ _).trans (le_of_eq ?_)
-      rw [abs_mul, abs_of_pos ht0]
-    have htd : t * |d a - d b| ≤ t * ∑ a, ∑ b, |d a - d b| := mul_le_mul_of_nonneg_left hdab ht0.le
-    have htq : t * |2 * dot d (rhoN ε)| + t * ∑ a, ∑ b, |d a - d b| = Q * t := by rw [hQ]; ring
+    have hΛab : |μ a - μ b| ≤ |L a - L b| + t * |d a - d b| := by
+      rw [hΛ, hΛ, show L a + t * d a - (L b + t * d b) = (L a - L b) + t * (d a - d b) by ring]
+      exact (abs_add_le _ _).trans_eq (by rw [abs_mul, abs_of_pos ht0])
     have h2 : ‖smE ε π a b v‖ ^ 2 ≤ P + Q * t := by
-      rw [hP]
-      linarith
-    have h3 := Real.abs_le_sqrt h2
-    rwa [abs_of_nonneg (norm_nonneg _)] at h3
-  have hmat := hMat (n + 1) ε _ (smE ε π) hGl hIU (lowK ε (lam + t • d)) (Real.sqrt (P + Q * t)) v hKHW.1
-    (Real.sqrt_nonneg _) hoff
+      have hLab := pairLe L a b
+      have hdab := pairLe d a b
+      dsimp only [P, Q]
+      nlinarith
+    simpa [abs_of_nonneg (norm_nonneg _)] using Real.abs_le_sqrt h2
+  have hmat := hMat (n + 1) ε _ (smE ε π) hGl hIU μ (Real.sqrt (P + Q * t)) v hKHW.1 (Real.sqrt_nonneg _) hoff
   have hab : ∀ a b, ‖smE ε π (e (Sum.inl a)) (e (Sum.inl b)) (T' v)
       - (if a = b then ((t * d' a : ℝ) : ℂ) else 0) • T' v‖ ^ 2
-      ≤ t * (2 * S a b ^ 2 * (P + Q) + 2 * S' a b ^ 2) := by
-    intro a b
+      ≤ t * (2 * S a b ^ 2 * (P + Q) + 2 * S' a b ^ 2) := fun a b => by
     have hE : smE ε π (e (Sum.inl a)) (e (Sum.inl b)) = actM (smE ε π) (um g * Y a b * (um g)⁻¹) := by
-      rw [hY, conj_lemma_2, block_embed_single, actM_single_lemma]
+      rw [conj_lemma_2, block_embed_single, actM_single_lemma]
     have htr : ∑ c, Y a b c c * ((d c : ℝ) : ℂ) = if a = b then ((d' a : ℝ) : ℂ) else 0 := by
-      rw [← trace_dg, hY, show (dg d * (um g⁻¹ * blk0 e (Matrix.single a b 1) * um g)).trace
-        = (dg d' * Matrix.single a b 1).trace from hOver _, trace_dg_single]
-    have hsum : (∑ c, Y a b c c * ((lowK ε (lam + t • d) c : ℝ) : ℂ))
-        - (if a = b then ((t * d' a : ℝ) : ℂ) else 0) = ∑ c, Y a b c c * ((L c : ℝ) : ℂ) := by
-      simp only [hΛ]
-      push_cast
-      simp only [mul_add, Finset.sum_add_distrib]
-      have e3 : ∑ c, Y a b c c * ((t : ℂ) * (d c : ℂ)) = (t : ℂ) * ∑ c, Y a b c c * (d c : ℂ) := by
-        rw [Finset.mul_sum]
-        exact Finset.sum_congr rfl fun c _ => by ring
-      rw [e3, htr]
+      rw [← trace_dg, show (dg d * Y a b).trace = (dg d' * Matrix.single a b 1).trace from hOver _, trace_dg_single]
+    have hsum : (∑ c, Y a b c c * ((μ c : ℝ) : ℂ)) - (if a = b then ((t * d' a : ℝ) : ℂ) else 0)
+        = ∑ c, Y a b c c * ((L c : ℝ) : ℂ) := by
+      simp only [hΛ]; push_cast; simp only [mul_add, Finset.sum_add_distrib]
+      rw [show ∑ c, Y a b c c * ((t : ℂ) * (d c : ℂ)) = (t : ℂ) * ∑ c, Y a b c c * (d c : ℂ) by
+        rw [Finset.mul_sum]; exact Finset.sum_congr rfl fun _ _ => by ring, htr]
       split_ifs <;> push_cast <;> ring
+    let w₁ := actM (smE ε π) (Y a b) v - (∑ c, Y a b c c * ((μ c : ℝ) : ℂ)) • v
+    let w₂ := (∑ c, Y a b c c * ((L c : ℝ) : ℂ)) • v
     have hdecomp : smE ε π (e (Sum.inl a)) (e (Sum.inl b)) (T' v)
-        - (if a = b then ((t * d' a : ℝ) : ℂ) else 0) • T' v
-        = T' ((actM (smE ε π) (Y a b) v - (∑ c, Y a b c c * ((lowK ε (lam + t • d) c : ℝ) : ℂ)) • v)
-          + (∑ c, Y a b c c * ((L c : ℝ) : ℂ)) • v) := by
+        - (if a = b then ((t * d' a : ℝ) : ℂ) else 0) • T' v = T' (w₁ + w₂) := by
+      dsimp only [w₁, w₂]
       rw [hE, ← hT'2, ← hsum]
-      simp only [map_add (f := _), map_sub, map_smul, sub_smul]
-      abel
+      simp only [map_add (f := _), map_sub, map_smul, sub_smul]; abel
     rw [hdecomp, hTn]
-    have hn1 := norm_add_le (actM (smE ε π) (Y a b) v - (∑ c, Y a b c c * ((lowK ε (lam + t • d) c : ℝ) : ℂ)) • v)
-      ((∑ c, Y a b c c * ((L c : ℝ) : ℂ)) • v)
-    have hm := hmat (Y a b)
-    rw [hv1, mul_one, ← hS] at hm
-    have hs' : ‖(∑ c, Y a b c c * ((L c : ℝ) : ℂ)) • v‖ ≤ S' a b := by
-      rw [norm_smul, hv1, mul_one, hS']
-      refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun c _ => ?_)
-      rw [norm_mul, Complex.norm_real, Real.norm_eq_abs]
-    have hz0 := norm_nonneg ((actM (smE ε π) (Y a b) v - (∑ c, Y a b c c * ((lowK ε (lam + t • d) c : ℝ) : ℂ)) • v)
-          + (∑ c, Y a b c c * ((L c : ℝ) : ℂ)) • v)
-    have hz : ‖(actM (smE ε π) (Y a b) v - (∑ c, Y a b c c * ((lowK ε (lam + t • d) c : ℝ) : ℂ)) • v)
-          + (∑ c, Y a b c c * ((L c : ℝ) : ℂ)) • v‖ ≤ S a b * Real.sqrt (P + Q * t) + S' a b := by
-      linarith
-    have hsq := Real.sq_sqrt hR0
-    have hS0 : 0 ≤ S a b := by
-      rw [hS]; exact Finset.sum_nonneg fun _ _ => Finset.sum_nonneg fun _ _ => norm_nonneg _
-    have hsqrt0 := Real.sqrt_nonneg (P + Q * t)
-    have hRt : P + Q * t ≤ t * (P + Q) := by nlinarith
-    have k1 : 2 * S a b ^ 2 * (P + Q * t) ≤ 2 * S a b ^ 2 * (t * (P + Q)) :=
-      mul_le_mul_of_nonneg_left hRt (by positivity)
-    have k2 : 2 * S' a b ^ 2 ≤ t * (2 * S' a b ^ 2) := le_mul_of_one_le_left (by positivity) ht
-    calc _ ≤ (S a b * Real.sqrt (P + Q * t) + S' a b) ^ 2 := pow_le_pow_left₀ hz0 hz 2
+    have hm : ‖w₁‖ ≤ S a b * Real.sqrt (P + Q * t) := by
+      simpa only [w₁, S, hv1, mul_one] using hmat (Y a b)
+    have hs' : ‖w₂‖ ≤ S' a b := by
+      dsimp only [w₂, S']
+      rw [norm_smul, hv1, mul_one]
+      exact (norm_sum_le _ _).trans <| Finset.sum_le_sum fun c _ => by
+        rw [norm_mul, Complex.norm_real, Real.norm_eq_abs]
+    have hz : ‖w₁ + w₂‖ ≤ S a b * Real.sqrt (P + Q * t) + S' a b := (norm_add_le w₁ w₂).trans (by linarith)
+    calc ‖w₁ + w₂‖ ^ 2 ≤ (S a b * Real.sqrt (P + Q * t) + S' a b) ^ 2 := pow_le_pow_left₀ (norm_nonneg _) hz 2
       _ ≤ 2 * S a b ^ 2 * (P + Q * t) + 2 * S' a b ^ 2 := by
-          nlinarith [sq_nonneg (S a b * Real.sqrt (P + Q * t) - S' a b)]
-      _ ≤ t * (2 * S a b ^ 2 * (P + Q) + 2 * S' a b ^ 2) := by linarith
+          nlinarith [sq_nonneg (S a b * Real.sqrt (P + Q * t) - S' a b), Real.sq_sqrt hR0]
+      _ ≤ t * (2 * S a b ^ 2 * (P + Q) + 2 * S' a b ^ 2) := by
+          have hRt : P + Q * t ≤ t * (P + Q) := by nlinarith
+          nlinarith [mul_le_mul_of_nonneg_left hRt (sq_nonneg (S a b)), sq_nonneg (S' a b)]
   refine ⟨T' v, by rw [hTn, hv1], ?_⟩
   calc _ ≤ ∑ a, ∑ b, t * (2 * S a b ^ 2 * (P + Q) + 2 * S' a b ^ 2) :=
         Finset.sum_le_sum fun a _ => Finset.sum_le_sum fun b _ => hab a b

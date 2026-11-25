@@ -37,14 +37,7 @@ end
 
 structure CycHost (H : Type) [AddCommGroup H] [Fintype H] [DecidableEq H] where
   cv : AddChar (E0 × H) ℂ → ℕ → ℂ
-  cv_zero : ∀ n, cv 0 n = 1
   ell : AddChar (E0 × H) ℂ → ℂ
-  chC : AddChar (E0 × H) ℂ
-  psC : AddChar (E0 × H) ℂ
-  chpsC : AddChar (E0 × H) ℂ
-  chC_apply : ∀ g, chC g = (sgn2 g.1.1 : ℂ)
-  psC_apply : ∀ g, psC g = (sgn2 g.1.2 : ℂ)
-  chpsC_apply : ∀ g, chpsC g = ((sgn2 g.1.1 * sgn2 g.1.2 : ℝ) : ℂ)
 
 section
 variable {H : Type} [AddCommGroup H] [Fintype H] [DecidableEq H]

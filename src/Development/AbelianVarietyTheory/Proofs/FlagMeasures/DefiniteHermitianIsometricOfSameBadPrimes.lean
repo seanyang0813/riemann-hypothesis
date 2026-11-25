@@ -79,19 +79,6 @@ variable {K : Type} [Field K] [NumberField K] [StarRing K]
 def NormUnit (P : Ideal (𝓞 K)) (x : K) : Prop :=
   ∃ c : K, c ≠ 0 ∧ star c * c * x ∈ locR (K := K) P ∧ (star c * c * x)⁻¹ ∈ locR (K := K) P
 
-theorem star_mem_locR {P : Ideal (𝓞 K)} (hP : P.IsMaximal) (hc : conjIdeal (K := K) P = P) {a : K}
-    (ha : a ∈ locR (K := K) P) : star a ∈ locR (K := K) P := by
-  have mR : ∀ a : K, a ∈ locR (K := K) P ↔ ∃ s, s ∉ P ∧ ∃ r : 𝓞 K,
-      algebraMap (𝓞 K) K r = algebraMap (𝓞 K) K s * a := fun a =>
-    exists_congr fun s => and_congr (LocWitt.mem_hcompl hP hc s)
-      (by rw [Submodule.mem_one, Algebra.smul_def])
-  obtain ⟨s, hs, r, e⟩ := (mR a).1 ha
-  obtain ⟨s', es⟩ := LocWitt.star_int s
-  obtain ⟨r', er⟩ := LocWitt.star_int r
-  refine (mR _).2 ⟨s', fun a => hs ?_, r', by rw [er, es, e, star_mul']⟩
-  rw [← hc]
-  exact Ideal.subset_span ⟨s', a, by rw [es, star_star]⟩
-
 theorem normUnit_iff (v : IsDedekindDomain.HeightOneSpectrum (𝓞 K))
     (hc : conjIdeal (K := K) v.asIdeal = v.asIdeal) {x : K} {m : ℤ}
     (hx : v.valuation K x = WithZero.exp m) : NormUnit v.asIdeal x ↔ Even m := by

@@ -118,10 +118,6 @@ private theorem pderiv_ev_rows {b : Fin m → Pt R n d} (hb : ZZ b)
   funext g
   simpa only [Function.comp_apply, Finset.sum_apply, Pi.mul_apply, pderiv_coe, subst_coe] using hp g
 
-private theorem pderiv_point (v : Fin n × Fin d) (j : Fin n) (i : Fin d) :
-    pderiv v (pt R d j i) = if (j, i) = v then 1 else 0 := by
-  rw [pt, pderiv_X, Pi.single_apply]
-
 private theorem constantCoeff_partial (f : PS R n d) (v : Fin n × Fin d) :
     constantCoeff (pderiv v f) = coeff (Finsupp.single v 1) f := by
   rw [← coeff_zero_eq_constantCoeff_apply, coeff_pderiv, zero_add]
@@ -146,13 +142,13 @@ theorem dcomp_ne {s t : Fin n} (h : t ≠ s) (φ : Pt R 1 d) (j c : Fin d) :
     pderiv (s, j) (comp1 φ (pt R d t) c) = 0 := by
   show pderiv (s, j) (ev ![pt R d t] (φ c)) = 0
   rw [pderiv_ev_rows (ZZ_cons (Z_pt t) ZZ_nil), Fin.sum_univ_one]
-  simp [pderiv_point, h]
+  simp [ReciprocityTheory.ChartRestriction.G.TB.LogPf.pderiv_pt, h]
 
 theorem dcomp_eq (s : Fin n) (φ : Pt R 1 d) (j c : Fin d) :
     pderiv (s, j) (comp1 φ (pt R d s) c) = ev ![pt R d s] (pderiv ((0 : Fin 1), j) (φ c)) := by
   show pderiv (s, j) (ev ![pt R d s] (φ c)) = _
   rw [pderiv_ev_rows (ZZ_cons (Z_pt s) ZZ_nil), Fin.sum_univ_one]
-  simp [pderiv_point]
+  simp [ReciprocityTheory.ChartRestriction.G.TB.LogPf.pderiv_pt]
 
 theorem jac_cancel (G : FGLaw R d) {x : Pt R n d} (hx : Z x) (v : Fin d → PS R n d)
     (h : ∀ j, ∑ c, v c * ev ![x, 0] (pderiv ((1 : Fin 2), j) (G.F c)) = 0) (c : Fin d) : v c = 0 := by
@@ -167,8 +163,8 @@ theorem jac_cancel (G : FGLaw R d) {x : Pt R n d} (hx : Z x) (v : Fin d → PS R
         constantCoeff (pderiv ((0 : Fin 1), j) (pt R d 0 c)) := by
       rw [G.unit c]
       rfl
-    rw [pderiv_ev_rows hb0, Fin.sum_univ_two, pderiv_point] at hu
-    simp [pderiv_point, ccev hb0, constantCoeff_partial] at hu
+    rw [pderiv_ev_rows hb0, Fin.sum_univ_two, ReciprocityTheory.ChartRestriction.G.TB.LogPf.pderiv_pt] at hu
+    simp [ReciprocityTheory.ChartRestriction.G.TB.LogPf.pderiv_pt, ccev hb0, constantCoeff_partial] at hu
     rw [hu]
   have hdet : IsUnit M.det := by
     rw [MvPowerSeries.isUnit_iff_constantCoeff, RingHom.map_det]
@@ -255,7 +251,7 @@ theorem deriv_first_first_form_zero {z : Pt R n d} (hz : Z z) (c : Fin d) : ev !
     exact Derivation.map_one_eq_zero _
   rw [pderiv_ev_rows (ZZ_cons (Z_pt 0) (ZZ_cons Z_zero (ZZ_cons (Z_pt 1) ZZ_nil))),
     Fin.sum_univ_three] at e0
-  simp [pderiv_point] at e0
+  simp [ReciprocityTheory.ChartRestriction.G.TB.LogPf.pderiv_pt] at e0
   have e1 := congrArg (ev ![(0 : Pt R n d), z]) e0
   rw [ev3 hb (Z_pt 0) Z_zero (Z_pt 1), ep_pt hb, ep_zero hb, ep_pt hb, evz hb] at e1
   simpa using e1
@@ -267,7 +263,7 @@ theorem deriv_second_first_form_zero {z : Pt R n d} (hz : Z z) (c : Fin d) : ev 
     exact Derivation.map_one_eq_zero _
   rw [pderiv_ev_rows (ZZ_cons Z_zero (ZZ_cons (Z_pt 0) (ZZ_cons (Z_pt 1) ZZ_nil))),
     Fin.sum_univ_three] at e0
-  simp [pderiv_point] at e0
+  simp [ReciprocityTheory.ChartRestriction.G.TB.LogPf.pderiv_pt] at e0
   have e1 := congrArg (ev ![(0 : Pt R n d), z]) e0
   rw [ev3 hb Z_zero (Z_pt 0) (Z_pt 1), ep_zero hb, ep_pt hb, ep_pt hb, evz hb] at e1
   simpa using e1
@@ -285,7 +281,7 @@ private theorem ev_zero_pderiv_pow1_eq_zero {z : Pt R n d} (hz : Z z) (k : Fin d
     germComp1_zero_of_noConstantCoeff (Z_act _ _), deriv_first_first_form_zero B hz, deriv_second_first_form_zero B hz, zero_mul, Finset.sum_const_zero,
     zero_add]
   refine Finset.sum_eq_zero fun e _ => ?_
-  simp [pderiv_point, evz hb]
+  simp [ReciprocityTheory.ChartRestriction.G.TB.LogPf.pderiv_pt, evz hb]
 
 theorem deriv_first_power_char_p (p : ℕ) [CharP R p] (j : Fin d) : pderiv ((0 : Fin 2), j) (pow1 B p) = 0 := by
   have hb : ZZ (n := 2) ![pt R d 0, 0, pt R d 1] :=
@@ -297,10 +293,10 @@ theorem deriv_first_power_char_p (p : ℕ) [CharP R p] (j : Fin d) : pderiv ((0 
     intro c
     show pderiv _ (ev ![pt R d 0, pt R d 1] (B.G.F c)) = _
     rw [pderiv_ev_rows (ZZ_cons (Z_pt 0) (ZZ_cons (Z_pt 1) ZZ_nil)), Fin.sum_univ_two]
-    simp [pderiv_point]
+    simp [ReciprocityTheory.ChartRestriction.G.TB.LogPf.pderiv_pt]
   have hz2 : ∀ c, pderiv ((1 : Fin 3), k) (pt R d 2 c) = 0 := by
     intro c
-    simp [pderiv_point]
+    simp [ReciprocityTheory.ChartRestriction.G.TB.LogPf.pderiv_pt]
   have L : ev ![pt R d 0, (0 : Pt R 2 d), pt R d 1] (pderiv ((1 : Fin 3), k)
       (ev ![B.G.add (pt R d 0) (pt R d 1), pt R d 2] (pow1 B p) * B.ph1 ^ p)) =
       ∑ c, pderiv ((0 : Fin 2), c) (pow1 B p) *
@@ -316,11 +312,11 @@ theorem deriv_first_power_char_p (p : ℕ) [CharP R p] (j : Fin d) : pderiv ((0 
       Matrix.head_cons, Matrix.cons_val_two, Matrix.tail_cons, p_add_zero B.G (Z_pt 0), eval_points_two]
   have hA : pderiv ((1 : Fin 3), k) (ev ![pt R d 0, pt R d 2] (pow1 B p)) = 0 := by
     rw [pderiv_ev_rows (ZZ_cons (Z_pt 0) (ZZ_cons (Z_pt 2) ZZ_nil)), Fin.sum_univ_two]
-    simp [pderiv_point]
+    simp [ReciprocityTheory.ChartRestriction.G.TB.LogPf.pderiv_pt]
   have hBq : ev ![pt R d 0, (0 : Pt R 2 d), pt R d 1]
       (pderiv ((1 : Fin 3), k) (ev ![pt R d 1, pt R d 2] (pow1 B p))) = 0 := by
     rw [pderiv_ev_rows (ZZ_cons (Z_pt 1) (ZZ_cons (Z_pt 2) ZZ_nil)), Fin.sum_univ_two]
-    simp [pderiv_point]
+    simp [ReciprocityTheory.ChartRestriction.G.TB.LogPf.pderiv_pt]
     rw [ev2 hb (Z_pt 1) (Z_pt 2), ep_pt hb, ep_pt hb]
     simpa using ev_zero_pderiv_pow1_eq_zero B (Z_pt (R := R) (d := d) (n := 2) 1) k p
   have hC : pderiv ((1 : Fin 3), k) (ev ![comp1 (B.A.act (p : O)) (pt R d 0),

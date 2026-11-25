@@ -333,18 +333,11 @@ section Global
 
 variable {F : Type} [Field F] [NumberField F]
 
-private theorem mem_int (v : Pl F) (y : F) (hy : v.valuation F y ≤ 1) :
-    cv v y ∈ v.adicCompletionIntegers F := by
-  rw [HeightOneSpectrum.mem_adicCompletionIntegers]
-  change Valued.v (y : v.adicCompletion F) ≤ 1
-  rwa [HeightOneSpectrum.valuedAdicCompletion_eq_valuation']
-
 private theorem ae_int (x : F) :
     ∀ᶠ v : Pl F in Filter.cofinite, cv v x ∈ (algebraMap (Ov v) (Kv v)).range := by
-  refine (HeightOneSpectrum.Support.finite (𝓞 F) x).subset fun v hv => ?_
-  by_contra hn
-  simp only [HeightOneSpectrum.Support, Set.mem_setOf_eq, not_lt] at hn
-  exact hv ⟨⟨_, mem_int v x hn⟩, rfl⟩
+  have h := (algebraMap F (FiniteAdeleRing (𝓞 F) F) x).cofinite_mem_adicCompletionIntegers
+  filter_upwards [h] with v hv
+  exact ⟨⟨_, hv⟩, rfl⟩
 
 private theorem ae_unit {x : F} (hx : x ≠ 0) :
     ∀ᶠ v : Pl F in Filter.cofinite, ∃ u : (Ov v)ˣ, algebraMap (Ov v) (Kv v) u = cv v x := by

@@ -687,37 +687,6 @@ def SideLev : Prop := ∀ (D : D7) (G : Type) [Group G] [Fintype G] (V : HSp D) 
 variable {D : D7} {G : Type} [Group G] [Fintype G] {Pl0 T N : Type} {A : FamIn D.what₂.LL G Pl0 T D.R.m}
   {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] {R : RealDat D A Ks} {V : NewLev D N}
 
-theorem extL_is (hL : R.toLevCh.Is A.μ0) (hV : ∀ n, TwLev R (V.xiH n) (V.xi n) (V.Q n) (V.xiR n)) (hi : Function.Injective V.xiH)
-    (hn : ∀ n t, V.xiH n ≠ R.xiH t)
-    (hQ : ∀ p ∈ ({D.host.pde, D.host.pde'} : Set ℕ), ∃ 𝔭 : HeightOneSpectrum (𝓞 D.host.K),
-      (∀ t, ∀ PP ∈ R.Q t, ((p : ℕ) : 𝓞 D.host.E) ∈ PP.asIdeal → PP.under (𝓞 D.host.K) = 𝔭) ∧
-        ∀ n, ∀ PP ∈ V.Q n, ((p : ℕ) : 𝓞 D.host.E) ∈ PP.asIdeal → PP.under (𝓞 D.host.K) = 𝔭) :
-    (extL R.toLevCh V).Is (.inl A.μ0) :=
-  { mu0 := hL.mu0
-    eta := hL.eta
-    xi := Sum.rec hL.xi fun n => (hV n).xi
-    xi_inj := by
-      rintro (t | n) (t' | n') h
-      · exact congrArg _ (hL.xi_inj h)
-      · exact absurd h.symm (hn n' t)
-      · exact absurd h (hn n t')
-      · exact congrArg _ (hi h)
-    xi_base := hL.xi_base
-    xi_fin := Sum.rec hL.xi_fin fun n => (hV n).xi_fin
-    xi_triv := Sum.rec hL.xi_triv fun n => (hV n).xi_triv
-    xi_tame := Sum.rec hL.xi_tame fun n => (hV n).xi_tame
-    Pg := hL.Pg
-    Q_pl := Sum.rec hL.Q_pl fun n => (hV n).Q_pl
-    Q_off := Sum.rec hL.Q_off fun n => (hV n).Q_off
-    Q_de p hp := (hQ p hp).imp fun _ h => Sum.rec h.1 h.2
-    Q_ram := Sum.rec hL.Q_ram fun n => (hV n).Q_ram
-    chi := hL.chi
-    xiR := Sum.rec hL.xiR fun n => (hV n).xiR
-    βY := hL.βY
-    βX := hL.βX
-    βV := hL.βV
-    βW := hL.βW }
-
 open Formalism.L2.Host Formalism.L2.Col GlobalTheory.RationalValues in
 theorem xiR_mem (hL : R.toLevCh.Is A.μ0) (hF : R.IsFam) {χ xi Q xiR} (h : TwLev R χ xi Q xiR) :
     ∀ PP ∈ Q, ∀ x, ((xiR PP x : ℂˣ) : ℂ) ∈ D.what₂.embLL.fieldRange := by

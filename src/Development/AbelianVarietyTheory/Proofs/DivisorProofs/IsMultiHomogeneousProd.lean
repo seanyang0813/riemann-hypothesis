@@ -62,18 +62,6 @@ theorem linSubst_mul {R : Type} [CommRing R] {B N n : ℕ} (M : Matrix (Fin N) (
     (f g : MvPolynomial (Fin B × Fin N) R) : linSubst M (f * g) = linSubst M f * linSubst M g := by
   simp [linSubst]
 
-theorem exists_rightInv {F : Type} [Field F] {N n : ℕ} {w : Matrix (Fin N) (Fin n) F}
-    (hw : Function.Surjective w.mulVec) : ∃ P : Matrix (Fin n) (Fin N) F, w * P = 1 := by
-  classical
-  choose x hx using fun j : Fin N => hw (Pi.single j 1)
-  refine ⟨Matrix.of fun k j => x j k, ?_⟩
-  ext i j
-  have := congrFun (hx j) i
-  simp only [Matrix.mulVec, dotProduct] at this
-  rw [Matrix.mul_apply, Matrix.one_apply]
-  simp only [Matrix.of_apply]
-  rw [this, Pi.single_apply]
-
 theorem formHeight_mul {F : Type} [Field F] [NumberField F] {B N n : ℕ} (δ δ' : ℕ)
     {w : Matrix (Fin N) (Fin n) F} {P : Matrix (Fin n) (Fin N) F} (hP : w * P = 1)
     {A : (F →+* ℂ) → Matrix (Fin N) (Fin N) ℂ} (hA : ∀ σ, (A σ).det ≠ 0) {a a' : Fin B → ℕ}

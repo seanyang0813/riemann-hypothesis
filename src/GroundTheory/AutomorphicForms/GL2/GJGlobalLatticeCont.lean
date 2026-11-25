@@ -2,44 +2,6 @@ module
 
 public import GroundTheory.AutomorphicForms.GL2.GJGlobalLattice
 public import GroundTheory.AutomorphicForms.GL2.GJGlobalLatticeBounds
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.TypeStar
-import Mathlib.Topology.Sheaves.Init
 
 @[expose] public section
 
@@ -168,37 +130,29 @@ theorem exists_nhds_compact (p₀ : {r : ℝ // 0 < r} × AdelicGLn.AdelicGL K n
   filter_upwards [h1, h2] with p hp1 hp2
   exact ⟨hp1, hp2.1, hp2.2⟩
 
-private theorem continuous_tsum_of {ι : Type*} {Φ : Matrix (Fin n) (Fin n) 𝔸[K] → ℂ}
-    (hΦ : Φ ∈ matrixSchwartzBruhat K n) (f : ι → Matrix (Fin n) (Fin n) K)
-    (hf : Function.Injective f) :
-    Continuous (fun p : {r : ℝ // 0 < r} × AdelicGLn.AdelicGL K n × AdelicGLn.AdelicGL K n =>
-      ∑' ξ : ι, Φ (((Reduction.centralSection K n p.1 * p.2.1 :
-        AdelicGLn.AdelicGL K n) : Matrix (Fin n) (Fin n) 𝔸[K]) * ratMat (f ξ) *
-          (p.2.2 : Matrix (Fin n) (Fin n) 𝔸[K]))) := by
-  refine continuous_iff_continuousAt.2 fun p₀ => ?_
-  obtain ⟨A, B, hA, hB, hU⟩ := exists_nhds_compact (K := K) (n := n) p₀
-  obtain ⟨u, hu, hbd⟩ := exists_summable_bound hΦ ⟨(p₀.1 : ℝ) / 2, half_pos p₀.1.2⟩ hA hB
-  refine (continuousOn_tsum (s := {p : {r : ℝ // 0 < r} × AdelicGLn.AdelicGL K n ×
-      AdelicGLn.AdelicGL K n | (p₀.1 : ℝ) / 2 < p.1 ∧ p.2.1 ∈ A ∧ p.2.2 ∈ B})
-    (fun ξ => ((continuous_of_mem_matrixSchwartzBruhat hΦ).comp
-      ((continuous_centralSection_mul_coe.matrix_mul continuous_const).matrix_mul
-        continuous_snd_snd_coe)).continuousOn)
-    (hu.comp_injective hf) (fun ξ p hp => hbd p.1 hp.1.le p.2.1 hp.2.1 p.2.2
-    hp.2.2 (f ξ))).continuousAt hU
-
 theorem continuous_tsum_ratMat {Φ : Matrix (Fin n) (Fin n) 𝔸[K] → ℂ}
     (hΦ : Φ ∈ matrixSchwartzBruhat K n) :
     Continuous (fun p : {r : ℝ // 0 < r} × AdelicGLn.AdelicGL K n × AdelicGLn.AdelicGL K n =>
       ∑' ξ : Matrix (Fin n) (Fin n) K, Φ (((Reduction.centralSection K n p.1 * p.2.1 :
         AdelicGLn.AdelicGL K n) : Matrix (Fin n) (Fin n) 𝔸[K]) * ratMat ξ *
-          (p.2.2 : Matrix (Fin n) (Fin n) 𝔸[K]))) :=
-  continuous_tsum_of hΦ id Function.injective_id
+          (p.2.2 : Matrix (Fin n) (Fin n) 𝔸[K]))) := by
+  have hΦc := continuous_of_mem_matrixSchwartzBruhat hΦ
+  refine continuous_iff_continuousAt.2 fun p₀ => ?_
+  obtain ⟨A, B, hA, hB, hU⟩ := exists_nhds_compact (K := K) (n := n) p₀
+  obtain ⟨u, hu, hbd⟩ := exists_summable_bound hΦ ⟨(p₀.1 : ℝ) / 2, half_pos p₀.1.2⟩ hA hB
+  refine (continuousOn_tsum (s := {p : {r : ℝ // 0 < r} × AdelicGLn.AdelicGL K n ×
+      AdelicGLn.AdelicGL K n | (p₀.1 : ℝ) / 2 < p.1 ∧ p.2.1 ∈ A ∧ p.2.2 ∈ B})
+    (fun ξ => ?_) hu (fun ξ p hp => hbd p.1 hp.1.le p.2.1 hp.2.1 p.2.2
+    hp.2.2 ξ)).continuousAt hU
+  exact (hΦc.comp ((continuous_centralSection_mul_coe.matrix_mul continuous_const).matrix_mul
+    continuous_snd_snd_coe)).continuousOn
 
 theorem continuous_tsum_GL {Φ : Matrix (Fin n) (Fin n) 𝔸[K] → ℂ}
     (hΦ : Φ ∈ matrixSchwartzBruhat K n) :
     Continuous (fun p : {r : ℝ // 0 < r} × AdelicGLn.AdelicGL K n × AdelicGLn.AdelicGL K n =>
       ∑' γ : GL (Fin n) K, Φ ((Reduction.centralSection K n p.1 * p.2.1 * AdelicGLn.diagonal K n γ *
         p.2.2 : AdelicGLn.AdelicGL K n) : Matrix (Fin n) (Fin n) 𝔸[K])) := by
+  have hΦc := continuous_of_mem_matrixSchwartzBruhat hΦ
   have heq : ∀ (p : {r : ℝ // 0 < r} × AdelicGLn.AdelicGL K n × AdelicGLn.AdelicGL K n)
       (γ : GL (Fin n) K), ((Reduction.centralSection K n p.1 * p.2.1 * AdelicGLn.diagonal K n γ *
         p.2.2 : AdelicGLn.AdelicGL K n) : Matrix (Fin n) (Fin n) 𝔸[K]) =
@@ -207,7 +161,16 @@ theorem continuous_tsum_GL {Φ : Matrix (Fin n) (Fin n) 𝔸[K] → ℂ}
           (p.2.2 : Matrix (Fin n) (Fin n) 𝔸[K]) := fun p γ => by
     simp only [Units.val_mul, coe_diagonal]
   simp_rw [heq]
-  exact continuous_tsum_of hΦ _ (fun _ _ h => Units.ext h)
+  refine continuous_iff_continuousAt.2 fun p₀ => ?_
+  obtain ⟨A, B, hA, hB, hU⟩ := exists_nhds_compact (K := K) (n := n) p₀
+  obtain ⟨u, hu, hbd⟩ := exists_summable_bound hΦ ⟨(p₀.1 : ℝ) / 2, half_pos p₀.1.2⟩ hA hB
+  refine (continuousOn_tsum (s := {p : {r : ℝ // 0 < r} × AdelicGLn.AdelicGL K n ×
+      AdelicGLn.AdelicGL K n | (p₀.1 : ℝ) / 2 < p.1 ∧ p.2.1 ∈ A ∧ p.2.2 ∈ B})
+    (u := fun γ : GL (Fin n) K => u (γ : Matrix (Fin n) (Fin n) K))
+    (fun γ => ?_) (hu.comp_injective (fun _ _ h => Units.ext h))
+    (fun γ p hp => hbd p.1 hp.1.le p.2.1 hp.2.1 p.2.2 hp.2.2 _)).continuousAt hU
+  exact (hΦc.comp ((continuous_centralSection_mul_coe.matrix_mul continuous_const).matrix_mul
+    continuous_snd_snd_coe)).continuousOn
 
 end GJGlobal
 

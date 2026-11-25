@@ -54,8 +54,6 @@ namespace GlobalTheory.FunObj
 
 open GlobalTheory.ChiGrid GlobalTheory.SplitFlip GlobalTheory.SplitWeil GlobalTheory.StepData GlobalTheory.StdFrames Formalism.L2.Host Formalism.L2.DIV ValuativeRel
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 variable {D : D7} {T : Type} {L : LevCh D T} {sc : Consts}
 
 def finG (V : HSp D) : GfC V →* GL (Fin V.rank) (Lev.EAf D) := (Lev.finE V).comp (GfC V).subtype
@@ -376,8 +374,6 @@ end GlobalTheory.FunObj
 namespace GlobalTheory.FunObj
 
 open GlobalTheory.ChiGrid Formalism.L2.DIV
-
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 variable {D : D7} {Γ : Type} [Group Γ] [Fintype Γ] {Pl0 T : Type} {A : FamIn D.what₂.LL Γ Pl0 T D.R.m}
   {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] {R : RealDat D A Ks} {sc : Consts}

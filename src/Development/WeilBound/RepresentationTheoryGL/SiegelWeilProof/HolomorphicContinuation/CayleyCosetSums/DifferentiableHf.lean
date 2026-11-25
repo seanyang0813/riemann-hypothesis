@@ -92,7 +92,7 @@ theorem continuousAt_fz {x : M2 n} (hx : InG x) (m : ℕ) (e : ℤ) (z : ℂ) :
     ring
   have hslit : (u1 x).det * (ub1 x).det ∈ Complex.slitPlane := by
     rw [hw, Complex.ofReal_mem_slitPlane]
-    exact Complex.normSq_pos.2 (det_first_block_ne_zero_group hx)
+    exact Complex.normSq_pos.2 (PositivityTheory.Rg.Sw.LVs.det_first_cayley_block_ne_zero hx)
   show ContinuousAt (fun p : M2 n × ℂ =>
     p.1.det ^ e * (u1 p.1).det ^ (-(m : ℤ)) * ((u1 p.1).det * (ub1 p.1).det) ^ (-p.2)) (x, z)
   have hA : ContinuousAt (fun p : M2 n × ℂ => p.1.det) (x, z) := (hdet.comp continuous_fst).continuousAt
@@ -102,7 +102,7 @@ theorem continuousAt_fz {x : M2 n} (hx : InG x) (m : ℕ) (e : ℤ) (z : ℂ) :
   have hC : ContinuousAt (fun p : M2 n × ℂ => (ub1 p.1).det) (x, z) :=
     ContinuousAt.comp (g := fun y : M2 n => (ub1 y).det) (f := Prod.fst) (x := (x, z)) hub'
       continuous_fst.continuousAt
-  refine ((hA.zpow₀ e (Or.inl hdx)).mul (hB.zpow₀ _ (Or.inl (det_first_block_ne_zero_group hx)))).mul ?_
+  refine ((hA.zpow₀ e (Or.inl hdx)).mul (hB.zpow₀ _ (Or.inl (PositivityTheory.Rg.Sw.LVs.det_first_cayley_block_ne_zero hx)))).mul ?_
   exact (hB.mul hC).cpow continuous_snd.neg.continuousAt hslit
 
 theorem inG_path {y a b : M2 n} (hy : InG y) (ha : InG a) (hb : InG b) (t : Fin n → Fin n → ℝ) :
@@ -169,9 +169,9 @@ theorem differentiable_Hf (m : ℕ) (e : ℤ) {ψ : (Fin n → Fin n → ℝ) �
     intro t _ z _
     have hG := inG_path hy ha hb t
     have hc : (u1 (y * a * nU (herm t) * b)).det * (ub1 (y * a * nU (herm t) * b)).det ≠ 0 := by
-      refine mul_ne_zero (det_first_block_ne_zero_group hG) ?_
+      refine mul_ne_zero (PositivityTheory.Rg.Sw.LVs.det_first_cayley_block_ne_zero hG) ?_
       rw [inverse_first_block_eq_conjTranspose hG, Matrix.det_conjTranspose]
-      exact star_ne_zero.2 (det_first_block_ne_zero_group hG)
+      exact star_ne_zero.2 (PositivityTheory.Rg.Sw.LVs.det_first_cayley_block_ne_zero hG)
     simp only [fz]
     exact (((differentiableAt_const _).mul (differentiableAt_id.neg.const_cpow (Or.inl hc))).mul_const
       _).differentiableWithinAt

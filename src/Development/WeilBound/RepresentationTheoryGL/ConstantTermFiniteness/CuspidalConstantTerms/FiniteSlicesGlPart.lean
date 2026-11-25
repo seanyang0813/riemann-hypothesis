@@ -255,16 +255,6 @@ open scoped TensorProduct DirectSum Classical
 
 namespace GlobalTheory.SepTypes
 
-theorem coeffSpan_rtrans {G W : Type} [Group G] [AddCommGroup W] [Module ℂ W]
-    (ρ : Representation ℂ G W) (c : G) {h : G → ℂ} (hh : h ∈ coeffSpan ρ) :
-    (fun k => h (k * c)) ∈ coeffSpan ρ := by
-  have hle : coeffSpan ρ ≤ (coeffSpan ρ).comap (LinearMap.funLeft ℂ ℂ (fun k : G => k * c)) := by
-    refine Submodule.span_le.2 ?_
-    rintro f ⟨ℓ, w, rfl⟩
-    refine Submodule.subset_span ⟨ℓ, ρ c w, funext fun k => ?_⟩
-    simp [LinearMap.funLeft, map_mul]
-  exact hle hh
-
 theorem exists_space {ι : Type} [Fintype ι] [DecidableEq ι] {G : Type} [Group G] [TopologicalSpace G]
     [IsTopologicalGroup G] {Γ : ι → Type} [∀ i, Group (Γ i)] (K : Subgroup G) (j : (∀ i, Γ i) →* K)
     (hjs : Function.Surjective j) (a : ∀ i, Γ i → G) (hj : ∀ i k, (j (Pi.mulSingle i k) : G) = a i k)
@@ -318,7 +308,7 @@ theorem exists_space {ι : Type} [Fintype ι] [DecidableEq ι] {G : Type} [Group
       · subst h; simp
       · simp [Function.update_of_ne h, Pi.mulSingle_eq_of_ne h]
     simp only [key]
-    exact coeffSpan_rtrans (ρ τ) (κ₁ τ) (hf.2 τ _)
+    exact GlobalTheory.AvgCoeff.coeffSpan_mulRight (ρ τ) (κ₁ τ) (hf.2 τ _)
   · intro φ hφ hty g
     refine ⟨hφ.comp (continuous_const.mul continuous_subtype_val), fun τ k₀ => ?_⟩
     have := hty τ (g * (k₀ : G))

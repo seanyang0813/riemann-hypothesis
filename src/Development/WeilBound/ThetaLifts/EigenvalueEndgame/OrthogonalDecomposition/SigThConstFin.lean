@@ -213,7 +213,7 @@ theorem exists_op (hD : DictSt) (hp : IsPair B M χX χW om r s r' s') {v : Pl F
       Acts (evFin F v) (om (1, h.1)) φ (a h φ) := by
   obtain ⟨⟨ι, hι⟩, ν, α, -, -, -, hd⟩ := hD F E σ n d B X W M om χX χW hp.base ⟨_, _, hp.herm⟩ ⟨_, _, hp.skew⟩ hp.good hp.weil
     hp.hX hp.hW v t
-  obtain ⟨j, -, j2⟩ := exists_inv' hι.bij
+  obtain ⟨j, -, j2⟩ := PositivityTheory.KCo.kd_exists_inv hι.bij
   choose g hg using fun h : UAt σ W (evFin F v) => (hd ι hι).right h.1 h.2
   exact ⟨fun h => j ∘ₗ (⟨⟨omB ν α 1 (g h), fun _ _ => funext fun _ => mul_add _ _ _⟩, fun _ _ => funext fun _ => mul_left_comm _ _ _⟩ :
     _ →ₗ[ℂ] _) ∘ₗ ι, fun h φ hφ => acts_of_reads (hg h) j2 hφ⟩
@@ -383,8 +383,8 @@ theorem inv_loc₂ (hL : LocDist) (e : Fin n ⊕ Fin n' ≃ Fin d) {v : Pl F} {o
     (hh : ∀ h₀, ∃ h, Reads v ι (om (1, h)) (omB ν α 1 h₀) ∧ Reads v ι' (om' (1, h)) (omB ν' α' 1 h₀) ∧
       ∀ φ ∈ SB _, ∀ φ₁ ∈ SB _, Acts (evFin F v) (om' (1, h)) φ φ₁ → ∀ Ψ ∈ schA F _, L φ₁ (om (1, h) Ψ) = L φ Ψ)
     {u g₀} (hu : Reads v ι (om (u, 1)) (omB ν α g₀ 1)) : ∀ φ' ∈ SB _, ∀ Ψ ∈ schA F _, L φ' (om (u, 1) Ψ) = L φ' Ψ := by
-  obtain ⟨j, j1, j2⟩ := exists_inv' b
-  obtain ⟨j', j1', j2'⟩ := exists_inv' b'
+  obtain ⟨j, j1, j2⟩ := PositivityTheory.KCo.kd_exists_inv b
+  obtain ⟨j', j1', j2'⟩ := PositivityTheory.KCo.kd_exists_inv b'
   intro φ' p1' Ψ hΨ
   refine schA_le (LinearMap.eqLocus (L φ' ∘ₛₗ om (u, 1)) (L φ')) (fun f φ p1 p2 => ?_) hΨ
   obtain ⟨T, t1, t2, t3⟩ := intersection_update_fsHerm_neg_one v f p1 p2

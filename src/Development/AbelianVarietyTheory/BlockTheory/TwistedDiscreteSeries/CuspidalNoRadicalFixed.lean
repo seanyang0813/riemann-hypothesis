@@ -64,27 +64,11 @@ variable (V : HSp D) (μ : Measure (GA D V)) [μ.IsHaarMeasure] [μ.IsMulRightIn
 
 structure IsCuspidalOp (f : GA D V → ℂ) : Prop where
 
-  map_mem : ∀ F : DividedPowerChartLift V μ, RopG V μ f F ∈ L2cusp V μ
-
-  map_orthogonal : ∀ F ∈ (L2cusp V μ)ᗮ, RopG V μ f F = 0
-
   traceClass : IsTraceClass (RopG V μ f)
-
-  integrable_kernel : ∀ (F : DividedPowerChartLift V μ) (p : Quot (GQ V)),
-    Integrable (fun q => kernelQ (GQ V) f p q * F q) (autMeasure V μ)
-
-  apply_eq_kernel : ∀ F : DividedPowerChartLift V μ,
-    RopG V μ f F =ᵐ[autMeasure V μ] fun p => ∫ q, kernelQ (GQ V) f p q * F q ∂autMeasure V μ
-
-  integrable_diag : Integrable (fun p => kernelQ (GQ V) f p p) (autMeasure V μ)
 
   trace_eq_integral : trace (RopG V μ f) = ∫ p, kernelQ (GQ V) f p p ∂autMeasure V μ
 
-  mult_finite : ∀ c : UDual (GA D V), mCusp V μ c.rep.π < Cardinal.aleph0
-
   traceClass_rep : ∀ c : UDual (GA D V), mCusp V μ c.rep.π ≠ 0 → IsTraceClass (repOp c.rep.π μ f)
-
-  summable_norm : Summable fun c : UDual (GA D V) => ‖((mCusp V μ c.rep.π).toNat : ℂ) * repTrace c.rep.π μ f‖
 
   hasSum_trace : HasSum (fun c : UDual (GA D V) => ((mCusp V μ c.rep.π).toNat : ℂ) * repTrace c.rep.π μ f)
     (trace (RopG V μ f))

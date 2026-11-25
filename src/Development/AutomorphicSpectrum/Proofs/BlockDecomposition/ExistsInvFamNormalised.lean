@@ -23,7 +23,6 @@ public import GroundTheory.GlobalFields.KummerTheory.LocalIndexAtPlace
 public import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.DecompositionGroupLocalGaloisIso
 public import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsLocalEmbeddingOverPlace
 public import Mathlib.Topology.LocallyConstant.Basic
-public import ReciprocityTheory.GaloisValuations.GlobalE
 public import GroundTheory.LocalFields.MaximalUnramified
 public import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsPowCharPowEqSelf
 public import GroundTheory.ProfiniteCohomology.LocalClassFormation.InvariantSplit

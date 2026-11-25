@@ -416,9 +416,9 @@ theorem kummerG_kummerF (n : ℕ)
 theorem exists_kummerδ_eq (n : ℕ)
     (x : gsTateCompactCohomology S ιr ιs (galRootsOfUnity.{0} K.1 (maxUnramifiedOutside K.1 ℚ̄ S) 2) (n + 1))
     (hx : kummerF S ιr ιs (n + 1) x = 0) : ∃ y, kummerδ S ιr ιs h2S n y = x :=
-  (ShortComplex.moduleCat_exact_iff _).1 (tateCompactCohomology_exact₁ (gsFinFamily S ιs) (gsRealFamily S ιr)
+  ((ShortComplex.moduleCat_exact_iff _).1 (tateCompactCohomology_exact₁ (gsFinFamily S ιs) (gsRealFamily S ιr)
     (finKummerMap S ιs) (realKummerMap S ιr) (kummerSeq_shortExact S h2S)
-    (fun _ => localKummerSeq_shortExact _ _ _ _) (fun _ => localKummerSeq_shortExact _ _ _ _) n) x hx
+    (fun _ => localKummerSeq_shortExact _ _ _ _) (fun _ => localKummerSeq_shortExact _ _ _ _) n) x hx :)
 
 
 

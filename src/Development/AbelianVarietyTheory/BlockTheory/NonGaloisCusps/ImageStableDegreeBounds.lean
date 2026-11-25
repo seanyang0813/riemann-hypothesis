@@ -86,15 +86,6 @@ def P₁ (Sig : Finset (ZMod e)) (c : ZMod e) (A' : ℕ) : Polynomial ℤ := roo
 
 def P₂ (Sig : Finset (ZMod e)) (c : ZMod e) (A' : ℕ) : Polynomial ℤ := rootPoly (D₂ Sig c A')
 
-structure DegreeBounds (Sig : Finset (ZMod e)) (c : ZMod e) (A' : ℕ) : Prop where
-  lt_of_mem₁ : ∀ i ∈ D₁ Sig c A', i < e * A'
-  mem_Ico₂ : ∀ j ∈ D₂ Sig c A', e * A' ≤ j ∧ j < 2 * e * A'
-  monic₁ : (P₁ Sig c A').Monic
-  monic₂ : (P₂ Sig c A').Monic
-  disjoint_roots : Disjoint (P₁ Sig c A').roots (P₂ Sig c A').roots
-  card₁ : (D₁ Sig c A').card ≤ Sig.card * A'
-  card₂ : (D₂ Sig c A').card ≤ Sig.card * A'
-
 end Degrees
 
 section Modules
@@ -169,7 +160,6 @@ def Reduction : Prop :=
 
 def Degrees : Prop :=
   ∀ (Sig : Finset (ZMod e)) (c : ZMod e) (A' : ℕ), 2 * A' ≤ l →
-    DegreeBounds Sig c A' ∧
     ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (η H : ℕ) (D : BKDat O K l e a ι η H),
       (∀ τ, D.desc.chars τ ⊆ (Sig : Set (ZMod e))) → RaisesDegree D.desc Sig c A'
 

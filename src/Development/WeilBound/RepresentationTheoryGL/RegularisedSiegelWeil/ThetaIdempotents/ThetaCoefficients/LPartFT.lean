@@ -243,17 +243,6 @@ theorem yPart_xz {m : ℕ} (X : Mx D m n) : yPart (xz X) = 0 := by
   show Sum.elim (X i) (fun _ => (0 : AE D)) (finSumFinEquiv.symm (finSumFinEquiv (Sum.inr j))) = _
   rw [Equiv.symm_apply_apply]; rfl
 
-theorem heis_xz (ψ : AddChar (AF D.host.F) ℂ) (V : HSp D) (X : Mx D V.rank n) (F : Mx D V.rank n → ℂ) :
-    PositivityTheory.GramSchwartzFunctions.EC.Heisenberg₂ ψ V (xz X) F 0 = F X := by
-  simp [PositivityTheory.GramSchwartzFunctions.EC.Heisenberg₂, xPart_xz, yPart_xz, GlobalTheory.StdUnn.inner, halfTr]
-
-theorem trace_inner_jn (V : HSp D) (hn : r + t = n) (x x' : Mx D V.rank r) (v v' : Mx D V.rank t) :
-    Matrix.trace (GlobalTheory.StdUnn.inner V (jn hn x v) (jn hn x' v')) = Matrix.trace (ip V x x') + Matrix.trace (ip V v v') := by
-  simp only [Matrix.trace, Matrix.diag, GlobalTheory.StdUnn.inner, ip, mm]
-  rw [← (ee hn).sum_comp, Fintype.sum_sum_type]
-  simp only [Matrix.mul_apply, adj, Matrix.transpose_apply, Matrix.map_apply, jn_ee, Matrix.fromCols_apply_inl,
-    Matrix.fromCols_apply_inr]
-
 theorem psi_ip_symm (ψ : AddChar (AF D.host.F) ℂ) (V : HSp D) (x y : Mx D V.rank t) :
     ψ (trA (Matrix.trace (ip V x y))) = ψ (trA (Matrix.trace (ip V y x))) := by
   have hs := pairing_symm (n := t) (isHermND_gram V) ψ x y
@@ -262,28 +251,6 @@ theorem psi_ip_symm (ψ : AddChar (AF D.host.F) ℂ) (V : HSp D) (x y : Mx D V.r
       simp only [GlobalTheory.IndefiniteRowSideFullHecke.GramMatrixBlocks.pairing, GlobalTheory.SiegelWeilLitCompare.gramQ_eq]
       rfl
   rw [← e, ← e, hs]
-
-theorem levi_zero {V : HSp D} {ψ χ θ μ ω} (hS : SetW D n V ψ χ θ μ ω) (g : G D n) (u : GL (Fin n) D.host.E)
-    (hg : mat g = blk4 (u.1.map (incA D)) 0 0 (adj ((u⁻¹).1.map (incA D)))) (F : schwartzA θ V.rank n) :
-    (ω g F).1 0 = F.1 0 := by
-  obtain ⟨-, hχ, -, -, hω⟩ := hS
-  let a' : GL (Fin n) (AE D) := Matrix.GeneralLinearGroup.map (incA D) u
-  have hdet : Matrix.GeneralLinearGroup.det a' =
-      Units.map (incA D).toMonoidHom (Matrix.GeneralLinearGroup.det u) := by
-    apply Units.ext
-    simp [a', Matrix.GeneralLinearGroup.map]
-    exact (RingHom.map_det _ _).symm
-  have h1 : absA D (Matrix.GeneralLinearGroup.det a') = 1 := by
-    rw [hdet]; exact absE_inclR _
-  have h2 : χ (Matrix.GeneralLinearGroup.det a') = 1 := by
-    rw [hdet]; exact hχ.2 _
-  have hinv : (a'⁻¹).1 = (u⁻¹).1.map (incA D) := by
-    show ((Matrix.GeneralLinearGroup.map (incA D) u)⁻¹).1 = _
-    rw [← map_inv]; rfl
-  have hg' : mat g = blk4 a'.1 0 0 (adj (a'⁻¹).1) := by
-    rw [hinv]; exact hg
-  rw [hω.levi g a' hg' F, h1, h2]
-  simp [npow]
 
 end PositivityTheory.Rg.Rsw.L.LPartFT
 end -- clump:auto

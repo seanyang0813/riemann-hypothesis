@@ -7,6 +7,7 @@ public import Development.AutomorphicArithmetic.AutomorphicVarieties.GaloisLibra
 public import Development.AutomorphicArithmetic.AutomorphicVarieties.HeightAndVanishing.CongrFacts
 public import Development.AutomorphicArithmetic.AutomorphicVarieties.HeightAndVanishing.ExistsStrictHenselianAbsolutelyClosedLocalRing
 public import Development.AutomorphicArithmetic.AutomorphicVarieties.HeightAndVanishing.PsiBar
+import Development.AbelianVarietyTheory.Proofs.GlobalInterpolation.IneLeFixingSubgroup
 import Mathlib.Algebra.Order.Floor.Extended
 import Mathlib.Algebra.Order.Floor.Semifield
 import Mathlib.Algebra.Order.Interval.Basic
@@ -57,103 +58,41 @@ import Mathlib.Tactic.ReduceModChar
 
 open NumberField IsDedekindDomain Formalism.ConjugateSelfDual Formalism.HC ReciprocityTheory.Gal Formalism.GaloisCohomology UpperTheory.V UpperTheory.V.Base UpperTheory.Top UpperTheory.V.HV
 
-private theorem mem_of_int {Ω : Type} [Field Ω] (A : ValuationSubring Ω) {y : Ω} (hy : IsIntegral ℤ y) : y ∈ A := by
-  have h2 : IsIntegral A y := hy.tower_top
-  obtain ⟨z, hz⟩ := IsIntegrallyClosed.isIntegral_iff.mp h2
-  rw [← hz]
-  exact z.2
-
-private theorem det_lt {Ω ι : Type} [Field Ω] [Fintype ι] [DecidableEq ι] (A : ValuationSubring Ω) (M : Matrix ι ι Ω)
-    (hM : ∀ i j, M i j ∈ A) {a b : ι} (hab : a ≠ b) (h : ∀ i, A.valuation (M i a - M i b) < 1) :
-    A.valuation M.det < 1 := by
-  classical
-  set M' : Matrix ι ι Ω := M.updateCol a (fun k => M k a + (-1 : Ω) • M k b) with hM'
-  have hdet : M'.det = M.det := Matrix.det_updateCol_add_smul_self M hab (-1)
-  have hent : ∀ i j, M' i j ∈ A := by
-    intro i j
-    rw [hM', Matrix.updateCol_apply]
-    split_ifs
-    · simpa [← sub_eq_add_neg] using A.sub_mem (hM i a) (hM i b)
-    · exact hM i j
-  have hcol : ∀ i, A.valuation (M' i a) < 1 := by
-    intro i
-    rw [hM', Matrix.updateCol_self]
-    simpa [← sub_eq_add_neg] using h i
-  rw [← hdet, Matrix.det_apply']
-  refine Valuation.map_sum_lt _ one_ne_zero (fun σ _ => ?_)
-  rw [← Finset.mul_prod_erase Finset.univ (fun i => M' (σ i) i) (Finset.mem_univ a)]
-  have hs : ((Equiv.Perm.sign σ : ℤ) : Ω) ∈ A := intCast_mem A.toSubring _
-  have hp : (∏ i ∈ Finset.univ.erase a, M' (σ i) i) ∈ A := A.toSubring.prod_mem (fun i _ => hent _ _)
-  rw [Valuation.map_mul, Valuation.map_mul]
-  have e1 := (A.valuation_le_one_iff _).mpr hs
-  have e2 := (A.valuation_le_one_iff _).mpr hp
-  calc A.valuation ((Equiv.Perm.sign σ : ℤ) : Ω) * (A.valuation (M' (σ a) a) * A.valuation (∏ i ∈ Finset.univ.erase a, M' (σ i) i))
-      ≤ 1 * (A.valuation (M' (σ a) a) * 1) := by gcongr
-    _ < 1 := by rw [one_mul, mul_one]; exact hcol _
+/-- If inertia acts nontrivially on a number field, every natural multiple of its absolute
+discriminant has valuation less than one. -/
+theorem UpperTheory.V.HV.valuation_lt_one_of_ramified_of_discr_dvd
+    {Ω : Type} [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω]
+    (K : Type) [Field K] [NumberField K] [Algebra K Ω] (A : ValuationSubring Ω)
+    (hram : ¬ Ine (F := ℚ) A ≤ galOf ℚ K Ω) {m : ℕ} (hm : (discr K).natAbs ∣ m) :
+    A.valuation (m : Ω) < 1 := by
+  have : IsAlgClosed Ω := IsAlgClosure.isAlgClosed ℚ
+  have hd : A.valuation ((discr K : ℤ) : Ω) < 1 := by
+    by_contra hunit
+    apply hram
+    intro σ hσ
+    have heq := GlobalTheory.UnramDiscr.embedding_eq A hunit
+      ((σ : Ω →+* Ω).comp (algebraMap K Ω)) (algebraMap K Ω) (fun x => by
+        apply hσ.2
+        exact (A.valuation_le_one_iff _).mpr (GlobalTheory.UnramDiscr.mem_of_isIntegral A
+          ((RingOfIntegers.isIntegral_coe x).map (algebraMap K Ω).toIntAlgHom)))
+    exact fun x => DFunLike.congr_fun heq x
+  obtain ⟨k, rfl⟩ := hm
+  rw [Nat.cast_mul, map_mul, mul_comm]
+  refine lt_of_le_of_lt (mul_le_of_le_one_left' ((A.valuation_le_one_iff _).2 (natCast_mem A k))) ?_
+  rcases Int.natAbs_eq (discr K) with h | h
+  · rwa [h, Int.cast_natCast] at hd
+  · rwa [h, Int.cast_neg, Int.cast_natCast, Valuation.map_neg] at hd
 
 private theorem ine_le (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (K : Type) [Field K] [NumberField K]
     [Algebra K Ω] {l : ℕ} (hl : l.Prime) (hd : ¬ l ∣ (discr K).natAbs) (A : ValuationSubring Ω)
     (hA : A.valuation (l : Ω) < 1) : Ine (F := ℚ) A ≤ galOf ℚ K Ω := by
-  classical
-  haveI : IsAlgClosed Ω := IsAlgClosure.isAlgClosed ℚ
-  intro σ hσ
-  have hin : ∀ x : Ω, A.valuation x ≤ 1 → A.valuation (σ x - x) < 1 := (show σ ∈ Inertia A from hσ).2
-  show ∀ x : K, σ (algebraMap K Ω x) = algebraMap K Ω x
-  by_contra hne
-  push_neg at hne
-  obtain ⟨x₀, hx₀⟩ := hne
-  let ι : K →ₐ[ℚ] Ω := (algebraMap K Ω).toRatAlgHom
-  let ι' : K →ₐ[ℚ] Ω := (σ : Ω ≃ₐ[ℚ] Ω).toAlgHom.comp ι
-  have hιι : ι ≠ ι' := by
-    intro h
-    apply hx₀
-    have := congrArg (fun f : K →ₐ[ℚ] Ω => f x₀) h
-    exact this.symm
-  have hcard : Fintype.card (Module.Free.ChooseBasisIndex ℤ (𝓞 K)) = Fintype.card (K →ₐ[ℚ] Ω) := by
-    rw [AlgHom.card ℚ K Ω, Module.finrank_eq_card_basis (integralBasis K)]
-  let e := Fintype.equivOfCardEq hcard
-  have hdisc := Algebra.discr_eq_det_embeddingsMatrixReindex_pow_two ℚ Ω (integralBasis K) e
-  rw [← NumberField.coe_discr] at hdisc
-  have hint : ∀ (f : K →ₐ[ℚ] Ω) i, IsIntegral ℤ (f (integralBasis K i)) := by
-    intro f i
-    rw [integralBasis_apply]
-    exact (RingOfIntegers.isIntegral_coe _).map ((f : K →+* Ω).toIntAlgHom)
-  have hlt : A.valuation (Algebra.embeddingsMatrixReindex ℚ Ω (integralBasis K) e).det < 1 := by
-    refine det_lt A _ ?_ (a := e.symm ι) (b := e.symm ι') (e.symm.injective.ne hιι) ?_
-    · intro i j
-      simp only [Algebra.embeddingsMatrixReindex, Matrix.reindex_apply, Matrix.submatrix_apply,
-        Equiv.refl_symm, Equiv.refl_apply, Equiv.symm_symm, Algebra.embeddingsMatrix_apply]
-      exact mem_of_int A (hint _ _)
-    · intro i
-      simp only [Algebra.embeddingsMatrixReindex, Matrix.reindex_apply, Matrix.submatrix_apply,
-        Equiv.refl_symm, Equiv.refl_apply, Equiv.symm_symm, Algebra.embeddingsMatrix_apply,
-        Equiv.apply_symm_apply]
-      rw [Valuation.map_sub_swap]
-      exact hin _ ((A.valuation_le_one_iff _).mpr (mem_of_int A (hint _ _)))
-  have hdv : A.valuation ((discr K : ℤ) : Ω) < 1 := by
-    have h1 : ((discr K : ℤ) : Ω) = algebraMap ℚ Ω ((discr K : ℤ) : ℚ) := by simp
-    rw [h1, hdisc, Valuation.map_pow]
-    exact pow_lt_one₀ zero_le' hlt two_ne_zero
-  have hcop : Nat.Coprime l (discr K).natAbs := (Nat.Prime.coprime_iff_not_dvd hl).mpr hd
-  have hic : IsCoprime (l : ℤ) (discr K) := Int.isCoprime_iff_gcd_eq_one.mpr hcop
-  obtain ⟨u, v, huv⟩ := hic
-  have hΩ : (u : Ω) * (l : Ω) + (v : Ω) * ((discr K : ℤ) : Ω) = 1 := by
-    have := congrArg (fun t : ℤ => (t : Ω)) huv
-    push_cast at this
-    exact this
-  have hu : A.valuation (u : Ω) ≤ 1 := (A.valuation_le_one_iff _).mpr (intCast_mem A.toSubring _)
-  have hv : A.valuation (v : Ω) ≤ 1 := (A.valuation_le_one_iff _).mpr (intCast_mem A.toSubring _)
-  have h1 : A.valuation ((u : Ω) * (l : Ω)) < 1 := by
-    rw [Valuation.map_mul]
-    calc A.valuation (u : Ω) * A.valuation (l : Ω) ≤ 1 * A.valuation (l : Ω) := by gcongr
-      _ < 1 := by rw [one_mul]; exact hA
-  have h2 : A.valuation ((v : Ω) * ((discr K : ℤ) : Ω)) < 1 := by
-    rw [Valuation.map_mul]
-    calc A.valuation (v : Ω) * A.valuation ((discr K : ℤ) : Ω) ≤ 1 * A.valuation ((discr K : ℤ) : Ω) := by gcongr
-      _ < 1 := by rw [one_mul]; exact hdv
-  have := Valuation.map_add_lt _ h1 h2
-  rw [hΩ, Valuation.map_one] at this
-  exact lt_irrefl _ this
+  by_contra hram
+  have hdisc := valuation_lt_one_of_ramified_of_discr_dvd K A hram (dvd_refl _)
+  have hcop : IsCoprime (l : A) ((discr K).natAbs : A) :=
+    ((Nat.Prime.coprime_iff_not_dvd hl).2 hd).cast
+  exact Ideal.IsPrime.notMem_of_isCoprime_of_mem (I := IsLocalRing.maximalIdeal A) hcop
+    ((A.valuation_lt_one_iff _).2 (by simpa using hA))
+    ((A.valuation_lt_one_iff _).2 (by simpa using hdisc))
 
 private theorem exists_neg (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (hl : l ≠ 2)
     {O : Type} [CommRing O] [IsDomain O] {N : ℕ} [NeZero N] (ψ : DirichletCharacter O N) (w : G ℚ Ω →* Oˣ)

@@ -1132,7 +1132,7 @@ theorem depth_bound_of_chars : Laws → Laws2 → Laws4 → TwistBaseChangeState
   have hTW : TwistBCSpanStatement := twistBCSpan_of hTB
   have hVR : TWM.VRatioGtStatement := GlobalTheory.RatioVal.main
   have hUU : UUStatement := GlobalTheory.UnitBallFree.main hL.globalFns hTB
-  obtain ⟨jA, jR, -, -, -, -, -, jS, jX, -, -, -, -, jB⟩ := GlobalTheory.JetRoad.jetRoad
+  obtain ⟨jA, jR, -, -, -, jS, jX, -, -, jB⟩ := GlobalTheory.JetRoad.jetRoad
   have hG : FamGerm.GermExSt := GlobalTheory.FamGermExist.germ_exists_unique_linear hL hL4 hTW jA jR jS jX
   have hGV : GermValSt := GlobalTheory.GermValuation.main hL hL4 hTW jA jR jS jX hG
   have hJ : JetsSt := GlobalTheory.GermJets.jets hL hL4 hTW jA jR jS jX hG

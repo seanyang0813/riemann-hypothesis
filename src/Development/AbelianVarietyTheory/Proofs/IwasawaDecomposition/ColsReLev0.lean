@@ -134,8 +134,7 @@ def atTRe {u : B.Word}
 def hermRe (H : Formalism.L2.Herm.ColsHermS (recOf Z)) : Formalism.L2.Herm.ColsHermS (recOf Z') :=
   { H with
     base := hermChRe Z' H.base
-    atT := fun u => atTRe Z' (H.atT u)
-    ad := { H.ad with } }
+    atT := fun u => atTRe Z' (H.atT u) }
 
 
 

@@ -10,8 +10,6 @@ namespace Formalism.MainNotions.flipTwoThree
 
 open Formalism.BasicNotions NumberField
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 def lamCol (D : D7) (u : D.what₂.Word) (τ : D.what₂.Tau) (i : ℕ) : ℚ :=
   if h : i < D.R.k then hcToWeightQ (D.hcW u τ).u ⟨i, h⟩ else 0
 

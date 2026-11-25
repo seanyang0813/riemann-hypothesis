@@ -46,8 +46,6 @@ open NumberField Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.L2.T
 open ReciprocityTheory.ChartRestriction.G.Geo.Tor (Datum Level)
 open scoped TensorProduct
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 variable {D : D7}
 
 def idealLatHat (V : HSp D) (I : Ideal (𝓞 D.host.E)) :

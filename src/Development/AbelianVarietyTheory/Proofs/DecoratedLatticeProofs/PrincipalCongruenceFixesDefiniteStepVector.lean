@@ -81,9 +81,6 @@ theorem isDetRoot_one (V : HSp D) : IsDetRoot V (1 : GA D V) (1 : (AE D)ˣ) := b
 theorem suppPl_one (ε : AF D.host.F) (V : HSp D) : SuppPl ε V (1 : GA D V) := fun i j => by
   rw [GlobalTheory.AdelicLatMove.mt_one, sub_self, Matrix.zero_apply, mul_zero]
 
-theorem suppAt_one (e : AE D) (V : HSp D) : Formalism.L2.Theta.SuppAt e V (1 : GA D V) := fun i j => by
-  rw [GlobalTheory.AdelicLatMove.mt_one, sub_self, Matrix.zero_apply, mul_zero]
-
 theorem inert_one {ψ : AddChar (AF D.host.F) ℂ} {S T : HSp D} {ΛS : Submodule (𝓞 D.host.E) (Fin S.rank → D.host.E)}
     {ΛT : Submodule (𝓞 D.host.E) (Fin T.rank → D.host.E)} {χS : (AE D)ˣ →* Circle}
     {om : GA D S × GA D T →* Module.End ℂ (WO S T → ℂ)} (hW : IsWeilDatumO ψ S T χS 1 om)
@@ -132,7 +129,7 @@ theorem local_one {ψ : AddChar (AF D.host.F) ℂ} {S T : HSp D} {ΛS : Submodul
   by_cases hsp : ∃ e', IsSplitIdem D e' ∧ e' + cA D e' = algebraMap (AF D.host.F) (AE D) ε
   · obtain ⟨e', he', hb⟩ := hsp
     have := GlobalTheory.T.splitPlace_weilRep_latticeVacuum_character D ψ S T ΛS ΛT χS 1 om hW hS hT e' he' g 1 (fun i j => by rw [hb]; exact sg i j)
-      (suppAt_one e' T) hlat _ _ (isDetAt_detAt e' he'.1 S g) (isDetAt_detAt e' he'.1 T 1) f hf hvac
+      (GlobalTheory.WeilUniq.suppAt_one e' T) hlat _ _ (isDetAt_detAt e' he'.1 S g) (isDetAt_detAt e' he'.1 T 1) f hf hvac
     rw [this, splitFacO, map_one, map_one, MonoidHom.one_apply, inv_one, one_mul, Circle.coe_one, one_smul]
   · exact inert_one hW hS hT hη ⟨hε, hsp⟩ g sg hlat f hf hvac
 

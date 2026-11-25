@@ -1025,21 +1025,6 @@ namespace GlobalTheory.CompanionTheory.LTPer.LogConv
 
 variable {B : Type} [CommRing B] {S : Subring B} {ϖ : B} {J : Ideal B}
 
-theorem near_add {m : ℕ} {x y : B} (hx : Near S ϖ J m x) (hy : Near S ϖ J m y) :
-    Near S ϖ J m (x + y) := by
-  obtain ⟨s, hs, h⟩ := hx
-  obtain ⟨s', hs', h'⟩ := hy
-  refine ⟨s + s', S.add_mem hs hs', ?_⟩
-  have := J.add_mem h h'
-  convert this using 1; ring
-
-theorem near_sub {m : ℕ} {x y : B} (hx : Near S ϖ J m x) (hy : Near S ϖ J m y) :
-    Near S ϖ J m (x - y) := by
-  obtain ⟨s, hs, h⟩ := hx
-  obtain ⟨s', hs', h'⟩ := hy
-  refine ⟨s - s', S.sub_mem hs hs', ?_⟩
-  have := J.sub_mem h h'
-  convert this using 1; ring
 
 theorem near_mul {a b : ℕ} {x y : B} (hx : Near S ϖ J a x) (hy : Near S ϖ J b y) :
     Near S ϖ J (a + b) (x * y) := by
@@ -1096,16 +1081,11 @@ theorem near_Qpow (E : PerEnv S F ϖ) {Q : B} (hQ : Q ∈ S) {M : ℕ}
     have := E.mul_le k 1 (Ideal.mul_mem_mul h1 h2)
     convert this using 1; ring
 
-theorem iter_succ (ϖ : B) (q n : ℕ) (x : B) :
-    ltIter ϖ q (n + 1) x = ϖ * ltIter ϖ q n x + ltIter ϖ q n x ^ q := by
-  unfold ltIter
-  rw [Function.iterate_succ_apply']
-
 theorem iter_mem (hϖ : ϖ ∈ S) {Q : B} (hQ : Q ∈ S) (q n : ℕ) : ltIter ϖ q n Q ∈ S := by
   induction n with
   | zero => simpa [ltIter] using hQ
   | succ n ih =>
-    rw [iter_succ]
+    rw [GlobalTheory.CompanionTheory.LTPer.QGal.ltIter_succ]
     exact S.add_mem (S.mul_mem hϖ ih) (S.pow_mem ih _)
 
 theorem pow_congr' {y z : B} (hy : y ∈ S) (hz : z ∈ S) (h : ∃ s ∈ S, y - z = ϖ * s) (e : ℕ) :
@@ -1126,7 +1106,7 @@ theorem iter_congr (hϖ : ϖ ∈ S) {Q : B} (hQ : Q ∈ S) (q n : ℕ) :
     have hy := iter_mem hϖ hQ q n
     obtain ⟨u, hu, h2⟩ := pow_congr' hy (S.pow_mem hQ (q ^ n)) ih q
     refine ⟨ltIter ϖ q n Q + u, S.add_mem hy hu, ?_⟩
-    rw [iter_succ, pow_succ q n, pow_mul]
+    rw [GlobalTheory.CompanionTheory.LTPer.QGal.ltIter_succ, pow_succ q n, pow_mul]
     linear_combination h2
 
 theorem near_iter (E : PerEnv S F ϖ) {q : ℕ} (hq : 2 ≤ q) {Q : B} (hQ : Q ∈ S) {M : ℕ}
@@ -1150,7 +1130,7 @@ theorem near_step (hϖ : ϖ ∈ S) {q : ℕ} (hq : 2 ≤ q) {b : ℕ} (hb : 1 �
     rw [add_comm]; exact near_mul h0 h
   have h2 : Near S ϖ J (b + 1) (y ^ q) :=
     near_mono hϖ (by nlinarith) (near_pow h q)
-  exact near_add h1 h2
+  exact GlobalTheory.CompanionTheory.LTPer.LogGal.near_add h1 h2
 
 theorem near_iter_add (E : PerEnv S F ϖ) {q : ℕ} (hq : 2 ≤ q) {Q : B} {k n0 : ℕ}
     (h : Near S ϖ (F k) 1 (ltIter ϖ q n0 Q)) (j : ℕ) :
@@ -1158,13 +1138,13 @@ theorem near_iter_add (E : PerEnv S F ϖ) {q : ℕ} (hq : 2 ≤ q) {Q : B} {k n0
   induction j with
   | zero => simpa using h
   | succ j ih =>
-    rw [show n0 + (j + 1) = n0 + j + 1 from rfl, iter_succ]
+    rw [show n0 + (j + 1) = n0 + j + 1 from rfl, GlobalTheory.CompanionTheory.LTPer.QGal.ltIter_succ]
     exact near_step (b := 1 + j) E.mem hq (by omega) ih
 
 theorem iter_diff {ϖ' : B} (hu : ϖ * ϖ' = 1) (q n : ℕ) (Q : B) :
     ϖ' ^ (n + 1) * ltIter ϖ q (n + 1) Q - ϖ' ^ n * ltIter ϖ q n Q =
       ϖ' ^ (n + 1) * ltIter ϖ q n Q ^ q := by
-  rw [iter_succ]
+  rw [GlobalTheory.CompanionTheory.LTPer.QGal.ltIter_succ]
   linear_combination (ϖ' ^ n * ltIter ϖ q n Q) * hu
 
 theorem near_diff (E : PerEnv S F ϖ) {ϖ' : B} (hu : ϖ * ϖ' = 1) {q : ℕ} (hq : 2 ≤ q) {Q : B}
@@ -1227,7 +1207,7 @@ theorem glue (E : PerEnv S F ϖ) {ϖ' : B} (hu : ϖ * ϖ' = 1) (x : ℕ → B)
       have a2 := near_anti (E.anti k) (h2 (max N1 N2) (le_max_right _ _))
       have b1 := near_mul (near_of_mem (S.pow_mem E.mem (c (k + 1)))) a1
       have b2 := near_mul (near_of_mem (S.pow_mem E.mem (c k))) a2
-      have b := near_sub b1 b2
+      have b := GlobalTheory.CompanionTheory.LTPer.LogGal.near_sub b1 b2
       rw [zero_add] at b
       convert b using 1; ring
     have := (F k).mul_mem_left (ϖ' ^ (c k + c (k + 1))) (near_all E k hall)

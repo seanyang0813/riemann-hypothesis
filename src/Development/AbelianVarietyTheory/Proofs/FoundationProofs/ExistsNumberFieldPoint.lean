@@ -6,7 +6,12 @@ public import Development.AbelianVarietyTheory.Proofs.AbelianSchemeLawProofs.Abe
 public import Development.AbelianVarietyTheory.Proofs.UnitaryExistence.FrameLawsOfModuli
 import Development.AbelianVarietyTheory.Proofs.UnitaryExistence.NumberFieldFinitePlaceCompletionEmbedding
 import Formalism.LocalToGlobal.ProjectiveLattices.CompSplitPfD
-public import Formalism.LocalToGlobal.ProjectiveLattices.LocFrLoc
+public import Development.AbelianVarietyTheory.Definitions.Divisors.IsLocalRingTrivSqZeroExt
+public import Formalism.LocalToGlobal.ProjectiveLattices.GenSpecV
+public import Formalism.LocalToGlobal.ProjectiveLattices.GenSpecLocFrM
+public import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.BCRing
+public import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.PullbackSections.LieBridgeB
+public import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.PullbackSections.LieBridgeC
 import Mathlib.Algebra.Order.Floor.Extended
 import Mathlib.Algebra.Order.Floor.Semifield
 import Mathlib.Algebra.Order.Interval.Basic
@@ -140,7 +145,7 @@ theorem framesOn_nonempty {r : ℕ} {σ : c.F →+* ℂ} {U : Unf Xo c σ r} (hU
   obtain ⟨h1, h2⟩ := point_ext hg hZ k.toRingHom
   have e : k.toRingHom.comp j = algebraMap c.F (CAt σ) := k.comp_algebraMap
   rw [e] at h1
-  obtain ⟨y, hy⟩ := exists_frPt_local (c := c) GlobalTheory.abelianSchemeLaws_all.2.secTwist _ (prX_over h1)
+  obtain ⟨y, hy⟩ := GlobalTheory.FlagTan.exists_frPt (c := c) _ (prX_over h1)
   obtain ⟨i, z, t, ht⟩ := hU.2.2.1 y
   refine ⟨⟨i, z.1⟩, z.2, fun p => ?_⟩
   have := ptF_eq h1 (ht.1.symm.trans hy)

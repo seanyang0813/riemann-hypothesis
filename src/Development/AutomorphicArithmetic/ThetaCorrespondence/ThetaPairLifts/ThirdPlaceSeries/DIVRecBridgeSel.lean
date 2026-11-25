@@ -81,21 +81,6 @@ structure DivisionKernelData (ex : Extra D L hT Gi Gl Kc Y cX) : Type 1 where
   Sp : ∀ Zs : DefSub P.A3.fam3.amb3, SPer (c.face Zs)
   Zsc : DefSub P.A3.fam3.amb3 → IndefScale P.A3.fam3.base3
   colTie : ColTie3 P X e c Sp
-  kerTie : _root_.Formalism.L2.DIV.ColumnRecordCompatible T P X e c
-  wTie : ∀ u, HEq (P.I.wU u) u
-  lvTie : c.Lv = Formalism.L2.Col.rPsymF (R := c.Rk) c.Ch
-  sgTie : c.Am.σ₀ = D.what₂.embLL
-  v0 : InfinitePlace D.what₂.LL
-  TU : Finset (Tup X.F X.E D.what₂.LL c.Sg)
-  xiVal : Tup X.F X.E D.what₂.LL c.Sg → HeightOneSpectrum (𝓞 X.E) → D.what₂.LLˣ
-  trIv : Fin c.Rk.m → (Formalism.L2.Col.LevOffI ∅ c.Pr.vGs ∅ × List ℕ → D.what₂.LL) →
-    Formalism.L2.Col.LevOffI ∅ c.Pr.vGs ∅ × List ℕ → D.what₂.LL
-  famEq : HEq P.A3 (colIn3 c.W c.Ch c.sel c.hX v0 TU c.Xg ∅ xiVal trIv)
-  gEq : P.Gp = Formalism.L2.Col.G0 X.E c.Pr.vGs c.Rk.r
-  plEq : P.Pl0 = Formalism.L2.Col.LevOff ∅ c.Pr.vGs ∅
-  i0Eq : P.I0 = Formalism.L2.Col.LevOffI ∅ c.Pr.vGs ∅
-  tEq : P.T = TupF (X := fieldsLL D X e) TU
-  muTie : ∀ t, c.mu t = (cast tEq t).1
   ok1 : P.A3.fam3.Ok3 1
 structure SquareIntegrableColumns (T : _root_.Formalism.L2.TiedDataSKAlt ex) (P : RowSideFamily ex) : Type 1 where
   X : Formalism.L2.Col.Fields
@@ -130,20 +115,6 @@ def SquareIntegrableColumns.toK {T : _root_.Formalism.L2.TiedDataSKAlt ex} {P : 
   Sp := K.Sp
   Zsc := Zsc
   colTie := K.colTie
-  kerTie := K.kerTie
-  wTie := K.wTie
-  lvTie := K.lvTie
-  sgTie := K.sgTie
-  v0 := K.v0
-  TU := K.TU
-  xiVal := K.xiVal
-  trIv := K.trIv
-  famEq := K.famEq
-  gEq := K.gEq
-  plEq := K.plEq
-  i0Eq := K.i0Eq
-  tEq := K.tEq
-  muTie := K.muTie
   ok1 := K.ok1
 def DivisionKernelData.toT (R : _root_.Formalism.L2.DIV.DivisionKernelData ex) : DivisionRowsColumns L :=
   { DivisionRowsColumns.split_model_to_place_model (L := L) R.P R.hr R.X R.e R.c R.Sp R.Zsc with s := 1, hOk := R.ok1 }
@@ -151,7 +122,6 @@ structure DivisionPackageKernel' (Q : _root_.Formalism.L2.DIV.DivisionKernelData
   tupTie : ∀ t, tup t = Q.P.I.tup t
   evTie : ∀ t (F : Fin ((Q.P.A3.side3 Q.P.Ps Q.P.ψs Pk.Zs).nV t) → D.what₂.LL),
     HEq (eV t F) (Q.P.I.jA t ((rV0 D Q.P.A3.A Q.P.Ps Q.P.ψs t).mulVec F))
-  wuTie : ∀ u, HEq (wU u) u
 theorem pkg_of_rowsK_alt (R : _root_.Formalism.L2.DIV.DivisionKernelData ex)
     (hR : DivRows3 D R.P.A3 R.P.P0 R.P.ψ0 R.P.Ps R.P.ψs R.P.Zs R.P.S0 R.P.S1 ex.p0 R.P.C R.P.NuC R.P.I) (C Cabs Cp CHp : ℝ) (cf : ConvFace R.P.A3.fam3.base3)
     (Pk : IndefPkgR R.P.A3.fam3.amb3 (Formalism.IndefR.Cx.faceOf3 R.P.A3 R.P.P0 R.P.ψ0 R.P.Ps R.P.ψs R.c.face R.Sp R.Zsc) cf Cp CHp)
@@ -193,14 +163,13 @@ theorem pkg_of_rowsK_alt (R : _root_.Formalism.L2.DIV.DivisionKernelData ex)
   obtain ⟨NuC'', I'', hT'', -, hI''⟩ := divTied3_congr hZs.symm hS0 hS1.symm (hF2 _ _ hZs.symm).1 (hF2 _ _ hZs.symm).2
     (hC'.trans hCol.symm) hT'
   have hII : HEq I'' R.P.I := hI''.trans hI'
-  obtain ⟨htup, hjA, hwU⟩ := divTieDat3_heq hZs hS0.symm hS1 ((hF2 _ _ hZs).1.trans (heq_of_eq R.colTie.1)) hII
+  obtain ⟨htup, hjA, -⟩ := divTieDat3_heq hZs hS0.symm hS1 ((hF2 _ _ hZs).1.trans (heq_of_eq R.colTie.1)) hII
   obtain ⟨hbr, inp, hQ, h0c⟩ := hOpen NuC'' I'' hT'' hII
   let x := DivisionPackageColumns.ofTied R.P R.hr R.X R.e R.c R.Sp R.Zsc C Cabs Cp CHp cf Pk hZs hRows NuC'' I'' hT'' hbr Del h0 lam0 C0 ce Ch Sw C1
     eJ H inp hQ h0c hN Z hk tH hh hF hC0 hC1 hC2 hCabs hLa
-  refine ⟨{ toDivisionPackageFace := x.toDivisionPackageFace, hQ := x.hQ, h0 := x.h0, tupTie := ?_, evTie := ?_, wuTie := ?_ }⟩
+  refine ⟨{ toDivisionPackageFace := x.toDivisionPackageFace, hQ := x.hQ, h0 := x.h0, tupTie := ?_, evTie := ?_ }⟩
   · exact fun t => congrFun htup t
   · exact fun t F => hjA t _
-  · exact fun u => (hwU u).trans (R.wTie u)
 abbrev divisionKernelToColumns {eps : ℝ} {Fm : FamP eps}
     (Rk : Σ' x0 : ℝ, ∀ x (hx : Fm.x1 < x), x0 ≤ x → ∀ i : Fm.Ix x, _root_.Formalism.L2.DIV.DivisionKernelData (Fm.ex x hx i)) :
     Σ' x0 : ℝ, ∀ x, Fm.x1 < x → x0 ≤ x → ∀ i : Fm.Ix x, DivisionRowsColumns (Fm.L x i) :=

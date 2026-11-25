@@ -852,7 +852,7 @@ theorem jD_Qpow (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.l
   let a : AA K LL := W.Q ^ m
   let ξ : RA LL := (1 : ↥(OL LL)) ⊗ₜ[ℤ_[l]] (D.locA l).ξ
   let aE := @algebraMap (AA K LL) W.EE _ W.eeRing.toSemiring W.eeAlgA a
-  have hQ : E.io W.Q = ξ := (GlobalTheory.NL.IoXQ.main D HW F l K s LL h).2.1
+  have hQ : E.io W.Q = ξ := (GlobalTheory.NL.IoXQ.main D.loc D.locA HW F l K s LL h).2.1
   have hscalar : E.ioE aE = (inclR LL ξ) ^ m :=
     (E.ioE_ext a).trans
       ((map_pow ((inclR LL).comp E.io) W.Q m).trans
@@ -974,8 +974,8 @@ theorem main : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf 
     (restrict_crys D hle T hT)
   have hN2 := (image_map_refl (O := ↥(OL LL)) (R := RW LL) (M := ↥T.L.T) _).symm.trans hN
   have h1 := (exists_aN_iff ((F l).E K' s LL h').tie (resLt (K := K) (K' := K') (LL := LL) hle T) _ _
-    (GlobalTheory.NL.IoXQ.main D HW F l K' s LL h').1 _).1 ⟨z', hz', rfl⟩
-  refine (exists_aN_iff ((F l).E K s LL h).tie T _ _ (GlobalTheory.NL.IoXQ.main D HW F l K s LL h).1 _).2 ?_
+    (GlobalTheory.NL.IoXQ.main D.loc D.locA HW F l K' s LL h').1 _).1 ⟨z', hz', rfl⟩
+  refine (exists_aN_iff ((F l).E K s LL h).tie T _ _ (GlobalTheory.NL.IoXQ.main D.loc D.locA HW F l K s LL h).1 _).2 ?_
   refine h1.elim fun y hy => ⟨toTW hle T y, ?_, hy.2⟩
   exact hN2.subset hy.1
 
@@ -1654,7 +1654,7 @@ theorem defect_torsion : ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (
     l K s LL h T₀ T₁ T₂ ι π hses
   have hsat := _root_.GlobalTheory.NL.KerSat.mem_N_of_map_mem D HW F l K s LL h T₀ T₁ T₂ ι π c₀ c₁ c₂ hses
   have h2 := GlobalTheory.NL.WachLatticeTrivialModUniformizer.wachLattice_galois_trivial_mod_uniformizer D HW F Cm l K s LL h T₁ c₁
-  have hP5 := _root_.GlobalTheory.NL.Heights.heights_from_jumps D HW F Cm l K s LL h T₁ M hh c₁ hJ
+  have hP5 := _root_.GlobalTheory.NL.Heights.heights_from_jumps D.loc D.locA D.locT HW F Cm l K s LL h T₁ M hh c₁ hJ
   have hφ : ∀ x ∈ ((HW l).W K s LL h).N T₁,
       ((HW l).W K s LL h).Q ^ mx M • ((HW l).W K s LL h).φD T₁ x ∈ ((HW l).W K s LL h).N T₁ :=
     fun x hx => φ_mem ((HW l).W K s LL h) T₁ M hh hP5 x hx

@@ -137,26 +137,6 @@ theorem teich_ext {O : Type} [CommRing O] [IsLocalRing O] [Finite (ResidueField 
     simp
   exact Units.ext (sub_eq_zero.1 (hu.mul_right_eq_zero.1 e))
 
-theorem typeFor_up (hp : ∀ g, h.p (toGS Ω V.S' g) = toGS Ω V0.S' g) (ι : Qbar l ≃+* ℂ) {m : ℕ}
-    (τ₀ : KT n (wt s) →* GL (Fin m) c.O) (ht : TypeFor r ι τ₀) : TypeFor (rUp h) ι τ₀ := by
-  intro t' ht'
-  haveI : Finite (ResidueField c.O) := Module.finite_of_finite (ResidueField ℤ_[l])
-  have hk : ∀ i, (p0 h).ker ≤ (t' i).ker := fun i g hg => by
-    refine teich_ext _ _ ?_ (ht' i g).2 (one_pow _)
-    rw [(ht' i g).1, rUp_chib, MonoidHom.mem_ker.1 hg, map_one]
-    simp
-  let t : Fin n → V0.frame.G₀ →* c.Oˣ := fun i => (p0 h).liftOfSurjective (surjective_levelChangeBaseGroupHom h) ⟨t' i, hk i⟩
-  have e : ∀ i g, t i (p0 h g) = t' i g := fun i g => MonoidHom.liftOfRightInverse_comp_apply _ _ _ _ g
-  have := ht t fun i g => by
-    obtain ⟨x, rfl⟩ := surjective_levelChangeBaseGroupHom h g
-    rw [e, ← rUp_chib]
-    exact ht' i x
-  have e2 : ∀ (u : s.St) i, (t' i).comp (V.pr.comp (Ine (F := L) (s.A u)).subtype) =
-      (t i).comp (V0.pr.comp (Ine (F := L) (s.A u)).subtype) := fun u i => MonoidHom.ext fun x =>
-    (e i (V.pr x)).symm.trans (congrArg (t i) (levelChangeBaseGroupHom_apply_projection h hp x))
-  simp only [e2]
-  exact this
-
 theorem cont_up {m : ℕ} (τ₀ : KT n (wt s) →* GL (Fin m) c.O) {A : Type} [CommRing A] [IsLocalRing A]
     (θ : (hset Q0 τ₀).X.I.T →* Aˣ) (hθ : (hset Q0 τ₀).X.I.ContChar θ) : (hset Q τ₀).X.I.ContChar θ := hθ
 

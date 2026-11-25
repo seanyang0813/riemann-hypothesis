@@ -29,7 +29,7 @@ noncomputable section
 
 namespace ReciprocityTheory.ChartRestriction.DS.Mult1.SymB
 
-open Formalism.QuantumDeterminants Formalism.FourierDecayAlt.B Formalism.FourierDecayAlt.B2 ReciprocityTheory.ChartRestriction.DS.Mult1 ReciprocityTheory.ChartRestriction.DS.Mult1.SymA
+open Formalism.QuantumDeterminants Formalism.QuantumDeterminants.WeylGroupFacts Formalism.FourierDecayAlt.B Formalism.FourierDecayAlt.B2 ReciprocityTheory.ChartRestriction.DS.Mult1 ReciprocityTheory.ChartRestriction.DS.Mult1.SymA
 
 variable {k r : ℕ}
 
@@ -223,7 +223,7 @@ noncomputable section
 
 namespace ReciprocityTheory.ChartRestriction.DS.Mult1.SymC
 
-open Formalism.QuantumDeterminants Formalism.FourierDecayAlt.B Formalism.FourierDecayAlt.B2 ReciprocityTheory.ChartRestriction.DS.Mult1 ReciprocityTheory.ChartRestriction.DS.Mult1.SymA
+open Formalism.QuantumDeterminants Formalism.QuantumDeterminants.WeylGroupFacts Formalism.FourierDecayAlt.B Formalism.FourierDecayAlt.B2 ReciprocityTheory.ChartRestriction.DS.Mult1 ReciprocityTheory.ChartRestriction.DS.Mult1.SymA
   ReciprocityTheory.ChartRestriction.DS.Mult1.SymB
 
 variable {k r : ℕ}
@@ -373,7 +373,7 @@ end ReciprocityTheory.ChartRestriction.DS.Mult1.SymC
 
 namespace ReciprocityTheory.ChartRestriction.DS.Mult1.SymD
 
-open Formalism.QuantumDeterminants Formalism.FourierDecayAlt.B Formalism.FourierDecayAlt.B2 ReciprocityTheory.ChartRestriction.DS.Mult1 ReciprocityTheory.ChartRestriction.DS.Mult1.SymA
+open Formalism.QuantumDeterminants Formalism.QuantumDeterminants.WeylGroupFacts Formalism.FourierDecayAlt.B Formalism.FourierDecayAlt.B2 ReciprocityTheory.ChartRestriction.DS.Mult1 ReciprocityTheory.ChartRestriction.DS.Mult1.SymA
   ReciprocityTheory.ChartRestriction.DS.Mult1.SymB ReciprocityTheory.ChartRestriction.DS.Mult1.SymC
 
 variable {k r : ℕ} {Wp : Type} [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [FiniteDimensional ℂ Wp]
@@ -506,7 +506,7 @@ noncomputable section
 
 namespace ReciprocityTheory.ChartRestriction.DS.Mult1.SymE
 
-open Formalism.QuantumDeterminants Formalism.FourierDecayAlt.B Formalism.FourierDecayAlt.B2 ReciprocityTheory.ChartRestriction.DS.Mult1 ReciprocityTheory.ChartRestriction.DS.Mult1.SymA
+open Formalism.QuantumDeterminants Formalism.QuantumDeterminants.WeylGroupFacts Formalism.FourierDecayAlt.B Formalism.FourierDecayAlt.B2 ReciprocityTheory.ChartRestriction.DS.Mult1 ReciprocityTheory.ChartRestriction.DS.Mult1.SymA
   ReciprocityTheory.ChartRestriction.DS.Mult1.SymB ReciprocityTheory.ChartRestriction.DS.Mult1.SymC ReciprocityTheory.ChartRestriction.DS.Mult1.SymD
 
 variable {k r : ℕ} {Wp : Type} [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [FiniteDimensional ℂ Wp]
@@ -516,7 +516,7 @@ lemma uu_inv {z : Fin (2 * r + k + 1) → ℂ} {γ : Matrix (Fin (k + 1)) (Fin (
   simp only [UUset, UWset, UH, Set.mem_setOf_eq] at hu ⊢
   obtain ⟨⟨hH, hb, hz⟩, hw⟩ := hu
   have hdH : (Hpk k r).det ≠ 0 := by
-    have h := congrArg Matrix.det (_root_.ReciprocityTheory.ChartRestriction.DS.Mult1.SymA.hpk_sq (k := k) (r := r))
+    have h := congrArg Matrix.det (Formalism.QuantumDeterminants.WeylGroupFacts.hpk_sq (k := k) (r := r))
     rw [Matrix.det_mul, Matrix.det_one] at h
     exact left_ne_zero_of_mul_eq_one h
   have hdu : IsUnit u.det := by
@@ -622,7 +622,7 @@ end ReciprocityTheory.ChartRestriction.DS.Mult1.SymE
 
 namespace ReciprocityTheory.ChartRestriction.DS.Mult1
 
-open Formalism.QuantumDeterminants Formalism.FourierDecayAlt.B Formalism.FourierDecayAlt.B2 ReciprocityTheory.ChartRestriction.DS.Mult1.SymA ReciprocityTheory.ChartRestriction.DS.Mult1.SymB
+open Formalism.QuantumDeterminants Formalism.QuantumDeterminants.WeylGroupFacts Formalism.FourierDecayAlt.B Formalism.FourierDecayAlt.B2 ReciprocityTheory.ChartRestriction.DS.Mult1.SymA ReciprocityTheory.ChartRestriction.DS.Mult1.SymB
   ReciprocityTheory.ChartRestriction.DS.Mult1.SymE
 
 theorem stSym (hIn : UnitaryGroupStructuralFacts) : StSym := by

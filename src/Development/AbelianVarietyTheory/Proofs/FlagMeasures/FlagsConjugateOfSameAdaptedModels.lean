@@ -158,14 +158,6 @@ theorem exists_unitary_adapted {a m : ℕ} {j : Fin a → ℕ} (hn : n = m + 2 *
 
 end Linear
 
-theorem unitary_map {E A : Type} [CommRing E] [CommRing A] {n : ℕ} (σ : E →+* E) (s : A →+* A) (φ : E →+* A)
-    (h : ∀ e, s (φ e) = φ (σ e)) (J g : Matrix (Fin n) (Fin n) E) (hg : Formalism.UG.cT σ g * J * g = J) :
-    Formalism.UG.cT s (g.map φ) * J.map φ * g.map φ = J.map φ := by
-  have e : Formalism.UG.cT s (g.map φ) = (Formalism.UG.cT σ g).map φ := by
-    ext i k
-    simp [Formalism.UG.cT, h]
-  rw [e, ← Matrix.map_mul, ← Matrix.map_mul, hg]
-
 theorem exists_point (I : AutInst) (γ : GL (Fin I.n) I.E) (hγ : γ ∈ Formalism.UG.UJ (starRingEnd I.E) I.J) :
     ∃ a : I.GA,
       (∀ v, uMat (a.1 v) = (I.P v)⁻¹ * (γ : Matrix (Fin I.n) (Fin I.n) I.E).map (I.φ v) * I.P v) ∧

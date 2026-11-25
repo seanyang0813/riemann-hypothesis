@@ -89,9 +89,7 @@ structure DivTied3 (P0 : Subgroup G) (ψ0 : P0 →* D.what₂.LLˣ) (Ps : Subgro
     (NuC : ∀ u, Submodule (𝓞 D.what₂.LL) (Fin (Dc.a u) → D.what₂.LL))
     (I : DivisionCompatibilityDataThreeSided D A3 P0 ψ0 Ps ψs Zs S0 S1 X0 Dc) : Prop where
 
-  ranks : m = D.R.m ∧ A3.A.r = D.R.r ∧ A3.A.t = D.R.t
 
-  grp : GrpTie D A3.A P0 ψ0 Ps ψs I.eG
 
   tup : TupTie D A3.A (A3.indefDown S0) I.tup
 
@@ -99,11 +97,8 @@ structure DivTied3 (P0 : Subgroup G) (ψ0 : P0 →* D.what₂.LLˣ) (Ps : Subgro
 
   sharp : RowSideTie D A3.A (Formalism.BasicNotions.RowSide.sharp D) Ps ψs (A3.fam3.toSub2 Zs) (A3.indefDown S1) I.tup I.eRR I.jA
 
-  base : RowSideTie D A3.A X0.s P0 ψ0 (A3.fam3.toSub2 Zs) (A3.indefDown S0) I.tup I.eRR0 I.jA0
 
-  mt : MtTie D A3.A P0 ψ0 (A3.fam3.toSub2 Zs) I.tup I.eMt
 
-  th : ThTie D A3.A (A3.indefDown S0) I.tup I.eMt I.jW
 
   num : NumTie D A3.A (A3.indefDown S0) I.tup
 
@@ -226,14 +221,9 @@ variable {D A3} {P0 : Subgroup G} {ψ0 : P0 →* D.what₂.LLˣ} {Ps : Subgroup 
 
 theorem DivTied3.ofSplit (hD : DivDef3 D A3 P0 ψ0 Ps ψs Zs S0 S1 X0 C NuC I) (hR : DivRows3 D A3 P0 ψ0 Ps ψs Zs S0 S1 X0 C NuC I) :
     DivTied3 D A3 P0 ψ0 Ps ψs Zs S0 S1 X0 C NuC I :=
-  { ranks := hD.ranks
-    grp := hD.grp
-    tup := hD.tup
+  { tup := hD.tup
     mu1 := hD.mu1
     sharp := ⟨hR.sharpRR, hD.sharp.forms, hD.sharp.Mtilde, hD.sharp.iota⟩
-    base := ⟨hR.baseRR, hD.base.forms, hD.base.Mtilde, hD.base.iota⟩
-    mt := ⟨hD.mt.forms, hD.mt.lat, hR.divisionRows_rationalLift⟩
-    th := ⟨hD.th.li, hD.th.span, hD.th.lat, hR.thTheta⟩
     num := hR.num
     cols := ⟨hD.cols.wU_bij, hD.cols.Nu, hR.colsBk⟩ }
 

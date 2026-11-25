@@ -106,7 +106,7 @@ theorem hasDiv_of_forall_cDvr : ∀ (k Ω : Type) [CommRing k] [IsNoetherianRing
     intro b
     obtain ⟨a, s, hs, hx⟩ := IsFractionRing.div_surjective (A := M.O z) (th b ^ D / e j₀)
     have hs0 : s ≠ 0 := nonZeroDivisors.ne_zero hs
-    have hdvd : s ∣ a := GlobalTheory.T.dvd_of_dvd_in_all_completeDVR_normal_noetherian (M.O z) a s hs0 (fun V _ _ _ hV φ hφ => by
+    have hdvd : s ∣ a := _root_.GlobalTheory.DvrDiv.dvd_of_forall_cDvr (M.O z) a s hs0 (fun V _ _ _ hV φ hφ => by
       obtain ⟨emb, hemb, h1, -⟩ := key V hV φ hφ
       obtain ⟨v, hv⟩ := h1 b
       rw [← hx, map_div₀, hemb, hemb] at hv

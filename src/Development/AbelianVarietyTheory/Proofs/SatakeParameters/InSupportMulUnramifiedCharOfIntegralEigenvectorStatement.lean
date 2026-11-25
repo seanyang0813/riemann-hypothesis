@@ -92,10 +92,6 @@ theorem scalar_det_fin_one (g : GL (Fin 1) k) :
   fin_cases i; fin_cases j
   simp [Matrix.GeneralLinearGroup.scalar]
 
-theorem det_scalar_fin_one (z : kˣ) :
-    Matrix.GeneralLinearGroup.det (Matrix.GeneralLinearGroup.scalar (Fin 1) z) = z := by
-  ext; simp [Matrix.GeneralLinearGroup.scalar]
-
 theorem mk_ne_zero (hD : GlobalTheory.Published.DepthZeroJacquetInjective) {m : ℕ} {V : Type} [AddCommGroup V] [Module ℂ V]
     (σ : Representation ℂ (GL (Fin m) k) V) (χ : kˣ →* ℂˣ) (y : V) (hs : IsSmooth σ) (hi : σ.IsIrreducible)
     (hχ : IsSmoothChar χ) (hy : y ≠ 0)

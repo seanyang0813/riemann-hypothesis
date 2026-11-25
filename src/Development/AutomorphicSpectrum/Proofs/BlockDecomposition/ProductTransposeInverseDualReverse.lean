@@ -239,7 +239,8 @@ variable {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchim
 abbrev dualOf (hA : GlobalTheory.Published.IrreducibleAdmissibleGL) (y : IrrGL (k := k)) : IrrGL (k := k) := ⟨y.1, dualClass hA y⟩
 
 theorem dualOf_eq (hA : GlobalTheory.Published.IrreducibleAdmissibleGL) (y : IrrGL (k := k)) : dualOf hA y = dualCl y := by
-  rw [GlobalTheory.CompanionTheory.Zcore.dualCl_eq_of hA y, dualOf, dualClass]
+  rw [GlobalTheory.CompanionTheory.Zcore.dualCl_eq_of hA y]
+  unfold dualOf dualClass
   rfl
 
 def dualOfEquiv (hA : GlobalTheory.Published.IrreducibleAdmissibleGL) (y : IrrGL (k := k)) :

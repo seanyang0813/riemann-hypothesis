@@ -75,40 +75,38 @@ theorem algebraMap_det_mulLeft [Module.Free O B] [Module.Finite O B] [FiniteDime
   change algebraMap O K (Algebra.norm O _) = _
   rw [← Algebra.norm_localization O O⁰ (Sₘ := L), algebraMap_sum_smul (K := K)]
 
-end NormOfDividedForm
-
-
-open NormOfDividedForm in
-theorem NormOfDividedForm.proof (hEval : NormFormEval.Statement) (hDvd : NormFormDvd.Statement)
-    (hPrime : PrimeMapFractionRing.Statement) : NormOfDividedForm.Statement := by
-  intro O B _ _ _ _ _ _ _ _ n η t P hgen ht hP hdvd u
+theorem det_mulLeft_eq (hEval : NormFormEval.Statement) (hDvd : NormFormDvd.Statement)
+    (hPrime : PrimeMapFractionRing.Statement)
+    (O B : Type) [CommRing O] [IsDomain O] [Infinite O] [CommRing B] [IsDomain B]
+    [Algebra O B] [Module.Free O B] [Module.Finite O B]
+    (n : ℕ) (η : Fin n → B) (t : Fin n → O) (P : MvPolynomial (Fin n) O)
+    (hsep : @Algebra.IsSeparable (FractionRing O) (FractionRing B) _ _ (FractionRing.liftAlgebra O _))
+    (hgen : Algebra.adjoin O (Set.range η) = ⊤) (ht : ∑ m, t m • η m = 1) (hP : Prime P)
+    (hdvd : (∑ m, X m * C (η m)) ∣ map (algebraMap O B) P) (u : Fin n → O) :
+    eval u P = eval t P * LinearMap.det (LinearMap.mulLeft O (∑ m, u m • η m)) := by
   let K := FractionRing O
   let L := FractionRing B
   let _ : Algebra K L := FractionRing.liftAlgebra O L
   have : IsScalarTower O K L := FractionRing.isScalarTower_liftAlgebra O L
   have : FiniteDimensional K L := .of_isLocalization O B O⁰
-  have : Algebra.IsSeparable K L := Algebra.IsAlgebraic.isSeparable_of_perfectField
+  have : Algebra.IsSeparable K L := hsep
   have hOB : Function.Injective (algebraMap O B) := FaithfulSMul.algebraMap_injective O B
   have hOK : Function.Injective (algebraMap O K) := IsFractionRing.injective O K
+  have : Infinite K := Infinite.of_injective _ hOK
   let ηL : Fin n → L := fun m => algebraMap B L (η m)
   let tK : Fin n → K := fun m => algebraMap O K (t m)
   have htL : ∑ m, tK m • ηL m = 1 := by
     rw [← algebraMap_sum_smul, ht, map_one]
-
   have hdvdL : (∑ m, X m * C (ηL m)) ∣ map (algebraMap K L) (map (algebraMap O K) P) := by
     have h := _root_.map_dvd (MvPolynomial.map (algebraMap B L)) hdvd
-
     rw [map_map, ← IsScalarTower.algebraMap_eq, IsScalarTower.algebraMap_eq O K L, ← map_map, map_sum] at h
     simpa only [map_mul, map_X, map_C] using h
-
   have hnc : ∀ a : O, P ≠ C a := by
     rintro a rfl
     obtain ⟨g, hg⟩ := hdvd
     have h := congrArg (eval 0) hg
-
     simp only [map_C, eval_C, map_mul, map_sum, eval_X, Pi.zero_apply, zero_mul, Finset.sum_const_zero] at h
     exact hP.ne_zero (by rw [(map_eq_zero_iff _ hOB).1 h, map_zero])
-
   obtain ⟨c, hc⟩ := hDvd K L n ηL tK _ (adjoin_range_eq_top η hgen) htL hdvdL
   have hNt : eval tK (normForm K L ηL) = 1 := by
     rw [hEval K L n ηL, htL, map_one]
@@ -132,6 +130,19 @@ theorem NormOfDividedForm.proof (hEval : NormFormEval.Statement) (hDvd : NormFor
   have h := congrArg (eval (fun m => algebraMap O K (u m))) hc
   rw [map_mul, eval_C, hct, hev] at h
   rw [map_mul, algebraMap_det_mulLeft (L := L) hEval η u, h, mul_comm]
+
+end NormOfDividedForm
+
+
+open NormOfDividedForm in
+theorem NormOfDividedForm.proof (hEval : NormFormEval.Statement) (hDvd : NormFormDvd.Statement)
+    (hPrime : PrimeMapFractionRing.Statement) : NormOfDividedForm.Statement := by
+  intro O B _ _ _ _ _ _ _ _ n η t P hgen ht hP hdvd u
+  let _ : Algebra (FractionRing O) (FractionRing B) := FractionRing.liftAlgebra O _
+  have : IsScalarTower O (FractionRing O) (FractionRing B) := FractionRing.isScalarTower_liftAlgebra O _
+  have : FiniteDimensional (FractionRing O) (FractionRing B) := .of_isLocalization O B O⁰
+  exact det_mulLeft_eq hEval hDvd hPrime O B n η t P Algebra.IsAlgebraic.isSeparable_of_perfectField
+    hgen ht hP hdvd u
 
 end
 

@@ -1049,7 +1049,7 @@ private theorem idx_split {F E : Type} [Field F] [NumberField F] [Field E] [Numb
     rw [coe_rhoFF, hy]
     show actOF σ JS JT g h ((1 - (e + cAF σ e)) • (x : WOF F E nS nT)) = _
     rw [actOF_smul]
-    exact PositivityTheory.ThKW.LatB.act_supp hg hh _
+    exact GlobalTheory.FinLatSplitF.off_smul_actOF hg hh _
   refine hIH (𝓞 E) (XFF F E nS nT) (GlobalTheory.WeilPartsF.thetaSubF σ JS JT ξ₀ ψ) (sgOF σ) w (gamFF σ JS JT ξ₀ ψ) (opFF hc w)
     (isHeis_opFF hσ hS hT hξ hc hw) _ _ hSDA (hsd _) (hfin _) (mulFF e) (mulFF (cAF σ e))
     (fun x => by rw [hm, he.1]; rfl) (fun x => by rw [hm, he'.1]; rfl)

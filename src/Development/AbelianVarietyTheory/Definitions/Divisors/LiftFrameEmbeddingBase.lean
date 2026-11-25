@@ -90,8 +90,6 @@ open GlobalTheory.ExpFrame
 
 namespace GlobalTheory.ExpTie
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 abbrev presJ {G Γ : Type} [Group G] [Group Γ] {ι : Γ →* G} {W : Type} [NormedAddCommGroup W] [InnerProductSpace ℂ W] {K : Type} [Field K]
     [NumberField K] [StarRing K] {S : CSD K} {σ : K →+* ℂ} {ρ : Γ →* Module.End ℂ W} {J : Subgroup G} {χ : J →* ℂˣ}
     (_ : Bridge.ClassPres ι S σ ρ J χ) : Subgroup G := J

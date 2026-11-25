@@ -45,8 +45,8 @@ theorem exists_transfer_pair [CompactSpace X] (j k : Fin P.N) :
       ‖P.chart k ((P.chart j).symm y) - P.chart k x‖ ≤ L * ‖y - P.chart j x‖ ∧
       P.q j y - P.q k (P.chart k ((P.chart j).symm y)) - (P.q j (P.chart j x) - P.q k (P.chart k x)) ≤
         L * ‖y - P.chart j x‖ := by
-  set K := (P.chart j) '' (closure (P.mid j) ∩ closure (P.mid k)) with hKdef
-  set W := (P.chart j).target ∩ (P.chart j).symm ⁻¹' (P.chart k).source with hWdef
+  let K := (P.chart j) '' (closure (P.mid j) ∩ closure (P.mid k))
+  let W := (P.chart j).target ∩ (P.chart j).symm ⁻¹' (P.chart k).source
   have hK : IsCompact K := (isClosed_closure.inter isClosed_closure).isCompact.image_of_continuousOn
     ((P.chart j).continuousOn.mono (inter_subset_left.trans (P.closure_mid j)))
   have hW : IsOpen W := (P.chart j).continuousOn_symm.isOpen_inter_preimage (P.chart j).open_target
@@ -55,28 +55,23 @@ theorem exists_transfer_pair [CompactSpace X] (j k : Fin P.N) :
     rintro _ ⟨x, ⟨hxj, hxk⟩, rfl⟩
     exact ⟨(P.chart j).map_source (P.closure_mid j hxj), by
       simp [(P.chart j).left_inv (P.closure_mid j hxj), P.closure_mid k hxk]⟩
-  have hτ : ∀ y ∈ W, ContDiffAt ℝ 1 (P.chart k ∘ (P.chart j).symm) y := by
-    intro y hy
+  have hτ : ∀ y ∈ W, ContDiffAt ℝ 1 (P.chart k ∘ (P.chart j).symm) y := fun y hy => by
     have h := analyticAt_transition (P.compat j) (P.compat k) ((P.chart j).map_target hy.1) hy.2
     rw [(P.chart j).right_inv hy.1] at h
     exact (h.restrictScalars (𝕜 := ℝ)).contDiffAt
   have hg : ∀ y ∈ W, ContDiffAt ℝ 1
-      (fun y => P.q j y - P.q k ((P.chart k ∘ (P.chart j).symm) y)) y := by
-    intro y hy
-    have h1 : ContDiffAt ℝ 1 (P.q j) y :=
-      ((P.q_smooth j).contDiffAt ((P.chart j).open_target.mem_nhds hy.1)).of_le (by simp)
-    have h2 : ContDiffAt ℝ 1 (P.q k) ((P.chart k ∘ (P.chart j).symm) y) :=
-      ((P.q_smooth k).contDiffAt
-        ((P.chart k).open_target.mem_nhds ((P.chart k).map_source hy.2))).of_le (by simp)
-    exact h1.sub (h2.comp y (hτ y hy))
+      (fun y => P.q j y - P.q k ((P.chart k ∘ (P.chart j).symm) y)) y := fun y hy =>
+    (((P.q_smooth j).contDiffAt ((P.chart j).open_target.mem_nhds hy.1)).of_le (by simp)).sub
+      ((((P.q_smooth k).contDiffAt
+        ((P.chart k).open_target.mem_nhds ((P.chart k).map_source hy.2))).of_le (by simp)).comp y
+        (hτ y hy))
   obtain ⟨δ₁, hδ₁, L₁, h₁⟩ := exists_lipschitz_near_compact hK hW hKW hτ
   obtain ⟨δ₂, hδ₂, L₂, h₂⟩ := exists_lipschitz_near_compact hK hW hKW hg
   refine ⟨min δ₁ δ₂, lt_min hδ₁ hδ₂, max L₁ L₂, fun x hx y hy => ?_⟩
   have hxK : P.chart j x ∈ K := mem_image_of_mem _ ⟨subset_closure hx.1, subset_closure hx.2⟩
   obtain ⟨hyW, e₁⟩ := h₁ _ hxK y (closedBall_subset_closedBall (min_le_left _ _) hy)
   obtain ⟨-, e₂⟩ := h₂ _ hxK y (closedBall_subset_closedBall (min_le_right _ _) hy)
-  have hxj : (P.chart j).symm (P.chart j x) = x := (P.chart j).left_inv (P.mid_subset_source j hx.1)
-  simp only [Function.comp_apply, hxj] at e₁ e₂
+  simp only [Function.comp_apply, (P.chart j).left_inv (P.mid_subset_source j hx.1)] at e₁ e₂
   have hn : 0 ≤ ‖y - P.chart j x‖ := norm_nonneg _
   refine ⟨hyW.1, hyW.2, e₁.trans (mul_le_mul_of_nonneg_right (le_max_left _ _) hn), ?_⟩
   rw [Real.norm_eq_abs] at e₂
@@ -114,124 +109,99 @@ theorem BoundedChartComparison.proof (h0 : MollifiedLowerBound.Statement)
   obtain ⟨δ₁, hδ₁, L, hL, hT⟩ := B.exists_transfer
   obtain ⟨b, hb⟩ := mollifier_exists_bound ρ
   have hb0 : 0 ≤ b := (ρ.nonneg 0).trans (hb 0)
-  obtain ⟨c₀, hc₀⟩ : ∃ c : ℝ, c = Real.pi ^ D * (3 / 2 : ℝ) ^ (2 * D) * b := ⟨_, rfl⟩
-  have hc₀0 : 0 ≤ c₀ := by rw [hc₀]; positivity
-  obtain ⟨B₀, hB₀⟩ : ∃ c : ℝ, c = |Q| + |Cφ| := ⟨_, rfl⟩
-  have hB₀0 : 0 ≤ B₀ := by rw [hB₀]; positivity
-
+  let c₀ : ℝ := Real.pi ^ D * (3 / 2 : ℝ) ^ (2 * D) * b
+  let B₀ : ℝ := |Q| + |Cφ|
+  let C₁ : ℝ := L + 2
+  let a : ℝ := |Real.log (δ / C₁)|
+  let E : ℝ := (1 + c₀) * (4 * Real.log (4 * C₁ ^ 2) * B₀)
+  let C : ℝ := max E L
+  have hc₀0 : 0 ≤ c₀ := by positivity
+  have hB₀0 : 0 ≤ B₀ := by positivity
+  have hC₁3 : 3 ≤ C₁ := by dsimp only [C₁]; linarith
+  have hlog4 : 0 ≤ Real.log (4 * C₁ ^ 2) := Real.log_nonneg (by nlinarith)
+  have hC₁2 : 0 < C₁ + 2 := by linarith
   have hball : ∀ k : Fin B.N, ∀ x ∈ B.mid k, ∀ r, r ≤ δ →
       closedBall (B.chart k x) r ⊆ (B.chart k).target := fun k x hx r hr =>
     (closedBall_subset_closedBall hr).trans
       ((closedBall_subset_cthickening (mem_image_of_mem _ (subset_closure hx)) δ).trans (hmarg k))
-  have hbd : ∀ k : Fin B.N, ∀ x ∈ B.mid k, ∀ y ∈ closedBall (B.chart k x) δ, |B.u k y| ≤ B₀ := by
-    intro k x hx y hy
-    have e1 := hQ k y (closedBall_subset_cthickening (mem_image_of_mem _ (subset_closure hx)) δ hy)
-    have e2 := hCφ ((B.chart k).symm y)
-    have e3 : |B.u k y| ≤ |B.q k y| + |B.ph ((B.chart k).symm y)| := abs_add_le _ _
-    rw [hB₀]
-    linarith [le_abs_self Q, le_abs_self Cφ]
-  have hpsh : ∀ k : Fin B.N, IsPsh (B.chart k).target (B.u k) := fun k => B.u_psh k
-  obtain ⟨C₁, hC₁⟩ : ∃ c : ℝ, c = L + 2 := ⟨_, rfl⟩
-  have hC₁3 : 3 ≤ C₁ := by linarith
-  obtain ⟨a, ha⟩ : ∃ c : ℝ, c = |Real.log (δ / C₁)| := ⟨_, rfl⟩
-  have ha0 : 0 ≤ a := ha ▸ abs_nonneg _
-  have hlog4 : 0 ≤ Real.log (4 * C₁ ^ 2) := Real.log_nonneg (by nlinarith)
-  obtain ⟨E, hE⟩ : ∃ c : ℝ, c = (1 + c₀) * (4 * Real.log (4 * C₁ ^ 2) * B₀) := ⟨_, rfl⟩
-  obtain ⟨C, hC⟩ : ∃ c : ℝ, c = max E L := ⟨_, rfl⟩
-  have hCE : E ≤ C := hC ▸ le_max_left _ _
-  have hCL : L ≤ C := hC ▸ le_max_right _ _
-  have hC₁2 : 0 < C₁ + 2 := by linarith
+  have hbd : ∀ k : Fin B.N, ∀ x ∈ B.mid k, ∀ y ∈ closedBall (B.chart k x) δ, |B.u k y| ≤ B₀ :=
+    fun k x hx y hy => by
+      have e1 := hQ k y (closedBall_subset_cthickening (mem_image_of_mem _ (subset_closure hx)) δ hy)
+      have e2 := hCφ ((B.chart k).symm y)
+      have e3 : |B.u k y| ≤ |B.q k y| + |B.ph ((B.chart k).symm y)| := abs_add_le _ _
+      dsimp only [B₀]
+      linarith [le_abs_self Q, le_abs_self Cφ]
   refine ⟨C, min δ₁ (min (δ / (C₁ + 2)) (Real.exp (-(Real.exp 1 + 2 * a)))),
     lt_min hδ₁ (lt_min (div_pos hδ hC₁2) (Real.exp_pos _)), ?_⟩
   intro t ht ht₀
   simp only [lt_min_iff] at ht₀
   obtain ⟨htδ₁, htδ, hte⟩ := ht₀
   have hCt : t * (C₁ + 2) < δ := (lt_div_iff₀ hC₁2).1 htδ
-  have hC₁t : C₁ * t ≤ δ := by linarith
   have hC₁tlt : C₁ * t < δ := by linarith
-  have htLt : t ≤ L * t := le_mul_of_one_le_left ht.le hL
-  have hLt : L * t ≤ C₁ * t := mul_le_mul_of_nonneg_right (by linarith) ht.le
-  have h2t : 2 * t ≤ C₁ * t := mul_le_mul_of_nonneg_right (by linarith) ht.le
-  obtain ⟨hℓa, -⟩ := log_inv_facts ht ha0 hte
-  have hℓ0 : 0 < Real.log t⁻¹ := by linarith [Real.exp_pos 1]
-  have hden : Real.log t⁻¹ / 2 ≤ Real.log (δ / (C₁ * t)) := by
+  set ℓ : ℝ := Real.log t⁻¹
+  obtain ⟨hℓa, -⟩ : Real.exp 1 + 2 * a < ℓ ∧ 1 < Real.log ℓ :=
+    log_inv_facts ht (abs_nonneg _) hte
+  have hℓ0 : 0 < ℓ := by linarith [Real.exp_pos 1, show 0 ≤ a from abs_nonneg _]
+  have hden : ℓ / 2 ≤ Real.log (δ / (C₁ * t)) := by
     rw [show δ / (C₁ * t) = (δ / C₁) * t⁻¹ by field_simp,
       Real.log_mul (div_pos hδ (by linarith)).ne' (inv_pos.2 ht).ne']
-    have := neg_abs_le (Real.log (δ / C₁))
-    rw [← ha] at this
-    linarith [Real.exp_pos 1]
-  have hden0 : 0 < Real.log (δ / (C₁ * t)) := by linarith
+    linarith [neg_abs_le (Real.log (δ / C₁)), Real.exp_pos 1]
   have key : ∀ j k : Fin B.N, ∀ x ∈ B.mid j ∩ B.mid k,
-      B.phReg ρ t j x - B.phReg ρ t k x ≤ E / Real.log t⁻¹ + L * t := by
-    intro j k x hx
-    have hpj := hpsh j
-    have hpk := hpsh k
-
+      B.phReg ρ t j x - B.phReg ρ t k x ≤ E / ℓ + L * t := fun j k x hx => by
+    let M : ℝ → ℝ := polyMax (B.u k) (B.chart k x)
+    have hpk := B.u_psh k
     have hi : molli ρ t (B.u j) (B.chart j x) ≤ polyMax (B.u j) (B.chart j x) t :=
-      (((mollify_thm D ρ _ (B.u j) (B.chart j).open_target hpj).1 t ht).2.2.2 (B.chart j x)
-        (hball j x hx.1 t (by linarith))).2
-
-    have hii : polyMax (B.u j) (B.chart j x) t ≤ polyMax (B.u k) (B.chart k x) (L * t) +
-        (B.q j (B.chart j x) - B.q k (B.chart k x)) + L * t := by
+      (((mollify_thm D ρ _ (B.u j) (B.chart j).open_target (B.u_psh j)).1 t ht).2.2.2
+        (B.chart j x) (hball j x hx.1 t (by nlinarith))).2
+    have hii : polyMax (B.u j) (B.chart j x) t ≤
+        M (L * t) + (B.q j (B.chart j x) - B.q k (B.chart k x)) + L * t := by
       refine polyMax_le' ht.le fun y hy => ?_
       obtain ⟨-, hyk, hτ, hg⟩ := hT j k x hx y (closedBall_subset_closedBall htδ₁.le hy)
-      have hyt : ‖y - B.chart j x‖ ≤ t := by rw [← dist_eq_norm]; exact hy
-      have hLy := mul_le_mul_of_nonneg_left hyt (by linarith : (0 : ℝ) ≤ L)
+      have hyt : ‖y - B.chart j x‖ ≤ t := by rwa [← dist_eq_norm]
       have hτ' : B.chart k ((B.chart j).symm y) ∈ closedBall (B.chart k x) (L * t) := by
         rw [mem_closedBall, dist_eq_norm]
-        exact hτ.trans hLy
-      have hle := le_polyMax hpk.1 (hball k x hx.2 (L * t) (by linarith)) hτ'
+        exact hτ.trans (mul_le_mul_of_nonneg_left hyt (by linarith))
+      have hle : B.u k (B.chart k ((B.chart j).symm y)) ≤ M (L * t) :=
+        le_polyMax hpk.1 (hball k x hx.2 (L * t) (by dsimp only [C₁] at hC₁tlt; nlinarith)) hτ'
       have hu : B.u j y = B.u k (B.chart k ((B.chart j).symm y)) +
           (B.q j y - B.q k (B.chart k ((B.chart j).symm y))) := by
         simp only [BoundedPshData.u, PotentialCharts.chartFun, (B.chart k).left_inv hyk]
         ring
-      linarith
-    have mono : ∀ s s', 0 ≤ s → s ≤ s' → s' ≤ δ →
-        polyMax (B.u k) (B.chart k x) s ≤ polyMax (B.u k) (B.chart k x) s' :=
+      nlinarith
+    have mono : ∀ s s', 0 ≤ s → s ≤ s' → s' ≤ δ → M s ≤ M s' :=
       fun s s' hs hss' hs' => polyMax_mono' hpk.1 hs hss' (hball k x hx.2 _ hs')
-    have e1 := mono (L * t) (C₁ * t) (by linarith) hLt hC₁t
+    have e1 : M (L * t) ≤ M (C₁ * t) :=
+      mono (L * t) (C₁ * t) (by nlinarith) (by dsimp only [C₁]; nlinarith) hC₁tlt.le
     have hq : t / (4 * C₁) ≤ t / 4 := div_le_div_of_nonneg_left ht.le (by norm_num) (by linarith)
-    have e2 := mono (t / (4 * C₁)) (t / 4) (by positivity) hq (by linarith)
-    have e3 := mono (t / 4) (2 * t) (by positivity) (by linarith) (by linarith)
-    have e4 := mono (2 * t) (C₁ * t) (by positivity) h2t hC₁t
-
-    have hiv := h0 D ρ b _ (B.u k) (B.chart k x) t (B.chart k).open_target hpk ht
-      (hball k x hx.2 _ (by linarith)) hb
-    rw [← hc₀] at hiv
-
-    have hv := h1 D _ (B.u k) (B.chart k x) δ t C₁ (B.chart k).open_target hpk
-      (hball k x hx.2 δ le_rfl) ht (by linarith) hC₁tlt
-    have hMδ : polyMax (B.u k) (B.chart k x) δ ≤ B₀ :=
+    have e2 : M (t / (4 * C₁)) ≤ M (t / 4) := mono (t / (4 * C₁)) (t / 4) (by positivity) hq (by nlinarith)
+    have e3 : M (t / 4) ≤ M (2 * t) := mono (t / 4) (2 * t) (by positivity) (by linarith) (by nlinarith)
+    have e4 : M (2 * t) ≤ M (C₁ * t) := mono (2 * t) (C₁ * t) (by positivity) (by nlinarith) hC₁tlt.le
+    have hiv : M (2 * t) - c₀ * (M (2 * t) - M (t / 4)) ≤ molli ρ t (B.u k) (B.chart k x) :=
+      h0 D ρ b _ (B.u k) (B.chart k x) t (B.chart k).open_target hpk ht (hball k x hx.2 _ (by nlinarith)) hb
+    have hv : M (C₁ * t) - M (t / (4 * C₁)) ≤
+        Real.log (4 * C₁ ^ 2) * (M δ - M (C₁ * t)) / Real.log (δ / (C₁ * t)) :=
+      h1 D _ (B.u k) (B.chart k x) δ t C₁ (B.chart k).open_target hpk
+        (hball k x hx.2 δ le_rfl) ht (by linarith) hC₁tlt
+    have hMδ : M δ ≤ B₀ :=
       polyMax_le' hδ.le fun y hy => (le_abs_self _).trans (hbd k x hx.2 y hy)
-    have hMC : -B₀ ≤ polyMax (B.u k) (B.chart k x) (C₁ * t) :=
+    have hMC : -B₀ ≤ M (C₁ * t) :=
       (neg_le_of_abs_le (hbd k x hx.2 _ (mem_closedBall_self hδ.le))).trans
-        (le_polyMax hpk.1 (hball k x hx.2 _ hC₁t) (mem_closedBall_self (by positivity)))
-    have hN : polyMax (B.u k) (B.chart k x) δ - polyMax (B.u k) (B.chart k x) (C₁ * t) ≤ 2 * B₀ := by
-      linarith
-    have hO : polyMax (B.u k) (B.chart k x) (C₁ * t) - polyMax (B.u k) (B.chart k x) (t / (4 * C₁)) ≤
-        4 * Real.log (4 * C₁ ^ 2) * B₀ / Real.log t⁻¹ := by
+        (le_polyMax hpk.1 (hball k x hx.2 _ hC₁tlt.le) (mem_closedBall_self (by positivity)))
+    have hO : M (C₁ * t) - M (t / (4 * C₁)) ≤ 4 * Real.log (4 * C₁ ^ 2) * B₀ / ℓ := by
       refine hv.trans ?_
-      rw [div_le_div_iff₀ hden0 hℓ0]
-      calc Real.log (4 * C₁ ^ 2) * (polyMax (B.u k) (B.chart k x) δ -
-              polyMax (B.u k) (B.chart k x) (C₁ * t)) * Real.log t⁻¹
-          ≤ Real.log (4 * C₁ ^ 2) * (2 * B₀) * Real.log t⁻¹ :=
-            mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left hN hlog4) hℓ0.le
-        _ = 4 * Real.log (4 * C₁ ^ 2) * B₀ * (Real.log t⁻¹ / 2) := by ring
-        _ ≤ 4 * Real.log (4 * C₁ ^ 2) * B₀ * Real.log (δ / (C₁ * t)) :=
-            mul_le_mul_of_nonneg_left hden (mul_nonneg (mul_nonneg (by norm_num) hlog4) hB₀0)
-    have hc : c₀ * (polyMax (B.u k) (B.chart k x) (2 * t) - polyMax (B.u k) (B.chart k x) (t / 4)) ≤
-        c₀ * (polyMax (B.u k) (B.chart k x) (C₁ * t) -
-          polyMax (B.u k) (B.chart k x) (t / (4 * C₁))) :=
-      mul_le_mul_of_nonneg_left (by linarith) hc₀0
-    have hfin : (1 + c₀) * (polyMax (B.u k) (B.chart k x) (C₁ * t) -
-          polyMax (B.u k) (B.chart k x) (t / (4 * C₁))) ≤ E / Real.log t⁻¹ := by
-      rw [hE, mul_div_assoc]
-      exact mul_le_mul_of_nonneg_left hO (by linarith)
+      rw [div_le_div_iff₀ (by linarith) hℓ0]
+      calc Real.log (4 * C₁ ^ 2) * (M δ - M (C₁ * t)) * ℓ
+          ≤ Real.log (4 * C₁ ^ 2) * (2 * B₀) * ℓ := by gcongr; linarith
+        _ = 4 * Real.log (4 * C₁ ^ 2) * B₀ * (ℓ / 2) := by ring
+        _ ≤ 4 * Real.log (4 * C₁ ^ 2) * B₀ * Real.log (δ / (C₁ * t)) := by gcongr
     simp only [BoundedPshData.phReg, BoundedPshData.smoothed]
-    linarith
+    have hE' : E / ℓ = (1 + c₀) * (4 * Real.log (4 * C₁ ^ 2) * B₀ / ℓ) := by
+      dsimp only [E]; ring
+    nlinarith
   intro j k x hx
-  have hEC : E / Real.log t⁻¹ + L * t ≤ C / Real.log t⁻¹ + C * t :=
-    add_le_add (div_le_div_of_nonneg_right hCE hℓ0.le) (mul_le_mul_of_nonneg_right hCL ht.le)
+  have hEC : E / ℓ + L * t ≤ C / ℓ + C * t :=
+    add_le_add (div_le_div_of_nonneg_right (le_max_left _ _) hℓ0.le)
+      (mul_le_mul_of_nonneg_right (le_max_right _ _) ht.le)
   exact abs_sub_le_iff.2 ⟨(key j k x hx).trans hEC, (key k j x ⟨hx.2, hx.1⟩).trans hEC⟩
 
 end

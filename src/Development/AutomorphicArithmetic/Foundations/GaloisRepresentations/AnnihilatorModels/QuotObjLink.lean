@@ -1080,8 +1080,7 @@ theorem exists_tjCorr_finiteEtale : ∀ (p : ℕ) [Fact p.Prime] (D : Datum p) (
     exact ⟨y.base z', by rw [← hy]; rfl⟩
   let T : TjCorr M.toRepFam r w j c :=
     { Y := Y.left, s := Y.hom, t := t, st := ht.symm, o := o₀, o' := o', ms := m₀, mt := mt, ψ := ψ,
-      isog := hisog, tj := htj, wPrime := hw.isPrime, uLe := hu,
-      pReg := fun U f hf => pReg_of_isUnit (Y.hom ≫ M.s) hp U f hf, sFin := hfin, tFin := h3, sSurj := hsurj }
+      isog := hisog, tj := htj }
   exact ⟨T, hfin, het, hsurj, h3, h4, fun S x o₁ o₁' m ψ₁ _ h1 h2 => huniv S x o₁ o₁' m ψ₁ h1 h2⟩
 
 end GlobalTheory.UPel.HT.ES

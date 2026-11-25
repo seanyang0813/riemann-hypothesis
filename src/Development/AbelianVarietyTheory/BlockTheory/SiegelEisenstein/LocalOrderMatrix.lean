@@ -64,10 +64,6 @@ theorem ordX_d (R : Ranks) (j : ℕ) (i : Fin j) (l : Fin R.t) :
 section Points
 variable {E k : Type} [Field E] [Field k] (ι : E →+* k) {a b : ℕ} {I J : Type}
 
-def locVec (e : I ≃ Fin b) (y : Fin b → E) : I → k := fun r => ι (y (e r))
-
-def locRow (e' : J ≃ Fin a) (η : (Fin a → E) →ₗ[E] E) : J → k := fun s => ι (η (Pi.single (e' s) 1))
-
 end Points
 
 section Match

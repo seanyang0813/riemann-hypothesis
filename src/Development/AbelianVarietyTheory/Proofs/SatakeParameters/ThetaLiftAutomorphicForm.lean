@@ -57,7 +57,6 @@ namespace GlobalTheory.ThetaRead
 open MeasureTheory Formalism.BasicNotions.TH Formalism.L2.Theta Formalism.L2.DIV Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Mult Formalism.IndefR.RecTie
   Formalism.IndefR.Lev Formalism.IndefR.Datum GlobalTheory.ThetaTri
 open scoped TensorProduct InnerProductSpace
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 section Pair
 

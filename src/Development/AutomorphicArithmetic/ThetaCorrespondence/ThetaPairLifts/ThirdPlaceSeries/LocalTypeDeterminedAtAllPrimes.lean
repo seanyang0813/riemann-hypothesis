@@ -223,7 +223,7 @@ theorem _root_.GlobalTheory.T.inertiaPolynomial_kills_potentiallyCrystalline_mod
     D i w hw K' h hN hF hS m r hr hpc
   obtain ⟨LL', hL, hV', hchar⟩ :=
     GlobalTheory.T.charPoly_inertia_of_potSemistable_enlargement D i w hw m r hPst
-  have hkill := GlobalTheory.T.aeval_inertia_eq_zero_potSemistableDieudonne
+  have hkill := _root_.GlobalTheory.IneKillsDpst.aeval_stRep_eq_zero
     (D.loc (D.nd.l i)) (D.locA (D.nd.l i)) (D.locT (D.nd.l i)) (D.naut.iotaQC i)
     (D.nbr i w hw) (D.nd.plOm.2 w) (D.nbr_ind i w hw) _ hV' ⟨(σ : GE D.nd), hσ⟩ _
     (hchar σ hσ p hp)

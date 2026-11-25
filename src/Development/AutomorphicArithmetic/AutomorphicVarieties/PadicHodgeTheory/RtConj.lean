@@ -83,13 +83,6 @@ theorem conjBy_left {G C : Type} [Group G] [CommRing C] (h : GL (Fin 3) C)
   rw [SemidirectProduct.mul_left, SemidirectProduct.mul_left, SemidirectProduct.inv_left]
   simp only [SemidirectProduct.right_inl, SemidirectProduct.left_inl, SemidirectProduct.mul_right, hg, mul_one, inv_one, map_one, MulAut.one_apply]
 
-theorem conjBy_mat {G C : Type} [Group G] [CommRing C] (h : GL (Fin 3) C)
-    (r : G →* UpperTheory.V.U3.GG (m := 3) (R := C)) (g : G)
-    (hg : (r g).right = 1) :
-    (conjBy h r g).mat = (h : Matrix (Fin 3) (Fin 3) C) * (r g).mat * ((h⁻¹ : GL (Fin 3) C) : Matrix (Fin 3) (Fin 3) C) := by
-  unfold GG.mat
-  rw [conjBy_left h r g hg, Units.val_mul, Units.val_mul]
-
 section Conj
 
 variable {C : Type} [CommRing C]

@@ -7,16 +7,6 @@ public import Formalism.HermitianLattices.HermitianLatticesProofs.DualLattice
 public import Formalism.HermitianLattices.HermitianLatticesProofs.GenusCovolBound
 public import Formalism.HermitianLattices.HermitianLatticesProofs.NeighbourConstruct
 public import Formalism.LocalToGlobal.Columns.BaseLemmas
-import Mathlib.LinearAlgebra.FreeModule.IdealQuotient
-import Mathlib.LinearAlgebra.Matrix.FiniteDimensional
-import Mathlib.RingTheory.Coalgebra.CoassocSimps
-import Mathlib.RingTheory.Coalgebra.IsFrobenius
-import Mathlib.RingTheory.Etale.Weakly
-import Mathlib.RingTheory.Henselian
-import Mathlib.RingTheory.HopfAlgebra.Basic
-import Mathlib.RingTheory.RegularLocalRing.Defs
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.RingTheory.TotallySplit
 
 @[expose] public section
 

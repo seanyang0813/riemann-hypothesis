@@ -279,61 +279,16 @@ theorem compDeg_le (hP : Proport U) (Z : Comp Xo c) {u : Weight Dw} (hu : ∀ τ
   rcases (compDeg U Z (wtOf Dw u 0)).eq_zero_or_pos with h0 | h0
   · rw [h0, Nat.cast_zero]; exact topDeg_nonneg Z hu
   · have := finiteDimensional_cuspOn hP Z hu
-    have h1 := _root_.GlobalTheory.ConeDeg.degree_growth_integral.1 c.F _ _ _ _ 1 le_rfl _ ((imageDeg_pos_iff _ _).1 h0)
+    have h1 := _root_.GlobalTheory.ConeDeg.degree_growth.1 c.F _ _ _ _ 1 le_rfl _ ((imageDeg_pos_iff _ _).1 h0)
     have h2 := growth_hilb_le hP Z hu le_rfl
     rw [h1, Nat.cast_one, Nat.cast_one, one_pow, one_pow, one_mul, one_mul, ← ENNReal.ofReal_natCast] at h2
     exact (ENNReal.ofReal_le_ofReal_iff (topDeg_nonneg Z hu)).1 h2
 
 end
 
-def normFac {σ : c.F →+* ℂ} (U : Unf Xo c σ r) (x : ℝ) (G : WTZ E) (z : Σ k, Frame (U.X k).Ψ r) : ℝ :=
-  lieFacZ Dw x G * (U.X z.1).nfac (modelWt U G z.1) z.2
-
 section Fac
 
 variable {σ : c.F →+* ℂ} (U₁ : Unf Xo c σ r) (x)
-
-theorem homN_eq (G : WTZ E) (f : Rul Xo c) (z : Σ k, Frame (U₁.X k).Ψ r) :
-    homN U₁ x G f z = normFac U₁ x G z * ‖rdU U₁ f z.1 z.2‖ := by
-  show _ * (‖rdU U₁ f z.1 z.2‖ * (U₁.X z.1).nfac (modelWt U₁ G z.1) z.2) = _
-  rw [normFac]; ring
-
-theorem normFac_pos (G : WTZ E) {z : Σ k, Frame (U₁.X k).Ψ r} (hz : z.2 ∈ (U₁.X z.1).dom) : 0 < normFac U₁ x G z := by
-  have hd : ∀ τ i, dmin (U₁.X z.1).Gm z.2 τ i ≠ 0 := fun τ i h0 => by
-    have := (hz τ).2 i
-    rw [h0] at this; simp at this
-  exact mul_pos (lieFacZ_pos _ _) (Finset.prod_pos fun τ _ => Finset.prod_pos fun i _ =>
-    Real.rpow_pos_of_pos (norm_pos_iff.mpr (div_ne_zero (hd τ _) (hd τ _))) _)
-
-theorem normFac_add {G G' : WTZ E} (hG : Even G.2) (hG' : Even G'.2) {z : Σ k, Frame (U₁.X k).Ψ r}
-    (hz : z.2 ∈ (U₁.X z.1).dom) : normFac U₁ x (G + G') z = normFac U₁ x G z * normFac U₁ x G' z := by
-  have hd : ∀ τ i, dmin (U₁.X z.1).Gm z.2 τ i ≠ 0 := fun τ i h0 => by
-    have := (hz τ).2 i
-    rw [h0] at this; simp at this
-  have key : ∀ la la' : Wt (U₁.X z.1).Ψ r, (U₁.X z.1).nfac (la + la') z.2 =
-      (U₁.X z.1).nfac la z.2 * (U₁.X z.1).nfac la' z.2 := fun la la' => by
-    unfold Data.nfac
-    rw [← Finset.prod_mul_distrib]
-    refine Finset.prod_congr rfl fun τ _ => ?_
-    rw [← Finset.prod_mul_distrib]
-    refine Finset.prod_congr rfl fun i _ => ?_
-    rw [← Real.rpow_add (norm_pos_iff.mpr (div_ne_zero (hd τ _) (hd τ _)))]
-    congr 1
-    simp only [Pi.add_apply]
-    push_cast
-    ring
-  rw [normFac, normFac, normFac, modelWt_add U₁ hG hG', key, lieFacZ_add]
-  ring
-
-theorem normFac_nsmul {G : WTZ E} (hG : Even G.2) {z : Σ k, Frame (U₁.X k).Ψ r} (hz : z.2 ∈ (U₁.X z.1).dom) (n : ℕ) :
-    normFac U₁ x (n • G) z = normFac U₁ x G z ^ n := by
-  induction n with
-  | zero =>
-    have h := normFac_add x U₁ (G := 0) (G' := 0) Even.zero Even.zero hz
-    rw [add_zero] at h
-    rw [zero_nsmul, pow_zero]
-    exact (mul_left_cancel₀ (normFac_pos x U₁ 0 hz).ne' (h.symm.trans (mul_one _).symm))
-  | succ n ih => rw [succ_nsmul, normFac_add x U₁ (even_nsmul hG n) hG hz, ih, pow_succ]
 
 end Fac
 

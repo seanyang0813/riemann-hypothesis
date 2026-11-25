@@ -19,51 +19,8 @@ import Formalism.HermitianCurvature.HermitianCurvatureProofs.SandwichRhoAction
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.SmoothLevOfCk
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.SmoothnessOnGoodSet
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.UnipotentCoordinatesMeasurePreserving
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.CategoryTheory.Countable
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
 import Mathlib.Data.Set.Finite.List
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
 import Mathlib.Tactic.Linter.Style
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Topology.Sheaves.Init
 import Std.Tactic.BVDecide.Normalize.Prop
 
 @[expose] public section
@@ -303,10 +260,10 @@ theorem continuous_characterProduct (Bj : B.RealPlaceData k ρ Wp Wq) : Continuo
     ((Formalism.FourierDecayAlt.P.ParameterFamilyAlgebra.psi_cont_of (liftVec k p ρ Bj.z) cStd).comp
       ((Formalism.FourierDecayAlt.P.Dx2.SplitF.rn_cont (k := k) p ρ).comp continuous_snd))
 
-theorem chart_zero (g0 : Mat k n) : Formalism.FourierDecayAlt.P.Ux10.chart g0 0 = g0 := by
-  have hMv : Formalism.FourierDecayAlt.P.Ux10.Mv (0 : Formalism.FourierDecayAlt.P.Ux10.J k n → ℝ) = 0 := by
-    ext a b; simp [Formalism.FourierDecayAlt.P.Ux10.Mv]
-  simp [Formalism.FourierDecayAlt.P.Ux10.chart, hMv, Formalism.FourierDecayAlt.P.Ux10.prj_zero, Formalism.FourierDecayAlt.P.Ux10.kap]
+theorem chart_zero (g0 : Mat k n) : Formalism.FourierDecayAlt.P.Ux1.chart g0 0 = g0 := by
+  have hMv : Formalism.FourierDecayAlt.P.Ux1.Mv (0 : Formalism.FourierDecayAlt.P.Ux1.J k n → ℝ) = 0 := by
+    ext a b; simp [Formalism.FourierDecayAlt.P.Ux1.Mv]
+  simp [Formalism.FourierDecayAlt.P.Ux1.chart, hMv, Formalism.FourierDecayAlt.P.Ux1.prj_zero, Formalism.FourierDecayAlt.P.Ux1.kap]
 
 end main
 
@@ -403,28 +360,28 @@ theorem ck_at (Bj : B.RealPlaceData k ρ Wp Wq) (B0 : B.RealPlaceData k n Wp Wq)
     · rfl
 
   obtain ⟨δ1, hδ1, hsub⟩ := Metric.mem_nhds_iff.1
-    (Formalism.FourierDecayAlt.P.Ux10.dom_open.mem_nhds (Formalism.FourierDecayAlt.P.Ux10.zero_mem_dom (k := k) (r := n)))
-  have hcc : ContinuousAt (Formalism.FourierDecayAlt.P.Ux10.chart g0) 0 :=
-    (Formalism.FourierDecayAlt.P.Ux10.chart_cd g0).continuousOn.continuousAt
-      (Formalism.FourierDecayAlt.P.Ux10.dom_open.mem_nhds Formalism.FourierDecayAlt.P.Ux10.zero_mem_dom)
+    (Formalism.FourierDecayAlt.P.Ux1.dom_open.mem_nhds (Formalism.FourierDecayAlt.P.Ux1.zero_mem_dom (k := k) (r := n)))
+  have hcc : ContinuousAt (Formalism.FourierDecayAlt.P.Ux1.chart g0) 0 :=
+    (Formalism.FourierDecayAlt.P.Ux1.chart_cd g0).continuousOn.continuousAt
+      (Formalism.FourierDecayAlt.P.Ux1.dom_open.mem_nhds Formalism.FourierDecayAlt.P.Ux1.zero_mem_dom)
   obtain ⟨δ2, hδ2, hsub2⟩ := Metric.mem_nhds_iff.1
     (hcc.preimage_mem_nhds (by rw [chart_zero]; exact hOo.mem_nhds hgO))
   set δ := min δ1 δ2 / 2 with hδ
   have hδp : 0 < δ := by rw [hδ]; positivity
   have hδ1' : δ < δ1 := by rw [hδ]; have := min_le_left δ1 δ2; linarith
   have hδ2' : δ < δ2 := by rw [hδ]; have := min_le_right δ1 δ2; linarith
-  have hcl : Metric.closedBall (0 : Formalism.FourierDecayAlt.P.Ux10.J k n → ℝ) δ ⊆ Formalism.FourierDecayAlt.P.Ux10.Dom k n :=
+  have hcl : Metric.closedBall (0 : Formalism.FourierDecayAlt.P.Ux1.J k n → ℝ) δ ⊆ Formalism.FourierDecayAlt.P.Ux1.Dom k n :=
     fun Y hY => hsub (Metric.closedBall_subset_ball hδ1' hY)
-  have hclO : ∀ Y ∈ Metric.closedBall (0 : Formalism.FourierDecayAlt.P.Ux10.J k n → ℝ) δ, Formalism.FourierDecayAlt.P.Ux10.chart g0 Y ∈ O :=
+  have hclO : ∀ Y ∈ Metric.closedBall (0 : Formalism.FourierDecayAlt.P.Ux1.J k n → ℝ) δ, Formalism.FourierDecayAlt.P.Ux1.chart g0 Y ∈ O :=
     fun Y hY => hsub2 (Metric.closedBall_subset_ball hδ2' hY)
-  set Kc := Formalism.FourierDecayAlt.P.Ux10.chart g0 '' Metric.closedBall (0 : Formalism.FourierDecayAlt.P.Ux10.J k n → ℝ) δ with hKcdef
+  set Kc := Formalism.FourierDecayAlt.P.Ux1.chart g0 '' Metric.closedBall (0 : Formalism.FourierDecayAlt.P.Ux1.J k n → ℝ) δ with hKcdef
   have hKc : IsCompact Kc :=
-    (isCompact_closedBall _ _).image_of_continuousOn ((Formalism.FourierDecayAlt.P.Ux10.chart_cd g0).continuousOn.mono hcl)
+    (isCompact_closedBall _ _).image_of_continuousOn ((Formalism.FourierDecayAlt.P.Ux1.chart_cd g0).continuousOn.mono hcl)
   have hKcG : Kc ⊆ GV k n := by
-    rintro _ ⟨Y, hY, rfl⟩; exact Formalism.FourierDecayAlt.P.Ux10.chart_mem hg0 (hcl hY)
-  have hmemKc : ∀ Y ∈ Metric.ball (0 : Formalism.FourierDecayAlt.P.Ux10.J k n → ℝ) δ, Formalism.FourierDecayAlt.P.Ux10.chart g0 Y ∈ Kc :=
+    rintro _ ⟨Y, hY, rfl⟩; exact Formalism.FourierDecayAlt.P.Ux1.chart_mem hg0 (hcl hY)
+  have hmemKc : ∀ Y ∈ Metric.ball (0 : Formalism.FourierDecayAlt.P.Ux1.J k n → ℝ) δ, Formalism.FourierDecayAlt.P.Ux1.chart g0 Y ∈ Kc :=
     fun Y hY => ⟨Y, Metric.ball_subset_closedBall hY, rfl⟩
-  have hmemO : ∀ Y ∈ Metric.ball (0 : Formalism.FourierDecayAlt.P.Ux10.J k n → ℝ) δ, Formalism.FourierDecayAlt.P.Ux10.chart g0 Y ∈ O :=
+  have hmemO : ∀ Y ∈ Metric.ball (0 : Formalism.FourierDecayAlt.P.Ux1.J k n → ℝ) δ, Formalism.FourierDecayAlt.P.Ux1.chart g0 Y ∈ O :=
     fun Y hY => hclO Y (Metric.ball_subset_closedBall hY)
 
   set Kx := K ∩ {x : PBQ.XP k p ρ | PBQ.GoodP Bj x} with hKxdef
@@ -439,25 +396,25 @@ theorem ck_at (Bj : B.RealPlaceData k ρ Wp Wq) (B0 : B.RealPlaceData k n Wp Wq)
     rintro _ ⟨q, hq, rfl⟩
     exact Formalism.FourierDecayAlt.P.BetaSesquilinearity.gv_mul (hKcG hq.2) (iotL_mem (sxF_GV e hq.1.2))
 
-  have hunit : ∀ w : List (Formalism.FourierDecayAlt.P.Ux10.J k n), ∀ X ∈ w.map Formalism.FourierDecayAlt.P.Ux10.Lt, unitLie k n X := by
+  have hunit : ∀ w : List (Formalism.FourierDecayAlt.P.Ux1.J k n), ∀ X ∈ w.map Formalism.FourierDecayAlt.P.Ux1.Lt, unitLie k n X := by
     intro w X hX
     obtain ⟨i, _, rfl⟩ := List.mem_map.1 hX
-    exact Formalism.FourierDecayAlt.P.Ux10.Lt_unit i
-  have hΨ : ∀ w : List (Formalism.FourierDecayAlt.P.Ux10.J k n),
-      ContinuousOn (dLR (w.map Formalism.FourierDecayAlt.P.Ux10.Lt) [] Φt) (GV k n) := by
+    exact Formalism.FourierDecayAlt.P.Ux1.Lt_unit i
+  have hΨ : ∀ w : List (Formalism.FourierDecayAlt.P.Ux1.J k n),
+      ContinuousOn (dLR (w.map Formalism.FourierDecayAlt.P.Ux1.Lt) [] Φt) (GV k n) := by
     intro w
     rw [Formalism.FourierDecayAlt.P.B4.dLR_eq]
     exact Formalism.FourierDecayAlt.P.B5.ckOn_continuousOn (m := ((0 : ℕ) : ℕ∞))
       (smooth_on_of_word_derivatives _ (allLie_lr (hunit w) (by simp)) 0 (Formalism.FourierDecayAlt.P.B5.ckOn_mono le_top hΦt))
-  have hbw : ∀ w : List (Formalism.FourierDecayAlt.P.Ux10.J k n), ∃ C : ℝ,
-      ∀ y ∈ KImage, ‖dLR (w.map Formalism.FourierDecayAlt.P.Ux10.Lt) [] Φt y‖ ≤ C :=
+  have hbw : ∀ w : List (Formalism.FourierDecayAlt.P.Ux1.J k n), ∃ C : ℝ,
+      ∀ y ∈ KImage, ‖dLR (w.map Formalism.FourierDecayAlt.P.Ux1.Lt) [] Φt y‖ ≤ C :=
     fun w => hKim.exists_bound_of_continuousOn ((hΨ w).mono hKimG)
   choose Cw hCw using hbw
-  set Wm := (List.finite_length_le (Formalism.FourierDecayAlt.P.Ux10.J k n) m).toFinset with hWm
+  set Wm := (List.finite_length_le (Formalism.FourierDecayAlt.P.Ux1.J k n) m).toFinset with hWm
   set c : ℝ := ∑ w ∈ Wm, max (Cw w) 0 with hcdef
   have hc0 : 0 ≤ c := Finset.sum_nonneg fun w _ => le_max_right _ _
-  have hcw : ∀ w : List (Formalism.FourierDecayAlt.P.Ux10.J k n), w.length ≤ m → ∀ y ∈ KImage,
-      ‖dLR (w.map Formalism.FourierDecayAlt.P.Ux10.Lt) [] Φt y‖ ≤ c := by
+  have hcw : ∀ w : List (Formalism.FourierDecayAlt.P.Ux1.J k n), w.length ≤ m → ∀ y ∈ KImage,
+      ‖dLR (w.map Formalism.FourierDecayAlt.P.Ux1.Lt) [] Φt y‖ ≤ c := by
     intro w hw y hy
     have hwm : w ∈ Wm := by rw [hWm, Set.Finite.mem_toFinset]; exact hw
     calc _ ≤ Cw w := hCw w y hy
@@ -470,25 +427,25 @@ theorem ck_at (Bj : B.RealPlaceData k ρ Wp Wq) (B0 : B.RealPlaceData k n Wp Wq)
     (integrableOn_const (μ := μ) (s := Kx) (C := c) (muXP_lt_top_of_isCompact Bj hKx).ne).integrable_indicator
       hKx.isClosed.measurableSet
 
-  have hwords : ∀ (w : List (Formalism.FourierDecayAlt.P.Ux10.J k n)) x, PBQ.GoodP Bj x → ∀ y,
-      dLR (w.map Formalism.FourierDecayAlt.P.Ux10.Lt) [] (fam Bj e Φt x) y =
-        (Bj.π (Matrix.of x.1.1)).comp (dLR (w.map Formalism.FourierDecayAlt.P.Ux10.Lt) [] Φt (y * iotL k n (sxF e x))) := by
+  have hwords : ∀ (w : List (Formalism.FourierDecayAlt.P.Ux1.J k n)) x, PBQ.GoodP Bj x → ∀ y,
+      dLR (w.map Formalism.FourierDecayAlt.P.Ux1.Lt) [] (fam Bj e Φt x) y =
+        (Bj.π (Matrix.of x.1.1)).comp (dLR (w.map Formalism.FourierDecayAlt.P.Ux1.Lt) [] Φt (y * iotL k n (sxF e x))) := by
     intro w x hx y
     have hf : fam Bj e Φt x = fun g => (Bj.π (Matrix.of x.1.1)).comp (Φt (g * iotL k n (sxF e x))) := by
       funext g; unfold fam; rw [if_pos hx]
     rw [hf]
-    show (w.map Formalism.FourierDecayAlt.P.Ux10.Lt).foldr LdV
+    show (w.map Formalism.FourierDecayAlt.P.Ux1.Lt).foldr LdV
       (fun g => (Bj.π (Matrix.of x.1.1)).comp (Φt (g * iotL k n (sxF e x)))) y = _
     rw [lw_post (pi_leftInv Bj hx.1)]
-    show (Bj.π (Matrix.of x.1.1)).comp ((w.map Formalism.FourierDecayAlt.P.Ux10.Lt).foldr LdV
+    show (Bj.π (Matrix.of x.1.1)).comp ((w.map Formalism.FourierDecayAlt.P.Ux1.Lt).foldr LdV
       (fun g => Φt (g * iotL k n (sxF e x))) y) =
-      (Bj.π (Matrix.of x.1.1)).comp ((w.map Formalism.FourierDecayAlt.P.Ux10.Lt).foldr LdV Φt (y * iotL k n (sxF e x)))
+      (Bj.π (Matrix.of x.1.1)).comp ((w.map Formalism.FourierDecayAlt.P.Ux1.Lt).foldr LdV Φt (y * iotL k n (sxF e x)))
     rw [lw_rtransl]
-  have hbd : ∀ w : List (Formalism.FourierDecayAlt.P.Ux10.J k n), w.length ≤ m →
-      ∀ Y ∈ Metric.ball (0 : Formalism.FourierDecayAlt.P.Ux10.J k n → ℝ) δ, ∀ x,
-        ‖dLR (w.map Formalism.FourierDecayAlt.P.Ux10.Lt) [] (fam Bj e Φt x) (Formalism.FourierDecayAlt.P.Ux10.chart g0 Y)‖ ≤ β x := by
+  have hbd : ∀ w : List (Formalism.FourierDecayAlt.P.Ux1.J k n), w.length ≤ m →
+      ∀ Y ∈ Metric.ball (0 : Formalism.FourierDecayAlt.P.Ux1.J k n → ℝ) δ, ∀ x,
+        ‖dLR (w.map Formalism.FourierDecayAlt.P.Ux1.Lt) [] (fam Bj e Φt x) (Formalism.FourierDecayAlt.P.Ux1.chart g0 Y)‖ ≤ β x := by
     intro w hw Y hY x
-    set y := Formalism.FourierDecayAlt.P.Ux10.chart g0 Y with hydef
+    set y := Formalism.FourierDecayAlt.P.Ux1.chart g0 Y with hydef
     have hyG : y ∈ GV k n := hKcG (hmemKc Y hY)
     by_cases hxK : x ∈ Kx
     · rw [hwords w x hxK.2 y, hβ, Set.indicator_of_mem hxK]
@@ -499,7 +456,7 @@ theorem ck_at (Bj : B.RealPlaceData k ρ Wp Wq) (B0 : B.RealPlaceData k n Wp Wq)
         by_contra hc
         push_neg at hc
         exact hxK ⟨hc.1, hc.2⟩
-      have h0 : dLR (w.map Formalism.FourierDecayAlt.P.Ux10.Lt) [] (fam Bj e Φt x) y = 0 := by
+      have h0 : dLR (w.map Formalism.FourierDecayAlt.P.Ux1.Lt) [] (fam Bj e Φt x) y = 0 := by
         rw [Formalism.FourierDecayAlt.P.B4.dLR_eq]
         exact Formalism.FourierDecayAlt.P.PBG.W_zero_near _ (allLie_lr (hunit w) (by simp)) hOo
           (fun g hg hgO' => hzero x hx' g hg hgO') y hyG (hmemO Y hY)
@@ -508,12 +465,12 @@ theorem ck_at (Bj : B.RealPlaceData k ρ Wp Wq) (B0 : B.RealPlaceData k n Wp Wq)
 
   have hgood : μ.restrict {x : PBQ.XP k p ρ | PBQ.GoodP Bj x} = μ :=
     Measure.restrict_eq_self_of_ae_mem (PBQ.ae_goodP (p := p) Bj)
-  have hM : ∀ w : List (Formalism.FourierDecayAlt.P.Ux10.J k n), w.length ≤ m →
-      ∀ Y ∈ Metric.ball (0 : Formalism.FourierDecayAlt.P.Ux10.J k n → ℝ) δ,
-        AEStronglyMeasurable (fun x => dLR (w.map Formalism.FourierDecayAlt.P.Ux10.Lt) [] (fam Bj e Φt x)
-          (Formalism.FourierDecayAlt.P.Ux10.chart g0 Y)) μ := by
+  have hM : ∀ w : List (Formalism.FourierDecayAlt.P.Ux1.J k n), w.length ≤ m →
+      ∀ Y ∈ Metric.ball (0 : Formalism.FourierDecayAlt.P.Ux1.J k n → ℝ) δ,
+        AEStronglyMeasurable (fun x => dLR (w.map Formalism.FourierDecayAlt.P.Ux1.Lt) [] (fam Bj e Φt x)
+          (Formalism.FourierDecayAlt.P.Ux1.chart g0 Y)) μ := by
     intro w hw Y hY
-    set y := Formalism.FourierDecayAlt.P.Ux10.chart g0 Y with hydef
+    set y := Formalism.FourierDecayAlt.P.Ux1.chart g0 Y with hydef
     have hyG : y ∈ GV k n := hKcG (hmemKc Y hY)
     have hs : ContinuousOn (fun x : PBQ.XP k p ρ => y * iotL k n (sxF e x)) {x | PBQ.GoodP Bj x} :=
       continuousOn_const.mul ((iotL k n).continuous.comp_continuousOn (cont_sxF Bj e))
@@ -522,7 +479,7 @@ theorem ck_at (Bj : B.RealPlaceData k ρ Wp Wq) (B0 : B.RealPlaceData k n Wp Wq)
     have hπ : ContinuousOn (fun x : PBQ.XP k p ρ => Bj.π (Matrix.of x.1.1)) {x | PBQ.GoodP Bj x} :=
       Bj.π_cont.comp (continuous_fst.comp continuous_fst).continuousOn fun x hx => hx.1
     have hG : ContinuousOn (fun x : PBQ.XP k p ρ => (Bj.π (Matrix.of x.1.1)).comp
-        (dLR (w.map Formalism.FourierDecayAlt.P.Ux10.Lt) [] Φt (y * iotL k n (sxF e x)))) {x | PBQ.GoodP Bj x} :=
+        (dLR (w.map Formalism.FourierDecayAlt.P.Ux1.Lt) [] Φt (y * iotL k n (sxF e x)))) {x | PBQ.GoodP Bj x} :=
       hπ.clm_comp ((hΨ w).comp hs hmap)
     have hGm := hG.aestronglyMeasurable (μ := μ) (isClosed_good Bj).measurableSet
     rw [hgood] at hGm

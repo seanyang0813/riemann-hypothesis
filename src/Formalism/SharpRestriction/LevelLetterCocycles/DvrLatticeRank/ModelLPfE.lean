@@ -34,10 +34,6 @@ variable {G : Type} [Group G] [TopologicalSpace G] {Qp K₀ K : Type} [Field Qp]
     [CommRing O] [Algebra O LL] {v : AddValuation LL (WithTop ℚ)} {n : ℕ}
     (W : LocWach PD LL O v n) (T : LocLat G Qp LL O) (π' Eπ : LetA O n) (h' : ℕ) (c : ZMod n)
 
-theorem toLA_tmul (S : Submodule O (LcQ W T π' c)) (a : ↥W.AΔ) (s : ↥S) :
-    toLA W T π' c S (a ⊗ₜ s) = algebraMap (LetA O n) W.EE ((letE c : LetA O n) * a) ⊗ₜ (s : LcQ W T π' c) :=
-  rfl
-
 theorem smulLA_tmul (a : LetA O n) (e : W.EE) (s : LcQ W T π' c) :
     smulLA W T π' c a (e ⊗ₜ s) = (algebraMap (LetA O n) W.EE a * e) ⊗ₜ s := rfl
 
@@ -56,20 +52,6 @@ theorem smul_eq_smulLA (o : O) (x : LA W T π' c) :
     rw [smulLA_tmul, TensorProduct.smul_tmul', Algebra.smul_def,
       IsScalarTower.algebraMap_apply O (LetA O n) W.EE]
   | add x y hx hy => rw [smul_add, map_add (f := _), hx, hy]
-
-theorem rep_exists {x : LA W T π' c} (hx : x ∈ LamLA W T π' Eπ h' c ⊤) :
-    ∃ (m : ℕ) (a : Fin m → ↥W.AΔ) (y : Fin m → W.DD T), IsRepL W T π' Eπ h' c x a y := by
-  obtain ⟨t, ht⟩ := hx
-  obtain ⟨m, a, s, rfl⟩ := exists_fin_sum t
-  have hs : ∀ j, ∃ yy : ↥(NcS W T (c - 1)), Submodule.Quotient.mk yy = ((s j : ↥(⊤ : Submodule O _)) :
-      LcQ W T π' c) := fun j => Submodule.Quotient.mk_surjective _ _
-  choose yy hyy using hs
-  refine ⟨m, a, fun j => (yy j : W.DD T), ⟨fun j => (yy j).2, ?_⟩⟩
-
-  rw [← ht, map_sum]
-  refine Finset.sum_congr rfl (fun j _ => ?_)
-  rw [toLA_tmul, ← hyy j]
-  rfl
 
 theorem rep_append {x x' : LA W T π' c} {m m' : ℕ} {a : Fin m → ↥W.AΔ} {y : Fin m → W.DD T}
     {a' : Fin m' → ↥W.AΔ} {y' : Fin m' → W.DD T} (h : IsRepL W T π' Eπ h' c x a y)

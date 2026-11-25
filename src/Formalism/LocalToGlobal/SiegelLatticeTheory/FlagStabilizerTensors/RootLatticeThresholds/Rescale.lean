@@ -123,24 +123,6 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 variable {D : D7}
 
-theorem hform_crdX (X : HidaSetting D) (v w : (VS D).V) :
-    X.ιE (Formalism.UG.hform (starRingEnd X.B.I.E) X.B.I.J (crdOf X.B.I X.ιE X.bas v) (crdOf X.B.I X.ιE X.bas w)) =
-      (VS D).hT v w := by
-  conv_rhs => rw [← X.bas.sum_repr v, ← X.bas.sum_repr w]
-
-  simp only [map_sum, LinearMap.map_smulₛₗ, LinearMap.sum_apply, LinearMap.smul_apply, smul_eq_mul,
-  Formalism.UG.hform, map_mul, crdOf, starRingEnd_apply, X.ιE_conj, RingEquiv.apply_symm_apply,
-  X.J_eq, Finset.mul_sum]
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => ?_
-  simp only [← Formalism.BasicNotions.bridge_star_holds D.R D.host, RingHom.id_apply]
-  ring
-
-theorem hE_crdX (X : HidaSetting D) (v w : (VS D).V) :
-    hE X.B.I.cm.sig X.B.I.J (crdOf X.B.I X.ιE X.bas v) (crdOf X.B.I X.ιE X.bas w) = X.ιE.symm ((VS D).hT v w) := by
-  show Formalism.UG.hform (starRingEnd X.B.I.E) X.B.I.J _ _ = _
-  rw [← hform_crdX X v w, RingEquiv.symm_apply_apply]
-
 end Formalism.L2.SG.Pf.Rescale
 end -- clump:auto
 end -- clump:auto

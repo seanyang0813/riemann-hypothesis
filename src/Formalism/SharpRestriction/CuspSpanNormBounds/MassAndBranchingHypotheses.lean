@@ -14,8 +14,6 @@ export Formalism.MainNotions.S.UnitaryVolumeMass (embU succMin dualZ)
 open NumberField Module Formalism.BasicNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat Formalism.MainNotions.S.Cnt
 open scoped ENNReal NNReal InnerProductSpace
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 section Conclusion₂
 
 variable (D : D7)

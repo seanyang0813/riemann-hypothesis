@@ -23,7 +23,6 @@ public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.OneParamSubg
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.SchwartzFockVacuumLineUniqueOfHeisenbergDerivati
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ThetaKernelReal
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.WeilModelLineActionExists
-public import Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.ILiescalar
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.LieFirstOfLieSecond
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.PolActs
 public import Development.AbelianVarietyTheory.PublishedTheorems.Divisors₂.HoweDualityReal
@@ -102,7 +101,7 @@ import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ProductFunctionOnSu
 import Formalism.LocalToGlobal.IndefiniteReal.PHeisFC
 import Mathlib.Tactic.Linter.HaveILetI
 import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ArchActionReadingsCompatible
-import Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.WeilLieAlgebraScalarAction
+import Development.AbelianVarietyTheory.Proofs.DivisorProofs.HoweSplittingActsFockActionPlusTraceMultiples
 import Mathlib.RingTheory.Coalgebra.CoassocSimps
 import Development.WeilBound.ThetaLifts.SphericalLattices.ThetaSubSup
 
@@ -855,7 +854,7 @@ theorem exists_rebase_splitting_datum : _root_.GlobalTheory.FunPr.ThetaLocalInpu
     (r s r' s' : ℕ), B.IsGood σ → X.IsHerm σ B r s → W.IsSkew σ B r' s' → M.IsGood B.ψ → M.IsWeil B.ψ χX χW om →
     ∀ γ ∈ Lines σ X, ∀ f ∈ M.Pol B.ψ B.emb, ∃ f₁ : SInf F (Fin n × Fin d),
       GlobalTheory.RealLift.SD (fun t => om (γ (Multiplicative.ofAdd t), 1)) f f₁ := by
-  intro hKP F E _ _ _ _ _ σ B n d X W M χX χW om r s r' s' hB hX hW hM hWeil γ hγ f hf
+  intro _ F E _ _ _ _ _ σ B n d X W M χX χW om r s r' s' hB hX hW hM hWeil γ hγ f hf
   choose A hA hAθ using fun w => frameEx_holds _ _ _ _ _ (hX.sig w) (hX.cartan w)
   choose C hC hCθ using fun w => frameEx_holds _ _ _ _ _ (hW.sig w) (hW.cartan w)
   have hA1 : ∀ w, IsFrame ((1 : ℂ) • (incM F X.J).map (piInf (B.emb w))) (A w) := fun w => by
@@ -870,7 +869,7 @@ theorem exists_rebase_splitting_datum : _root_.GlobalTheory.FunPr.ThetaLocalInpu
   have hwp : IsUWeilPair (cA σ) (adeleClass F) B.ψ (-1) (incM F X.J) (incM F W.J) M.co χX χW om := hWeil
   obtain ⟨d', hdd, hB1'⟩ := hwp.2.1
   have hΦ' := fockMap_swap hΦ hdd
-  obtain ⟨c, hact⟩ := _root_.GlobalTheory.T.weil_lie_algebra_scalar_action hKP _root_.GlobalTheory.HeisDer.derEx hvl F E σ _ _ _ _ _ _ _ B.ψ B.emb _ _ d' Complex.I 1 C A _
+  obtain ⟨c, hact⟩ := _root_.GlobalTheory.HoweD.lieScalar F E σ _ _ _ _ _ _ _ B.ψ B.emb _ _ d' Complex.I 1 C A _
     (om.comp (MonoidHom.inl _ _)) hB.cm hB.std fr' hΦ' hB1'.1
   obtain ⟨Y, -, hY⟩ := _root_.GlobalTheory.RealLiftGen.genEx F E σ (Fin n) r s B.emb (incM F X.J) 1 A hB.cm hA1 γ hγ
   rw [← hr] at hf
@@ -927,7 +926,7 @@ theorem conjugation_acts_on_derivation : _root_.GlobalTheory.FunPr.ThetaLocalInp
     ∀ γ ∈ Lines σ W, ∀ f ∈ M.Pol B.ψ B.emb, ∀ f₁ : SInf F (Fin n × Fin d),
       ActsD (evI F) (fun t => om (1, γ (Multiplicative.ofAdd t))) f f₁ →
       ActsD (evI F) (fun t => om (1, h * γ (Multiplicative.ofAdd t) * h⁻¹)) (T f) (T f₁) := by
-  intro hK F E _ _ _ _ _ σ B n d X W M χX χW om r s r' s' hb hX hW _hM hw g _hg h _hh T hT hTs γ hγ f hf f₁ hf₁
+  intro _ F E _ _ _ _ _ σ B n d X W M χX χW om r s r' s' hb hX hW _hM hw g _hg h _hh T hT hTs γ hγ f hf f₁ hf₁
   have hder := GlobalTheory.RealLift.Main.i_derex
   have hvl := GlobalTheory.RealLift.Main.i_vacline hder
   have hfe := GlobalTheory.RealLift.Main.i_fockex hder
@@ -943,7 +942,7 @@ theorem conjugation_acts_on_derivation : _root_.GlobalTheory.FunPr.ThetaLocalInp
     hb.std fr hAθ hCθ hΦ
   have hsp : IsUSplitting (adeleClass F) B.ψ M.co (actAB (cA σ)) om := IsUWeilPair.isUSplitting hw
   have hsp2 := GlobalTheory.WeilSchrodinger.isUSplitting_inr hsp
-  obtain ⟨c, hc⟩ := _root_.GlobalTheory.LieScal.lie_algebra_acts_by_scalar hK hder hvl F E σ _ _ _ _ _ _ _ B.ψ B.emb _ _ M.co 1 Complex.I A C Φ _
+  obtain ⟨c, hc⟩ := _root_.GlobalTheory.HoweD.lieScalar F E σ _ _ _ _ _ _ _ B.ψ B.emb _ _ M.co 1 Complex.I A C Φ _
     hb.cm hb.std fr hΦ hsp2
   obtain ⟨Yg, -, hY⟩ := GlobalTheory.RealLift.Main.i_genex F E σ (Fin d) _ _ B.emb (incM F W.J) Complex.I C hb.cm hC1 γ hγ
   obtain ⟨T0, rfl⟩ := GlobalTheory.RealLift.Main.pol_eq B M Φ hr hf

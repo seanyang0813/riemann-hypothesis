@@ -108,7 +108,7 @@ theorem goodO_coeff_explicit_sums : ∀ (l : ℕ) [Fact l.Prime] (LL : Type) [Fi
       a - ∑ j ∈ Finset.range n, ((l : ℕ) : O) ^ j * x j = ((l : ℕ) : O) ^ n * b) ∧
     (∀ a : O, (∀ n : ℕ, ∃ b : O, a = ((l : ℕ) : O) ^ n * b) → a = 0) := by
   intro l _ LL _ _ _ O _ _ hG
-  have hc := (_root_.GlobalTheory.GoodCoeff.good_coeff_integers l LL O hG).2.2.2
+  have hc := (_root_.GlobalTheory.PowerImageOpen.main l LL O hG).2.2.2
   exact adicComplete_explicit_sums (h := hc) ((l : ℕ) : O)
 
 end GlobalTheory
@@ -288,7 +288,7 @@ theorem cocycles_fg_mod_l : Formalism.GaloisCohomology.LocalTateDualityK → ∀
     haveI : Module.Finite O ↥LA.T := Module.Finite.iff_fg.2 LA.fg
     obtain ⟨n, f, hf⟩ := Module.Finite.exists_fin' O ↥LA.T
     haveI : Finite (O ⧸ Ideal.span {ϖ}) := by
-      have := (_root_.GlobalTheory.GoodCoeff.good_coeff_integers l LL O hO).2.2.1 1
+      have := (_root_.GlobalTheory.PowerImageOpen.main l LL O hO).2.2.1 1
       simpa [pow_one] using this
     have hqs : Function.Surjective (Ideal.Quotient.mk (Ideal.span {ϖ})) :=
       Ideal.Quotient.mk_surjective

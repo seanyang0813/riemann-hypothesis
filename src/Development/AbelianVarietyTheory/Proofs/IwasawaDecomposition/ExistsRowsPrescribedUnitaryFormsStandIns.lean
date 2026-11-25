@@ -243,25 +243,10 @@ theorem standIn_rowsStd (B : Base) (C : Cols B) (hC : SpectralModel.ColsPos C) (
     StandIn (rowsStd B C hC n e0 eT L mt hmt) := by
   exact
     { drows := rfl
-      d0 := rfl
       dall := rfl
-      delp := rfl
-      ft := ⟨fun x => nomatch x⟩
-      mult := fun a j hj => subsingleton_std (if_neg hj)
-      io := fun _ _ => rfl
-      mj := fun _ => subsingleton_std rfl
       mt := fun _ _ => subsingleton_std rfl
-      eMt := fun _ _ => rfl
-      bu := fun _ _ _ => rfl
-      ij := fun _ _ _ => ⟨rfl, rfl⟩
       eta := fun _ _ => rfl
-      sha := shaOK_shaTrue B.toPre
-      kap := fun V S N G j _ _ τ =>
-        ⟨fun i => (aPlusB_int B j τ i).choose_spec.symm,
-         fun c => by
-           show ((-(aMinusB_int B j τ c).choose : ℤ) : ℚ) = -aMinusB B j τ c
-           push_cast
-           rw [← (aMinusB_int B j τ c).choose_spec]⟩ }
+      sha := shaOK_shaTrue B.toPre }
 
 theorem exists_rowsRest_std : ∀ (B : Base) (C : Cols B) (n : C.Tup → ℕ) (e0 : ∀ u, (C.mem u).P.Mt ≃ₗ[ℂ] EuclideanSpace ℂ (Fin (n C.mu0))) (eT : ∀ u a, (C.PTw u a).Mt ≃ₗ[ℂ] EuclideanSpace ℂ (Fin (n a))) (L : ∀ a, Rows.OLat B.O (B.embLL.comp B.OtoLL) (EuclideanSpace ℂ (Fin (n a)))) (mt : B.places.Pl → C.Tup), (∀ w, mt (B.places.conj w) = mt w) → SpectralModel.ColsPos C → ∃ (W : RowsRest B C) (g : ∀ a, EuclideanSpace ℂ (Fin (n a)) ≃ₗᵢ[ℂ] W.Amb a), StandIn W ∧ (∀ w, W.muAt w = C.mu0) ∧ (∀ w, W.muTw w = mt w) ∧ (∀ u F, W.eMt0 u F = g C.mu0 (e0 u F)) ∧ (∀ u a F, W.eMtTw u a F = g a (eT u a F)) ∧ (∀ a y, g a y ∈ (W.Mtilde a).carrier ↔ y ∈ (L a).carrier) ∧ (∀ a y, g a y ∈ (W.Mtilde a).gen ↔ y ∈ (L a).gen) ∧ (∀ a, W.eOp a = LinearMap.id) ∧ ∀ u a, W.ze u a = 1 := by
   intro B C n e0 eT L mt hmt hC

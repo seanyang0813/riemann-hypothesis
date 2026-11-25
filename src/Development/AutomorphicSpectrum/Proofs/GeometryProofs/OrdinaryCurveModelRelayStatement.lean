@@ -1272,7 +1272,7 @@ theorem reducesAt_pack (hF : HT.FarguesHodgeTate) (E : Type) [Field E] [NumberFi
   obtain ⟨h0, hNoe, hIC, hFr⟩ :=
     chart_facts E H D l Xo c O₀ β Y S Ω K J y 𝔐 d hd p hpS A m hpm O c' hc'
   obtain ⟨-, hN, hprop, hTa, hrk, -, -⟩ := _root_.GlobalTheory.CompanionTheory.Ar.HT.hcpt_generic_point E H D l Xo c O₀ β Y S Ω K J y 𝔐 p hpS
-    (zp Ω p) (mem_range_zp Ω p)
+    (PositivityTheory.Xgn.PackingFacts.zp Ω p) (PositivityTheory.Xgn.PackingFacts.mem_range_zp Ω p)
   have hp := (Fact.out : p.Prime)
   have hn : p ^ 𝔐.R p ≠ 0 := pow_ne_zero _ hp.ne_zero
   haveI : NeZero (p ^ 𝔐.R p) := ⟨hn⟩
@@ -1667,7 +1667,7 @@ theorem PositivityTheory.Xgn.test_group_point_exists : GlobalTheory.CompanionThe
   haveI : NeZero (p ^ 𝔐.R p) := ⟨pow_ne_zero _ hpp.ne_zero⟩
   have hR4 := 𝔐.R_ge p hpS
   obtain ⟨h0, hNoe, hIC, hFr⟩ := PositivityTheory.Xgn.SequenceTestFunction.chart_facts E H D l Xo c O₀ β Y S Ω K J y 𝔐 d hd p hpS A m hpm O c' hc'
-  obtain ⟨-, hN, -⟩ := _root_.GlobalTheory.CompanionTheory.Ar.HT.hcpt_generic_point E H D l Xo c O₀ β Y S Ω K J y 𝔐 p hpS (PositivityTheory.Xgn.SequenceTestFunction.zp Ω p) (PositivityTheory.Xgn.SequenceTestFunction.mem_range_zp Ω p)
+  obtain ⟨-, hN, -⟩ := _root_.GlobalTheory.CompanionTheory.Ar.HT.hcpt_generic_point E H D l Xo c O₀ β Y S Ω K J y 𝔐 p hpS (PositivityTheory.Xgn.PackingFacts.zp Ω p) (PositivityTheory.Xgn.PackingFacts.mem_range_zp Ω p)
   obtain ⟨AA, AW, hAA, hAW, hM, hret, -⟩ := PositivityTheory.Xgn.test_order_sections E H D l Xo c O₀ β Y S Ω K J y 𝔐 d hd hpq p
     hpS hfree hp2 hdisc b hb φ hφ A m hpm O t₀ Sg e φ' F pq sc w σF hO hsec G c' hc' P i hseq hbase C RC hT χ hχ
   obtain ⟨-, htight⟩ := _root_.GlobalTheory.CompanionTheory.Relay.arith_variety_model_hodge_relay hHD hOC E H D l Xo c O₀ β Y S Ω K J y 𝔐 d hd hpq p

@@ -1004,12 +1004,6 @@ theorem side_kappa (hH : GlobalTheory.GapIn.Hyp) (ht : t ∈ GG k r) {lam u u' b
 
 end side
 
-theorem tens_zero : HypsG → ∀ (k r : ℕ) (lam : Fin (2 * r + k + 1) → ℝ) (u : ℕ → ℝ) (b bv ga h : ℝ) (q0 : ℕ)
-    (F F' : (Fin (2 * r + k + 1) → ℤ) → Rep k r) (ν : Fin (2 * r + k + 1) → ℤ), Num k r lam u b bv ga h q0 →
-    IsFamG lam q0 F → IsFamG lam q0 F' → n1 ν + 2 ≤ q0 →
-    ∃ io pr ep, TensH (cmp 0) (cmp 0 (Hpk k r)) (F ν) (fun I : Sub (2 * r + k + 1) 0 => F' (ν + eZ I.1)) io pr ep :=
-  _root_.GlobalTheory.TrivWedge.tensH_trivial
-
 theorem exists_fams (hH : GlobalTheory.GapIn.Hyp) {lam : Fin (2 * r + k + 1) → ℝ}
     (hlam : ∀ ν : Fin (2 * r + k + 1) → ℤ, n1 ν ≤ q0 → IsHCParam fun a => lam a + (ν a : ℝ))
     (hgap : ∀ ν : Fin (2 * r + k + 1) → ℤ, n1 ν ≤ q0 → ∃ h, GapAtLeast (PI.BesselPeriodGGP.eps48 k r)

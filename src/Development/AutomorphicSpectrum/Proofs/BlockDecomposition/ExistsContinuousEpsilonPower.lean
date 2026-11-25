@@ -150,18 +150,4 @@ theorem exists_fn (A : PAlg l) (x : A.A) (hx : x - 1 ∈ Ideal.span {A.pi}) :
     convert this using 1
     ring
 
-theorem exists_eta (ε : Eps l) : ∃ η : ((base l).cont ℤ_[l]).A,
-    (∀ (m : ℕ) (z : ℤ_[l]), Hom.f ((base l).evCont z) η - (base l).s (ε.e 0) ^ (PadicInt.toZModPow m z).val ∈ Ideal.span {(base l).pi ^ (l ^ m)}) ∧
-    Hom.f (contShift (base l)) η = ((base l).cont ℤ_[l]).s (ε.e 0) * η := by
-  have hx : (base l).s (ε.e 0) - 1 ∈ Ideal.span {(base l).pi} :=
-    ((RL.sharp_cong (base l)).2.1 _ 1).1 (by
-      rw [ε.sharp_e (base l), map_one, sub_self]
-      exact zero_mem _)
-  obtain ⟨η, h1, h2⟩ := exists_fn (base l) _ hx
-  refine ⟨η, h1, cont_ext fun z => ?_⟩
-  have e : Hom.f ((base l).evCont z) (((base l).cont ℤ_[l]).s (ε.e 0)) = (base l).s (ε.e 0) :=
-    RingHom.congr_fun (Hom.comm ((base l).evCont z)) _
-  rw [map_mul, e]
-  exact h2 z
-
 end GlobalTheory.CompanionTheory.ContUniv.EtaFn

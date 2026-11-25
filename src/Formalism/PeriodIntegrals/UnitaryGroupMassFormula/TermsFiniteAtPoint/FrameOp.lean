@@ -64,8 +64,6 @@ end Gen
 
 section D7
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem aaS_eq (D : D7) (a : Fin D.R.rS) :
     Formalism.L2.SG.Saturated.aaS D a = (ddS D ^ (D.R.rS - a.1))⁻¹ := by
   unfold Formalism.L2.SG.Saturated.aaS

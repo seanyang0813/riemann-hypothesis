@@ -335,16 +335,6 @@ theorem kAt_eq (K : Subgroup (UA σ X.J)) (v : Pl F) : kAt K (evFin F v) = K ⊓
 theorem kAt_mem {K : Subgroup (UA σ X.J)} {v : Pl F} (k : kAt K (evFin F v)) : k.1 ∈ UAt σ X (evFin F v) :=
   ((kAt_eq K v).le k.2).2
 
-theorem kAt_compact {K : Subgroup (UA σ X.J)} (hK : IsCompact (K : Set (UA σ X.J))) (v : Pl F) : CompactSpace (kAt K (evFin F v)) := by
-  refine isCompact_iff_compactSpace.1 ?_
-  rw [kAt_eq, Subgroup.coe_inf]
-  refine hK.inter_right ?_
-  have : (uSub σ X v : Set (UA σ X.J)) = ⋂ u : AF F, ⋂ _ : evFin F v u = 0, {g | u • (mat g - 1) = 0} := by
-    ext g; simp only [Set.mem_iInter]; rfl
-  rw [this]
-  exact isClosed_iInter fun u => isClosed_iInter fun _ =>
-    isClosed_eq (((PositivityTheory.ThK.kc_cont_mat X.J).sub continuous_const).const_smul u) continuous_const
-
 end US
 
 section Part
@@ -533,7 +523,7 @@ theorem kInv (hB : B.IsGood σ) (hY : Y.IsHerm σ B r s) (hH : H.IsAdapted σ B 
   haveI : BorelSpace (UA σ Y.J) := ⟨rfl⟩
   haveI : BorelSpace (UA σ Y₁.J) := ⟨rfl⟩
   haveI : BorelSpace (AE F E)ˣ := ⟨rfl⟩
-  haveI := US.kAt_compact hI.1 v
+  haveI := PositivityTheory.ThKG.Loc.Cone.Fin.kAt_compact hI.1 v
   obtain ⟨hG, act, ht, htc, ht1, htK, htP⟩ := htEx hB hY hH hI hpar.emb hu hL
   have ht0 : ∀ t : (AE F E)ˣ, absE F E t ≠ 0 := fun t => ((Group.isUnit t).map (absE F E)).ne_zero
   have ha := idem_mul_self v

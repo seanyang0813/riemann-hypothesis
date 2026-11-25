@@ -63,30 +63,6 @@ open Polynomial
 
 namespace GlobalTheory
 
-theorem exists_eq_algebraMap_add_pow_mul {R R' : Type} [CommRing R] [IsLocalRing R]
-    [CommRing R'] [IsLocalRing R'] [Algebra R R'] [IsLocalHom (algebraMap R R')] {ϖ : R}
-    (hϖ : IsLocalRing.maximalIdeal R' = Ideal.span {algebraMap R R' ϖ})
-    (hres : Function.Surjective (IsLocalRing.ResidueField.map (algebraMap R R'))) (n : ℕ)
-    (r' : R') : ∃ (r : R) (s : R'), r' = algebraMap R R' r + algebraMap R R' ϖ ^ n * s := by
-  have h1 : ∀ r' : R', ∃ (r : R) (s : R'), r' = algebraMap R R' r + algebraMap R R' ϖ * s := by
-    intro r'
-    obtain ⟨a, ha⟩ := hres (IsLocalRing.residue R' r')
-    obtain ⟨r, rfl⟩ := IsLocalRing.residue_surjective a
-    rw [IsLocalRing.ResidueField.map_residue] at ha
-    have hm : r' - algebraMap R R' r ∈ IsLocalRing.maximalIdeal R' := by
-      rw [← IsLocalRing.residue_eq_zero_iff, map_sub, ha, sub_self]
-    rw [hϖ, Ideal.mem_span_singleton] at hm
-    obtain ⟨s, hs⟩ := hm
-    exact ⟨r, s, by rw [← hs]; ring⟩
-  induction n with
-  | zero => exact ⟨0, r', by simp⟩
-  | succ n ih =>
-    obtain ⟨r, s, hs⟩ := ih
-    obtain ⟨r₁, s₁, hs₁⟩ := h1 s
-    refine ⟨r + ϖ ^ n * r₁, s₁, ?_⟩
-    rw [hs, hs₁, map_add (f := _), map_mul, map_pow]
-    ring
-
 open NumberField in
 open scoped TensorProduct in
 open Polynomial in

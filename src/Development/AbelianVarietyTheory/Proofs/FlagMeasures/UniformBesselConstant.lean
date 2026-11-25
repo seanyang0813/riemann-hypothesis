@@ -177,27 +177,6 @@ theorem rStab_bigCell (hc : ∀ a, c a ≠ 0) (hg : bigCell k r c μ ∈ UH (Hpk
 
 end stab
 
-theorem haar_smul {U : Set (B.Mat k r)} {μ : Measure (Mt k r)} (h : B.IsHaarOn U μ) {x : ℝ} (hx : 0 < x) :
-    B.IsHaarOn U (ENNReal.ofReal x • μ) := by
-  refine ⟨?_, ?_, ?_, ?_, ?_⟩
-  · rw [Measure.smul_apply, h.conc, smul_zero]
-  · intro a ha
-    have hcont : Continuous (lmulM a : Mt k r → Mt k r) :=
-      continuous_const.matrix_mul continuous_id
-    rw [Measure.map_smul _ hcont.measurable.aemeasurable, h.left a ha]
-  · intro a ha
-    have hcont : Continuous (B.rmulF a : Mt k r → Mt k r) :=
-      continuous_id.matrix_mul continuous_const
-    rw [Measure.map_smul _ hcont.measurable.aemeasurable, h.right a ha]
-  · intro K hK
-    rw [Measure.smul_apply, smul_eq_mul]
-    exact ENNReal.mul_lt_top ENNReal.ofReal_lt_top (h.finite_compact K hK)
-  · intro h0
-    apply h.ne_zero
-    have h1 := Measure.measure_univ_eq_zero.2 h0
-    rw [Measure.smul_apply, smul_eq_mul] at h1
-    exact Measure.measure_univ_eq_zero.1 ((mul_eq_zero.1 h1).resolve_left (ENNReal.ofReal_pos.2 hx).ne')
-
 theorem lintegral_weight_scale (T T' s : ℝ) (hs : 0 < s) (F : (Fin r → ℂ) × ℂ → ℝ) :
     ∫⁻ q, ENNReal.ofReal (bcWeight k r T T' q * F (B7.d_S r s q)) =
       ENNReal.ofReal ((s ^ B.kap k r)⁻¹) * ∫⁻ q, ENNReal.ofReal (bcWeight k r T T' q * F q) := by

@@ -12,8 +12,6 @@ open NumberField Formalism.MainNotions.S Formalism.L2.SG.HidaSetting
 open scoped TensorProduct
 open Matrix
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 namespace MassDataMassesW.NLev
 
 section Grp

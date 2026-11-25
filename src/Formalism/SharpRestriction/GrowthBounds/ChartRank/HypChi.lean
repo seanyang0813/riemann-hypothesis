@@ -12,8 +12,6 @@ namespace Formalism.MainNotions.G.ChF
 open Formalism.BasicNotions Formalism.MainNotions.G Formalism.L2.G Formalism.L2.G.Cmp Formalism.L2.Forms Formalism.UG NumberField IsDedekindDomain Matrix Formalism.MainNotions.G.CmpJ
 open scoped TensorProduct
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 variable {D : D7} {u : D.what₂.Word} {w : D.what₂.places.Pl}
   {hg : GIdx D.host (D.mem u).A.T (D.what₂.places.resChar w)} {i : ℕ} (hi : i + 1 ≤ D.R.m)
   {Uloc : ∀ v : HeightOneSpectrum (𝓞 D.host.F),

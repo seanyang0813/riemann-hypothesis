@@ -154,9 +154,6 @@ def FibQ : Prop :=
       ∀ t : kˣ, nabs k t < 1 → ∀ a : List ℝ, Kills (polyH t a η') UU →
         Kills (polyH t (a.map (· + (Module.finrank k Z : ℝ))) η) UU
 
-def BaseQ : Prop :=
-  ∀ (n : ℕ) (Z : SubMat k n), CR Z → dB0 Z = 0 → FibVan Z (NB Z)
-
 end PositivityTheory.RgUd.TP.Nil
 
 end

@@ -14,8 +14,6 @@ export Formalism.MainNotions.S.UnitaryVolumeMass (embU succMin dualZ ForAmpH abs
 open NumberField Matrix Module Formalism.BasicNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat Formalism.MainNotions.S.Cnt
 open scoped ENNReal NNReal InnerProductSpace
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 section B3
 
 variable (D : D7)

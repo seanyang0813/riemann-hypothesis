@@ -149,7 +149,7 @@ protected theorem ofFn_smul {A : Type*} [Semiring A] [Algebra ℂ A] : ∀ (r : 
     simp only [List.ofFn_succ, List.prod_cons, Fin.prod_univ_succ]
     rw [ih (fun i => a i.succ) (fun i => X i.succ), smul_mul_smul_comm]
 
-private theorem dep_extend {ι α : Type*} {β : α → Type*} (w : ι → α) (hw : Function.Injective w) (ψ : ∀ i, β (w i))
+protected theorem dep_extend {ι α : Type*} {β : α → Type*} (w : ι → α) (hw : Function.Injective w) (ψ : ∀ i, β (w i))
     (d : ∀ v, β v) : ∃ f : ∀ v, β v, (∀ i, f (w i) = ψ i) ∧ ∀ v, v ∉ Set.range w → f v = d v := by
   classical
   refine ⟨fun v => if h : ∃ i, w i = v then h.choose_spec ▸ ψ h.choose else d v, fun i => ?_, fun v hv => ?_⟩
@@ -182,14 +182,14 @@ protected theorem rhoL_comm {v w : Pl K} (h : v ≠ w) (g : Gw n v) (x : Gw n w)
   simp only [rhoL]
   rw [← hm, ← hm, hc]
 
-private def GA (J : ∀ w : Pl K, Subgroup (Gw n w)) (χ : ∀ w : Pl K, Gw n w → ℂ) (A : Set (Pl K)) : Submodule ℂ (LL μ) :=
+protected def GA (J : ∀ w : Pl K, Subgroup (Gw n w)) (χ : ∀ w : Pl K, Gw n w → ℂ) (A : Set (Pl K)) : Submodule ℂ (LL μ) :=
   ⨅ u ∈ A, eigL μ u (J u) (χ u)
 
 variable {J : ∀ w : Pl K, Subgroup (Gw n w)} {χ : ∀ w : Pl K, Gw n w → ℂ}
 
 private theorem GA_closed (hco : ∀ w, CO (J w) ∧ IsChr (J w) (χ w)) (A : Set (Pl K)) :
-    IsClosed (GA μ J χ A : Set (LL μ)) := by
-  simp only [GA, Submodule.coe_iInf]
+    IsClosed (L1.GA μ J χ A : Set (LL μ)) := by
+  simp only [L1.GA, Submodule.coe_iInf]
   exact isClosed_iInter fun u => isClosed_iInter fun _ =>
     (eigBasic K n μ u (J u) (χ u) (hco u).1 (hco u).2).1
 
@@ -197,9 +197,9 @@ protected theorem mem_eigL {w : Pl K} {J' : Subgroup (Gw n w)} {χ' : Gw n w →
     x ∈ eigL μ w J' χ' ↔ ∀ y ∈ J', rhoL μ w y x = χ' y • x := by
   simp [eigL, Submodule.mem_iInf, LinearMap.mem_eqLocus]
 
-private theorem GA_stable {A : Set (Pl K)} {v : Pl K} (hv : v ∉ A) (g : Gw n v) (x : LL μ) (hx : x ∈ GA μ J χ A) :
-    rhoL μ v g x ∈ GA μ J χ A := by
-  simp only [GA, Submodule.mem_iInf] at hx ⊢
+private theorem GA_stable {A : Set (Pl K)} {v : Pl K} (hv : v ∉ A) (g : Gw n v) (x : LL μ) (hx : x ∈ L1.GA μ J χ A) :
+    rhoL μ v g x ∈ L1.GA μ J χ A := by
+  simp only [L1.GA, Submodule.mem_iInf] at hx ⊢
   intro u hu
   refine (L1.mem_eigL μ).2 fun y hy => ?_
   have hne : u ≠ v := fun h => hv (h ▸ hu)
@@ -208,14 +208,14 @@ private theorem GA_stable {A : Set (Pl K)} {v : Pl K} (hv : v ∉ A) (g : Gw n v
   rw [h1, (L1.mem_eigL μ).1 (hx u hu) y hy, map_smul]
 
 private theorem GA_commute (hco : ∀ w, CO (J w) ∧ IsChr (J w) (χ w)) {A : Set (Pl K)} {v : Pl K} (hv : v ∉ A) (g : Gw n v) :
-    Commute (rhoL μ v g) (prj (GA μ J χ A)) := by
+    Commute (rhoL μ v g) (prj (L1.GA μ J χ A)) := by
   refine prj_commute (GA_closed μ hco A) _ (GA_stable μ hv g) fun x hx => ?_
   rw [L1.rhoL_adj]
   exact GA_stable μ hv _ x hx
 
-private theorem list_prj (hco : ∀ w, CO (J w) ∧ IsChr (J w) (χ w)) (L : List (Pl K)) :
+protected theorem list_prj (hco : ∀ w, CO (J w) ∧ IsChr (J w) (χ w)) (L : List (Pl K)) :
     L.Nodup → ∀ (A : Set (Pl K)), (∀ v ∈ L, v ∉ A) →
-    (L.map fun v => prj (eigL μ v (J v) (χ v))).prod ∘L prj (GA μ J χ A) = prj (GA μ J χ (A ∪ {v | v ∈ L})) := by
+    (L.map fun v => prj (eigL μ v (J v) (χ v))).prod ∘L prj (L1.GA μ J χ A) = prj (L1.GA μ J χ (A ∪ {v | v ∈ L})) := by
   induction L with
   | nil => intro _ A _; simp; rfl
   | cons v L ih =>
@@ -224,12 +224,12 @@ private theorem list_prj (hco : ∀ w, CO (J w) ∧ IsChr (J w) (χ w)) (L : Lis
     have h1 := ih hn'.2 A fun u hu => hA u (List.mem_cons_of_mem _ hu)
     have hv : v ∉ A ∪ {v | v ∈ L} := fun h => h.elim (hA v List.mem_cons_self) hn'.1
     obtain ⟨hcl, -, -, hcm⟩ := eigBasic K n μ v (J v) (χ v) (hco v).1 (hco v).2
-    have hc : Commute (prj (eigL μ v (J v) (χ v))) (prj (GA μ J χ (A ∪ {v | v ∈ L}))) :=
+    have hc : Commute (prj (eigL μ v (J v) (χ v))) (prj (L1.GA μ J χ (A ∪ {v | v ∈ L}))) :=
       (hcm _ fun x _ => (GA_commute μ hco hv x).symm).symm
     have hs : A ∪ {u | u ∈ v :: L} = insert v (A ∪ {v | v ∈ L}) := by
       ext u; simp only [Set.mem_union, Set.mem_setOf_eq, List.mem_cons, Set.mem_insert_iff]; tauto
-    have hG : GA μ J χ (insert v (A ∪ {v | v ∈ L})) = eigL μ v (J v) (χ v) ⊓ GA μ J χ (A ∪ {v | v ∈ L}) := by
-      simp only [GA]; rw [iInf_insert]
+    have hG : L1.GA μ J χ (insert v (A ∪ {v | v ∈ L})) = eigL μ v (J v) (χ v) ⊓ L1.GA μ J χ (A ∪ {v | v ∈ L}) := by
+      simp only [L1.GA]; rw [iInf_insert]
     rw [List.map_cons, List.prod_cons, hs, hG, ← prj_comp_of_commute hcl (GA_closed μ hco _) hc, ← h1]
     rfl
 
@@ -276,7 +276,7 @@ end Haar
 section BernoulliSumsFrobeniusOrbits
 variable {K : Type} [Field K] [NumberField K] {n : ℕ} (μ : Measure (normOneGL (K := K) (n := n))) [μ.IsHaarMeasure]
 
-private theorem oloc_commute {w v : Pl K} (h : v ≠ w) [MeasurableSpace (Gw n w)] (m : Measure (Gw n w)) (φ : Gw n w → ℂ)
+protected theorem oloc_commute {w v : Pl K} (h : v ≠ w) [MeasurableSpace (Gw n w)] (m : Measure (Gw n w)) (φ : Gw n w → ℂ)
     (T : LL μ →L[ℂ] LL μ) (hT : IsOloc μ w m φ T) (x : Gw n v) : Commute T (rhoL μ v x) := by
   refine ContinuousLinearMap.ext fun b => ext_inner_left ℂ fun a => ?_
   show ⟪a, T (rhoL μ v x b)⟫_ℂ = ⟪a, rhoL μ v x (T b)⟫_ℂ
@@ -317,7 +317,7 @@ private theorem oloc_right (v : Pl K) [MeasurableSpace (Gw n v)] [BorelSpace (Gw
   · simp only [mul_inv_cancel_right, L1.rhoL_mul, ContinuousLinearMap.comp_apply]
   · simp only [hψ', mul_assoc]
 
-private theorem oloc_absorb (v : Pl K) [MeasurableSpace (Gw n v)] [BorelSpace (Gw n v)] (m : Measure (Gw n v))
+protected theorem oloc_absorb (v : Pl K) [MeasurableSpace (Gw n v)] [BorelSpace (Gw n v)] (m : Measure (Gw n v))
     [m.IsHaarMeasure] {J : Subgroup (Gw n v)} (hJ : CO J) (hm : m J = 1) {χ : Gw n v → ℂ} (hχ : IsChr J χ) (ψ : Gw n v → ℂ)
     (hψ : ∀ u ∈ J, ∀ g, ψ (g * u) = conj (χ u) * ψ g) (T : LL μ →L[ℂ] LL μ) (hT : IsOloc μ v m ψ T) :
     T * prj (eigL μ v J χ) = T := by
@@ -385,8 +385,8 @@ protected theorem fixL_bot (v : Pl K) : fixL μ v (⊥ : Subgroup (Gw n v)) = �
 private theorem sph_eq {J : ∀ w : Pl K, Subgroup (Gw n w)} {χ : ∀ w : Pl K, Gw n w → ℂ}
     (hco : ∀ w, CO (J w) ∧ IsChr (J w) (χ w)) (W : Finset (Pl K))
     (hW : ∀ v ∉ W, J v = GLnLocal.integralGL (v.adicCompletion K) n ∧ χ v = 1) :
-    sphOff μ W = GA μ J χ {v | v ∉ W} := by
-  simp only [sphOff, GA, Set.mem_setOf_eq]
+    sphOff μ W = L1.GA μ J χ {v | v ∉ W} := by
+  simp only [sphOff, L1.GA, Set.mem_setOf_eq]
   refine iInf_congr fun v => iInf_congr fun hv => ?_
   obtain ⟨h1, h2⟩ := hW v hv
   have e := (eigBasic K n μ v (J v) (χ v) (hco v).1 (hco v).2).2.1
@@ -417,8 +417,19 @@ end SlopeTestRemainingChoices
 end UpperTheory.ConvolutionTheory.L1
 
 
-theorem UpperTheory.ConvolutionTheory.L1.tensFactor :
-    UpperTheory.ConvolutionTheory.L1.TensFactor := by
+theorem UpperTheory.ConvolutionTheory.L1.tensFactor_offRange :
+    ∀ (K : Type) [Field K] [NumberField K] (n : ℕ), 0 < n → ∀ (μ : Measure (normOneGL (K := K) (n := n))) [μ.IsHaarMeasure]
+      (ν : Measure (archGroup K n)) [ν.IsHaarMeasure] (J : ∀ w : Pl K, Subgroup (Gw n w)) (χ : ∀ w : Pl K, Gw n w → ℂ),
+      (∀ w, CO (J w) ∧ IsChr (J w) (χ w)) →
+      (∀ᶠ w in Filter.cofinite, J w = GLnLocal.integralGL (w.adicCompletion K) n ∧ χ w = 1) → ∃ κ : ℝ, 0 < κ ∧
+      ∀ (β : TI K n) (r : ℕ) (w : Fin r → Pl K), Function.Injective w →
+      ∀ [∀ i, MeasurableSpace (Gw n (w i))] [∀ i, BorelSpace (Gw n (w i))] (m : ∀ i, Measure (Gw n (w i))),
+        (∀ i, (m i).IsHaarMeasure ∧ m i (J (w i)) = 1) → ∀ (ψ : ∀ i, Gw n (w i) → ℂ) (T : Fin r → LL μ →L[ℂ] LL μ),
+        (∀ i, Test (ψ i) ∧ IsOloc μ (w i) (m i) (ψ i) (T i)) →
+        ∀ e : TF K n, (∀ x, e x = (∏ i, ψ i (finAt (w i) (finEmb K n x))) *
+          ∏ᶠ u ∉ Set.range w, (J u : Set (Gw n u)).indicator (fun g => conj (χ u g)) (finAt u (finEmb K n x))) →
+        RR μ (tens β e) = (κ : ℂ) • (Oinf μ ν β ∘L (List.ofFn T).prod ∘L
+          prj (⨅ (u : Pl K) (_ : u ∉ Set.range w), eigL μ u (J u) (χ u))) := by
   intro K _ _ n hn μ _ ν _ J χ hco hcof
   classical
   letI bm : ∀ v : Pl K, MeasurableSpace (Gw n v) := fun v => borel _
@@ -479,9 +490,9 @@ theorem UpperTheory.ConvolutionTheory.L1.tensFactor :
   have hgood : ∀ v, v ∉ hBad.toFinset → J v = GLnLocal.integralGL (v.adicCompletion K) n ∧ χ v = 1 := fun v hv => by
     by_contra h; exact hv (hBad.mem_toFinset.2 h)
 
-  obtain ⟨X, hXw, hXd⟩ := dep_extend (β := fun _ : Pl K => LL μ →L[ℂ] LL μ) w hw T
+  obtain ⟨X, hXw, hXd⟩ := L1.dep_extend (β := fun _ : Pl K => LL μ →L[ℂ] LL μ) w hw T
     (fun v => prj (eigL μ v (J v) (χ v)))
-  obtain ⟨f, hfw, hfd⟩ := dep_extend (β := fun v : Pl K => Gw n v → ℂ) w hw ψ
+  obtain ⟨f, hfw, hfd⟩ := L1.dep_extend (β := fun v : Pl K => Gw n v → ℂ) w hw ψ
     (fun v => (J v : Set (Gw n v)).indicator fun g => conj (χ v g))
   have hfTest : ∀ v, Test (f v) := fun v => by
     by_cases hv : v ∈ Set.range w
@@ -499,7 +510,7 @@ theorem UpperTheory.ConvolutionTheory.L1.tensFactor :
     by_cases hv : v ∈ Set.range w
     · obtain ⟨i, rfl⟩ := hv
       rw [hfw, hXw]
-      exact L1.oloc_scale μ (w i) (mm i) (mO (w i)) (hmm i).2 (ψ i) (T i) (hT i).2.2
+      exact L1.oloc_scale μ (w i) (mm i) (mO (w i)) (hmm i).2 (ψ i) (T i) (hT i).2
     · rw [hfd v hv, hXd v hv]
       exact L1.oloc_scale μ v (mJ v) (mO v) (hmJ v) _ _
         ((eigBasic K n μ v (J v) (χ v) (hco v).1 (hco v).2).2.2.1 (mJ v) (hmJ v))
@@ -532,20 +543,34 @@ theorem UpperTheory.ConvolutionTheory.L1.tensFactor :
     (levOn W fun v => (⊥ : Subgroup (Gw n v))) (fun h => by
       rw [mem_levOn]
       simp only [W, Finset.mem_image, Finset.mem_univ, true_and, forall_exists_index, forall_apply_eq_imp_iff])
-  have hQ : fixF μ (levOn W fun v => (⊥ : Subgroup (Gw n v))) = GA μ J χ {v | v ∉ W} := by
+  have hQ : fixF μ (levOn W fun v => (⊥ : Subgroup (Gw n v))) = L1.GA μ J χ {v | v ∉ W} := by
     rw [UpperTheory.ConvolutionTheory.C.fixLev K n μ W _]
     simp only [L1.fixL_bot, iInf_top, inf_top_eq]
     exact sph_eq μ hco W fun v hv => hgood v (hrange v (hWm v hv)).2
-  have hlist := list_prj μ hco (List.ofFn w') (List.nodup_ofFn.2 hw') {v | v ∉ W} (fun v hv h => h (by
-    obtain ⟨i, rfl⟩ := (List.mem_ofFn' _ _).1 hv
-    exact Finset.mem_image.2 ⟨i, Finset.mem_univ _, rfl⟩))
-  have hU : {v | v ∉ W} ∪ {v | v ∈ List.ofFn w'} = Set.univ := by
-    refine Set.eq_univ_of_forall fun v => ?_
-    by_cases hv : v ∈ W
-    · obtain ⟨i, -, rfl⟩ := Finset.mem_image.1 hv
-      exact Or.inr ((List.mem_ofFn' _ _).2 ⟨i, rfl⟩)
-    · exact Or.inl hv
-  have hGU : GA μ J χ Set.univ = ⨅ u, eigL μ u (J u) (χ u) := by simp [GA]
+  have hlist := L1.list_prj μ hco (List.ofFn b) (List.nodup_ofFn.2 hbinj) {v | v ∉ W} (fun v hv h => h (by
+    obtain ⟨j, rfl⟩ := (List.mem_ofFn' _ _).1 hv
+    exact Finset.mem_image.2 ⟨Fin.natAdd _ j, Finset.mem_univ _, hw'r j⟩))
+  have hU : {v | v ∉ W} ∪ {v | v ∈ List.ofFn b} = {v | v ∉ Set.range w} := by
+    ext v
+    simp only [Set.mem_union, Set.mem_ofPred_eq]
+    constructor
+    · rintro (hv | hv)
+      · exact (hrange v (hWm v hv)).1
+      · obtain ⟨j, rfl⟩ := (List.mem_ofFn' _ _).1 hv
+        exact hbw j
+    · intro hv
+      by_cases hvW : v ∈ W
+      · obtain ⟨i, -, rfl⟩ := Finset.mem_image.1 hvW
+        refine Fin.addCases (fun i => ?_) (fun j => ?_) i hv
+        · intro h
+          rw [hw'l] at h
+          exact absurd ⟨i, rfl⟩ h
+        · intro _
+          rw [hw'r]
+          exact Or.inr ((List.mem_ofFn' _ _).2 ⟨j, rfl⟩)
+      · exact Or.inl hvW
+  have hGU : L1.GA μ J χ {v | v ∉ Set.range w} = ⨅ (u : Pl K) (_ : u ∉ Set.range w), eigL μ u (J u) (χ u) := by
+    simp only [L1.GA, Set.mem_ofPred_eq]
   have hXlist : (List.ofFn fun i => X (w' i)).prod =
       (List.ofFn T).prod * (List.ofFn fun j => prj (eigL μ (b j) (J (b j)) (χ (b j)))).prod := by
     have : (fun i => X (w' i)) = Fin.append T (fun j => prj (eigL μ (b j) (J (b j)) (χ (b j)))) := by
@@ -554,16 +579,6 @@ theorem UpperTheory.ConvolutionTheory.L1.tensFactor :
       · rw [hw'l, Fin.append_left, hXw]
       · rw [hw'r, Fin.append_right, hXd _ (hbw j)]
     rw [this, List.ofFn_fin_append, List.prod_append]
-  have hPlist : ((List.ofFn w').map fun v => prj (eigL μ v (J v) (χ v))).prod =
-      (List.ofFn fun i => prj (eigL μ (w i) (J (w i)) (χ (w i)))).prod *
-        (List.ofFn fun j => prj (eigL μ (b j) (J (b j)) (χ (b j)))).prod := by
-    show ((List.ofFn (Fin.append w b)).map _).prod = _
-    rw [List.ofFn_fin_append, List.map_append, List.prod_append, List.map_ofFn, List.map_ofFn]
-    rfl
-  have habs := L1.ofFn_absorb r T (fun i => prj (eigL μ (w i) (J (w i)) (χ (w i))))
-    (fun i j hij => (eigBasic K n μ (w j) (J (w j)) (χ (w j)) (hco _).1 (hco _).2).2.2.2 (T i)
-      fun x _ => oloc_commute μ (fun h => hij (hw h).symm) (mm i) (ψ i) (T i) (hT i).2.2 x)
-    fun i => oloc_absorb μ (w i) (mm i) (hco _).1 (hmm i).2 (hco _).2 (ψ i) (hT i).2.1 (T i) (hT i).2.2
   have hmain : (List.ofFn fun i => ((c (w' i) : ℝ) : ℂ) • X (w' i)).prod =
       (∏ i, ((c (w' i) : ℝ) : ℂ)) • (List.ofFn fun i => X (w' i)).prod := L1.ofFn_smul _ _ _
   have hsub : hBad.toFinset ⊆ W := fun v hv => by
@@ -575,14 +590,47 @@ theorem UpperTheory.ConvolutionTheory.L1.tensFactor :
     calc ∏ i, c (w' i) = ∏ v ∈ W, c v := (Finset.prod_image fun _ _ _ _ h => hw' h).symm
       _ = ∏ v ∈ hBad.toFinset, c v := (Finset.prod_subset hsub fun v _ hv => hc1 v hv).symm
   have key : ((List.ofFn T).prod * (List.ofFn fun j => prj (eigL μ (b j) (J (b j)) (χ (b j)))).prod) ∘L
-      prj (GA μ J χ {v | v ∉ W}) = (List.ofFn T).prod ∘L prj (⨅ u, eigL μ u (J u) (χ u)) := by
-    calc _ = ((List.ofFn T).prod * ((List.ofFn fun i => prj (eigL μ (w i) (J (w i)) (χ (w i)))).prod *
-          (List.ofFn fun j => prj (eigL μ (b j) (J (b j)) (χ (b j)))).prod)) ∘L prj (GA μ J χ {v | v ∉ W}) := by
-          rw [← mul_assoc, ← habs]
-      _ = (List.ofFn T).prod ∘L (((List.ofFn w').map fun v => prj (eigL μ v (J v) (χ v))).prod ∘L
-          prj (GA μ J χ {v | v ∉ W})) := by rw [hPlist]; rfl
-      _ = _ := by rw [hlist, hU, hGU]
+      prj (L1.GA μ J χ {v | v ∉ W}) =
+      (List.ofFn T).prod ∘L prj (⨅ (u : Pl K) (_ : u ∉ Set.range w), eigL μ u (J u) (χ u)) := by
+    have h2 : ((List.ofFn b).map fun v => prj (eigL μ v (J v) (χ v))).prod =
+        (List.ofFn fun j => prj (eigL μ (b j) (J (b j)) (χ (b j)))).prod := by
+      rw [List.map_ofFn]
+      rfl
+    rw [h2, hU, hGU] at hlist
+    rw [← hlist]
+    rfl
   rw [UpperTheory.ConvolutionTheory.Tf.rrTens K n hn μ ν m hC β e', h1, hmain, hXlist, hprodc, hQ,
     ContinuousLinearMap.smul_comp, key, ContinuousLinearMap.comp_smul, ContinuousLinearMap.comp_smul, smul_smul]
   push_cast
   rfl
+
+theorem UpperTheory.ConvolutionTheory.L1.tensFactor :
+    UpperTheory.ConvolutionTheory.L1.TensFactor := by
+  intro K _ _ n hn μ _ ν _ J χ hco hcof
+  obtain ⟨κ, hκ, H⟩ := L1.tensFactor_offRange K n hn μ ν J χ hco hcof
+  refine ⟨κ, hκ, fun β r w hw _ _ mm hmm ψ T hT e he => ?_⟩
+  have hbase := H β r w hw mm hmm ψ T (fun i => ⟨(hT i).1, (hT i).2.2⟩) e he
+  have hmI : ∀ i, (mm i).IsHaarMeasure := fun i => (hmm i).1
+  have hlist := L1.list_prj μ hco (List.ofFn w) (List.nodup_ofFn.2 hw) {u | u ∉ Set.range w}
+    fun v hv h => h (by obtain ⟨i, rfl⟩ := (List.mem_ofFn' _ _).1 hv; exact ⟨i, rfl⟩)
+  have hU : {u | u ∉ Set.range w} ∪ {v | v ∈ List.ofFn w} = Set.univ := by
+    refine Set.eq_univ_of_forall fun v => ?_
+    by_cases hv : v ∈ Set.range w
+    · obtain ⟨i, rfl⟩ := hv; exact Or.inr ((List.mem_ofFn' _ _).2 ⟨i, rfl⟩)
+    · exact Or.inl hv
+  have hGU : L1.GA μ J χ Set.univ = ⨅ u, eigL μ u (J u) (χ u) := by simp [L1.GA]
+  have hGA : L1.GA μ J χ {u | u ∉ Set.range w} = ⨅ (u : Pl K) (_ : u ∉ Set.range w), eigL μ u (J u) (χ u) := by
+    simp only [L1.GA, Set.mem_ofPred_eq]
+  have habs := L1.ofFn_absorb r T (fun i => prj (eigL μ (w i) (J (w i)) (χ (w i))))
+    (fun i j hij => (eigBasic K n μ (w j) (J (w j)) (χ (w j)) (hco _).1 (hco _).2).2.2.2 (T i)
+      fun x _ => L1.oloc_commute μ (fun h => hij (hw h).symm) (mm i) (ψ i) (T i) (hT i).2.2 x)
+    fun i => L1.oloc_absorb μ (w i) (mm i) (hco _).1 (hmm i).2 (hco _).2 (ψ i) (hT i).2.1 (T i) (hT i).2.2
+  rw [hU, hGU, hGA, List.map_ofFn] at hlist
+  have hkey : (List.ofFn T).prod ∘L prj (⨅ u, eigL μ u (J u) (χ u)) =
+      (List.ofFn T).prod ∘L prj (⨅ (u : Pl K) (_ : u ∉ Set.range w), eigL μ u (J u) (χ u)) := by
+    rw [← hlist]
+    change (List.ofFn T).prod * ((List.ofFn fun i => prj (eigL μ (w i) (J (w i)) (χ (w i)))).prod * _) = _
+    rw [← mul_assoc, ← habs]
+    rfl
+  rw [hbase, hkey]
+

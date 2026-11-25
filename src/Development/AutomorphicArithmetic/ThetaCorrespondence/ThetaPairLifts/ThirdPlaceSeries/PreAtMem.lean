@@ -862,7 +862,7 @@ theorem sideB_built_alt (hL : _root_.UpperTheory.Zero.LLC.RecTExists) (D' : D7) 
   obtain rfl : hL0 = hL' := (eq_of_heq hhL).symm
   obtain rfl : eig0 = eig := (eq_of_heq heig).symm
   obtain rfl : θ0 = θ := (eq_of_heq hθ).symm
-  obtain ⟨Rw, hRw, Bs', -⟩ := GlobalTheory.T.twist_second_step_kept_with_localisations D cf0 A.row low Pq S0 hL0 eig0 θ0 Bs L ψ hψ
+  obtain ⟨Rw, hRw, Bs', -⟩ := _root_.GlobalTheory.TwInputs.SideBLoc.exists_sideB_withLoc D cf0 A.row low Pq S0 hL0 eig0 θ0 Bs L ψ hψ
   refine ⟨Rw, hRw, ⟨Bs'⟩, fun a σ v _ => ?_⟩
   have e : Rw.locR = A.row.locR := eq_of_heq hRw
   rw [e]

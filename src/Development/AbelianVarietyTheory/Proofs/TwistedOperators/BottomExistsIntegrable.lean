@@ -64,8 +64,6 @@ open scoped ComplexOrder
 
 namespace GlobalTheory.RowTest
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 variable {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} {G : GridData L sc} {W : G.Weil}
 
 open GlobalTheory.Grid (neg neg_gram sigOK_sgn isCartanInv_sgn)

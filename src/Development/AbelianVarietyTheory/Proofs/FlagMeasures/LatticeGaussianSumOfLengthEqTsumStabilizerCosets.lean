@@ -65,15 +65,6 @@ theorem map_mulVec_incl {E A : Type} [CommRing E] [CommRing A] (ι : E →+* A) 
 
   simp only [Matrix.mulVec, dotProduct, Matrix.map_apply, map_sum, map_mul]
 
-theorem unitary_map {E A : Type} [CommRing E] [CommRing A] (σ : E →+* E) (s : A →+* A)
-    (ι : E →+* A) (hι : ∀ e, s (ι e) = ι (σ e)) {n : ℕ} (J g : Matrix (Fin n) (Fin n) E)
-    (hg : Formalism.UG.cT σ g * J * g = J) :
-    Formalism.UG.cT s (g.map ι) * J.map ι * g.map ι = J.map ι := by
-  have hc : Formalism.UG.cT s (g.map ι) = (Formalism.UG.cT σ g).map ι := by
-    ext i j
-    simp [Formalism.UG.cT, hι]
-  rw [hc, ← Matrix.map_mul, ← Matrix.map_mul, hg]
-
 theorem cT_star {E : Type} [CommRing E] [StarRing E] {n : ℕ} (g : Matrix (Fin n) (Fin n) E) :
     Formalism.UG.cT (starRingEnd E) g = gᴴ := by
   ext i j

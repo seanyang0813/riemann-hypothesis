@@ -120,9 +120,6 @@ def Placed : Prop :=
     (v : VCom f.c) (o : TDat f.c k ι) (n : ℕ) (G : Fin n → GLoc v) (pl : Fin n ≃ (pk W).Pg),
     f.c.Is ∧ v.Is ∧ VTie f v ∧ ShapeOff v o ∧ GPin G ∧ GRead f G pl ∧ BotTie f B v o G
 
-def tOf (a₀ a : GA D (D.sp.X 0)) : GA D (D.sp.Y 0) :=
-  ((iotaX W.S.X W.Q.instEq).symm (1, W.S.X.xu u))⁻¹ * embA B.d B.o (a₀ * a) * (show GA D (D.sp.Y 0) from f.g.b 0)
-
 end GlobalTheory.MiTop
 
 end

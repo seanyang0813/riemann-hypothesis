@@ -13,8 +13,6 @@ namespace Formalism.MainNotions.BridgeLemma₂
 
 open NumberField Module Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat Formalism.MainNotions.S.Cnt Formalism.HermitianLatticesTheory Formalism.ThetaLiftIndependence.LatticeLiftIndependence
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 def LiftsConjugateUnderStabilizer (D : D7) (u : D.what₂.Word) : Prop :=
   ForPrimeFlag D u fun F0 => ∀ Λ₁ Λ₂ : LatV D, IsRowLat D F0 Λ₁ → IsRowLat D F0 Λ₂ →
     Lsub Λ₁ (lf D F0) = Lsub Λ₂ (lf D F0) →

@@ -81,16 +81,4 @@ theorem linForm_eq {K : Type} [Field K] {m n : Type} [Fintype m] [Fintype n] [De
   rw [show Matrix.single k j (Y k j) = Y k j • Matrix.single k j (1 : K) by
     rw [Matrix.smul_single, smul_eq_mul, mul_one], map_smul, smul_eq_mul]
 
-theorem at_hTens {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] {σ : E →ₐ[F] E}
-    {v : Pl (F := F)} {m n : ℕ} (JA : Matrix (Fin m) (Fin m) E) (JB : Matrix (Fin n) (Fin n) E)
-    (x u : Matrix (Fin m) (Fin n) (AE F E)) (hx : At (evFin F v) x) :
-    At (evFin F v) ((-1 : AE F E) * hTens (_root_.Algebra.TensorProduct.map (_root_.AlgHom.id (AF F) (AF F)) σ) ((_root_.Matrix.map · (_root_.Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.inclR (F := F) (AF F))) JA) ((_root_.Matrix.map · (_root_.Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.inclR (F := F) (AF F))) JB) x u) := by
-  intro r hr
-  have h : ∀ i j, r • x i j = 0 := fun i j => by
-    have := congrFun (congrFun (hx r hr) i) j
-    simpa using this
-  rw [← mul_smul_comm]
-  unfold hTens
-  simp only [Finset.smul_sum, ← smul_mul_assoc, h, zero_mul, Finset.sum_const_zero, mul_zero]
-
 end GlobalTheory.LinWShape

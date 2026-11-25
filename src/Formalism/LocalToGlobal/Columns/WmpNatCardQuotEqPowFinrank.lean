@@ -10,20 +10,8 @@ public import Formalism.LocalToGlobal.Columns.HeckeSp
 public import Formalism.LocalToGlobal.Columns.HeckeSpCount
 public import Lemmata.GeneralBFactRightMore.Imports
 public import Formalism.LocalToGlobal.Divisibility.Tuples
-import Mathlib.RingTheory.Henselian
-import Mathlib.RingTheory.RegularLocalRing.Defs
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.Tactic.Lemma
-import Mathlib.Tactic.TypeStar
-import Mathlib.Topology.Sheaves.Presheaf
 import Formalism.FlagUnipotentLattices.MemOfOrthogonalAnisotropic
 import Formalism.HermitianLattices.HermitianLatticesProofs.DualBasic
-import Mathlib.LinearAlgebra.FreeModule.IdealQuotient
-import Mathlib.LinearAlgebra.Matrix.FiniteDimensional
-import Mathlib.RingTheory.Coalgebra.IsFrobenius
-import Mathlib.RingTheory.Etale.Weakly
-import Mathlib.RingTheory.HopfAlgebra.Basic
-import Mathlib.RingTheory.TotallySplit
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Formalism.FlagUnipotentLattices.MinkowskiFactorialBounds.ColonCountWeighted, Formalism.FlagUnipotentLattices.IdealCountLeWAsm, Formalism.LocalToGlobal.Columns.WmpNatCardQuotEqPowFinrank
